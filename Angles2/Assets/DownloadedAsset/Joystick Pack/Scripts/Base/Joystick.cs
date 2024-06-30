@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System;
 
-public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+public class Joystick : BaseInputHandler, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public float Horizontal { get { return (snapX) ? SnapFloat(input.x, AxisOptions.Horizontal) : input.x; } }
     public float Vertical { get { return (snapY) ? SnapFloat(input.y, AxisOptions.Vertical) : input.y; } }
@@ -31,6 +32,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [SerializeField] private bool snapX = false;
     [SerializeField] private bool snapY = false;
 
+    [SerializeField] private float _doubleTabDelay = 1.0f;
+
     [SerializeField] protected RectTransform background = null;
     [SerializeField] private RectTransform handle = null;
     private RectTransform baseRect = null;
@@ -57,8 +60,32 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         handle.anchoredPosition = Vector2.zero;
     }
 
+    float _tabTime = 0;
+    int _tabCnt = 0;
+
+    bool CanDoubleTab()
+    {
+        if (_tabCnt >= 1)
+        {
+            bool inDuration = false;
+            if(Time.time - _tabTime <= _doubleTabDelay) inDuration = true;
+
+            _tabTime = 0;
+            _tabCnt = 0;
+            return inDuration;
+        }
+
+        _tabTime = Time.time;
+        _tabCnt++;
+        return false;
+    }
+
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        bool canDoubleTab = CanDoubleTab();
+        if(canDoubleTab) OnDoubleTabRequested?.Invoke();
+
+        OnInputStartRequested?.Invoke();
         OnDrag(eventData);
     }
 
@@ -74,6 +101,9 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         FormatInput();
         HandleInput(input.magnitude, input.normalized, radius, cam);
         handle.anchoredPosition = input * radius * handleRange;
+
+        if (input == Vector2.zero) return;
+        OnInputRequested?.Invoke(input);
     }
 
     protected virtual void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
@@ -133,6 +163,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
+
+        OnInputEndRequested?.Invoke();
     }
 
     protected Vector2 ScreenPointToAnchoredPosition(Vector2 screenPosition)
