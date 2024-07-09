@@ -8,6 +8,8 @@ abstract public class BaseState
     public abstract void OnStateEnter(Vector2 vec2, string message);
 
     public abstract void OnStateUpdate();
+    public abstract void OnFixedUpdate();
+
     public abstract void OnStateExit();
 
     public abstract void OnCollisionEnter(Collision2D collision);
@@ -30,6 +32,7 @@ public class State : BaseState
 
     public override void OnStateExit() { }
     public override void OnStateUpdate() { }
+    public override void OnFixedUpdate() { }
 
     public override void OnCollisionEnter(Collision2D collision) { }
 

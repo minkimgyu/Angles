@@ -19,6 +19,7 @@ public class FSM<T>
     }
 
     public void OnUpdate() => _currentState.OnStateUpdate();
+    public void OnFixedUpdate() => _currentState.OnFixedUpdate();
 
     public void OnMoveStart() => _currentState.OnMoveStart();
     public void OnMove(Vector2 direction) => _currentState.OnMove(direction);

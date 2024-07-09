@@ -7,6 +7,25 @@ using UnityEngine;
 public class StringStringDictionary : SerializableDictionary<string, string> {}
 
 [Serializable]
+public class EffectInputDictionary : SerializableDictionary<BaseEffect.Name, EffectCreaterInput> { }
+
+[Serializable]
+public class WeaponInputDictionary : SerializableDictionary<BaseWeapon.Name, WeaponCreaterInput> { }
+
+[Serializable]
+public class SkillInputDictionary : SerializableDictionary<BaseSkill.Name, SkillCreaterInput> { }
+
+[Serializable]
+public class ItemInputDictionary : SerializableDictionary<FieldItem.Name, FieldItemCreaterInput> { }
+
+
+[Serializable]
+public class OutlineColorDictionary : SerializableDictionary<OutlineComponent.Condition, Color> { }
+
+[Serializable]
+public class FlockBehaviorDictionary : SerializableDictionary<FlockComponent.BehaviorType, float> { }
+
+[Serializable]
 public class HandlerDictionary : SerializableDictionary<InputManager.Side, BaseInputHandler> {}
 
 [Serializable]
