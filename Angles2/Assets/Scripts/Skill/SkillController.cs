@@ -12,23 +12,16 @@ public class SkillController : MonoBehaviour, ICondition
         _castingData = new CastingData(transform);
         _skills = new List<BaseSkill>();
 
-        BaseSkill knockback = new Knockback(1, 100, new Vector2(5.5f, 3), new Vector2(1.5f, 0),
-            new List<ITarget.Type> { ITarget.Type.Red }
-        );
+        BaseSkill impact = SkillFactory.Create(BaseSkill.Name.Impact);
+        BaseSkill knockback = SkillFactory.Create(BaseSkill.Name.Knockback);
+        BaseSkill statikk = SkillFactory.Create(BaseSkill.Name.Statikk);
 
-        BaseSkill impact = new Impact(1, 100, 5,
-            new List<ITarget.Type> { ITarget.Type.Red }
-        );
+        BaseSkill spawnBlackhole = SkillFactory.Create(BaseSkill.Name.SpawnBlackhole);
+        BaseSkill spawnBlade = SkillFactory.Create(BaseSkill.Name.SpawnBlade);
+        BaseSkill spawnShooter = SkillFactory.Create(BaseSkill.Name.SpawnShooter);
+        BaseSkill spawnStickyBomb = SkillFactory.Create(BaseSkill.Name.SpawnStickyBomb);
 
-        BaseSkill stickBomb = new StickBomb(1, 100, 5, 3,
-            new List<ITarget.Type> { ITarget.Type.Red }
-        );
-
-        BaseSkill statikk = new Statikk(1, 100, 5, 3,
-            new List<ITarget.Type> { ITarget.Type.Red }
-        );
-
-        AddSkill(statikk);
+        AddSkill(spawnBlade);
     }
 
     public void AddSkill(BaseSkill skill)

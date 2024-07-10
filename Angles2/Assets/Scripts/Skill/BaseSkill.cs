@@ -29,21 +29,13 @@ abstract public class BaseSkill : ICondition
         Knockback,
         Impact,
 
-        AttachStickyBomb, // weapon
-
         SpawnBlackhole, // weapon
         SpawnShooter, // weapon
-        SpawnSpear, // projectile
         SpawnBlade, // projectile
+        SpawnStickyBomb, // projectile
     }
 
-    protected CastingData _castingData;
-    protected float _probability;
-
-    public void Initialize(CastingData data)
-    {
-        _castingData = data;
-    }
+    public virtual void Initialize(CastingData data) { }
 
     public abstract bool CanUse();
 

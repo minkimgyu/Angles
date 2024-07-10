@@ -1,0 +1,1 @@
+{"_damage":101.0,"_range":3.0,"_maxTargetCount":3,"_targetTypes":[1],"_probability":1.0}

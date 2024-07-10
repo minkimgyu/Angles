@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IAbsorbable
 {
-    void Absorb(Vector3 pos, float speed);
+    void Absorb(Vector3 pos, float force);
 }

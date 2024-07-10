@@ -1,0 +1,1 @@
+{"_moveSpeed":5.0,"_fireMaxDelay":1.0,"_offsetToFollower":2.0,"_damage":100.0}

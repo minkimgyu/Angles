@@ -33,5 +33,4 @@ abstract public class BaseEffect : MonoBehaviour
 
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { }
-    public virtual void ResetPosition(IAttachable attachable) {}
 }

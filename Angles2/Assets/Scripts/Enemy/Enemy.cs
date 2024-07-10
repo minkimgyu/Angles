@@ -14,21 +14,28 @@ public class Enemy : Life, IFlock, IAttachable, IAbsorbable
 
     Vector3 _dir;
 
+    List<IFlock> _nearAgents;
+    List<IObstacle> _obstacles;
+
     [SerializeField] float _moveSpeed = 3;
 
     protected override void Start()
     {
         base.Start();
+
+        _nearAgents = new List<IFlock>();
+        _obstacles = new List<IObstacle>();
+
         _targetType = ITarget.Type.Red;
 
         Player.Player player = FindObjectOfType<Player.Player>();
         ReturnPlayerPos = () => { return player.transform.position; };
 
         _flockCaptureComponent = GetComponentInChildren<FlockCaptureComponent>();
-        _flockCaptureComponent.Initialize();
+        _flockCaptureComponent.Initialize(_nearAgents.Add, (item) => { _nearAgents.Remove(item); });
 
         _obstacleCaptureComponent = GetComponentInChildren<ObstacleCaptureComponent>();
-        _obstacleCaptureComponent.Initialize();
+        _obstacleCaptureComponent.Initialize(_obstacles.Add, (item) => { _obstacles.Remove(item); });
 
         _flockComponent = GetComponent<FlockComponent>();
         _flockComponent.Initialize();
@@ -39,11 +46,9 @@ public class Enemy : Life, IFlock, IAttachable, IAbsorbable
 
     private void Update()
     {
-        List<IFlock> nearAgents = _flockCaptureComponent.ReturnTargets();
-        List<IObstacle> obstacles = _obstacleCaptureComponent.ReturnTargets();
         Vector3 playerPos = ReturnPlayerPos();
 
-        BehaviorData data = new BehaviorData(nearAgents, obstacles, playerPos);
+        BehaviorData data = new BehaviorData(_nearAgents, _obstacles, playerPos);
         _dir = _flockComponent.ReturnDirection(data);
     }
 

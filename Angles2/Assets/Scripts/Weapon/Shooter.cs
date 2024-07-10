@@ -10,20 +10,32 @@ public class Shooter : BaseWeapon
 
     float _moveSpeed;
     float _fireMaxDelay;
-    float _fireDelay;
-
     float _offsetToFollower;
 
+    float _fireDelay;
     Vector2 _followOffset;
+    List<ITarget> _targetDatas;
 
-    public override void Initialize(float damage, float moveSpeed, float fireMaxDelay, float offsetToFollower)
+    public override void Initialize(ShooterData data)
     {
-        _moveSpeed = moveSpeed;
-        _fireMaxDelay = fireMaxDelay;
-        _fireDelay = 0;
+        _moveSpeed = data._moveSpeed;
+        _fireMaxDelay = data._fireMaxDelay;
+        _offsetToFollower = data._offsetToFollower;
 
-        _offsetToFollower = offsetToFollower;
+        _fireDelay = 0;
+        _followOffset = Vector2.zero;
+        _targetDatas = new List<ITarget>();
         _targetCaptureComponent = GetComponent<TargetCaptureComponent>();
+    }
+
+    void OnEnter(ITarget target)
+    {
+        _targetDatas.Add(target);
+    }
+
+    void OnExit(ITarget target)
+    {
+        _targetDatas.Remove(target);
     }
 
     public override void ResetFollower(Transform follower)
@@ -41,14 +53,12 @@ public class Shooter : BaseWeapon
     {
         ITarget capturedTarget = null;
 
-        List<ITarget> targets = _targetCaptureComponent.ReturnTargets();
-        for (int i = 0; i < targets.Count; i++)
+        for (int i = 0; i < _targetDatas.Count; i++)
         {
-            ITarget.Type targetType = targets[i].ReturnTargetType();
-            bool isOtherSide = _targetTypes.Contains(targetType);
+            bool isOtherSide = _targetTypes.Contains(_targetDatas[i].ReturnTargetType());
             if (isOtherSide == false) continue;
 
-            capturedTarget = targets[i];
+            capturedTarget = _targetDatas[i];
             break;
         }
 
@@ -61,9 +71,9 @@ public class Shooter : BaseWeapon
         if (_fireMaxDelay > _fireDelay) return;
 
         _fireDelay = 0;
-        BaseWeapon weapon = WeaponFactory.Create(Name.Shooter);
+        BaseWeapon weapon = WeaponFactory.Create(Name.Bullet);
         weapon.ResetPosition(transform.position);
-        weapon.ResetDamageableTypes(_targetTypes);
+        weapon.ResetTargetTypes(_targetTypes);
 
         IProjectile projectile = weapon.GetComponent<IProjectile>();
         if (projectile == null) return;

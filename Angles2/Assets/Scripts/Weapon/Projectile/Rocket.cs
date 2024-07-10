@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DamageUtility;
 
-public class Rocket : MonoBehaviour
+public class Rocket : Projectile
 {
-    // Start is called before the first frame update
-    void Start()
+    float _explosionDamage;
+    float _explosionRange;
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        ApplyDamage(collision);
+
+        DamageData damageData = new DamageData(_explosionDamage, _targetTypes);
+        Damage.HitCircleRange(damageData, transform.position, _explosionRange, true, Color.red, 3);
+
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Explosion);
+        effect.ResetPosition(transform.position);
+        effect.Play();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Initialize(RocketData data)
     {
-        
+        _damage = data._damage;
+        _lifeTime = data._lifeTime;
+        _force = data._force;
+
+        _explosionDamage = data._explosionDamage;
+        _explosionRange = data._explosionRange;
+
+        _moveComponent = GetComponent<MoveComponent>();
     }
+
 }
