@@ -2,26 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICondition
-{
-    void OnAdd();
-    void OnReflect(Collision2D collision);
-    void OnTrigger(Collider2D collider);
-    void OnUpdate();
-}
-
 public struct CastingData
 {
-    public CastingData(Transform transform)
+    public CastingData(GameObject myObject, Transform myTransform)
     {
-        _myTransform = transform;
+        _myObject = myObject;
+        _myTransform = myTransform;
     }
+
+    GameObject _myObject;
+    public GameObject MyObject { get { return _myObject; } }
 
     Transform _myTransform;
     public Transform MyTransform { get { return _myTransform; } }
 }
 
-abstract public class BaseSkill : ICondition
+abstract public class BaseSkill
 {
     public enum Name
     {
@@ -33,6 +29,11 @@ abstract public class BaseSkill : ICondition
         SpawnShooter, // weapon
         SpawnBlade, // projectile
         SpawnStickyBomb, // projectile
+
+        SpreadBullets,
+        Shockwave,
+        MagneticField,
+        SelfDestruction
     }
 
     public virtual void Initialize(CastingData data) { }
@@ -40,7 +41,13 @@ abstract public class BaseSkill : ICondition
     public abstract bool CanUse();
 
     public virtual void OnReflect(Collision2D collision) { }
-    public virtual void OnTrigger(Collider2D collider) { }
+
+    public virtual void OnCaptureEnter(ITarget target) { }
+    public virtual void OnCaptureExit(ITarget target) { }
+
+    public virtual void OnCaptureEnter(ITarget target, IDamageable damageable) { }
+    public virtual void OnCaptureExit(ITarget target, IDamageable damageable) { }
+
     public virtual void OnUpdate() { }
     public virtual void OnAdd() { }
 }

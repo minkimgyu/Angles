@@ -2,34 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class Enemy : Life, IFlock, IAttachable, IAbsorbable
+
+public class BaseEnemy : BaseLife, IFlock, IAttachable, IAbsorbable
 {
     FlockCaptureComponent _flockCaptureComponent;
     ObstacleCaptureComponent _obstacleCaptureComponent;
 
-    FlockComponent _flockComponent;
-    MoveComponent _moveComponent;
+    protected SkillController _skillController;
+    protected List<BaseSkill.Name> _skillNames;
+    protected float _moveSpeed;
 
-    Func<Vector3> ReturnPlayerPos;
+    FlockComponent _flockComponent;
+    protected MoveComponent _moveComponent;
 
     Vector3 _dir;
 
     List<IFlock> _nearAgents;
     List<IObstacle> _obstacles;
 
-    [SerializeField] float _moveSpeed = 3;
+    protected IPos _followTarget;
 
-    protected override void Start()
+    public override void Initialize()
     {
-        base.Start();
+        _followTarget = FindObjectOfType<Player.Player>();
+        _groggyTimer = new Timer();
+        _hp = _maxHp;
 
         _nearAgents = new List<IFlock>();
         _obstacles = new List<IObstacle>();
-
-        _targetType = ITarget.Type.Red;
-
-        Player.Player player = FindObjectOfType<Player.Player>();
-        ReturnPlayerPos = () => { return player.transform.position; };
 
         _flockCaptureComponent = GetComponentInChildren<FlockCaptureComponent>();
         _flockCaptureComponent.Initialize(_nearAgents.Add, (item) => { _nearAgents.Remove(item); });
@@ -42,18 +42,30 @@ public class Enemy : Life, IFlock, IAttachable, IAbsorbable
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
+
+        _skillController = GetComponent<SkillController>();
+        _skillController.Initialize();
+        _skillController.AddSkill(_skillNames);
     }
 
-    private void Update()
+    protected override void Update()
     {
-        Vector3 playerPos = ReturnPlayerPos();
+        base.Update();
+        _skillController.OnUpdate();
+    }
 
-        BehaviorData data = new BehaviorData(_nearAgents, _obstacles, playerPos);
+    protected void ResetDirection()
+    {
+        if (_followTarget == null) return;
+
+        Vector3 targetPos = _followTarget.ReturnPosition();
+        BehaviorData data = new BehaviorData(_nearAgents, _obstacles, targetPos);
         _dir = _flockComponent.ReturnDirection(data);
     }
 
-    private void FixedUpdate()
+    protected void MoveToDirection()
     {
+        if (_aliveState == AliveState.Groggy) return; // 그로기 상태인 경우 실행 X
         _moveComponent.Move(_dir.normalized, _moveSpeed);
     }
 
@@ -63,7 +75,7 @@ public class Enemy : Life, IFlock, IAttachable, IAbsorbable
 
     public Vector3 ReturnFowardDirection()
     {
-        return transform.up;
+        return transform.right;
     }
 
     public bool CanAttach()
@@ -71,9 +83,14 @@ public class Enemy : Life, IFlock, IAttachable, IAbsorbable
         return _lifeState == LifeState.Alive;
     }
 
+    public bool CanAbsorb()
+    {
+        return _lifeState == LifeState.Alive;
+    }
+
     public void Absorb(Vector3 pos, float speed)
     {
-        Vector3 direction = transform.position - pos;
+        Vector3 direction = pos - transform.position;
         _moveComponent.AddForce(direction, speed);
     }
 }

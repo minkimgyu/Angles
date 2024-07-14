@@ -5,12 +5,29 @@ using DamageUtility;
 
 public class Bullet : Projectile
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        ApplyDamage(collision);
+        IObstacle obstacle = collision.GetComponent<IObstacle>();
+        if (obstacle != null)
+        {
+            Destroy(gameObject);
+            SpawnHitEffect();
+            return;
+        }
 
-        // 여기에 깨지는 파티클 넣어주기
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Explosion);
+        ITarget target = collision.GetComponent<ITarget>();
+        if (target == null) return;
+        if (target.IsTarget(_targetTypes) == false) return;
+
+        IDamageable damageable = collision.GetComponent<IDamageable>();
+        if (damageable != null) ApplyDamage(damageable);
+
+        Destroy(gameObject);
+    }
+
+    void SpawnHitEffect()
+    {
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Hit);
         effect.ResetPosition(transform.position);
         effect.Play();
     }
@@ -19,8 +36,8 @@ public class Bullet : Projectile
     {
         _damage = data._damage;
         _lifeTime = data._lifeTime;
-        _force = data._force;
 
         _moveComponent = GetComponent<MoveComponent>();
+        _moveComponent.Initialize();
     }
 }

@@ -8,14 +8,14 @@ public class KnockbackData : BaseSkillData
     public float _damage;
     public SerializableVector2 _size;
     public SerializableVector2 _offset;
-    public List<ITarget.Type> _targetType;
+    public List<ITarget.Type> _targetTypes;
 
     public KnockbackData(float probability, float damage, SerializableVector2 size, SerializableVector2 offset, List<ITarget.Type> targetTypes) : base(probability)
     {
         _damage = damage;
         _size = size;
         _offset = offset;
-        _targetType = targetTypes;
+        _targetTypes = targetTypes;
     }
 }
 

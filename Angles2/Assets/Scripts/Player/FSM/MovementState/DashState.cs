@@ -5,12 +5,10 @@ using System;
 
 namespace Player.FSM
 {
-    public class DashState : State
+    public class DashState : State<Player.MovementState>
     {
         Action<bool, float> ChangeBodyScale;
         Action EndDash;
-
-        Action<Player.MovementState> SetState;
         Action<Vector2, float> AddForce;
 
         float _dashSpeed;
@@ -18,11 +16,14 @@ namespace Player.FSM
 
         Timer _timer;
 
-        public DashState(float dashSpeed, float dashDuration,
+        public DashState(
+            FSM<Player.MovementState> fsm,
+            float dashSpeed, float dashDuration,
 
             Action<bool, float> ChangeBodyScale,
 
-            Action EndDash, Action<Player.MovementState> SetState, Action<Vector2, float> AddForce)
+            Action EndDash, Action<Vector2, float> AddForce)
+        : base(fsm)
         {
             _dashSpeed = dashSpeed;
             _dashDuration = dashDuration;
@@ -32,8 +33,6 @@ namespace Player.FSM
             this.ChangeBodyScale = ChangeBodyScale;
 
             this.EndDash = EndDash;
-
-            this.SetState = SetState;
             this.AddForce = AddForce;
         }
 
@@ -56,8 +55,8 @@ namespace Player.FSM
         {
             ChangeBodyScale?.Invoke(false, _timer.Ratio);
             if (_timer.CurrentState != Timer.State.Finish) return;
-            
-            SetState?.Invoke(Player.MovementState.Move);
+
+            _baseFSM.SetState(Player.MovementState.Move);
         }
     }
 

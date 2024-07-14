@@ -31,6 +31,11 @@ public class MoveComponent : MonoBehaviour
         if(_applyDirection == true) FaceDirection(direction);
     }
 
+    public void Move(Vector2 pos)
+    {
+        _rigid.MovePosition(pos);
+    }
+
     public void FaceDirection(Vector2 direction)
     {
         // 벡터에서 각도 구하기

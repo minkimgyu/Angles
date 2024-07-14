@@ -60,6 +60,12 @@ public class SkillFactory : MonoBehaviour
         _skillCreaters[BaseSkill.Name.SpawnShooter] = new SpawnShooterCreater();
         _skillCreaters[BaseSkill.Name.SpawnStickyBomb] = new SpawnStickyBombCreater();
 
+
+        _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater();
+        _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater();
+        _skillCreaters[BaseSkill.Name.MagneticField] = new MagneticFieldCreater();
+        _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater();
+
         foreach (var input in _skillInputs)
         {
             _skillCreaters[input.Key].Initialize(input.Value);

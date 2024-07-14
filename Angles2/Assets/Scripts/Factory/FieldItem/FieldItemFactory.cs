@@ -30,7 +30,7 @@ public class FieldItemCreater : BaseCreater<FieldItemCreaterInput, FieldItem>
 
 public class FieldItemFactory : MonoBehaviour
 {
-    [SerializeField] ItemInputDictionary _itemInputs; // 무기 prefab을 모아서 넣어준다.
+    [SerializeField] FieldItemInputDictionary _itemInputs; // 무기 prefab을 모아서 넣어준다.
     Dictionary<FieldItem.Name, FieldItemCreater> _itemCreaters;
 
     private static FieldItemFactory _instance;

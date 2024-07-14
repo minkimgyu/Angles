@@ -5,26 +5,20 @@ using System;
 
 namespace Player.FSM
 {
-    public class ChargeState : State
+    public class ChargeState : State<Player.ActionState>
     {
-
         Action<bool, float> ChangeBodyScale;
-
         Action<bool> SetInvincible;
 
         Action<bool> ShowShootDirection;
         Action<Vector3, Vector2> UpdateShootDirection;
-
         Action<Vector2> FaceDirection;
-
-        Action<Player.ActionState> SetState;
-        Action<Player.ActionState, Vector2, string> GoToShootState;
 
         float _minShootValue;
         Transform _myTransform;
         Vector2 _storedInput;
 
-        public ChargeState(float minShootValue, Transform myTransform,
+        public ChargeState(FSM<Player.ActionState> fsm, float minShootValue, Transform myTransform,
 
             Action<bool, float> ChangeBodyScale,
 
@@ -32,10 +26,7 @@ namespace Player.FSM
             Action<bool> ShowShootDirection,
             Action<Vector3, Vector2> UpdateShootDirection,
 
-            Action<Vector2> FaceDirection,
-
-            Action<Player.ActionState> SetState,
-            Action<Player.ActionState, Vector2, string> GoToShootState)
+            Action<Vector2> FaceDirection) : base(fsm)
         {
             _minShootValue = minShootValue;
             _myTransform = myTransform;
@@ -47,9 +38,6 @@ namespace Player.FSM
             this.UpdateShootDirection = UpdateShootDirection;
 
             this.FaceDirection = FaceDirection;
-
-            this.SetState = SetState;
-            this.GoToShootState = GoToShootState;
         }
 
         bool CanShoot(Vector2 input)
@@ -86,9 +74,12 @@ namespace Player.FSM
             if (canShoot)
             {
                 SetInvincible?.Invoke(true);
-                GoToShootState?.Invoke(Player.ActionState.Shoot, _storedInput, "GoToShootState");
+                _baseFSM.SetState(Player.ActionState.Shoot, _storedInput, "GoToShootState");
             }
-            else SetState?.Invoke(Player.ActionState.Ready);
+            else
+            {
+                _baseFSM.SetState(Player.ActionState.Ready);
+            }
         }
     }
 }

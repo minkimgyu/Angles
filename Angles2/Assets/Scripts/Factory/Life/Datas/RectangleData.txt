@@ -1,0 +1,1 @@
+{"_moveSpeed":5.0,"_skillNames":[9],"_maxHp":100.0,"_targetType":1}

@@ -13,7 +13,13 @@ public class SpawnBlackhole : ActiveSkill
 
     public override void OnReflect(Collision2D collision)
     {
-        BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.Blade);
+        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        if (target == null) return;
+
+        bool isTarget = target.IsTarget(_targetTypes);
+        if (isTarget == false) return;
+
+        BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.Blackhole);
         if (weapon == null) return;
 
         weapon.ResetTargetTypes(_targetTypes);

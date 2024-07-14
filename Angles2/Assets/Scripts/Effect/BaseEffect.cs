@@ -14,6 +14,7 @@ abstract public class BaseEffect : MonoBehaviour
         Laser,
 
         Blade,
+        Hit,
     }
 
     [SerializeField] protected float _destoryDelay = 0;
@@ -28,6 +29,7 @@ abstract public class BaseEffect : MonoBehaviour
     protected virtual void OnDestroy() => CancelInvoke();
 
     public virtual void ResetText(float damage) { }
+    public virtual void ResetColor(Color color) { }
     public virtual void ResetLine(Vector3 endPoint) { }
    
 

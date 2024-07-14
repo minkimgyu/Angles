@@ -5,23 +5,21 @@ using System;
 
 namespace Player.FSM
 {
-    public class ReflectState : State
+    public class ReflectState : State<Player.ActionState>
     {
-        Action<Vector2, string> RevertToPreviousState;
         Transform _myTransform;
 
-        public ReflectState(Transform myTransform, Action<Vector2, string> RevertToPreviousState)
+        public ReflectState(FSM<Player.ActionState> fsm, Transform myTransform)
+        : base(fsm)
         {
             _myTransform = myTransform;
-            this.RevertToPreviousState = RevertToPreviousState;
         }
 
         public override void OnStateEnter(Vector2 normal, string message)
         {
             Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, normal);
             _myTransform.right = reflectDirection;
-
-            RevertToPreviousState(reflectDirection, "RevertToShootState");
+            _baseFSM.RevertToPreviousState(reflectDirection, "RevertToShootState");
         }
     }
 }

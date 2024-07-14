@@ -16,7 +16,10 @@ public class SpawnShooter : ActiveSkill
         BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.Shooter);
         if (weapon == null) return;
 
-        weapon.ResetFollower(_castingData.MyTransform);
+        IFollowable followable = _castingData.MyObject.GetComponent<IFollowable>();
+        if (followable == null) return;
+
+        weapon.ResetFollower(followable);
 
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(_castingData.MyTransform.position);

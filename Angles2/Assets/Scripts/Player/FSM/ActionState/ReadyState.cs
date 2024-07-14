@@ -5,18 +5,15 @@ using System;
 
 namespace Player.FSM
 {
-    public class ReadyState : State
+    public class ReadyState : State<Player.ActionState>
     {
-        Action<Player.ActionState> SetState;
-
-        public ReadyState(Action<Player.ActionState> SetState)
+        public ReadyState(FSM<Player.ActionState> fsm) : base(fsm)
         {
-            this.SetState = SetState;
         }
 
         public override void OnCharge(Vector2 input)
         {
-            SetState?.Invoke(Player.ActionState.Charge);
+            _baseFSM.SetState(Player.ActionState.Charge);
         }
     }
 }

@@ -5,11 +5,11 @@ using System;
 
 public struct BehaviorData
 {
-    public BehaviorData(List<IFlock> nearAgents, List<IObstacle> nearObstacles, Vector3 playerPos)
+    public BehaviorData(List<IFlock> nearAgents, List<IObstacle> nearObstacles, Vector3 targetPos)
     {
         _nearAgents = nearAgents;
         _nearObstacles = nearObstacles;
-        PlayerPos = playerPos;
+        _targetPos = targetPos;
     }
 
     List<IFlock> _nearAgents;
@@ -18,7 +18,8 @@ public struct BehaviorData
     List<IObstacle> _nearObstacles;
     public List<IObstacle> NearObstacles { get { return _nearObstacles; } }
 
-    public Vector3 PlayerPos { get; }
+    public Vector3 _targetPos;
+    public Vector3 TargetPos { get { return _targetPos; } }
 }
 
 abstract public class BaseBehavior

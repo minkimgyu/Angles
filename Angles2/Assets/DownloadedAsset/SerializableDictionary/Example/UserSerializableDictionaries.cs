@@ -10,13 +10,16 @@ public class StringStringDictionary : SerializableDictionary<string, string> {}
 public class EffectInputDictionary : SerializableDictionary<BaseEffect.Name, EffectCreaterInput> { }
 
 [Serializable]
+public class LifeInputDictionary : SerializableDictionary<BaseLife.Name, LifeCreaterInput> { }
+
+[Serializable]
 public class WeaponInputDictionary : SerializableDictionary<BaseWeapon.Name, WeaponCreaterInput> { }
 
 [Serializable]
 public class SkillInputDictionary : SerializableDictionary<BaseSkill.Name, SkillCreaterInput> { }
 
 [Serializable]
-public class ItemInputDictionary : SerializableDictionary<FieldItem.Name, FieldItemCreaterInput> { }
+public class FieldItemInputDictionary : SerializableDictionary<FieldItem.Name, FieldItemCreaterInput> { }
 
 
 [Serializable]

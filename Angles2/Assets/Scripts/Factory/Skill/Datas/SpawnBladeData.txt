@@ -1,1 +1,1 @@
-{"_targetTypes":[1],"_probability":1.0}
+{"_targetTypes":[1],"_force":3.0,"_probability":1.0}

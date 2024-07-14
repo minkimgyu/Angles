@@ -21,8 +21,12 @@ public class Statikk : ActiveSkill
 
     public override void OnReflect(Collision2D collision)
     {
-        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
-        if (damageable == null) return;
+        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        if (target == null) return;
+
+        bool isTarget = target.IsTarget(_targetTypes);
+        if (isTarget == false) return;
+
         Debug.Log("Statikk");
 
         List<Vector2> hitPoints;

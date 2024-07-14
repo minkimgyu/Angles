@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IAbsorbable
 {
+    bool CanAbsorb();
+
     void Absorb(Vector3 pos, float force);
 }

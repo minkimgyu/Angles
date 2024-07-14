@@ -16,6 +16,11 @@ public class TextEffect : BaseEffect
         _text = GetComponentInChildren<TMP_Text>();
     }
 
+    public override void ResetColor(Color color)
+    {
+        _text.color = color;
+    }
+
     public override void ResetText(float damage)
     {
         _text.alpha = 0;
@@ -27,7 +32,7 @@ public class TextEffect : BaseEffect
     void Fade(float alpha, float scale, Action WhenCompleted)
     {
         _text.transform.DOScale(Vector3.one * scale, _fadeInDuration);
-        _text.DOFade(alpha, _fadeInDuration).OnComplete(() => WhenCompleted?.Invoke());
+        _text.DOFade(alpha, _fadeOutDuration).OnComplete(() => WhenCompleted?.Invoke());
     }
 
     public override void Play()

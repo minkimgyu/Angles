@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+[CustomPropertyDrawer(typeof(LifeInputDictionary))]
 [CustomPropertyDrawer(typeof(WeaponInputDictionary))]
-[CustomPropertyDrawer(typeof(ItemInputDictionary))]
+[CustomPropertyDrawer(typeof(FieldItemInputDictionary))]
 [CustomPropertyDrawer(typeof(SkillInputDictionary))]
 [CustomPropertyDrawer(typeof(EffectInputDictionary))]
+
 [CustomPropertyDrawer(typeof(OutlineColorDictionary))]
 
 [CustomPropertyDrawer(typeof(FlockBehaviorDictionary))]

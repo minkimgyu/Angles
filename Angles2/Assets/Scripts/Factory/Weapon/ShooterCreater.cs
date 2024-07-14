@@ -6,14 +6,15 @@ using UnityEngine;
 public class ShooterData : BaseWeaponData
 {
     public float _moveSpeed;
-    public float _fireMaxDelay;
-    public float _offsetToFollower;
-
-    public ShooterData(float damage, float moveSpeed, float fireMaxDelay, float offsetToFollower) : base(damage)
+    public float _shootForce;
+    public float _fireDelay;
+    public float _followOffset;
+    public ShooterData(float damage, float moveSpeed, float shootForce, float fireDelay, float followOffset) : base(damage)
     {
         _moveSpeed = moveSpeed;
-        _fireMaxDelay = fireMaxDelay;
-        _offsetToFollower = offsetToFollower;
+        _shootForce = shootForce;
+        _fireDelay = fireDelay;
+        _followOffset = followOffset;
     }
 }
 

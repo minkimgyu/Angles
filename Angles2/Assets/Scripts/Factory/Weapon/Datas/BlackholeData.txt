@@ -1,1 +1,1 @@
-{"_lifeTime":10.0,"_absorbForce":6.0,"_forceDelay":0.1,"_maxTargetCount":10,"_damage":100.0}
+{"_lifeTime":10.0,"_absorbForce":5.0,"_forceDelay":0.2,"_maxTargetCount":10,"_damage":10.0}

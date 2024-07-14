@@ -50,6 +50,7 @@ public class Blackhole : BaseWeapon
 
     void OnEnter(IAbsorbable absorbable, IDamageable damageable)
     {
+        if (_targetDatas.Count >= _maxTargetCount) return;
         _targetDatas.Add(new TargetData(Time.time, absorbable, damageable));
     }
 

@@ -6,6 +6,10 @@ public class FollowBehavior : BaseBehavior
 {
     public override Vector3 ReturnVelocity(BehaviorData behaviorData)
     {
-        return (behaviorData.PlayerPos - _myTransform.position).normalized * _weight;
+        Vector3 velocity;
+
+        Vector3 direction = behaviorData._targetPos - _myTransform.position;
+        velocity = direction.normalized * _weight;
+        return velocity;
     }
 }

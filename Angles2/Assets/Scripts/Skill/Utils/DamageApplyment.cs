@@ -8,6 +8,9 @@ namespace DamageUtility
 {
     class Damage
     {
+        const float _instantDeathDamage = 100000000;
+        public static float InstantDeathDamage { get { return _instantDeathDamage; } }
+
         public static void HitBoxRange(DamageData damageData, Vector2 pos, Vector2 offset, Vector2 direction, Vector2 size,
             bool drawDebug = false, Color color = default(Color), float duration = 3)
         {
@@ -54,6 +57,10 @@ namespace DamageUtility
             for (int i = 0; i < colliders.Length; i++)
             {
                 if (targetCount > maxTargetCount) break;
+
+                ITarget target = colliders[i].GetComponent<ITarget>();
+                if (target == null) continue;
+                if (target.IsTarget(damageData.DamageableTypes) == false) continue;
 
                 IDamageable damageable = colliders[i].GetComponent<IDamageable>();
                 if (damageable == null) continue;

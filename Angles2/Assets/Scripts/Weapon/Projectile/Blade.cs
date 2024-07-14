@@ -27,16 +27,17 @@ public class Blade : Projectile
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(collision.collider.name);
+
         Vector2 nomal = collision.contacts[0].normal;
         Vector2 direction = Vector2.Reflect(transform.right, nomal);
-        Shoot(direction);
+        Shoot(direction, _force);
     }
 
     public override void Initialize(BladeData data)
     {
         _damage = data._damage;
         _lifeTime = data._lifeTime;
-        _force = data._force;
         _attackDelay = data._attackDelay;
 
         _targetDatas = new List<TargetData>();
@@ -52,6 +53,7 @@ public class Blade : Projectile
     void OnEnter(IDamageable damageable)
     {
         _targetDatas.Add(new TargetData(Time.time, damageable));
+        ApplyDamage(damageable);
     }
 
     void OnExit(IDamageable damageable)
@@ -73,8 +75,7 @@ public class Blade : Projectile
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if (duration > _attackDelay)
             {
-                DamageData damageData = new DamageData(_damage, _targetTypes);
-                _targetDatas[i].Damageable.GetDamage(damageData);
+                ApplyDamage(_targetDatas[i].Damageable);
                 _targetDatas[i].CaptureTime = Time.time;
             }
         }

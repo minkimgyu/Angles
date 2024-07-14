@@ -6,7 +6,7 @@ using Player.FSM;
 
 namespace Player
 {
-    public class Player : Life
+    public class Player : BaseLife, IFollowable
     {
         public enum MovementState
         {
@@ -26,45 +26,51 @@ namespace Player
         FSM<MovementState> _movementFSM;
         FSM<ActionState> _actionFSM;
 
-        [SerializeField] float _moveSpeed = 5f;
-        [SerializeField] float _dashSpeed = 10f;
-        [SerializeField] float _dashDuration = 1.5f;
+        float _moveSpeed;
 
-        [SerializeField] float _minShootValue = 0.6f;
-        [SerializeField] float _shootSpeed = 15f;
-        [SerializeField] float _shootDuration = 1.5f;
+        float _dashSpeed;
+        float _dashDuration;
 
-        [SerializeField] int _maxDashCount = 3;
-        [SerializeField] int _currentDashCount = 3;
+        float _shootSpeed;
+        float _shootDuration;
 
-        [SerializeField] int _dashUseCount = 1;
+        float _minJoystickLength;
 
-        float _dashFillDuration = 0;
-        [SerializeField] float _maxDashFillDuration = 5f;
+        int _dashCount;
 
-        float DashRatio { get { return _dashFillDuration / _maxDashFillDuration; } }
-        float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
+        int _dashConsumeCount;
+        float _dashRestoreDuration;
+
+        float _shrinkScale;
+        float _normalScale;
+
+        float _currentDashFillDuration = 0;
+        int _currentDashCount;
+
+        float DashRatio { get { return _currentDashFillDuration / _dashRestoreDuration; } }
+        float TotalDashRatio { get { return _dashCount + DashRatio; } }
+        bool CanUseDash() { return _dashCount >= _dashConsumeCount; }
 
         MoveComponent _moveComponent;
         OutlineComponent _outlineComponent;
         SkillController _skillController;
 
-        Action<float> UpdateViewer;
-
-        float _maxScale = 0.3f;
-        float MinScale { get { return _maxScale * 0.6f; } }
+        Action<float> UpdateDashViewer;
 
         void ChangeBodyScale(bool xAxis, float ratio)
         {
+            float minScale = _shrinkScale;
+            float maxScale = _normalScale;
+
             if(xAxis) transform.localScale = 
                     Vector3.Lerp(
-                        new Vector3(MinScale, _maxScale, transform.localScale.z), 
-                        new Vector3(_maxScale, _maxScale, transform.localScale.z), ratio);
+                        new Vector3(minScale, maxScale, transform.localScale.z), 
+                        new Vector3(maxScale, maxScale, transform.localScale.z), ratio);
 
             else transform.localScale = 
                     Vector3.Lerp(
-                        new Vector3(_maxScale, MinScale, transform.localScale.z),
-                        new Vector3(_maxScale, _maxScale, transform.localScale.z), ratio);
+                        new Vector3(maxScale, minScale, transform.localScale.z),
+                        new Vector3(maxScale, maxScale, transform.localScale.z), ratio);
         }
 
         protected override void SetInvincible(bool nowInvincible)
@@ -76,31 +82,59 @@ namespace Player
             else _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
         }
 
-        void SetState(MovementState state) => _movementFSM.SetState(state);
-        void SetState(MovementState state, Vector2 vec2, string message) => _movementFSM.SetState(state, vec2, message);
-
-        void RevertToPreviousState(Vector2 vec2, string message) => _actionFSM.RevertToPreviousState(vec2, message);
-
-        void SetState(ActionState state) => _actionFSM.SetState(state);
-        void SetState(ActionState state, Vector2 vec2, string message) => _actionFSM.SetState(state, vec2, message);
-
-
-        protected override void Start()
+        public override void ResetData(PlayerData data)
         {
-            base.Start();
+            _maxHp = data._maxHp;
+            _targetType = data._targetType;
+
+            _moveSpeed = data._moveSpeed;
+
+            _dashSpeed = data._dashSpeed;
+            _dashDuration = data._dashDuration;
+
+            _shootSpeed = data._shootSpeed;
+            _shootDuration = data._shootDuration;
+
+            _minJoystickLength = data._minJoystickLength;
+
+            _dashCount = data._dashCount;
+            _dashConsumeCount = data._dashConsumeCount;
+            _dashRestoreDuration = data._dashRestoreDuration;
+
+            _shrinkScale = data._shrinkScale;
+            _normalScale = data._normalScale;
+        }
+
+        public override void Initialize()
+        {
+            _groggyTimer = new Timer();
+            _hp = _maxHp;
+
             _targetType = ITarget.Type.Blue;
 
             _skillController = GetComponent<SkillController>();
             _skillController.Initialize();
 
+            BaseSkill impact = SkillFactory.Create(BaseSkill.Name.Impact);
+            //BaseSkill knockback = SkillFactory.Create(BaseSkill.Name.Knockback);
+            //BaseSkill statikk = SkillFactory.Create(BaseSkill.Name.Statikk);
+
+            //BaseSkill spawnBlackhole = SkillFactory.Create(BaseSkill.Name.SpawnBlackhole);
+            //BaseSkill spawnBlade = SkillFactory.Create(BaseSkill.Name.SpawnBlade);
+            //BaseSkill spawnShooter = SkillFactory.Create(BaseSkill.Name.SpawnShooter);
+            //BaseSkill spawnStickyBomb = SkillFactory.Create(BaseSkill.Name.SpawnStickyBomb);
+
+            BaseSkill statikk = SkillFactory.Create(BaseSkill.Name.Statikk);
+            _skillController.AddSkill(impact);
+
             DashUIController dashUIController = FindObjectOfType<DashUIController>();
-            dashUIController.Initialize(_maxDashCount);
+            dashUIController.Initialize(_dashCount);
 
             CameraController cameraController = FindObjectOfType<CameraController>();
             cameraController.Initialize();
-            cameraController.OnFollowRequested(() => transform.position);
+            cameraController.SetFollower(this);
 
-            UpdateViewer = dashUIController.UpdateViewer;
+            UpdateDashViewer = dashUIController.UpdateViewer;
 
             _outlineComponent = GetComponent<OutlineComponent>();
             _outlineComponent.Initialize();
@@ -108,51 +142,55 @@ namespace Player
             _moveComponent = GetComponent<MoveComponent>();
             _moveComponent.Initialize();
 
+            InintializeFSM();
+            AddEvent();
+        }
+
+        void InintializeFSM()
+        {
+            _movementFSM = new FSM<MovementState>();
+            Dictionary<MovementState, BaseState<MovementState>> movementStates = new Dictionary<MovementState, BaseState<MovementState>>();
+
+            movementStates.Add(MovementState.Stop, new StopState(_movementFSM, _moveComponent.Stop));
+
+            movementStates.Add(MovementState.Move,
+                new MoveState(_movementFSM, _moveSpeed, CanUseDash, OnUseDash, _moveComponent.Move));
+
+            movementStates.Add(MovementState.Dash,
+                new DashState(_movementFSM, _dashSpeed, _dashDuration, ChangeBodyScale, OnEndDash, _moveComponent.AddForce));
+
+            _movementFSM.Inintialize(movementStates, MovementState.Stop);
+
             DirectionViewer directionViewer = FindObjectOfType<DirectionViewer>();
             directionViewer.Initialize();
 
-            Dictionary<MovementState, BaseState> movementStates = new Dictionary<MovementState, BaseState>();
-            movementStates.Add(MovementState.Stop, new StopState(SetState, _moveComponent.Stop));
+            _actionFSM = new FSM<ActionState>();
+            Dictionary<ActionState, BaseState<ActionState>> actionStates = new Dictionary<ActionState, BaseState<ActionState>>();
+            actionStates.Add(ActionState.Ready, new ReadyState(_actionFSM));
 
-            movementStates.Add(MovementState.Move,
-                new MoveState(_moveSpeed, CanUseDash, OnUseDash, _moveComponent.Move, SetState, SetState));
-
-            movementStates.Add(MovementState.Dash,
-                new DashState(_dashSpeed, _dashDuration, ChangeBodyScale, OnEndDash, SetState, _moveComponent.AddForce));
-
-            _movementFSM = new FSM<MovementState>();
-            _movementFSM.Inintialize(movementStates, MovementState.Stop);
-
-
-            Dictionary<ActionState, BaseState> actionStates = new Dictionary<ActionState, BaseState>();
-            actionStates.Add(ActionState.Ready, new ReadyState(SetState));
-
-            actionStates.Add(ActionState.Charge, new ChargeState(_minShootValue, transform, ChangeBodyScale, SetInvincible,
+            actionStates.Add(ActionState.Charge, new ChargeState(_actionFSM, _minJoystickLength, transform, ChangeBodyScale, SetInvincible,
                 (value) => { directionViewer.OnOffDirectionSprite(value); _moveComponent.ApplyDirection = !value; },
                 directionViewer.UpdatePosition,
-                _moveComponent.FaceDirection, SetState, SetState));
+                _moveComponent.FaceDirection));
 
             actionStates.Add(ActionState.Shoot,
-                new ShootState(_shootSpeed, _shootDuration,
-                ChangeBodyScale, _skillController.OnReflect, SetInvincible, SetState, SetState, _moveComponent.AddForce));
+                new ShootState(_actionFSM, _shootSpeed, _shootDuration,
+                ChangeBodyScale, _skillController.OnReflect, SetInvincible, _moveComponent.Stop, _moveComponent.AddForce));
 
-            actionStates.Add(ActionState.Reflect, new ReflectState(transform, RevertToPreviousState));
+            actionStates.Add(ActionState.Reflect, new ReflectState(_actionFSM, transform));
 
-            _actionFSM = new FSM<ActionState>();
             _actionFSM.Inintialize(actionStates, ActionState.Ready);
-
-            AddEvent();
         }
+
 
         protected override void OnDie()
         {
             ClearEvent();
         }
 
-        bool CanUseDash() { return _currentDashCount >= _dashUseCount; }
         void OnUseDash() 
         { 
-            _currentDashCount -= _dashUseCount;
+            _currentDashCount -= _dashConsumeCount;
             _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDash);
         }
 
@@ -163,18 +201,19 @@ namespace Player
 
         void FillDashCount()
         {
-            if (_maxDashCount == _currentDashCount) return;
+            if (_dashCount == _currentDashCount) return;
 
-            _dashFillDuration += Time.deltaTime;
+            _currentDashFillDuration += Time.deltaTime;
             if (DashRatio >= 1)
             {
                 _currentDashCount++;
-                _dashFillDuration = 0;
+                _currentDashFillDuration = 0;
             }
         }
 
-        private void FixedUpdate()
+        protected override void FixedUpdate()
         {
+            base.FixedUpdate();
             switch (_lifeState)
             {
                 case LifeState.Alive:
@@ -186,13 +225,14 @@ namespace Player
         }
 
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             switch (_lifeState)
             {
                 case LifeState.Alive:
                     FillDashCount();
-                    UpdateViewer?.Invoke(TotalDashRatio);
+                    UpdateDashViewer?.Invoke(TotalDashRatio);
 
                     _skillController.OnUpdate();
 
@@ -260,6 +300,12 @@ namespace Player
                 _actionFSM.OnChargeEnd
             );
         }
-    }
 
+        public bool CanFollow() { return true; }
+
+        public Vector3 ReturnFowardDirection()
+        {
+            return transform.right;
+        }
+    }
 }

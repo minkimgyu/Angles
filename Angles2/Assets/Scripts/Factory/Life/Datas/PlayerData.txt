@@ -1,0 +1,1 @@
+{"_moveSpeed":10.0,"_dashSpeed":15.0,"_dashDuration":0.5,"_shootSpeed":15.0,"_shootDuration":0.5,"_minJoystickLength":0.5,"_dashCount":3,"_dashConsumeCount":1,"_dashRestoreDuration":1.5,"_shrinkScale":0.15,"_normalScale":0.3,"_maxHp":100000000.0,"_targetType":0}

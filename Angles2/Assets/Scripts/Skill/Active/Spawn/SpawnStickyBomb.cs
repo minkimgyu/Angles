@@ -15,6 +15,12 @@ public class SpawnStickyBomb : ActiveSkill
 
     public override void OnReflect(Collision2D collision)
     {
+        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        if (target == null) return;
+
+        bool isTarget = target.IsTarget(_targetTypes);
+        if (isTarget == false) return;
+
         IAttachable attachable = collision.gameObject.GetComponent<IAttachable>();
         if (attachable == null) return;
 

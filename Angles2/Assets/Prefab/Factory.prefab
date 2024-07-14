@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3270278619965301401}
   - component: {fileID: 146818577121129966}
   - component: {fileID: 8110661806046756242}
-  - component: {fileID: 877176429239507966}
+  - component: {fileID: 7173198409280357077}
+  - component: {fileID: 1632147764201752497}
   m_Layer: 0
   m_Name: Factory
   m_TagString: Untagged
@@ -48,13 +49,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effectInputs:
-    m_keys: 0000000002000000010000000300000005000000
+    m_keys: 000000000200000001000000030000000500000007000000
     m_values:
     - _effectPrefab: {fileID: 2050354111816153786, guid: ff9ff23fce2be444faf7c4219549e792, type: 3}
     - _effectPrefab: {fileID: 3801485610320868615, guid: 41e92f936eb72b840ad76a9ec9aab95d, type: 3}
     - _effectPrefab: {fileID: 5462527784868504109, guid: 5b21d29860ff9484580e592f2d14d448, type: 3}
     - _effectPrefab: {fileID: 293518912111551882, guid: 840a2381eedba194b9ddc3238e9568be, type: 3}
     - _effectPrefab: {fileID: 5746995642611999647, guid: d74380c5cc92a8a408cd2af723b1f1f8, type: 3}
+    - _effectPrefab: {fileID: 1491738601980085631, guid: 5347728bddb0a9d45b86d5a419c6f6b1, type: 3}
 --- !u!114 &146818577121129966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +70,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillInputs:
-    m_keys: 00000000010000000200000003000000040000000500000006000000
+    m_keys: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
     m_values:
     - _jsonAsset: {fileID: 4900000, guid: 04952b074ee77b14a92f24f2b71a60e0, type: 3}
     - _jsonAsset: {fileID: 4900000, guid: a68843689e2685d4f86dc5eb454bd599, type: 3}
@@ -77,6 +79,10 @@ MonoBehaviour:
     - _jsonAsset: {fileID: 4900000, guid: 5e782643b2ce82747a1875c4168a4529, type: 3}
     - _jsonAsset: {fileID: 4900000, guid: 227693b30f6b5fb46a210f24298c548b, type: 3}
     - _jsonAsset: {fileID: 4900000, guid: 2c97ec566d0009841a5881f10d2c0538, type: 3}
+    - _jsonAsset: {fileID: 4900000, guid: 24cb4a56681313a41b96ffef845d2788, type: 3}
+    - _jsonAsset: {fileID: 4900000, guid: 4f032a11485174b4681b980065b82ab0, type: 3}
+    - _jsonAsset: {fileID: 4900000, guid: 2554e3d558a0110488641eb346a41df0, type: 3}
+    - _jsonAsset: {fileID: 4900000, guid: 544dd14d73b09f24589e9a8adc0f5fcc, type: 3}
 --- !u!114 &8110661806046756242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,17 +100,42 @@ MonoBehaviour:
     m_values:
     - _weaponPrafab: {fileID: 634862553226179111, guid: 6fed9c54dc1558946a775e52081ec8bb, type: 3}
       _jsonAsset: {fileID: 4900000, guid: 93fc4627d4ce59e4187c00eacbc0200d, type: 3}
-    - _weaponPrafab: {fileID: 8169145339719193278, guid: 33e80fa5cc729a64ba651b0148215156, type: 3}
+    - _weaponPrafab: {fileID: 9012788329747816030, guid: 33e80fa5cc729a64ba651b0148215156, type: 3}
       _jsonAsset: {fileID: 4900000, guid: 22d436636ca4be643adaf3440c399ccc, type: 3}
     - _weaponPrafab: {fileID: 2300262570311849608, guid: 8ea00d2913466164da18694d92bc9d6e, type: 3}
       _jsonAsset: {fileID: 4900000, guid: 827dd11f08ab1b34f982b0c57ee69c73, type: 3}
     - _weaponPrafab: {fileID: 6513606874235375494, guid: 16ee59aa17ab7224ba10bb8fee974fdc, type: 3}
       _jsonAsset: {fileID: 4900000, guid: c3ddb80813bf2e945b2291db3bb526a0, type: 3}
-    - _weaponPrafab: {fileID: 3476369896170050984, guid: 601aa820652874740ae7c05acf8ba044, type: 3}
+    - _weaponPrafab: {fileID: 8817283522166032132, guid: 601aa820652874740ae7c05acf8ba044, type: 3}
       _jsonAsset: {fileID: 4900000, guid: 30505bf22ed72934795a7905bb731b79, type: 3}
     - _weaponPrafab: {fileID: 1136624969910620757, guid: 2360825c86028d542a247f1d8e5f91e9, type: 3}
       _jsonAsset: {fileID: 4900000, guid: 3593377057a6fc949a49f01cbd1fdb99, type: 3}
---- !u!114 &877176429239507966
+--- !u!114 &7173198409280357077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135470098265847825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 873cc4026475c9649818576df46cb92d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lifeInputs:
+    m_keys: 0000000001000000020000000300000004000000
+    m_values:
+    - _lifePrafab: {fileID: 2244069313954300732, guid: 95c590e6357abb644878db3cd491202a, type: 3}
+      _jsonAsset: {fileID: 4900000, guid: 8f8077477fffb10469c37379db5cab58, type: 3}
+    - _lifePrafab: {fileID: 7830249019006791714, guid: 2ff553da843831f488f7e19cfe10eb50, type: 3}
+      _jsonAsset: {fileID: 4900000, guid: 5f8d78b9502e23c4eb5a4ba65cb47220, type: 3}
+    - _lifePrafab: {fileID: 708621952030184075, guid: 64c4a42177d7053479744aae0be7024c, type: 3}
+      _jsonAsset: {fileID: 4900000, guid: 85efe173831b45c41bd8fe7df217d17f, type: 3}
+    - _lifePrafab: {fileID: 1338375553244062948, guid: 91fa891cad381e64c9e124974272bb14, type: 3}
+      _jsonAsset: {fileID: 4900000, guid: c5776212f581c424fa9af84314a50572, type: 3}
+    - _lifePrafab: {fileID: 3317551673917045260, guid: d7289f882fc83f946be6050bd74c14ef, type: 3}
+      _jsonAsset: {fileID: 4900000, guid: 87f7f2a6f21edee47b8f435f3c380424, type: 3}
+--- !u!114 &1632147764201752497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,7 +148,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemInputs:
-    m_keys: 00000000
-    m_values:
-    - _itemPrefab: {fileID: 0}
-      _jsonAsset: {fileID: 0}
+    m_keys: 
+    m_values: []

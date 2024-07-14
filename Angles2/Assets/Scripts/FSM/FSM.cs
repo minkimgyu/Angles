@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FSM<T>
+abstract public class BaseFSM<T>
 {
-    Dictionary<T, BaseState> _states;
+    Dictionary<T, BaseState<T>> _states;
 
-    BaseState _currentState;
-    BaseState _previousState;
+    protected BaseState<T> _currentState;
+    protected BaseState<T> _previousState;
 
-    public void Inintialize(Dictionary<T, BaseState> states, T startState)
+    public void Inintialize(Dictionary<T, BaseState<T>> states, T startState)
     {
         _currentState = null;
         _previousState = null;
@@ -17,22 +17,6 @@ public class FSM<T>
         _states = states;
         SetState(startState);
     }
-
-    public void OnUpdate() => _currentState.OnStateUpdate();
-    public void OnFixedUpdate() => _currentState.OnFixedUpdate();
-
-    public void OnMoveStart() => _currentState.OnMoveStart();
-    public void OnMove(Vector2 direction) => _currentState.OnMove(direction);
-    public void OnMoveEnd() => _currentState.OnMoveEnd();
-
-    public void OnChargeStart() => _currentState.OnChargeStart();
-    public void OnCharge(Vector2 direction) => _currentState.OnCharge(direction);
-    public void OnChargeEnd() => _currentState.OnChargeEnd();
-
-    public void OnDash() => _currentState.OnDash();
-
-    public void OnCollisionEnter(Collision2D collision) => _currentState.OnCollisionEnter(collision);
-
 
     public bool SetState(T stateName)
     {
@@ -54,7 +38,7 @@ public class FSM<T>
         return ChangeState(_previousState, vec2, message);
     }
 
-    bool ChangeState(BaseState state)
+    bool ChangeState(BaseState<T> state)
     {
         if (_states.ContainsValue(state) == false) return false;
 
@@ -79,7 +63,7 @@ public class FSM<T>
         return true;
     }
 
-    bool ChangeState(BaseState state, Vector2 direction, string message)
+    bool ChangeState(BaseState<T> state, Vector2 direction, string message)
     {
         if (_states.ContainsValue(state) == false) return false;
 
@@ -103,4 +87,22 @@ public class FSM<T>
 
         return true;
     }
+}
+
+public class FSM<T> : BaseFSM<T>
+{
+    public void OnUpdate() => _currentState.OnStateUpdate();
+    public void OnFixedUpdate() => _currentState.OnFixedUpdate();
+
+    public void OnMoveStart() => _currentState.OnMoveStart();
+    public void OnMove(Vector2 direction) => _currentState.OnMove(direction);
+    public void OnMoveEnd() => _currentState.OnMoveEnd();
+
+    public void OnChargeStart() => _currentState.OnChargeStart();
+    public void OnCharge(Vector2 direction) => _currentState.OnCharge(direction);
+    public void OnChargeEnd() => _currentState.OnChargeEnd();
+
+    public void OnDash() => _currentState.OnDash();
+
+    public void OnCollisionEnter(Collision2D collision) => _currentState.OnCollisionEnter(collision);
 }

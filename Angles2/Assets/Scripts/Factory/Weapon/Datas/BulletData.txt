@@ -1,1 +1,1 @@
-{"_lifeTime":10.0,"_force":3.0,"_damage":100.0}
+{"_lifeTime":10.0,"_damage":100.0}

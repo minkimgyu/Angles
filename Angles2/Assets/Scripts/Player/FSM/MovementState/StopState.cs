@@ -5,14 +5,12 @@ using System;
 
 namespace Player.FSM
 {
-    public class StopState : State
+    public class StopState : State<Player.MovementState>
     {
-        Action<Player.MovementState> SetState;
         Action Stop;
 
-        public StopState(Action<Player.MovementState> SetState, Action Stop)
+        public StopState(FSM<Player.MovementState> baseFSM, Action Stop) : base(baseFSM)
         {
-            this.SetState = SetState;
             this.Stop = Stop;
         }
 
@@ -23,7 +21,7 @@ namespace Player.FSM
 
         public override void OnMoveStart()
         {
-            SetState?.Invoke(Player.MovementState.Move);
+            _baseFSM.SetState(Player.MovementState.Move);
         }
     }
 }

@@ -13,17 +13,22 @@ public class Projectile : BaseWeapon, IProjectile
         return transform.right;
     }
 
-    protected void ApplyDamage(Collision2D collision)
+    protected bool IsTarget(ITarget target)
     {
-        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
-        if (damageable == null) return;
+        return target.IsTarget(_targetTypes);
+    }
 
+    protected void ApplyDamage(IDamageable damageable)
+    {
         DamageData damageData = new DamageData(_damage, _targetTypes);
         damageable.GetDamage(damageData);
     }
 
-    public void Shoot(Vector3 direction)
+    public void Shoot(Vector3 direction, float force)
     {
+        transform.right = direction;
+        _force = force;
+
         _moveComponent.Stop();
         _moveComponent.AddForce(direction, _force);
     }

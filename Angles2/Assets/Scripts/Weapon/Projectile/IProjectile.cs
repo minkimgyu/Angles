@@ -6,5 +6,5 @@ public interface IProjectile
 {
     Vector2 ReturnDirectionVector();
 
-    void Shoot(Vector3 direction);
+    void Shoot(Vector3 direction, float force);
 }

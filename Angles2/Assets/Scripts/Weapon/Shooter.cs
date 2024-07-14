@@ -6,26 +6,33 @@ using UnityEngine;
 public class Shooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
-    Transform _follower;
+    MoveComponent _moveComponent;
+
+    IFollowable _followable;
 
     float _moveSpeed;
-    float _fireMaxDelay;
-    float _offsetToFollower;
-
+    float _shootForce;
     float _fireDelay;
-    Vector2 _followOffset;
+    float _followOffset;
+    float _waitFire;
+
+    Vector2 _followPos;
     List<ITarget> _targetDatas;
 
     public override void Initialize(ShooterData data)
     {
         _moveSpeed = data._moveSpeed;
-        _fireMaxDelay = data._fireMaxDelay;
-        _offsetToFollower = data._offsetToFollower;
+        _shootForce = data._shootForce;
+        _fireDelay = data._fireDelay;
+        _followOffset = data._followOffset;
 
-        _fireDelay = 0;
-        _followOffset = Vector2.zero;
+        _waitFire = 0;
+        _moveComponent = GetComponent<MoveComponent>();
+        _moveComponent.Initialize();
+
         _targetDatas = new List<ITarget>();
-        _targetCaptureComponent = GetComponent<TargetCaptureComponent>();
+        _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
+        _targetCaptureComponent.Initialize(OnEnter, OnExit);
     }
 
     void OnEnter(ITarget target)
@@ -38,15 +45,23 @@ public class Shooter : BaseWeapon
         _targetDatas.Remove(target);
     }
 
-    public override void ResetFollower(Transform follower)
+    public override void ResetFollower(IFollowable followable)
     {
-        _follower = follower;
+        _followable = followable;
+    }
+
+    private void CalculateNextPos()
+    {
+        Vector2 pos = _followable.ReturnPosition();
+        Vector2 foward = _followable.ReturnFowardDirection();
+
+        Vector2 offset = -foward * _followOffset;
+        _followPos = Vector2.Lerp(transform.position, pos + offset, Time.deltaTime * _moveSpeed);
     }
 
     private void MoveToFollower()
     {
-        _followOffset = -_follower.right * _offsetToFollower;
-        transform.position = Vector3.Lerp(transform.position, _follower.position, Time.deltaTime * _moveSpeed);
+        _moveComponent.Move(_followPos);
     }
 
     ITarget ReturnCapturedTarget()
@@ -55,8 +70,8 @@ public class Shooter : BaseWeapon
 
         for (int i = 0; i < _targetDatas.Count; i++)
         {
-            bool isOtherSide = _targetTypes.Contains(_targetDatas[i].ReturnTargetType());
-            if (isOtherSide == false) continue;
+            bool isTarget = _targetDatas[i].IsTarget(_targetTypes);
+            if (isTarget == false) continue;
 
             capturedTarget = _targetDatas[i];
             break;
@@ -67,10 +82,10 @@ public class Shooter : BaseWeapon
 
     void FireProjectile(Vector2 direction)
     {
-        _fireDelay += Time.deltaTime;
-        if (_fireMaxDelay > _fireDelay) return;
+        _waitFire += Time.deltaTime;
+        if (_fireDelay > _waitFire) return;
 
-        _fireDelay = 0;
+        _waitFire = 0;
         BaseWeapon weapon = WeaponFactory.Create(Name.Bullet);
         weapon.ResetPosition(transform.position);
         weapon.ResetTargetTypes(_targetTypes);
@@ -78,17 +93,24 @@ public class Shooter : BaseWeapon
         IProjectile projectile = weapon.GetComponent<IProjectile>();
         if (projectile == null) return;
 
-        projectile.Shoot(direction);
+        projectile.Shoot(direction, _shootForce);
+    }
+
+    private void FixedUpdate()
+    {
+        MoveToFollower();
     }
 
     private void Update()
     {
+        CalculateNextPos();
+
         ITarget target = ReturnCapturedTarget();
+        if (target == null) return;
 
         Vector3 targetPos = target.ReturnPosition();
         Vector2 direction = targetPos - transform.position;
 
         FireProjectile(direction);
-        MoveToFollower();
     }
 }
