@@ -55,6 +55,9 @@ namespace Player
         OutlineComponent _outlineComponent;
         SkillController _skillController;
 
+        InteractableCaptureComponent _interactableCaptureComponent;
+        IInteractable _interactableObj;
+
         Action<float> UpdateDashViewer;
 
         void ChangeBodyScale(bool xAxis, float ratio)
@@ -105,6 +108,27 @@ namespace Player
             _normalScale = data._normalScale;
         }
 
+        void OnInteractableEnter(IInteractable interactable)
+        {
+            _interactableObj = interactable;
+            interactable.OnInteractEnter(this);
+        }
+
+        void OnClickRightScreen()
+        {
+            _actionFSM.OnChargeStart();
+            if (_interactableObj == null) return;
+
+            List<SkillUpgradeData> skillUpgradeDatas = _skillController.ReturnSkillUpgradeDatas();
+            _interactableObj.OnInteract(skillUpgradeDatas);
+        }
+
+        void OnInteractableExit(IInteractable interactable)
+        {
+            _interactableObj = null;
+            interactable.OnInteractExit();
+        }
+
         public override void Initialize()
         {
             _groggyTimer = new Timer();
@@ -112,10 +136,13 @@ namespace Player
 
             _targetType = ITarget.Type.Blue;
 
+            _interactableCaptureComponent = GetComponentInChildren<InteractableCaptureComponent>();
+            _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
+
             _skillController = GetComponent<SkillController>();
             _skillController.Initialize();
 
-            BaseSkill impact = SkillFactory.Create(BaseSkill.Name.Impact);
+            //BaseSkill impact = SkillFactory.Create(BaseSkill.Name.Impact);
             //BaseSkill knockback = SkillFactory.Create(BaseSkill.Name.Knockback);
             //BaseSkill statikk = SkillFactory.Create(BaseSkill.Name.Statikk);
 
@@ -124,15 +151,25 @@ namespace Player
             //BaseSkill spawnShooter = SkillFactory.Create(BaseSkill.Name.SpawnShooter);
             //BaseSkill spawnStickyBomb = SkillFactory.Create(BaseSkill.Name.SpawnStickyBomb);
 
-            BaseSkill statikk = SkillFactory.Create(BaseSkill.Name.Statikk);
-            _skillController.AddSkill(impact);
+            _skillController.AddSkill(BaseSkill.Name.Impact);
+            _skillController.AddSkill(BaseSkill.Name.Knockback);
+            _skillController.AddSkill(BaseSkill.Name.Statikk);
+
+            HpViewer hpViewer = FindObjectOfType<HpViewer>();
+            hpViewer.Initialize();
+            hpViewer.SetTracker(this);
+
+            OnHpChange = hpViewer.OnHpChange;
 
             DashUIController dashUIController = FindObjectOfType<DashUIController>();
             dashUIController.Initialize(_dashCount);
 
+            CardController cardController = FindObjectOfType<CardController>();
+            cardController.Initialize((name) => _skillController.AddSkill(name));
+
             CameraController cameraController = FindObjectOfType<CameraController>();
             cameraController.Initialize();
-            cameraController.SetFollower(this);
+            cameraController.SetTracker(this);
 
             UpdateDashViewer = dashUIController.UpdateViewer;
 
@@ -181,7 +218,6 @@ namespace Player
 
             _actionFSM.Inintialize(actionStates, ActionState.Ready);
         }
-
 
         protected override void OnDie()
         {
@@ -285,7 +321,7 @@ namespace Player
             InputManager.AddEvent(
                InputManager.Side.Right,
                InputManager.Type.OnInputStart,
-               _actionFSM.OnChargeStart
+               OnClickRightScreen
            );
 
             InputManager.AddEvent(
@@ -301,7 +337,7 @@ namespace Player
             );
         }
 
-        public bool CanFollow() { return true; }
+        public bool CanFollow() { return _lifeState == LifeState.Alive; }
 
         public Vector3 ReturnFowardDirection()
         {

@@ -27,7 +27,7 @@ public class SpawnBlade : ActiveSkill
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(_castingData.MyTransform.position);
 
-        IProjectile projectile = weapon.GetComponent<IProjectile>();
+        IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
         Vector2 direction = _castingData.MyTransform.right;

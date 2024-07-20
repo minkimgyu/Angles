@@ -8,8 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr sword trail plain
-  m_Shader: {fileID: -6465566751694194690, guid: 1a29b4d27eb8b04479ef89c00dea533d,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: e198026df304af84a85675be636192ea, type: 3}
   m_ValidKeywords:
   - _ALPHABLEND_ON
   - _CFXR_DISSOLVE
@@ -23,7 +22,7 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 5000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -70,14 +69,14 @@ Material:
     - _DirectLightingRamp: 1
     - _DissolveAlongUVY: 0
     - _DissolveOffsetStrength: 0
-    - _DissolveSmooth: 0.025
+    - _DissolveSmooth: 0.01
     - _Distort: 0.1
     - _DoubleDissolve: 1
     - _DstBlend: 10
     - _EdgeFadePow: 1
     - _FadeAlongU: 0
     - _HdrBoost: 0
-    - _HdrMultiply: 0
+    - _HdrMultiply: 4
     - _IndirectLightingMix: 0.5
     - _InvertDissolveTex: 0
     - _LightingWorldPosStrength: 0.2

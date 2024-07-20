@@ -15,6 +15,7 @@ public class HexagonEnemy : RangedEnemy
 
         _stopDistance = data._stopDistance;
         _gap = data._gap;
+        _destoryEffect = BaseEffect.Name.HexagonDestroy;
     }
 
     public override void Initialize()

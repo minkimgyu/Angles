@@ -12,13 +12,17 @@ public class OutlineComponent : MonoBehaviour
         OnGroggy,
     }
 
-    [SerializeField] OutlineColorDictionary _outlineColorDictionary;
+    [SerializeField] Dictionary<Condition, Color> _outlineColorDictionary;
     SpriteRenderer _spriteRenderer;
 
     public void Initialize()
     {
+        _outlineColorDictionary = new Dictionary<Condition, Color>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
         _outlineColorDictionary.Add(Condition.OnIdle, _spriteRenderer.color);
+        _outlineColorDictionary.Add(Condition.OnDash, new Color(117 / 255f, 217 / 255f, 255 / 255f));
+        _outlineColorDictionary.Add(Condition.OnInvincible, new Color(255 / 255f, 73 / 255f, 69 / 255f));
     }
 
     public void OnOutlineChange(Condition condition)

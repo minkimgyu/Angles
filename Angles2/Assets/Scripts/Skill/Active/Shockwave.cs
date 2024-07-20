@@ -25,17 +25,17 @@ public class Shockwave : ActiveSkill
 
     public override void OnUpdate()
     {
-        if (_targets.Count == 0) return;
-
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:
+                if (_targets.Count == 0) return;
+
                 _delayTimer.Start(_delay);
                 break;
             case Timer.State.Finish:
                 Debug.Log("Shockwave");
 
-                BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Impact);
+                BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Shockwave);
                 effect.ResetPosition(_castingData.MyTransform.position);
                 effect.Play();
 

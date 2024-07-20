@@ -15,6 +15,12 @@ abstract public class BaseEffect : MonoBehaviour
 
         Blade,
         Hit,
+
+        TriangleDestroy,
+        RectangleDestroy,
+        PentagonDestroy,
+        HexagonDestroy,
+        Shockwave,
     }
 
     [SerializeField] protected float _destoryDelay = 0;

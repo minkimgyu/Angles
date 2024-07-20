@@ -90,7 +90,7 @@ public class Shooter : BaseWeapon
         weapon.ResetPosition(transform.position);
         weapon.ResetTargetTypes(_targetTypes);
 
-        IProjectile projectile = weapon.GetComponent<IProjectile>();
+        IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
         projectile.Shoot(direction, _shootForce);

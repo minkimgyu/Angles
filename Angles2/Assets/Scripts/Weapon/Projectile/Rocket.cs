@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Rocket : Projectile
+public class Rocket : ProjectileWeapon
 {
     float _explosionDamage;
     float _explosionRange;

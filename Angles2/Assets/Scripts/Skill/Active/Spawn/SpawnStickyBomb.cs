@@ -21,13 +21,13 @@ public class SpawnStickyBomb : ActiveSkill
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
 
-        IAttachable attachable = collision.gameObject.GetComponent<IAttachable>();
-        if (attachable == null) return;
+        IFollowable followable = collision.gameObject.GetComponent<IFollowable>();
+        if (followable == null) return;
 
         BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
 
         weapon.ResetTargetTypes(_targetTypes);
-        weapon.ResetPosition(attachable);
+        weapon.ResetFollower(followable);
     }
 }

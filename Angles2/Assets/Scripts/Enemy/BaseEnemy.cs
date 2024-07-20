@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BaseEnemy : BaseLife, IFlock, IAttachable, IAbsorbable
+public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
 {
     FlockCaptureComponent _flockCaptureComponent;
     ObstacleCaptureComponent _obstacleCaptureComponent;
@@ -19,6 +19,8 @@ public class BaseEnemy : BaseLife, IFlock, IAttachable, IAbsorbable
 
     List<IFlock> _nearAgents;
     List<IObstacle> _obstacles;
+
+    protected BaseEffect.Name _destoryEffect;
 
     protected IPos _followTarget;
 
@@ -68,9 +70,13 @@ public class BaseEnemy : BaseLife, IFlock, IAttachable, IAbsorbable
         if (_aliveState == AliveState.Groggy) return; // 그로기 상태인 경우 실행 X
         _moveComponent.Move(_dir.normalized, _moveSpeed);
     }
-
     protected override void OnDie()
     {
+        BaseEffect effect = EffectFactory.Create(_destoryEffect);
+        effect.ResetPosition(transform.position);
+        effect.Play();
+
+        Destroy(gameObject);
     }
 
     public Vector3 ReturnFowardDirection()
@@ -78,7 +84,7 @@ public class BaseEnemy : BaseLife, IFlock, IAttachable, IAbsorbable
         return transform.right;
     }
 
-    public bool CanAttach()
+    public bool CanFollow()
     {
         return _lifeState == LifeState.Alive;
     }

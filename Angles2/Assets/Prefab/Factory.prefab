@@ -49,14 +49,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effectInputs:
-    m_keys: 000000000200000001000000030000000500000007000000
+    m_keys: 00000000020000000100000003000000050000000700000008000000090000000a0000000b0000000c000000
     m_values:
     - _effectPrefab: {fileID: 2050354111816153786, guid: ff9ff23fce2be444faf7c4219549e792, type: 3}
     - _effectPrefab: {fileID: 3801485610320868615, guid: 41e92f936eb72b840ad76a9ec9aab95d, type: 3}
     - _effectPrefab: {fileID: 5462527784868504109, guid: 5b21d29860ff9484580e592f2d14d448, type: 3}
-    - _effectPrefab: {fileID: 293518912111551882, guid: 840a2381eedba194b9ddc3238e9568be, type: 3}
+    - _effectPrefab: {fileID: 2001151099543863873, guid: 6bd4a53c744cee542a3bb36d83ae2f18, type: 3}
     - _effectPrefab: {fileID: 5746995642611999647, guid: d74380c5cc92a8a408cd2af723b1f1f8, type: 3}
     - _effectPrefab: {fileID: 1491738601980085631, guid: 5347728bddb0a9d45b86d5a419c6f6b1, type: 3}
+    - _effectPrefab: {fileID: -7513571077169991090, guid: b07adf09b369c4a4abc11a4b71af42fe, type: 3}
+    - _effectPrefab: {fileID: 7827823614139927455, guid: 80cfc914a4c16f5418a759de146d1ced, type: 3}
+    - _effectPrefab: {fileID: 7376470072484921075, guid: 545d2cfbc504e57488fb265e865c15bb, type: 3}
+    - _effectPrefab: {fileID: 4112168342657770898, guid: baaaabb181173554aba0a853ee671095, type: 3}
+    - _effectPrefab: {fileID: 6180496656051511648, guid: c6814065a192e9d4ea0bb1d9bce4f9b9, type: 3}
 --- !u!114 &146818577121129966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,5 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemInputs:
-    m_keys: 
-    m_values: []
+    m_keys: 0000000001000000
+    m_values:
+    - _itemPrefab: {fileID: 0}
+      _jsonAsset: {fileID: 0}
+    - _itemPrefab: {fileID: 0}
+      _jsonAsset: {fileID: 0}

@@ -26,10 +26,8 @@ public class BaseWeapon : MonoBehaviour
     public virtual void Initialize(StickyBombData data) { }
 
     public virtual void ResetFollower(IFollowable followable) { }
-
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { transform.position = pos; transform.right = direction; }
-    public virtual void ResetPosition(IAttachable attachable) { }
 
     public void ResetDamage(float damage) { _damage = damage; }
     public void ResetTargetTypes(List<ITarget.Type> types) { _targetTypes = types; }

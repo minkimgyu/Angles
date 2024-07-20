@@ -8,8 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr water drop blur anim ab
-  m_Shader: {fileID: -6465566751694194690, guid: 1a29b4d27eb8b04479ef89c00dea533d,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: e198026df304af84a85675be636192ea, type: 3}
   m_ValidKeywords:
   - _ALPHABLEND_ON
   - _CFXR_DITHERED_SHADOWS_ON
@@ -96,7 +95,7 @@ Material:
     - _FadeAlongU: 0
     - _FlipbookMode: 0
     - _HdrBoost: 0
-    - _HdrMultiply: 0
+    - _HdrMultiply: 2
     - _IndirectLightingMix: 0.5
     - _InvertDissolveTex: 0
     - _LightingEnabled: 0

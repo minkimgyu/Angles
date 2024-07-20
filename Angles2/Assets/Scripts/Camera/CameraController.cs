@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float _followSpeed = 1;
     Camera _mainCamera;
 
-    IPos _followTarget;
+    IFollowable _followTarget;
 
     public void Initialize()
     {
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
         areaReflecter.Initialize(_mapSize.x, _mapSize.y, 3);
     }
 
-    public void SetFollower(IPos followTarget)
+    public void SetTracker(IFollowable followTarget)
     {
         _followTarget = followTarget;
     }

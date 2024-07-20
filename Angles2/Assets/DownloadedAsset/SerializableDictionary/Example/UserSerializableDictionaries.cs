@@ -6,6 +6,9 @@ using UnityEngine;
 [Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> {}
 
+//[Serializable]
+//public class CardInfoDictionary : SerializableDictionary<BaseSkill.Name, BaseCardInfo> { }
+
 [Serializable]
 public class EffectInputDictionary : SerializableDictionary<BaseEffect.Name, EffectCreaterInput> { }
 
@@ -19,7 +22,7 @@ public class WeaponInputDictionary : SerializableDictionary<BaseWeapon.Name, Wea
 public class SkillInputDictionary : SerializableDictionary<BaseSkill.Name, SkillCreaterInput> { }
 
 [Serializable]
-public class FieldItemInputDictionary : SerializableDictionary<FieldItem.Name, FieldItemCreaterInput> { }
+public class InteractableObjectInputDictionary : SerializableDictionary<IInteractable.Name, InteractableObjectCreaterInput> { }
 
 
 [Serializable]

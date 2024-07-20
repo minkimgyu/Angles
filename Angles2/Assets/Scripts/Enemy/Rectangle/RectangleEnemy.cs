@@ -12,6 +12,8 @@ public class RectangleEnemy : MeleeEnemy
         _targetType = data._targetType;
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
+
+        _destoryEffect = BaseEffect.Name.RectangleDestroy;
     }
 
     public override void Initialize()

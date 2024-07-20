@@ -9,7 +9,7 @@ public class StickBomb : BaseWeapon
     float _range = 0;
     float _explosionDelay = 0;
 
-    IAttachable _attachable;
+    IFollowable _followable;
 
     public override void Initialize(StickyBombData data) 
     {
@@ -21,9 +21,9 @@ public class StickBomb : BaseWeapon
         _lifeTimer.Start(_explosionDelay);
     }
 
-    public override void ResetPosition(IAttachable attachable) 
+    public override void ResetFollower(IFollowable followable) 
     {
-        _attachable = attachable;
+        _followable = followable;
     }
 
     void Explode()
@@ -40,10 +40,12 @@ public class StickBomb : BaseWeapon
 
     void Update()
     {
-        bool canAttach = _attachable.CanAttach();
+        if (_followable == null) return;
+
+        bool canAttach = _followable.CanFollow();
         if (canAttach == true)
         {
-            Vector3 pos = _attachable.ReturnPosition();
+            Vector3 pos = _followable.ReturnPosition();
             transform.position = pos;
         }
 

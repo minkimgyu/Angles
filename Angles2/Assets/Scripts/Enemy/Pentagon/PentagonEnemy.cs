@@ -15,6 +15,8 @@ public class PentagonEnemy : RangedEnemy
 
         _stopDistance = data._stopDistance;
         _gap = data._gap;
+
+        _destoryEffect = BaseEffect.Name.PentagonDestroy;
     }
 
     public override void Initialize()

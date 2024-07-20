@@ -2,24 +2,15 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 8
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr proc glow crisp ab
-  m_Shader: {fileID: -6465566751694194690, guid: 67dfcda17071f4a41be79c4049965e67,
-    type: 3}
-  m_ValidKeywords:
-  - _CFXR_DITHERED_SHADOWS_ON
-  - _FADING_ON
-  m_InvalidKeywords:
-  - _CFXR_AMBIENT_LIGHTING
-  - _CFXR_FWIDTH
-  - _CFXR_GLOW_POW_P0
-  - _SUBGLOW_ON
-  - __CFXRGLOW_POW_P4
-  - __CFXRGLOW_POW_P6
+  m_Shader: {fileID: 4800000, guid: 714e760b98304b44292e04841e05f258, type: 3}
+  m_ShaderKeywords: _CFXR_AMBIENT_LIGHTING _CFXR_DITHERED_SHADOWS_ON _CFXR_FWIDTH
+    _CFXR_GLOW_POW_P0 _FADING_ON _SUBGLOW_ON __CFXRGLOW_POW_P4 __CFXRGLOW_POW_P6
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -37,7 +28,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
     m_Floats:
     - _AmbientColor: 0.25
     - _AmbientIntensity: 0.5
@@ -51,7 +41,7 @@ Material:
     - _GlowMin: 0
     - _Glow_Pow: 2
     - _HdrBoost: 0
-    - _HdrMultiply: 0
+    - _HdrMultiply: 1
     - _InvertDissolveTex: 0
     - _MaxValue: 1
     - _RingTopOffset: 0.05
@@ -67,4 +57,3 @@ Material:
     - _UseSP: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []

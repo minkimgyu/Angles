@@ -12,8 +12,8 @@ public class SelfDestructionData : BaseSkillData
 
     public SelfDestructionData(float probability, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(probability)
     {
-        _delay = delay;
         _damage = damage;
+        _delay = delay;
         _range = range;
         _targetTypes = targetTypes;
     }

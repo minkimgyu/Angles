@@ -11,7 +11,7 @@
 	#define DISABLE_SOFT_PARTICLES
 #endif
 
-#if defined(CFXR_URP)
+#if CFXR_URP
 	float LinearEyeDepthURP(float depth, float4 zBufferParam)
 	{
 		return 1.0 / (zBufferParam.z * depth + zBufferParam.w);
@@ -130,7 +130,7 @@
 	#endif
 
 		// Vertex program
-	#if defined(PASS_SHADOW_CASTER)
+	#if PASS_SHADOW_CASTER
 		void vert(appdata v, v2f_shadowCaster o, out float4 opos)
 	#else
 		v2f vert(appdata v, v2f o)
@@ -140,7 +140,7 @@
 			vertProjPos(o, o.pos);
 			vertEdgeFade(v, o.color.a);
 
-	#if defined(PASS_SHADOW_CASTER)
+	#if PASS_SHADOW_CASTER
 			TRANSFER_SHADOW_CASTER_NOPOS(o, opos);
 	#else
 			return o;
@@ -148,7 +148,7 @@
 		}
 
 		// Fragment program
-	#if defined(PASS_SHADOW_CASTER)
+	#if PASS_SHADOW_CASTER
 		float4 frag(v2f_shadowCaster i, UNITY_VPOS_TYPE vpos, half3 particleColor, half particleAlpha, half dissolve, half dissolveTime, half doubleDissolveWidth) : SV_Target
 	#else
 		half4 frag(v2f i, half3 particleColor, half particleAlpha, half dissolve, half dissolveTime, half doubleDissolveWidth) : SV_Target
@@ -177,7 +177,7 @@
 			clip(particleAlpha - _Cutoff);
 		#endif
 
-		#if !defined(PASS_SHADOW_CASTER)
+		#if !PASS_SHADOW_CASTER
 			// Fog & Soft Particles
 			applyFog(i, particleColor, particleAlpha);
 			fragSoftParticlesFade(i, particleAlpha);
@@ -186,7 +186,7 @@
 			// Prevent alpha from exceeding 1
 			particleAlpha = min(particleAlpha, 1.0);
 
-		#if !defined(PASS_SHADOW_CASTER)
+		#if !PASS_SHADOW_CASTER
 			return float4(particleColor, particleAlpha);
 		#else
 
@@ -304,7 +304,7 @@
 		return color;
 	}
 
-	void GetParticleTexcoords(out float2 outputTexcoord, out float2 outputTexcoord2, inout float outputBlend, in float4 inputTexcoords, in float inputBlend)
+	void GetParticleTexcoords(out float2 outputTexcoord, out float2 outputTexcoord2, out float outputBlend, in float4 inputTexcoords, in float inputBlend)
 	{
 		#if defined(UNITY_PARTICLE_INSTANCING_ENABLED)
 			if (unity_ParticleUVShiftData.x != 0.0)
@@ -348,7 +348,7 @@
 
 		#ifndef _FLIPBOOKBLENDING_ON
 			outputTexcoord2.xy = inputTexcoords.xy;
-			//outputBlend = 0.5;
+			outputBlend = 0.5;
 		#endif
 	}
 

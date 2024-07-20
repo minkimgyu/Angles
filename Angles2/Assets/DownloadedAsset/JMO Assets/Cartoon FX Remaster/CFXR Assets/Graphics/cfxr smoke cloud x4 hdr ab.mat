@@ -8,16 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: cfxr smoke cloud x4 hdr ab
-  m_Shader: {fileID: -6465566751694194690, guid: 1a29b4d27eb8b04479ef89c00dea533d,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: e198026df304af84a85675be636192ea, type: 3}
   m_ValidKeywords:
   - _ALPHABLEND_ON
   - _CFXR_DISSOLVE
   - _CFXR_DITHERED_SHADOWS_ON
+  - _CFXR_HDR_BOOST
   - _FADING_ON
   m_InvalidKeywords:
   - _
-  - _CFXR_HDR_BOOST
   - _CFXR_OVERLAYBLEND_RGBA
   - _CFXR_OVERLAYTEX_OFF
   m_LightmapFlags: 0
@@ -73,20 +72,19 @@ Material:
     - _DebugDissolveTime: 0
     - _DirLightScreenAtten: 1
     - _DirectLightingRamp: 1
-    - _DissolveSmooth: 0.15
+    - _DissolveSmooth: 0.2
     - _Distort: 0.1
     - _DoubleDissolve: 0
     - _DstBlend: 10
     - _EdgeFadePow: 1
     - _FadeAlongU: 0
     - _HdrBoost: 1
-    - _HdrMultiply: 4
+    - _HdrMultiply: 6
     - _IndirectLightingMix: 0.5
     - _InvertDissolveTex: 0
     - _LightingWorldPosStrength: 0.2
     - _OVERLAYBLEND: 0
     - _OVERLAYTEX: 0
-    - _ReceivedShadowsStrength: 0.5
     - _SecondColorSmooth: 0.2
     - _ShadowStrength: 0.5
     - _SingleChannel: 0
@@ -112,7 +110,7 @@ Material:
     - _UseUVDistortion: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 2, g: 2, b: 2, a: 1}
+    - _Color: {r: 2.9960785, g: 2.9960785, b: 2.9960785, a: 1}
     - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _DistortScrolling: {r: 0, g: 0, b: 1, a: 1}
     - _OverlayTex_Scroll: {r: 0.1, g: 0.1, b: 1, a: 1}

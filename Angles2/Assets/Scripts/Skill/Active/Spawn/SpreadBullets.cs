@@ -44,7 +44,7 @@ public class SpreadBullets : ActiveSkill
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(spawnPosition, direction);
 
-        IProjectile projectile = weapon.GetComponent<IProjectile>();
+        IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
         projectile.Shoot(direction, _force);
@@ -52,11 +52,12 @@ public class SpreadBullets : ActiveSkill
 
     public override void OnUpdate()
     {
-        if (_targets.Count == 0) return;
 
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:
+                if (_targets.Count == 0) return;
+
                 _delayTimer.Start(_delay);
                 break;
             case Timer.State.Finish:
@@ -86,9 +87,6 @@ public class SpreadBullets : ActiveSkill
     {
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
-
-        bool containTarget = _targets.Contains(target);
-        if (containTarget == false) return;
 
         _targets.Remove(target);
     }

@@ -36,6 +36,16 @@ abstract public class BaseSkill
         SelfDestruction
     }
 
+    protected int _maxUpgradePoint;
+    public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
+
+
+    protected int _upgradePoint = 1;
+    public int UpgradePoint { get { return _upgradePoint; } }
+
+
+    public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
+
     public virtual void Initialize(CastingData data) { }
 
     public abstract bool CanUse();

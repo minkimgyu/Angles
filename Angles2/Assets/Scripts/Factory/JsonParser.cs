@@ -7,11 +7,13 @@ public class JsonParser
 {
     public T JsonToData<T>(string jdata)
     {
-        return JsonConvert.DeserializeObject<T>(jdata);
+        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        return JsonConvert.DeserializeObject<T>(jdata, settings);
     }
 
     public string DataToJson<T>(T data)
     {
-        return JsonConvert.SerializeObject(data);
+        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
     }
 }

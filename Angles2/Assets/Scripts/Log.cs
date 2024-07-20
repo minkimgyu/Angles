@@ -7,7 +7,23 @@ public class Log : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // skillData: { a: { end:0}, b: { }, c: { {x:2, y:2}}, }
+
+        // 데이터를 불러올 때 잘라서 들고오는 방법을 선택해보자
+
         JsonParser _jsonParser = new JsonParser();
+
+        Dictionary<BaseSkill.Name, BaseSkillData> keyValuePairs = new Dictionary<BaseSkill.Name, BaseSkillData>();
+        keyValuePairs.Add(BaseSkill.Name.Statikk, new StatikkData(1, 101, 3, 3, new List<ITarget.Type> { ITarget.Type.Red }));
+        keyValuePairs.Add(BaseSkill.Name.Knockback, new KnockbackData(1, 100, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0),
+            new List<ITarget.Type> { ITarget.Type.Red }));
+        keyValuePairs.Add(BaseSkill.Name.Impact, new ImpactData(1, 100, 5, new List<ITarget.Type> { ITarget.Type.Red }));
+
+        string jdata = _jsonParser.DataToJson(keyValuePairs);
+        Debug.Log(jdata);
+
+        Dictionary<BaseSkill.Name, BaseSkillData> pairs = _jsonParser.JsonToData<Dictionary<BaseSkill.Name, BaseSkillData>>(jdata);
+        Debug.Log(pairs);
 
 
         //Debug.Log(_jsonParser.DataToJson(new BladeData(100, 10, 3, 1)));
@@ -31,105 +47,105 @@ public class Log : MonoBehaviour
         //Debug.Log(_jsonParser.DataToJson(new SpawnShooterData(1, new List<ITarget.Type> { ITarget.Type.Red })));
 
 
-        SpreadBulletsData spreadBulletsData = new SpreadBulletsData(
-            1f,
-            20f,
-            5f,
-            3f,
-            3f,
-            5,
-            new List<ITarget.Type> { ITarget.Type.Blue }
-        );
+        // SpreadBulletsData spreadBulletsData = new SpreadBulletsData(
+        //     1f,
+        //     20f,
+        //     5f,
+        //     3f,
+        //     3f,
+        //     5,
+        //     new List<ITarget.Type> { ITarget.Type.Blue }
+        // );
 
-        Debug.Log(_jsonParser.DataToJson(spreadBulletsData));
-
-
-        SelfDestructionData selfDestructionData = new SelfDestructionData(
-            1f,
-            20f,
-            5f,
-            3f,
-            new List<ITarget.Type> { ITarget.Type.Blue }
-        );
-
-        Debug.Log(_jsonParser.DataToJson(selfDestructionData));
-
-        MagneticFieldData magneticFieldData = new MagneticFieldData(
-           1f,
-           20f,
-           5f,
-           3f,
-           new List<ITarget.Type> { ITarget.Type.Blue }
-       );
-
-        Debug.Log(_jsonParser.DataToJson(magneticFieldData));
-
-        ShockwaveData shockwaveData = new ShockwaveData(
-           1f,
-           20f,
-           5f,
-           3f,
-           new List<ITarget.Type> { ITarget.Type.Blue }
-       );
-
-        Debug.Log(_jsonParser.DataToJson(shockwaveData));
+        // Debug.Log(_jsonParser.DataToJson(spreadBulletsData));
 
 
+        // SelfDestructionData selfDestructionData = new SelfDestructionData(
+        //     1f,
+        //     20f,
+        //     5f,
+        //     3f,
+        //     new List<ITarget.Type> { ITarget.Type.Blue }
+        // );
+
+        // Debug.Log(_jsonParser.DataToJson(selfDestructionData));
+
+        // MagneticFieldData magneticFieldData = new MagneticFieldData(
+        //    1f,
+        //    20f,
+        //    5f,
+        //    3f,
+        //    new List<ITarget.Type> { ITarget.Type.Blue }
+        //);
+
+        // Debug.Log(_jsonParser.DataToJson(magneticFieldData));
+
+        // ShockwaveData shockwaveData = new ShockwaveData(
+        //    1f,
+        //    20f,
+        //    5f,
+        //    3f,
+        //    new List<ITarget.Type> { ITarget.Type.Blue }
+        //);
+
+        // Debug.Log(_jsonParser.DataToJson(shockwaveData));
 
 
-        PlayerData playerData = new PlayerData(
-            100, 
-            ITarget.Type.Blue, 
-            10, 
-            15, 
-            0.5f,
 
-            15,
-            0.5f,
-            0.5f,
-            3,
-            1,
-            1.5f,
 
-            0.15f,
-            0.3f
-        );
-        Debug.Log(_jsonParser.DataToJson(playerData));
+        // PlayerData playerData = new PlayerData(
+        //     100, 
+        //     ITarget.Type.Blue, 
+        //     10, 
+        //     15, 
+        //     0.5f,
 
-        TriangleData triangleData = new TriangleData(
-            100,
-            ITarget.Type.Red,
-            5,
-            new List<BaseSkill.Name> { BaseSkill.Name.MagneticField }
-        );
-        Debug.Log(_jsonParser.DataToJson(triangleData));
+        //     15,
+        //     0.5f,
+        //     0.5f,
+        //     3,
+        //     1,
+        //     1.5f,
 
-        RectangleData rectangleData = new RectangleData(
-            100,
-            ITarget.Type.Red,
-            5,
-            new List<BaseSkill.Name> { BaseSkill.Name.MagneticField }
-        );
-        Debug.Log(_jsonParser.DataToJson(rectangleData));
+        //     0.15f,
+        //     0.3f
+        // );
+        // Debug.Log(_jsonParser.DataToJson(playerData));
 
-        PentagonData pentagonData = new PentagonData(
-            100,
-            ITarget.Type.Red,
-            5,
-            new List<BaseSkill.Name> { BaseSkill.Name.SpreadBullets },
-            4f,
-            2f
-        );
-        Debug.Log(_jsonParser.DataToJson(pentagonData));
+        // TriangleData triangleData = new TriangleData(
+        //     100,
+        //     ITarget.Type.Red,
+        //     5,
+        //     new List<BaseSkill.Name> { BaseSkill.Name.MagneticField }
+        // );
+        // Debug.Log(_jsonParser.DataToJson(triangleData));
 
-        HexagonData hexagonData = new HexagonData(
-            100,
-            ITarget.Type.Red,
-            5,
-            new List<BaseSkill.Name> { BaseSkill.Name.Shockwave },
-            4f,
-            2f
-        );
-        Debug.Log(_jsonParser.DataToJson(hexagonData));
+        // RectangleData rectangleData = new RectangleData(
+        //     100,
+        //     ITarget.Type.Red,
+        //     5,
+        //     new List<BaseSkill.Name> { BaseSkill.Name.MagneticField }
+        // );
+        // Debug.Log(_jsonParser.DataToJson(rectangleData));
+
+        // PentagonData pentagonData = new PentagonData(
+        //     100,
+        //     ITarget.Type.Red,
+        //     5,
+        //     new List<BaseSkill.Name> { BaseSkill.Name.SpreadBullets },
+        //     4f,
+        //     2f
+        // );
+        // Debug.Log(_jsonParser.DataToJson(pentagonData));
+
+        // HexagonData hexagonData = new HexagonData(
+        //     100,
+        //     ITarget.Type.Red,
+        //     5,
+        //     new List<BaseSkill.Name> { BaseSkill.Name.Shockwave },
+        //     4f,
+        //     2f
+        // );
+        // Debug.Log(_jsonParser.DataToJson(hexagonData));
     }
 }

@@ -10,35 +10,36 @@ public class EffectCreaterInput
 
 public class EffectCreater : BaseCreater<EffectCreaterInput, BaseEffect>
 {
-    protected BaseEffect _prefab;
+    //protected BaseEffect _prefab;
 
     public override void Initialize(EffectCreaterInput input)
     {
-        _prefab = input._effectPrefab;
+        //_prefab = input._effectPrefab;
     }
 
     public override BaseEffect Create() 
     {
-        BaseEffect effect = Object.Instantiate(_prefab);
-        effect.Initialize();
+        //BaseEffect effect = Object.Instantiate(_prefab);
+        //effect.Initialize();
 
-        return effect; 
+        //return effect; 
+        return null;
     }
 }
 
-public class EffectFactory : MonoBehaviour
+public class EffectFactory : Singleton<EffectFactory>
 {
     [SerializeField] EffectInputDictionary _effectInputs; // 무기 prefab을 모아서 넣어준다.
     Dictionary<BaseEffect.Name, EffectCreater> _effectCreaters;
 
     private static EffectFactory _instance;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (_instance == null) _instance = this;
-        else Destroy(gameObject);
-
+        base.Awake();
         _effectCreaters = new Dictionary<BaseEffect.Name, EffectCreater>();
+        //AddressableManager.Instance.CardIconAssetDictionary;
+
         Initialize();
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 {
@@ -8,6 +9,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     protected float _hp;
 
     protected Timer _groggyTimer;
+    protected Action<float> OnHpChange;
 
     public enum Name
     {
@@ -55,6 +57,8 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void GetHeal(float point)
     {
         _hp += point;
+        OnHpChange?.Invoke(_hp / _maxHp);
+
         if (_maxHp < _hp)
         {
             _hp = _maxHp;
@@ -108,8 +112,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         if (canDamage == false) return;
 
         _hp -= damageData.Damage;
+        OnHpChange?.Invoke(_hp / _maxHp);
 
-        if(_aliveState == AliveState.Normal && damageData.GroggyDuration > 0)
+        if (_aliveState == AliveState.Normal && damageData.GroggyDuration > 0)
         {
             _aliveState = AliveState.Groggy; // 일정 시간 후 복귀
             _groggyTimer.Start(damageData.GroggyDuration);
@@ -117,7 +122,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
         SpawnDamageTxt(damageData);
 
-        if (_hp < 0)
+        if (_hp <= 0)
         {
             _hp = 0;
             _lifeState = LifeState.Die;

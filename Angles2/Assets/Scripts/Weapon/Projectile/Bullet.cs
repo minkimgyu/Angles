@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Bullet : Projectile
+public class Bullet : ProjectileWeapon
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {

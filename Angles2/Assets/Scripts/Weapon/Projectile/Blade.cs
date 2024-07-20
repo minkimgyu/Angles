@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Blade : Projectile
+public class Blade : ProjectileWeapon
 {
     public class TargetData
     {

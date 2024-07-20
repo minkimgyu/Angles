@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+//[CustomPropertyDrawer(typeof(CardInfoDictionary))]
 [CustomPropertyDrawer(typeof(LifeInputDictionary))]
 [CustomPropertyDrawer(typeof(WeaponInputDictionary))]
-[CustomPropertyDrawer(typeof(FieldItemInputDictionary))]
+[CustomPropertyDrawer(typeof(InteractableObjectInputDictionary))]
 [CustomPropertyDrawer(typeof(SkillInputDictionary))]
 [CustomPropertyDrawer(typeof(EffectInputDictionary))]
 
