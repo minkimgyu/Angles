@@ -4,11 +4,11 @@ using UnityEngine;
 using DamageUtility;
 using System;
 
-public class SpawnStickyBomb : ActiveSkill
+public class SpawnStickyBomb : CooltimeSkill
 {
     List<ITarget.Type> _targetTypes;
 
-    public SpawnStickyBomb(SpawnStickyBombData data) : base(data._probability)
+    public SpawnStickyBomb(SpawnStickyBombData data) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _targetTypes = data._targetTypes;
     }
@@ -26,6 +26,9 @@ public class SpawnStickyBomb : ActiveSkill
 
         BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
+
+        if (_stackCount <= 0) return;
+        _stackCount--;
 
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetFollower(followable);

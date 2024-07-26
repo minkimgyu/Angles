@@ -13,7 +13,9 @@ public class RectangleEnemy : MeleeEnemy
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
 
-        _destoryEffect = BaseEffect.Name.RectangleDestroy;
+        _offsetFromCenter = 0.5f;
+
+        _destoryEffect = BaseEffect.Name.RectangleDestroyEffect;
     }
 
     public override void Initialize()

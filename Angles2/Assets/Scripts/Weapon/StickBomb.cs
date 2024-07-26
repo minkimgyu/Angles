@@ -30,7 +30,7 @@ public class StickBomb : BaseWeapon
     {
         Debug.Log("Explode");
 
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Explosion);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
 

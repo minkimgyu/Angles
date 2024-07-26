@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class HpViewer : MonoBehaviour
+public class HpViewer : BaseViewer
 {
     [SerializeField] Image _bar;
     [SerializeField] float _changeDuration;
@@ -15,12 +15,12 @@ public class HpViewer : MonoBehaviour
 
     IFollowable _followTarget;
 
-    public void Initialize()
+    public override void Initialize()
     {
         _bar.color = _startColor;
     }
 
-    public void OnHpChange(float ratio)
+    public override void UpdateViewer(float ratio)
     {
         _bar.DOFillAmount(ratio, _changeDuration);
 
@@ -28,7 +28,7 @@ public class HpViewer : MonoBehaviour
         _bar.DOColor(targetColor, _changeDuration);
     }
 
-    public void SetTracker(IFollowable followTarget)
+    public override void SetFollower(IFollowable followTarget)
     {
         _followTarget = followTarget;
     }

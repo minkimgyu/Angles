@@ -2,53 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class EffectCreaterInput
+public class EffectCreater : ObjCreater<BaseEffect> 
 {
-    public BaseEffect _effectPrefab;
-}
-
-public class EffectCreater : BaseCreater<EffectCreaterInput, BaseEffect>
-{
-    //protected BaseEffect _prefab;
-
-    public override void Initialize(EffectCreaterInput input)
+    public override BaseEffect Create()
     {
-        //_prefab = input._effectPrefab;
-    }
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseEffect effect = obj.GetComponent<BaseEffect>();
+        if (effect == null) return null;
 
-    public override BaseEffect Create() 
-    {
-        //BaseEffect effect = Object.Instantiate(_prefab);
-        //effect.Initialize();
-
-        //return effect; 
-        return null;
+        effect.Initialize();
+        return effect;
     }
 }
 
-public class EffectFactory : Singleton<EffectFactory>
+public class EffectFactory : MonoBehaviour
 {
-    [SerializeField] EffectInputDictionary _effectInputs; // 무기 prefab을 모아서 넣어준다.
     Dictionary<BaseEffect.Name, EffectCreater> _effectCreaters;
-
     private static EffectFactory _instance;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-        _effectCreaters = new Dictionary<BaseEffect.Name, EffectCreater>();
-        //AddressableManager.Instance.CardIconAssetDictionary;
+        if (_instance == null) _instance = this;
+        else Destroy(gameObject);
 
         Initialize();
     }
 
     private void Initialize()
     {
-        foreach (var input in _effectInputs)
+        _effectCreaters = new Dictionary<BaseEffect.Name, EffectCreater>();
+
+        int effectCount = System.Enum.GetValues(typeof(BaseEffect.Name)).Length;
+        for (int i = 0; i < effectCount; i++)
         {
-            _effectCreaters[input.Key] = new EffectCreater();
-            _effectCreaters[input.Key].Initialize(input.Value);
+            BaseEffect.Name key = (BaseEffect.Name)i;
+            GameObject prefab = AddressableManager.Instance.PrefabAssetDictionary[key.ToString()];
+
+            _effectCreaters[key] = new EffectCreater();
+            _effectCreaters[key].Initialize(prefab);
         }
     }
 

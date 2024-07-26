@@ -15,12 +15,16 @@ public class StickyBombData : BaseWeaponData
     }
 }
 
-public class StickyBombCreater : WeaponCreater<StickyBombData>
+public class StickyBombCreater : WeaponCreater
 {
     public override BaseWeapon Create()
     {
-        BaseWeapon weapon = Object.Instantiate(_prefab);
-        weapon.Initialize(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        if (weapon == null) return null;
+
+        StickyBombData data = Database.Instance.WeaponData[BaseWeapon.Name.StickyBomb] as StickyBombData;
+        weapon.Initialize(data);
         return weapon;
     }
 }

@@ -14,7 +14,7 @@ public class SpreadBulletsData : BaseSkillData
 
     public List<ITarget.Type> _targetTypes;
 
-    public SpreadBulletsData(float probability, float damage, float force, float delay, float distanceFromCaster, int bulletCount, List<ITarget.Type> targetTypes) : base(probability)
+    public SpreadBulletsData(int maxUpgradePoint, float damage, float force, float delay, float distanceFromCaster, int bulletCount, List<ITarget.Type> targetTypes) : base(maxUpgradePoint) 
     {
         _damage = damage;
         _force = force;
@@ -27,10 +27,11 @@ public class SpreadBulletsData : BaseSkillData
     }
 }
 
-public class SpreadBulletsCreater : SkillCreater<SpreadBulletsData>
+public class SpreadBulletsCreater : SkillCreater
 {
     public override BaseSkill Create()
     {
-        return new SpreadBullets(_data);
+        SpreadBulletsData data = Database.Instance.SkillDatas[BaseSkill.Name.SpreadBullets] as SpreadBulletsData;
+        return new SpreadBullets(data);
     }
 }

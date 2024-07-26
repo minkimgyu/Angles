@@ -17,6 +17,26 @@ public class CaptureComponent<T> : MonoBehaviour
         this.OnExit = OnExit;
     }
 
+    public void Initialize(float range, Action<T> OnEnter)
+    {
+        CircleCollider2D collider = GetComponent<CircleCollider2D>();
+        if (collider == null) return;
+
+        collider.radius = range;
+        this.OnEnter = OnEnter;
+        this.OnExit = null;
+    }
+
+    public void Initialize(float range, Action<T> OnEnter, Action<T> OnExit)
+    {
+        CircleCollider2D collider = GetComponent<CircleCollider2D>();
+        if (collider == null) return;
+
+        collider.radius = range;
+        this.OnEnter = OnEnter;
+        this.OnExit = OnExit;
+    }
+
     Action<T> OnEnter;
     Action<T> OnExit;
 
@@ -47,6 +67,26 @@ public class CaptureComponent<T1, T2> : MonoBehaviour
 
     public void Initialize(Action<T1, T2> OnEnter, Action<T1, T2> OnExit)
     {
+        this.OnEnter = OnEnter;
+        this.OnExit = OnExit;
+    }
+
+    public void Initialize(float range, Action<T1, T2> OnEnter)
+    {
+        CircleCollider2D collider = GetComponent<CircleCollider2D>();
+        if (collider == null) return;
+
+        collider.radius = range;
+        this.OnEnter = OnEnter;
+        this.OnExit = null;
+    }
+
+    public void Initialize(float range, Action<T1, T2> OnEnter, Action<T1, T2> OnExit)
+    {
+        CircleCollider2D collider = GetComponent<CircleCollider2D>();
+        if (collider == null) return;
+
+        collider.radius = range;
         this.OnEnter = OnEnter;
         this.OnExit = OnExit;
     }

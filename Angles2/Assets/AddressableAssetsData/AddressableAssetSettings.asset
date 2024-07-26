@@ -48,6 +48,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fd375867909f4cf45a69eccc8e2590c7, type: 2}
   - {fileID: 11400000, guid: 875d91a274cf88e4baf748b9bf295332, type: 2}
   - {fileID: 11400000, guid: 50ba9f24a00284243be1be586f0943b3, type: 2}
+  - {fileID: 11400000, guid: a28361bf58c793b43861e674603a535b, type: 2}
+  - {fileID: 11400000, guid: 4e52011b27370694cbc74da50b894c9b, type: 2}
+  - {fileID: 11400000, guid: 7a43d66bd5ed81f4dbee0624b625c870, type: 2}
+  - {fileID: 11400000, guid: 7be2f013107a49a4588f0b3b4f236f15, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -90,7 +94,11 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Weapon
-    - Icon
+    - SkillIcon
+    - Effect
+    - Life
+    - Viewer
+    - Map1
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: e12fe35937006864a81e8bb7a1736e46, type: 2}

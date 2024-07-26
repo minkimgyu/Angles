@@ -27,7 +27,7 @@ public class Bullet : ProjectileWeapon
 
     void SpawnHitEffect()
     {
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Hit);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.HitEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
     }

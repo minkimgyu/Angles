@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class DashUIController : MonoBehaviour
 {
-    [SerializeField] DashCountViewer _dashViewerPrefab;
     [SerializeField] RectTransform _dashViewerParent;
-
-    List<DashCountViewer> _viwers;
+    List<BaseViewer> _viwers;
 
     public void Initialize(int dashCount)
     {
-        _viwers = new List<DashCountViewer>();
+        _viwers = new List<BaseViewer>();
 
         for (int i = 0; i < dashCount; i++)
         {
-            DashCountViewer viewer = Instantiate(_dashViewerPrefab, _dashViewerParent);
+            BaseViewer viewer = ViewerFactory.Create(BaseViewer.Name.DashViewer);
+            viewer.transform.SetParent(_dashViewerParent);
             _viwers.Add(viewer);
         }
     }
@@ -27,7 +26,7 @@ public class DashUIController : MonoBehaviour
         for (int i = 0; i < _viwers.Count; i++)
         {
             float ratio = Mathf.Clamp(totalRatio, 0, 1);
-            _viwers[i].FillViewer(ratio);
+            _viwers[i].UpdateViewer(ratio);
             totalRatio -= ratio;
         }
     }

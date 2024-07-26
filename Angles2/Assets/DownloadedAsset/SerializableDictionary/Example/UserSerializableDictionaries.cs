@@ -9,24 +9,21 @@ public class StringStringDictionary : SerializableDictionary<string, string> {}
 //[Serializable]
 //public class CardInfoDictionary : SerializableDictionary<BaseSkill.Name, BaseCardInfo> { }
 
-[Serializable]
-public class EffectInputDictionary : SerializableDictionary<BaseEffect.Name, EffectCreaterInput> { }
+//[Serializable]
+//public class EffectInputDictionary : SerializableDictionary<BaseEffect.Name, EffectCreaterInput> { }
 
-[Serializable]
-public class LifeInputDictionary : SerializableDictionary<BaseLife.Name, LifeCreaterInput> { }
+//[Serializable]
+//public class LifeInputDictionary : SerializableDictionary<BaseLife.Name, LifeCreaterInput> { }
 
-[Serializable]
-public class WeaponInputDictionary : SerializableDictionary<BaseWeapon.Name, WeaponCreaterInput> { }
+//[Serializable]
+//public class WeaponInputDictionary : SerializableDictionary<BaseWeapon.Name, WeaponCreaterInput> { }
 
-[Serializable]
-public class SkillInputDictionary : SerializableDictionary<BaseSkill.Name, SkillCreaterInput> { }
+//[Serializable]
+//public class SkillInputDictionary : SerializableDictionary<BaseSkill.Name, SkillCreaterInput> { }
 
-[Serializable]
-public class InteractableObjectInputDictionary : SerializableDictionary<IInteractable.Name, InteractableObjectCreaterInput> { }
+//[Serializable]
+//public class InteractableObjectInputDictionary : SerializableDictionary<IInteractable.Name, InteractableObjectCreaterInput> { }
 
-
-[Serializable]
-public class OutlineColorDictionary : SerializableDictionary<OutlineComponent.Condition, Color> { }
 
 [Serializable]
 public class FlockBehaviorDictionary : SerializableDictionary<FlockComponent.BehaviorType, float> { }

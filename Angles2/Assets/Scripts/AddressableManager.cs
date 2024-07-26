@@ -9,30 +9,105 @@ using System;
 
 public class AddressableManager : Singleton<AddressableManager>
 {
-    Dictionary<string, AsyncOperationHandle<Sprite>> _spriteAssetDictionary;
-    public Dictionary<string, AsyncOperationHandle<Sprite>> SpriteAssetDictionary { get { return _spriteAssetDictionary; } }
-
-    protected override void Awake()
+    public enum Labels
     {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
+        SkillIcon,
+        Life,
+        Weapon,
+        Effect,
+        InteractableObject,
+        Viewer,
+        Map1
     }
+
+    List<Tuple<string, Type>> _assetLabels;
+
+    Dictionary<string, Sprite> _spriteAssetDictionary;
+    public Dictionary<string, Sprite> SpriteAssetDictionary { get { return _spriteAssetDictionary; } }
+
+    Dictionary<string, GameObject> _prefabAssetDictionary;
+    public Dictionary<string, GameObject> PrefabAssetDictionary { get { return _prefabAssetDictionary; } }
+
+    int labelTotalCount = 0;
+    int labelCount = 0;
 
     private void Start()
     {
-        _spriteAssetDictionary = new Dictionary<string, AsyncOperationHandle<Sprite>>();
+        _assetLabels = new List<Tuple<string, Type>>();
+        _spriteAssetDictionary = new Dictionary<string, Sprite>();
+        _prefabAssetDictionary = new Dictionary<string, GameObject>();
 
-        int count = Enum.GetValues(typeof(CardData.Name)).Length;
-        foreach (CardData.Name name in Enum.GetValues(typeof(CardData.Name)))
+        _assetLabels.Add(new Tuple<string, Type>(Labels.SkillIcon.ToString(), typeof(Sprite)));
+        _assetLabels.Add(new Tuple<string, Type>(Labels.Weapon.ToString(), typeof(GameObject)));
+        _assetLabels.Add(new Tuple<string, Type>(Labels.Effect.ToString(), typeof(GameObject)));
+        _assetLabels.Add(new Tuple<string, Type>(Labels.Life.ToString(), typeof(GameObject)));
+        _assetLabels.Add(new Tuple<string, Type>(Labels.Viewer.ToString(), typeof(GameObject)));
+        _assetLabels.Add(new Tuple<string, Type>(Labels.Map1.ToString(), typeof(GameObject)));
+
+        for (int i = 0; i < _assetLabels.Count; i++)
         {
-            LoadAssetAsName<Sprite>(name.ToString(), (item) => 
+            LoadAssetAsLabel(_assetLabels[i].Item1, _assetLabels[i].Item2, 
+            () => 
             {
-                _spriteAssetDictionary.Add(name.ToString(), item);
-
-                if (_spriteAssetDictionary.Count != count) return;
-                ChangeScene();
-            });
+                labelCount++;
+                if (labelCount == labelTotalCount) ChangeScene();
+            }
+            );
         }
+
+        Invoke("ChangeScene", 2f);
+    }
+
+    void LoadAssetAsLabel(string label, Type type, Action OnComplete)
+    {
+        // 빌드타겟의 경로를 가져온다.
+        // 경로이기 때문에 메모리에 에셋이 로드되진 않는다.
+        Addressables.LoadResourceLocationsAsync(label, type).Completed +=
+        (handle) =>
+        {
+            IList<IResourceLocation> locationList = handle.Result;
+            labelTotalCount += locationList.Count;
+
+            if (type == typeof(Sprite))
+            {
+                for (int i = 0; i < locationList.Count; i++)
+                {
+                    LoadAsset(locationList[i], _spriteAssetDictionary);
+                }
+            }
+            else if(type == typeof(GameObject))
+            {
+                for (int i = 0; i < locationList.Count; i++)
+                {
+                    LoadAsset(locationList[i], _prefabAssetDictionary);
+                }
+            }
+
+            OnComplete?.Invoke();
+        };
+    }
+
+    void LoadAsset<T>(IResourceLocation location, Dictionary<string, T> dictionary)
+    {
+        Addressables.LoadAssetAsync<T>(location).Completed +=
+        (handle) =>
+        {
+            switch (handle.Status)
+            {
+                case AsyncOperationStatus.Succeeded:
+                    Debug.Log(location.PrimaryKey);
+                    Debug.Log(handle.Result);
+                    dictionary.Add(location.PrimaryKey, handle.Result);
+                    break;
+
+                case AsyncOperationStatus.Failed:
+                    Debug.Log("로드 실패");
+                    break;
+
+                default:
+                    break;
+            }
+        };
     }
 
     void ChangeScene()
@@ -40,17 +115,16 @@ public class AddressableManager : Singleton<AddressableManager>
         SceneManager.LoadScene("PlayScene");
     }
 
-    void LoadAssetAsName<T>(string name, Action<AsyncOperationHandle<T>> ReturnAssets)
-    {
-        AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(name);
-        handle.Completed += ReturnAssets;
-    }
-
     void ReleaseAsset()
     {
         foreach (var asset in _spriteAssetDictionary)
         {
-            Addressables.Release(asset.Value.Result);
+            Addressables.Release(asset.Value);
+        }
+
+        foreach (var asset in _prefabAssetDictionary)
+        {
+            Addressables.Release(asset.Value);
         }
     }
 
@@ -58,22 +132,4 @@ public class AddressableManager : Singleton<AddressableManager>
     {
         ReleaseAsset();
     }
-
-    //void LoadAsset<T>(IResourceLocation location, Action<AsyncOperationHandle<T>> ReturnAssets)
-    //{
-    //    // 해당 위치에 있는 스프라이트를 로드한다.
-    //    Addressables.LoadAssetAsync<T>(location).Completed += ReturnAssets;
-    //}
-
-    //void LoadAssetAsLabel<T>(string label, Action<AsyncOperationHandle<T>> ReturnAssets)
-    //{
-    //    Addressables.LoadResourceLocationsAsync(label, typeof(T)).Completed +=
-    //    (handle) => 
-    //    {
-    //        for (int i = 0; i < handle.Result.Count; i++)
-    //        {
-    //            LoadAsset(handle.Result[i], ReturnAssets);
-    //        }
-    //    };
-    //}
 }

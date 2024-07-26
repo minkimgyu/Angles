@@ -24,6 +24,8 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
 
     protected IPos _followTarget;
 
+    protected float _offsetFromCenter;
+
     public override void Initialize()
     {
         _followTarget = FindObjectOfType<Player.Player>();
@@ -61,7 +63,7 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
         if (_followTarget == null) return;
 
         Vector3 targetPos = _followTarget.ReturnPosition();
-        BehaviorData data = new BehaviorData(_nearAgents, _obstacles, targetPos);
+        BehaviorData data = new BehaviorData(_nearAgents, _obstacles, targetPos, _offsetFromCenter);
         _dir = _flockComponent.ReturnDirection(data);
     }
 

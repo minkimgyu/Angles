@@ -16,19 +16,16 @@ public class TriangleData : BaseLifeData
     }
 }
 
-public class TriangleCreater : LifeCreater<TriangleData>
+public class TriangleCreater : LifeCreater
 {
-    IPos _followTarget;
-
-    public override void Initialize(LifeCreaterInput input)
-    {
-        base.Initialize(input);
-    }
-
     public override BaseLife Create()
     {
-        BaseLife life = Object.Instantiate(_prefab);
-        life.ResetData(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseLife life = obj.GetComponent<TriangleEnemy>();
+        if (life == null) return null;
+
+        TriangleData playerData = Database.Instance.LifeDatas[BaseLife.Name.Triangle] as TriangleData;
+        life.ResetData(playerData);
         life.Initialize();
 
         return life;

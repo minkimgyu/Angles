@@ -6,11 +6,7 @@ using System;
 public class CardTable : MonoBehaviour, IInteractable
 {
     Action<List<SkillUpgradeData>> CreateCards;
-
-    public void OnInteract(List<SkillUpgradeData> containedSkillNames)
-    {
-        CreateCards?.Invoke(containedSkillNames);
-    }
+    OutlineComponent _outlineComponent;
 
     private void Start()
     {
@@ -21,9 +17,26 @@ public class CardTable : MonoBehaviour, IInteractable
     {
         CardController cardController = FindObjectOfType<CardController>();
         CreateCards = cardController.CreateCards;
+
+        _outlineComponent = GetComponentInChildren<OutlineComponent>();
+        _outlineComponent.Initialize();
     }
 
-    public void OnInteractEnter() { }
-    public void OnInteractEnter(IFollowable followable) { }
-    public void OnInteractExit() { }
+    public void OnInteractEnter(InteractEnterData data)
+    {
+        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnInteract);
+    }
+
+    public void OnInteract(InteractData data)
+    {
+        List<SkillUpgradeData> upgradeDatas = data.ReturnSkillUpgradeDatas?.Invoke();
+
+        if (upgradeDatas.Count == 0) return;
+        CreateCards?.Invoke(upgradeDatas);
+    }
+
+    public void OnInteractExit(InteractExitData data)
+    {
+        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
+    }
 }

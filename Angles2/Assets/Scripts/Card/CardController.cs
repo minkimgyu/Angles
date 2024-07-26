@@ -7,11 +7,11 @@ using DG.Tweening;
 
 public struct SKillCardData
 {
-    public SKillCardData(BaseSkill.Name name, int upgradeCount, int maxUpgradeCount)
+    public SKillCardData(BaseSkill.Name name, Sprite icon, string info, int upgradeCount, int maxUpgradeCount)
     {
         _name = name;
-        _icon = null;
-        _info = null;
+        _icon = icon;
+        _info = info;
         _upgradeCount = upgradeCount;
         _maxUpgradeCount = maxUpgradeCount;
     }
@@ -37,64 +37,75 @@ public class CardController : MonoBehaviour
 {
     [SerializeField] GameObject _uiObject;
     [SerializeField] Transform _cardParent;
-    [SerializeField] CardViewer _cardPrefab;
 
     [SerializeField] Image _backPanel;
-
-    //[SerializeField] CardInfoDictionary _cardInfoDictionary;
-    Dictionary<BaseSkill.Name, CardViewer> _cardViewerDictionary;
+    Dictionary<BaseSkill.Name, BaseViewer> _cardViewerDictionary;
 
     Action<BaseSkill.Name> ReturnSkillNameToAdd;
 
-    [SerializeField] int maxCardCount = 3;
+    int maxCardCount = 3;
+    const string _icon = "Icon";
 
     public void Initialize(Action<BaseSkill.Name> ReturnSkillNameToAdd)
     {
-        _cardViewerDictionary = new Dictionary<BaseSkill.Name, CardViewer>();
+        _cardViewerDictionary = new Dictionary<BaseSkill.Name, BaseViewer>();
         this.ReturnSkillNameToAdd = ReturnSkillNameToAdd;
     }
 
     // maxUpgrade인 스킬은 포함하지 않는다.
     public void CreateCards(List<SkillUpgradeData> skillUpgradeDatas)
     {
-        int cardCount = 0;
+        Time.timeScale = 0;
 
-        //foreach (var item in _cardInfoDictionary)
-        //{
-        //    if (cardCount == maxCardCount) break;
-        //    BaseSkill.Name name = item.Key;
+        int dataCount = skillUpgradeDatas.Count;
 
-        //    for (int i = 0; i < skillUpgradeDatas.Count; i++)
-        //    {
-        //        if (name != skillUpgradeDatas[i].Name) continue;
+        for (int i = 0; i < maxCardCount; i++)
+        {
+            int randomRange;
+            BaseSkill.Name skillNameToAdd;
 
-        //        int upgradeCount = skillUpgradeDatas[i].UpgradeCount;
-        //        int maxUpgradeCount = skillUpgradeDatas[i].MaxUpgradeCount;
-        //        if (upgradeCount == maxUpgradeCount) continue;
+            //중복 검출해주기
+            // 더 이상 스킬 카드를 만들 수 없다면 리턴해주기
+            do
+            {
+                randomRange = UnityEngine.Random.Range(0, dataCount);
+                skillNameToAdd = skillUpgradeDatas[randomRange].Name;
+            }
+            while (_cardViewerDictionary.ContainsKey(skillNameToAdd) == true);
 
-        //        cardCount++;
+            int upgradeCount = skillUpgradeDatas[randomRange].UpgradeCount;
+            int maxUpgradeCount = skillUpgradeDatas[randomRange].MaxUpgradeCount;
 
-        //        SKillCardData cardData = new SKillCardData(
-        //            skillUpgradeDatas[i].Name,
-        //            _cardInfoDictionary[skillUpgradeDatas[i].Name],
-        //            skillUpgradeDatas[i].UpgradeCount,
-        //            skillUpgradeDatas[i].MaxUpgradeCount
-        //        );
+            CardInfoData cardInfoData = Database.Instance.CardDatas[skillNameToAdd];
+            Sprite cardIcon = AddressableManager.Instance.SpriteAssetDictionary[cardInfoData.IconName.ToString() + _icon];
+            string info = cardInfoData.Info;
 
-        //        AddCard(cardData);
-        //    }
-        //}
+            SKillCardData cardData = new SKillCardData(
+                skillNameToAdd,
+                cardIcon,
+                info,
+                upgradeCount,
+                maxUpgradeCount
+            );
+
+            AddCard(cardData);
+        }
 
         _uiObject.SetActive(true);
-        _backPanel.DOFade(1, 2);
+        _backPanel.DOFade(0.5f, 2);
     }
 
     public void DeleteCards()
     {
         foreach (var item in _cardViewerDictionary)
         {
-            RemoveCard(item.Key);
+            Destroy(item.Value.gameObject);
         }
+
+        // 딕셔너리 초기화
+        _cardViewerDictionary.Clear();
+
+        Debug.Log(_cardViewerDictionary.Count);
 
         _uiObject.SetActive(false);
         _backPanel.DOFade(0, 2);
@@ -102,24 +113,31 @@ public class CardController : MonoBehaviour
 
     void PickCard(BaseSkill.Name name)
     {
+        Time.timeScale = 1;
         ReturnSkillNameToAdd?.Invoke(name);
         DeleteCards();
     }
 
     void AddCard(SKillCardData skillCardData)
     {
-        CardViewer viewer = Instantiate(_cardPrefab, _cardParent);
+        BaseViewer viewer = ViewerFactory.Create(BaseViewer.Name.CardViewer);
+        for (int i = 0; i < skillCardData.UpgradeCount; i++)
+        {
+            GameObject starUI = AddressableManager.Instance.PrefabAssetDictionary["StarViewer"];
+            GameObject starObject = Instantiate(starUI);
+
+            viewer.AddChildUI(starObject.transform);
+        }
+
+        viewer.transform.SetParent(_cardParent);
+
         viewer.Initialize(
             skillCardData,
-            () => { PickCard(skillCardData.Name); }
+            () => 
+            { 
+                PickCard(skillCardData.Name); 
+            }
         );
         _cardViewerDictionary.Add(skillCardData.Name, viewer);
-    }
-    void RemoveCard(BaseSkill.Name name)
-    {
-        CardViewer viewer = _cardViewerDictionary[name];
-        Destroy(viewer.gameObject);
-
-        _cardViewerDictionary.Remove(name);
     }
 }

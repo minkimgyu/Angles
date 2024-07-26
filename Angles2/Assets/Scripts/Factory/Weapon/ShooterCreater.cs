@@ -18,13 +18,16 @@ public class ShooterData : BaseWeaponData
     }
 }
 
-public class ShooterCreater : WeaponCreater<ShooterData>
+public class ShooterCreater : WeaponCreater
 {
     public override BaseWeapon Create()
     {
-        BaseWeapon weapon = Object.Instantiate(_prefab);
-        weapon.Initialize(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        if (weapon == null) return null;
 
+        ShooterData data = Database.Instance.WeaponData[BaseWeapon.Name.Shooter] as ShooterData;
+        weapon.Initialize(data);
         return weapon;
     }
 }

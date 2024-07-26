@@ -13,13 +13,16 @@ public class BladeData : ProjectileData
     }
 }
 
-public class BladeCreater : WeaponCreater<BladeData>
+public class BladeCreater : WeaponCreater
 {
     public override BaseWeapon Create()
     {
-        BaseWeapon weapon = Object.Instantiate(_prefab);
-        weapon.Initialize(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        if (weapon == null) return null;
 
+        BladeData data = Database.Instance.WeaponData[BaseWeapon.Name.Blade] as BladeData;
+        weapon.Initialize(data);
         return weapon;
     }
 }

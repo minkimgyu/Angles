@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MagneticField : ActiveSkill
+public class MagneticField : BaseSkill
 {
     float _delay;
     float _damage;
@@ -10,7 +10,7 @@ public class MagneticField : ActiveSkill
     List<IDamageable> _damageableTargets;
     Timer _delayTimer;
 
-    public MagneticField(MagneticFieldData data) : base(data._probability)
+    public MagneticField(MagneticFieldData data) : base(Type.Basic, data._maxUpgradePoint)
     {
         _delay = data._delay;
         _damage = data._damage;

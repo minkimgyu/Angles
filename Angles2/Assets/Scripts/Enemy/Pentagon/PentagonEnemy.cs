@@ -13,10 +13,12 @@ public class PentagonEnemy : RangedEnemy
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
 
+        _offsetFromCenter = 0.7f;
+
         _stopDistance = data._stopDistance;
         _gap = data._gap;
 
-        _destoryEffect = BaseEffect.Name.PentagonDestroy;
+        _destoryEffect = BaseEffect.Name.PentagonDestroyEffect;
     }
 
     public override void Initialize()

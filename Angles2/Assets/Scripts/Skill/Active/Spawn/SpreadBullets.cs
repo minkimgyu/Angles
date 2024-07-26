@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpreadBullets : ActiveSkill
+public class SpreadBullets : BaseSkill
 {
     float _delay;
     float _damage;
@@ -16,7 +16,7 @@ public class SpreadBullets : ActiveSkill
 
     Timer _delayTimer;
 
-    public SpreadBullets(SpreadBulletsData data) : base(data._probability)
+    public SpreadBullets(SpreadBulletsData data) : base(Type.Basic, data._maxUpgradePoint)
     {
         _delay = data._delay;
         _damage = data._damage;

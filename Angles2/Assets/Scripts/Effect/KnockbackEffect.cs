@@ -10,7 +10,7 @@ public class KnockbackEffect : ParticleEffect
     public override void ResetPosition(Vector3 pos, Vector3 direction)
     {
         transform.position = pos;
-        transform.up = direction;
+        transform.right = direction;
 
         ParticleSystem.VelocityOverLifetimeModule velocityOverLifetimeModule;
         velocityOverLifetimeModule = _impact.velocityOverLifetime;

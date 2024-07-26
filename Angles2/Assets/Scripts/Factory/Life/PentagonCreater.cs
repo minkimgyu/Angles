@@ -21,12 +21,16 @@ public class PentagonData : BaseLifeData
     }
 }
 
-public class PentagonCreater : LifeCreater<PentagonData>
+public class PentagonCreater : LifeCreater
 {
     public override BaseLife Create()
     {
-        BaseLife life = Object.Instantiate(_prefab);
-        life.ResetData(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseLife life = obj.GetComponent<PentagonEnemy>();
+        if (life == null) return null;
+
+        PentagonData data = Database.Instance.LifeDatas[BaseLife.Name.Pentagon] as PentagonData;
+        life.ResetData(data);
         life.Initialize();
 
         return life;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Shockwave : ActiveSkill
+public class Shockwave : BaseSkill
 {
     float _delay;
     float _damage;
@@ -12,7 +12,7 @@ public class Shockwave : ActiveSkill
     List<ITarget> _targets;
     Timer _delayTimer;
 
-    public Shockwave(ShockwaveData data) : base(data._probability)
+    public Shockwave(ShockwaveData data) : base(Type.Basic, data._maxUpgradePoint)
     {
         _delay = data._delay;
         _damage = data._damage;
@@ -33,9 +33,9 @@ public class Shockwave : ActiveSkill
                 _delayTimer.Start(_delay);
                 break;
             case Timer.State.Finish:
-                Debug.Log("Shockwave");
+                //Debug.Log("Shockwave");
 
-                BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Shockwave);
+                BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ShockwaveEffect);
                 effect.ResetPosition(_castingData.MyTransform.position);
                 effect.Play();
 

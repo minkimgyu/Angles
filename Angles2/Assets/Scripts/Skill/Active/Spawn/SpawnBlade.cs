@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBlade : ActiveSkill
+public class SpawnBlade : RandomSkill
 {
     List<ITarget.Type> _targetTypes;
     public float _force;
 
-    public SpawnBlade(SpawnBladeData data) :base(data._probability)
+    public SpawnBlade(SpawnBladeData data) :base(data._maxUpgradePoint, data._probability)
     {
         _targetTypes = data._targetTypes;
         _force = data._force;

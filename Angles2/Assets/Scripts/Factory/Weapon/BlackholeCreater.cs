@@ -20,13 +20,16 @@ public class BlackholeData : BaseWeaponData
     }
 }
 
-public class BlackholeCreater : WeaponCreater<BlackholeData>
+public class BlackholeCreater : WeaponCreater
 {
     public override BaseWeapon Create()
     {
-        BaseWeapon weapon = Object.Instantiate(_prefab);
-        weapon.Initialize(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        if (weapon == null) return null;
 
+        BlackholeData data = Database.Instance.WeaponData[BaseWeapon.Name.Blackhole] as BlackholeData;
+        weapon.Initialize(data);
         return weapon;
     }
 }

@@ -13,9 +13,11 @@ public class HexagonEnemy : RangedEnemy
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
 
+        _offsetFromCenter = 1.0f;
+
         _stopDistance = data._stopDistance;
         _gap = data._gap;
-        _destoryEffect = BaseEffect.Name.HexagonDestroy;
+        _destoryEffect = BaseEffect.Name.HexagonDestroyEffect;
     }
 
     public override void Initialize()

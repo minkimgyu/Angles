@@ -23,13 +23,15 @@ public class PlayerData : BaseLifeData
     public float _shrinkScale;
     public float _normalScale;
 
+    public List<BaseSkill.Name> _skillNames;
+
     public PlayerData(float maxHp, ITarget.Type targetType,
         float moveSpeed, float dashSpeed, float dashDuration, 
         float shootSpeed, float shootDuration,
         float minJoystickLength, int maxDashCount, 
         int dashConsumeCount, float dashRestoreDuration,
 
-        float shrinkScale, float normalScale) : base(maxHp, targetType)
+        float shrinkScale, float normalScale, List<BaseSkill.Name> skillNames) : base(maxHp, targetType)
     {
         _moveSpeed = moveSpeed;
         _dashSpeed = dashSpeed;
@@ -46,15 +48,21 @@ public class PlayerData : BaseLifeData
 
         _shrinkScale = shrinkScale;
         _normalScale = normalScale;
+
+        _skillNames = skillNames;
     }
 }
 
-public class PlayerCreater : LifeCreater<PlayerData>
+public class PlayerCreater : LifeCreater
 {
     public override BaseLife Create()
     {
-        BaseLife life = Object.Instantiate(_prefab);
-        life.ResetData(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseLife life = obj.GetComponent<Player.Player>();
+        if (life == null) return null;
+
+        PlayerData playerData = Database.Instance.LifeDatas[BaseLife.Name.Player] as PlayerData;
+        life.ResetData(playerData);
         life.Initialize();
 
         return life;

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class AvoidBehavior : BaseBehavior
 {
-    Vector3 RaycastToWall(Vector3 offset)
+    Vector3 RaycastToWall(float offset)
     {
         int layer = LayerMask.GetMask("Obstacle");
 
-        Vector3 start = _myTransform.position + offset;
+        Vector3 start = _myTransform.position + _myTransform.up * offset;
         Vector3 dir = _myTransform.right;
 
         RaycastHit2D hit = Physics2D.Raycast(start, dir, 10, layer);
@@ -25,13 +25,12 @@ public class AvoidBehavior : BaseBehavior
     {
         if (behaviorData.NearObstacles.Count == 0) return Vector3.zero;
 
-        Vector3[] offsets = new Vector3[] {
-            new Vector3(0.5f, 0, 0),
-            new Vector3(-0.5f, 0, 0),
-        };
-
+        float[] offsets = new float[2] { -behaviorData.OffsetFromCenter, behaviorData.OffsetFromCenter };
         Vector3 direction = Vector3.zero;
-        for (int i = 0; i < 2; i++) direction += RaycastToWall(offsets[i]);
+        for (int i = 0; i < 2; i++)
+        {
+            direction += RaycastToWall(offsets[i]);
+        }
 
         return direction.normalized * _weight;
     }

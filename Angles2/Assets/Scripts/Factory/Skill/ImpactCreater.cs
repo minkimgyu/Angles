@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ImpactData : BaseSkillData
+public class ImpactData : RandomSkillData
 {
     public float _damage;
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public ImpactData(float probability, float damage, float range, List<ITarget.Type> targetTypes) : base(probability)
+    public ImpactData(int maxUpgradePoint, float probability, float damage, float range, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
         _damage = damage;
         _range = range;
@@ -17,10 +17,11 @@ public class ImpactData : BaseSkillData
     }
 }
 
-public class ImpactCreater : SkillCreater<ImpactData>
+public class ImpactCreater : SkillCreater
 {
     public override BaseSkill Create()
     {
-        return new Impact(_data);
+        ImpactData data = Database.Instance.SkillDatas[BaseSkill.Name.Impact] as ImpactData;
+        return new Impact(data);
     }
 }

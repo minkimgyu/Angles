@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnShooter : ActiveSkill
+public class SpawnShooter : BaseSkill
 {
     List<ITarget.Type> _targetTypes;
 
-    public SpawnShooter(SpawnShooterData data) : base(data._probability)
+    public SpawnShooter(SpawnShooterData data) : base(Type.Passive, data._maxUpgradePoint)
     {
         _targetTypes = data._targetTypes;
     }

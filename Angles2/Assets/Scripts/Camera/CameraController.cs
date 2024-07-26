@@ -40,8 +40,12 @@ public class CameraController : MonoBehaviour
         if (_followTarget == null) return;
         Vector3 targetPos = _followTarget.ReturnPosition();
 
-        float xPos = Mathf.Clamp(targetPos.x, MapMinPos.x + _cameraArea.width / 2, MapMaxPos.x - _cameraArea.width / 2);
-        float yPos = Mathf.Clamp(targetPos.y, MapMinPos.y + _cameraArea.height / 2, MapMaxPos.y - _cameraArea.height / 2);
+        //float xPos = Mathf.Clamp(targetPos.x, MapMinPos.x + _cameraArea.width / 2, MapMaxPos.x - _cameraArea.width / 2);
+        //float yPos = Mathf.Clamp(targetPos.y, MapMinPos.y + _cameraArea.height / 2, MapMaxPos.y - _cameraArea.height / 2);
+        //targetPos.Set(xPos, yPos, -10);
+
+        float xPos = targetPos.x;
+        float yPos = targetPos.y;
         targetPos.Set(xPos, yPos, -10);
 
         Vector2 pos = Vector2.Lerp(_mainCamera.transform.position, targetPos, Time.deltaTime * _followSpeed);

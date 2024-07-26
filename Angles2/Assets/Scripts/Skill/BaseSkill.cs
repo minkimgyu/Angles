@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public struct CastingData
 {
@@ -24,6 +25,7 @@ abstract public class BaseSkill
         Statikk,
         Knockback,
         Impact,
+        ContactAttack,
 
         SpawnBlackhole, // weapon
         SpawnShooter, // weapon
@@ -36,19 +38,44 @@ abstract public class BaseSkill
         SelfDestruction
     }
 
+    public enum Type
+    {
+        Passive,
+        Active,
+        Basic
+    }
+
+    public BaseSkill(Type skillType, int maxUpgradePoint)
+    {
+        _skillType = skillType;
+        _maxUpgradePoint = maxUpgradePoint;
+        _upgradePoint = 1;
+    }
+
+    protected Type _skillType;
+    public Type SkillType { get { return _skillType; } }
+
+    protected CastingData _castingData;
+
     protected int _maxUpgradePoint;
     public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
 
 
-    protected int _upgradePoint = 1;
+    protected int _upgradePoint;
     public int UpgradePoint { get { return _upgradePoint; } }
-
 
     public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
 
-    public virtual void Initialize(CastingData data) { }
+    public virtual void Upgrade() 
+    {
+        _upgradePoint++;
+    }
 
-    public abstract bool CanUse();
+    public virtual void Initialize(CastingData data) { _castingData = data; }
+
+    public Action<float, int, bool> ResetViewerValue;
+
+    public virtual bool CanUse() { return true; }
 
     public virtual void OnReflect(Collision2D collision) { }
 
@@ -59,5 +86,6 @@ abstract public class BaseSkill
     public virtual void OnCaptureExit(ITarget target, IDamageable damageable) { }
 
     public virtual void OnUpdate() { }
+
     public virtual void OnAdd() { }
 }

@@ -28,13 +28,16 @@ public class RocketData : ProjectileData
     }
 }
 
-public class RocketCreater : WeaponCreater<RocketData>
+public class RocketCreater : WeaponCreater
 {
     public override BaseWeapon Create()
     {
-        BaseWeapon weapon = Object.Instantiate(_prefab);
-        weapon.Initialize(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        if (weapon == null) return null;
 
+        RocketData data = Database.Instance.WeaponData[BaseWeapon.Name.Rocket] as RocketData;
+        weapon.Initialize(data);
         return weapon;
     }
 }

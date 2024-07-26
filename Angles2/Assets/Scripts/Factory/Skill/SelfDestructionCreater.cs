@@ -10,7 +10,7 @@ public class SelfDestructionData : BaseSkillData
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public SelfDestructionData(float probability, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(probability)
+    public SelfDestructionData(int maxUpgradePoint, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
         _delay = delay;
@@ -19,10 +19,11 @@ public class SelfDestructionData : BaseSkillData
     }
 }
 
-public class SelfDestructionCreater : SkillCreater<SelfDestructionData>
+public class SelfDestructionCreater : SkillCreater
 {
     public override BaseSkill Create()
     {
-        return new SelfDestruction(_data);
+        SelfDestructionData data = Database.Instance.SkillDatas[BaseSkill.Name.SelfDestruction] as SelfDestructionData;
+        return new SelfDestruction(data);
     }
 }

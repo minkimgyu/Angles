@@ -2,22 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DirectionViewer : MonoBehaviour
+public class DirectionViewer : BaseViewer
 {
     [SerializeField] GameObject _directionSprite;
 
-    public void Initialize()
+    IFollowable _followTarget;
+
+    public override void Initialize() 
     {
-        OnOffDirectionSprite(false);
+        OnOffViewer(false);
     }
 
-    public void UpdatePosition(Vector3 pos, Vector2 direction)
+    public override void SetFollower(IFollowable followTarget)
     {
-        transform.position = pos;
-        transform.right = direction;
+        _followTarget = followTarget;
     }
 
-    public void OnOffDirectionSprite(bool show)
+    private void Update()
+    {
+        if (_directionSprite.activeSelf == false) return;
+
+        transform.position = _followTarget.ReturnPosition();
+        transform.right = _followTarget.ReturnFowardDirection();
+    }
+
+    public override void OnOffViewer(bool show) 
     {
         _directionSprite.SetActive(show);
     }

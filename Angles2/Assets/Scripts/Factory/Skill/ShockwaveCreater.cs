@@ -10,7 +10,7 @@ public class ShockwaveData : BaseSkillData
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public ShockwaveData(float probability, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(probability)
+    public ShockwaveData(int maxUpgradePoint, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
         _delay = delay;
@@ -19,10 +19,11 @@ public class ShockwaveData : BaseSkillData
     }
 }
 
-public class ShockwaveCreater : SkillCreater<ShockwaveData>
+public class ShockwaveCreater : SkillCreater
 {
     public override BaseSkill Create()
     {
-        return new Shockwave(_data);
+        ShockwaveData data = Database.Instance.SkillDatas[BaseSkill.Name.Shockwave] as ShockwaveData;
+        return new Shockwave(data);
     }
 }

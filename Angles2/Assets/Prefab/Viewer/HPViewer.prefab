@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8440388585054344230}
   - component: {fileID: 8425711038277316396}
   m_Layer: 5
-  m_Name: HPViewer
+  m_Name: HpViewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

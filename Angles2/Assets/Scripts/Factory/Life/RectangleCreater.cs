@@ -16,12 +16,16 @@ public class RectangleData : BaseLifeData
     }
 }
 
-public class RectangleCreater : LifeCreater<RectangleData>
+public class RectangleCreater : LifeCreater
 {
     public override BaseLife Create()
     {
-        BaseLife life = Object.Instantiate(_prefab);
-        life.ResetData(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseLife life = obj.GetComponent<RectangleEnemy>();
+        if (life == null) return null;
+
+        RectangleData data = Database.Instance.LifeDatas[BaseLife.Name.Rectangle] as RectangleData;
+        life.ResetData(data);
         life.Initialize();
 
         return life;

@@ -7,64 +7,26 @@ using UnityEngine;
 public class Coin : MonoBehaviour, IInteractable
 {
     [SerializeField] int _upCount = 1;
-    [SerializeField] float _minDistance = 0.1f;
     [SerializeField] float _moveSpeed = 8f;
 
-    bool _nowEnter;
-    IFollowable _followableTarget;
-    MoveComponent _moveComponent;
-
-    Vector2 _followDir;
+    TrackComponent _trackComponent;
 
     private void Start()
     {
-        _nowEnter = false;
-        _moveComponent = GetComponent<MoveComponent>();
-        _moveComponent.Initialize();
+        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent.Initialize(_moveSpeed);
     }
 
-    bool NowInRange()
+    public void OnInteractEnter(InteractEnterData data)
     {
-        return Vector3.Distance(transform.position, _followableTarget.ReturnPosition()) <= _minDistance;
+        _trackComponent.ResetFollower(data.Followable);
     }
 
-    private void Update()
+    public void OnInteract(InteractData data) 
     {
-        if (_nowEnter == false) return;
-
-        if (_followableTarget == null || _followableTarget.CanFollow() == false)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Vector3 targetPos = _followableTarget.ReturnPosition();
-        _followDir = (targetPos - transform.position).normalized;
-
-        bool nowInRange = NowInRange();
-        if (nowInRange == true)
-        {
-            StageManager.Instance.CoinCount += _upCount;
-            Destroy(gameObject);
-            return;
-        }
+        StageManager.Instance.CoinCount += _upCount;
+        Destroy(gameObject);
     }
 
-    private void FixedUpdate()
-    {
-        if (_nowEnter == false) return;
-        if (_followableTarget == null || _followableTarget.CanFollow() == false) return;
-
-        _moveComponent.Move(_followDir, _moveSpeed);
-    }
-
-    public void OnInteractEnter(IFollowable followable)
-    {
-        _followableTarget = followable;
-        _nowEnter = true;
-    }
-
-    public void OnInteractEnter() { }
-    public void OnInteract(List<SkillUpgradeData> skillDatas) { }
-    public void OnInteractExit() { }
+    public void OnInteractExit(InteractExitData data) { }
 }

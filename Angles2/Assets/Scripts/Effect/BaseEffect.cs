@@ -6,21 +6,21 @@ abstract public class BaseEffect : MonoBehaviour
 {
     public enum Name
     {
-        DamageText,
-        Explosion,
-        Knockback,
-        Impact,
-        Signal,
-        Laser,
+        DamageTextEffect,
+        ExplosionEffect,
+        KnockbackEffect,
+        ImpactEffect,
+        SignalEffect,
+        LaserEffect,
 
-        Blade,
-        Hit,
+        BladeEffect,
+        HitEffect,
+        ShockwaveEffect,
 
-        TriangleDestroy,
-        RectangleDestroy,
-        PentagonDestroy,
-        HexagonDestroy,
-        Shockwave,
+        TriangleDestroyEffect,
+        RectangleDestroyEffect,
+        PentagonDestroyEffect,
+        HexagonDestroyEffect,
     }
 
     [SerializeField] protected float _destoryDelay = 0;

@@ -7,17 +7,18 @@ public class SpawnShooterData : BaseSkillData
 {
     public List<ITarget.Type> _targetTypes;
 
-    public SpawnShooterData(float probability, List<ITarget.Type> targetTypes) : base(probability)
+    public SpawnShooterData(int maxUpgradePoint, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _targetTypes = targetTypes;
     }
 }
 
 
-public class SpawnShooterCreater : SkillCreater<SpawnShooterData>
+public class SpawnShooterCreater : SkillCreater
 {
     public override BaseSkill Create()
     {
-        return new SpawnShooter(_data);
+        SpawnShooterData data = Database.Instance.SkillDatas[BaseSkill.Name.SpawnShooter] as SpawnShooterData;
+        return new SpawnShooter(data);
     }
 }

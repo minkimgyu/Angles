@@ -3,40 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SkillCreaterInput
+public class BaseSkillData 
 {
-    public TextAsset _jsonAsset;
+    public int _maxUpgradePoint;
+
+    public BaseSkillData(int maxUpgradePoint)
+    {
+        _maxUpgradePoint = maxUpgradePoint;
+    }
 }
 
-[System.Serializable]
-public class BaseSkillData
+[System.Serializable] 
+public class RandomSkillData : BaseSkillData
 {
-    public BaseSkillData(float probability)
+    public float _probability;
+
+    public RandomSkillData(int maxUpgradePoint, float probability) : base(maxUpgradePoint)
     {
         _probability = probability;
     }
-
-    public float _probability;
 }
 
-public class SkillCreater<T> : BaseCreater<SkillCreaterInput, BaseSkill>
+[System.Serializable] 
+public class CooltimeSkillData : BaseSkillData
 {
-    protected T _data;
-    JsonParser _jsonParser;
+    public int _maxStackCount;
+    public float _coolTime;
 
-    public override void Initialize(SkillCreaterInput input)
+    public CooltimeSkillData(int maxUpgradePoint, float coolTime, int maxStackCount) : base(maxUpgradePoint)
     {
-        TextAsset asset = input._jsonAsset;
-
-        _jsonParser = new JsonParser();
-        _data = _jsonParser.JsonToData<T>(asset.text);
+        _coolTime = coolTime;
+        _maxStackCount = maxStackCount;
     }
 }
 
+public class SkillCreater : BaseCreater<BaseSkill> { }
+
 public class SkillFactory : MonoBehaviour
 {
-    [SerializeField] SkillInputDictionary _skillInputs; // 무기 prefab을 모아서 넣어준다.
-    Dictionary<BaseSkill.Name, BaseCreater<SkillCreaterInput, BaseSkill>> _skillCreaters;
+    Dictionary<BaseSkill.Name, SkillCreater> _skillCreaters;
 
     private static SkillFactory _instance;
 
@@ -45,7 +50,7 @@ public class SkillFactory : MonoBehaviour
         if (_instance == null) _instance = this;
         else Destroy(gameObject);
 
-        _skillCreaters = new Dictionary<BaseSkill.Name, BaseCreater<SkillCreaterInput, BaseSkill>>();
+        _skillCreaters = new Dictionary<BaseSkill.Name, SkillCreater>();
         Initialize();
     }
 
@@ -66,10 +71,7 @@ public class SkillFactory : MonoBehaviour
         _skillCreaters[BaseSkill.Name.MagneticField] = new MagneticFieldCreater();
         _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater();
 
-        foreach (var input in _skillInputs)
-        {
-            _skillCreaters[input.Key].Initialize(input.Value);
-        }
+        _skillCreaters[BaseSkill.Name.ContactAttack] = new ContactAttackCreater();
     }
 
     public static BaseSkill Create(BaseSkill.Name name)

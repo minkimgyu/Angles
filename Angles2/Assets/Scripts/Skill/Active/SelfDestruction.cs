@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class SelfDestruction : ActiveSkill
+public class SelfDestruction : BaseSkill
 {
     float _delay;
     float _damage;
@@ -12,7 +12,7 @@ public class SelfDestruction : ActiveSkill
     List<ITarget.Type> _targetTypes;
     Timer _delayTimer;
 
-    public SelfDestruction(SelfDestructionData data) : base(data._probability)
+    public SelfDestruction(SelfDestructionData data) : base(Type.Basic, data._maxUpgradePoint)
     {
         _damage = data._damage;
         _range = data._range;
@@ -25,7 +25,7 @@ public class SelfDestruction : ActiveSkill
         {
             Debug.Log("SelfDestruction");
 
-            BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Impact);
+            BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ImpactEffect);
             effect.ResetPosition(_castingData.MyObject.transform.position);
             effect.Play();
 
@@ -49,7 +49,7 @@ public class SelfDestruction : ActiveSkill
         if (_delayTimer.CurrentState != Timer.State.Ready) return;
         _delayTimer.Start(_delay);
 
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Impact);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ImpactEffect);
         effect.ResetPosition(_castingData.MyObject.transform.position);
         effect.Play();
         // 여기에 사전 이팩트 생성

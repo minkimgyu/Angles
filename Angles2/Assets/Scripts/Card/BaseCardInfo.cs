@@ -2,36 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardData
+public class CardInfoData
 {
-    public enum Name
+    public CardInfoData(BaseSkill.Name iconName, string info)
     {
-        StatikkCard,
-        KnockbackCard,
-        ImpactCard,
-        BlackholeCard,
-        ShooterCard,
-        BladeCard,
-        StickyBombCard,
+        _IconName = iconName;
+        _info = info;
     }
 
-    //public CardData(BaseSkill.Name skillName, )
-    //{
-
-    //}
+    [SerializeField]
+    private BaseSkill.Name _IconName;
+    public BaseSkill.Name IconName { get { return _IconName; } }
 
     [SerializeField]
-    private BaseSkill.Name _skillName;
-    public BaseSkill.Name SkillName { get { return _skillName; } }
-
-    //[SerializeField]
-    //private assetre
-
-    [SerializeField]
-    private Sprite _iconImage;
-    public Sprite Icon { get { return _iconImage; } }
-
-    [SerializeField]
-    private string _infoText;
-    public string Info { get { return _infoText; } }
+    private string _info;
+    public string Info { get { return _info; } }
 }

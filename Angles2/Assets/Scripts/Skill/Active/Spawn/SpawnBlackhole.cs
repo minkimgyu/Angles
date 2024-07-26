@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBlackhole : ActiveSkill
+public class SpawnBlackhole : RandomSkill
 {
     List<ITarget.Type> _targetTypes;
 
-    public SpawnBlackhole(SpawnBlackholeData data) : base(data._probability)
+    public SpawnBlackhole(SpawnBlackholeData data) : base(data._maxUpgradePoint, data._probability)
     {
         _targetTypes = data._targetTypes;
     }

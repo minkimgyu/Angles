@@ -8,7 +8,7 @@ public class FollowBehavior : BaseBehavior
     {
         Vector3 velocity;
 
-        Vector3 direction = behaviorData._targetPos - _myTransform.position;
+        Vector3 direction = behaviorData.TargetPos - _myTransform.position;
         velocity = direction.normalized * _weight;
         return velocity;
     }

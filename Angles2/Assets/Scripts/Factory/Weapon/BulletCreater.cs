@@ -10,13 +10,16 @@ public class BulletData : ProjectileData
     }
 }
 
-public class BulletCreater : WeaponCreater<BulletData>
+public class BulletCreater : WeaponCreater
 {
     public override BaseWeapon Create()
     {
-        BaseWeapon weapon = Object.Instantiate(_prefab);
-        weapon.Initialize(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        if (weapon == null) return null;
 
+        BulletData data = Database.Instance.WeaponData[BaseWeapon.Name.Bullet] as BulletData;
+        weapon.Initialize(data);
         return weapon;
     }
 }

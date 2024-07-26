@@ -47,6 +47,8 @@ namespace Player
         float _currentDashFillDuration = 0;
         int _currentDashCount;
 
+        List<BaseSkill.Name> _skillNames;
+
         float DashRatio { get { return _currentDashFillDuration / _dashRestoreDuration; } }
         float TotalDashRatio { get { return _dashCount + DashRatio; } }
         bool CanUseDash() { return _dashCount >= _dashConsumeCount; }
@@ -75,6 +77,8 @@ namespace Player
                         new Vector3(maxScale, minScale, transform.localScale.z),
                         new Vector3(maxScale, maxScale, transform.localScale.z), ratio);
         }
+
+        void ResetPosition(Vector2 pos) { transform.position = pos; }
 
         protected override void SetInvincible(bool nowInvincible)
         {
@@ -106,27 +110,8 @@ namespace Player
 
             _shrinkScale = data._shrinkScale;
             _normalScale = data._normalScale;
-        }
 
-        void OnInteractableEnter(IInteractable interactable)
-        {
-            _interactableObj = interactable;
-            interactable.OnInteractEnter(this);
-        }
-
-        void OnClickRightScreen()
-        {
-            _actionFSM.OnChargeStart();
-            if (_interactableObj == null) return;
-
-            List<SkillUpgradeData> skillUpgradeDatas = _skillController.ReturnSkillUpgradeDatas();
-            _interactableObj.OnInteract(skillUpgradeDatas);
-        }
-
-        void OnInteractableExit(IInteractable interactable)
-        {
-            _interactableObj = null;
-            interactable.OnInteractExit();
+            _skillNames = data._skillNames;
         }
 
         public override void Initialize()
@@ -139,30 +124,21 @@ namespace Player
             _interactableCaptureComponent = GetComponentInChildren<InteractableCaptureComponent>();
             _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
 
+            SkillUIController skillUIController = FindObjectOfType<SkillUIController>();
+            skillUIController.Initialize(new List<BaseSkill.Type> { BaseSkill.Type.Active });
+
             _skillController = GetComponent<SkillController>();
-            _skillController.Initialize();
+            _skillController.Initialize(skillUIController.AddViewer, skillUIController.RemoveViewer);
+            _skillController.AddSkill(BaseSkill.Name.ContactAttack);
 
-            //BaseSkill impact = SkillFactory.Create(BaseSkill.Name.Impact);
-            //BaseSkill knockback = SkillFactory.Create(BaseSkill.Name.Knockback);
-            //BaseSkill statikk = SkillFactory.Create(BaseSkill.Name.Statikk);
-
-            //BaseSkill spawnBlackhole = SkillFactory.Create(BaseSkill.Name.SpawnBlackhole);
-            //BaseSkill spawnBlade = SkillFactory.Create(BaseSkill.Name.SpawnBlade);
-            //BaseSkill spawnShooter = SkillFactory.Create(BaseSkill.Name.SpawnShooter);
-            //BaseSkill spawnStickyBomb = SkillFactory.Create(BaseSkill.Name.SpawnStickyBomb);
-
-            _skillController.AddSkill(BaseSkill.Name.Impact);
-            _skillController.AddSkill(BaseSkill.Name.Knockback);
-            _skillController.AddSkill(BaseSkill.Name.Statikk);
-
-            HpViewer hpViewer = FindObjectOfType<HpViewer>();
+            BaseViewer hpViewer = ViewerFactory.Create(BaseViewer.Name.HpViewer);
             hpViewer.Initialize();
-            hpViewer.SetTracker(this);
-
-            OnHpChange = hpViewer.OnHpChange;
+            hpViewer.SetFollower(this);
+            OnHpChange = hpViewer.UpdateViewer;
 
             DashUIController dashUIController = FindObjectOfType<DashUIController>();
             dashUIController.Initialize(_dashCount);
+            UpdateDashViewer = dashUIController.UpdateViewer;
 
             CardController cardController = FindObjectOfType<CardController>();
             cardController.Initialize((name) => _skillController.AddSkill(name));
@@ -170,8 +146,6 @@ namespace Player
             CameraController cameraController = FindObjectOfType<CameraController>();
             cameraController.Initialize();
             cameraController.SetTracker(this);
-
-            UpdateDashViewer = dashUIController.UpdateViewer;
 
             _outlineComponent = GetComponent<OutlineComponent>();
             _outlineComponent.Initialize();
@@ -198,16 +172,22 @@ namespace Player
 
             _movementFSM.Inintialize(movementStates, MovementState.Stop);
 
-            DirectionViewer directionViewer = FindObjectOfType<DirectionViewer>();
+            BaseViewer hpViewer = ViewerFactory.Create(BaseViewer.Name.HpViewer);
+            hpViewer.Initialize();
+            hpViewer.SetFollower(this);
+            OnHpChange = hpViewer.UpdateViewer;
+
+            BaseViewer directionViewer = ViewerFactory.Create(BaseViewer.Name.DirectionViewer);
             directionViewer.Initialize();
+            directionViewer.SetFollower(this);
 
             _actionFSM = new FSM<ActionState>();
             Dictionary<ActionState, BaseState<ActionState>> actionStates = new Dictionary<ActionState, BaseState<ActionState>>();
             actionStates.Add(ActionState.Ready, new ReadyState(_actionFSM));
 
             actionStates.Add(ActionState.Charge, new ChargeState(_actionFSM, _minJoystickLength, transform, ChangeBodyScale, SetInvincible,
-                (value) => { directionViewer.OnOffDirectionSprite(value); _moveComponent.ApplyDirection = !value; },
-                directionViewer.UpdatePosition,
+                (value) => { directionViewer.OnOffViewer(value); _moveComponent.ApplyDirection = !value; },
+                directionViewer.UpdateViewer,
                 _moveComponent.FaceDirection));
 
             actionStates.Add(ActionState.Shoot,
@@ -242,6 +222,7 @@ namespace Player
             _currentDashFillDuration += Time.deltaTime;
             if (DashRatio >= 1)
             {
+                //Debug.Log(_currentDashCount);
                 _currentDashCount++;
                 _currentDashFillDuration = 0;
             }
@@ -280,8 +261,40 @@ namespace Player
             }
         }
 
+        void OnInteractableEnter(IInteractable interactable)
+        {
+            Debug.Log(interactable);
+
+            _interactableObj = interactable;
+
+            InteractEnterData enterData = new InteractEnterData(this);
+            interactable.OnInteractEnter(enterData);
+        }
+
+        void OnInteract()
+        {
+            if (_interactableObj == null) return;
+
+            InteractData interactData = new InteractData(_skillController.ReturnSkillUpgradeDatas, _skillController.AddSkill, ResetPosition);
+            _interactableObj.OnInteract(interactData);
+        }
+
+        void OnInteractableExit(IInteractable interactable)
+        {
+            _interactableObj = null;
+
+            InteractExitData exitData = new InteractExitData();
+            interactable.OnInteractExit(exitData);
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
+            if(interactable != null && interactable == _interactableObj)
+            {
+                OnInteract();
+            }
+
             _actionFSM.OnCollisionEnter(collision);
         }
 
@@ -321,7 +334,7 @@ namespace Player
             InputManager.AddEvent(
                InputManager.Side.Right,
                InputManager.Type.OnInputStart,
-               OnClickRightScreen
+                _actionFSM.OnChargeStart
            );
 
             InputManager.AddEvent(

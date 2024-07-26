@@ -11,6 +11,8 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     protected Timer _groggyTimer;
     protected Action<float> OnHpChange;
 
+    protected Action OnDieRequested;
+
     public enum Name
     {
         Player,
@@ -38,6 +40,8 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     protected LifeState _lifeState = LifeState.Alive;
     protected AliveState _aliveState = AliveState.Normal;
 
+    public void AddDieEvent(Action OnDieRequested) { this.OnDieRequested = OnDieRequested; }
+
     protected virtual void SetInvincible(bool nowInvincible)
     {
         if (nowInvincible) _aliveState = AliveState.Invincible;
@@ -52,7 +56,10 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void Initialize() { }
 
-    protected abstract void OnDie();
+    protected virtual void OnDie()
+    {
+        OnDieRequested?.Invoke();
+    }
 
     public virtual void GetHeal(float point)
     {
@@ -67,7 +74,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     void SpawnDamageTxt(DamageData damageData)
     {
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.DamageText);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.DamageTextEffect);
         effect.Initialize();
 
         effect.ResetPosition(transform.position);

@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DashCountViewer : MonoBehaviour
+public class DashCountViewer : BaseViewer
 {
     [SerializeField] Image _fillContent;
+
+    public override void UpdateViewer(float ratio) 
+    {
+        _fillContent.fillAmount = ratio;
+    }
 
     public void FillViewer(float ratio)
     {
         _fillContent.fillAmount = ratio;
     }
 
-    public void OnOffViewer(bool on)
+    public override void OnOffViewer(bool show)
     {
-        gameObject.SetActive(on);
+        gameObject.SetActive(show);
     }
 }

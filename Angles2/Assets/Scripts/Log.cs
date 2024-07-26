@@ -13,17 +13,17 @@ public class Log : MonoBehaviour
 
         JsonParser _jsonParser = new JsonParser();
 
-        Dictionary<BaseSkill.Name, BaseSkillData> keyValuePairs = new Dictionary<BaseSkill.Name, BaseSkillData>();
-        keyValuePairs.Add(BaseSkill.Name.Statikk, new StatikkData(1, 101, 3, 3, new List<ITarget.Type> { ITarget.Type.Red }));
-        keyValuePairs.Add(BaseSkill.Name.Knockback, new KnockbackData(1, 100, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0),
-            new List<ITarget.Type> { ITarget.Type.Red }));
-        keyValuePairs.Add(BaseSkill.Name.Impact, new ImpactData(1, 100, 5, new List<ITarget.Type> { ITarget.Type.Red }));
+        //Dictionary<BaseSkill.Name, BaseSkillData> keyValuePairs = new Dictionary<BaseSkill.Name, BaseSkillData>();
+        //keyValuePairs.Add(BaseSkill.Name.Statikk, new StatikkData(1, 101, 3, 3, new List<ITarget.Type> { ITarget.Type.Red }));
+        //keyValuePairs.Add(BaseSkill.Name.Knockback, new KnockbackData(1, 100, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0),
+        //    new List<ITarget.Type> { ITarget.Type.Red }));
+        //keyValuePairs.Add(BaseSkill.Name.Impact, new ImpactData(1, 100, 5, new List<ITarget.Type> { ITarget.Type.Red }));
 
-        string jdata = _jsonParser.DataToJson(keyValuePairs);
-        Debug.Log(jdata);
+        //string jdata = _jsonParser.DataToJson(keyValuePairs);
+        //Debug.Log(jdata);
 
-        Dictionary<BaseSkill.Name, BaseSkillData> pairs = _jsonParser.JsonToData<Dictionary<BaseSkill.Name, BaseSkillData>>(jdata);
-        Debug.Log(pairs);
+        //Dictionary<BaseSkill.Name, BaseSkillData> pairs = _jsonParser.JsonToData<Dictionary<BaseSkill.Name, BaseSkillData>>(jdata);
+        //Debug.Log(pairs);
 
 
         //Debug.Log(_jsonParser.DataToJson(new BladeData(100, 10, 3, 1)));

@@ -10,7 +10,7 @@ public class MagneticFieldData : BaseSkillData
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public MagneticFieldData(float probability, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(probability)
+    public MagneticFieldData(int maxUpgradePoint, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _delay = delay;
         _damage = damage;
@@ -19,10 +19,11 @@ public class MagneticFieldData : BaseSkillData
     }
 }
 
-public class MagneticFieldCreater : SkillCreater<MagneticFieldData>
+public class MagneticFieldCreater : SkillCreater
 {
     public override BaseSkill Create()
     {
-        return new MagneticField(_data);
+        MagneticFieldData data = Database.Instance.SkillDatas[BaseSkill.Name.MagneticField] as MagneticFieldData;
+        return new MagneticField(data);
     }
 }

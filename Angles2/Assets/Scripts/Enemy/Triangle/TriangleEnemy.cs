@@ -13,7 +13,9 @@ public class TriangleEnemy : MeleeEnemy
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
 
-        _destoryEffect = BaseEffect.Name.TriangleDestroy;
+        _offsetFromCenter = 0.5f;
+
+        _destoryEffect = BaseEffect.Name.TriangleDestroyEffect;
     }
 
     public override void Initialize()

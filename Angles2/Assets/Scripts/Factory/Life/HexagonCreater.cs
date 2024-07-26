@@ -21,12 +21,16 @@ public class HexagonData : BaseLifeData
     }
 }
 
-public class HexagonCreater : LifeCreater<HexagonData>
+public class HexagonCreater : LifeCreater
 {
     public override BaseLife Create()
     {
-        BaseLife life = Object.Instantiate(_prefab);
-        life.ResetData(_data);
+        GameObject obj = Object.Instantiate(_prefab);
+        BaseLife life = obj.GetComponent<HexagonEnemy>();
+        if (life == null) return null;
+
+        HexagonData data = Database.Instance.LifeDatas[BaseLife.Name.Hexagon] as HexagonData;
+        life.ResetData(data);
         life.Initialize();
 
         return life;

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Statikk : ActiveSkill
+public class Statikk : CooltimeSkill
 {
     float _damage;
     float _range;
     int _maxTargetCount;
     List<ITarget.Type> _targetTypes;
 
-    public Statikk(StatikkData data) : base(data._probability)
+    public Statikk(StatikkData data) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _damage = data._damage;
         _range = data._range;
@@ -27,6 +27,9 @@ public class Statikk : ActiveSkill
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
 
+        if (_stackCount <= 0) return;
+        _stackCount--;
+
         Debug.Log("Statikk");
 
         List<Vector2> hitPoints;
@@ -36,7 +39,7 @@ public class Statikk : ActiveSkill
 
         for (int i = 0; i < hitPoints.Count; i++)
         {
-            BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Laser);
+            BaseEffect effect = EffectFactory.Create(BaseEffect.Name.LaserEffect);
             effect.ResetPosition(collision.transform.position);
             effect.ResetLine(hitPoints[i]);
 

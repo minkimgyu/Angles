@@ -30,7 +30,7 @@ public class Rocket : ProjectileWeapon
         DamageData damageData = new DamageData(_explosionDamage, _targetTypes);
         Damage.HitCircleRange(damageData, transform.position, _explosionRange, true, Color.red, 3);
 
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Explosion);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
 
@@ -39,7 +39,7 @@ public class Rocket : ProjectileWeapon
 
     void SpawnExplosionEffect()
     {
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Explosion);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
     }

@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-//[CustomPropertyDrawer(typeof(CardInfoDictionary))]
-[CustomPropertyDrawer(typeof(LifeInputDictionary))]
-[CustomPropertyDrawer(typeof(WeaponInputDictionary))]
-[CustomPropertyDrawer(typeof(InteractableObjectInputDictionary))]
-[CustomPropertyDrawer(typeof(SkillInputDictionary))]
-[CustomPropertyDrawer(typeof(EffectInputDictionary))]
-
-[CustomPropertyDrawer(typeof(OutlineColorDictionary))]
-
 [CustomPropertyDrawer(typeof(FlockBehaviorDictionary))]
 [CustomPropertyDrawer(typeof(StringStringDictionary))]
 

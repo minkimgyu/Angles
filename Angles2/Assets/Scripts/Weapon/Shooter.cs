@@ -6,9 +6,7 @@ using UnityEngine;
 public class Shooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
-    MoveComponent _moveComponent;
-
-    IFollowable _followable;
+    TrackComponent _trackComponent;
 
     float _moveSpeed;
     float _shootForce;
@@ -16,7 +14,6 @@ public class Shooter : BaseWeapon
     float _followOffset;
     float _waitFire;
 
-    Vector2 _followPos;
     List<ITarget> _targetDatas;
 
     public override void Initialize(ShooterData data)
@@ -27,8 +24,9 @@ public class Shooter : BaseWeapon
         _followOffset = data._followOffset;
 
         _waitFire = 0;
-        _moveComponent = GetComponent<MoveComponent>();
-        _moveComponent.Initialize();
+
+        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent.Initialize(_moveSpeed, _followOffset);
 
         _targetDatas = new List<ITarget>();
         _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
@@ -47,21 +45,7 @@ public class Shooter : BaseWeapon
 
     public override void ResetFollower(IFollowable followable)
     {
-        _followable = followable;
-    }
-
-    private void CalculateNextPos()
-    {
-        Vector2 pos = _followable.ReturnPosition();
-        Vector2 foward = _followable.ReturnFowardDirection();
-
-        Vector2 offset = -foward * _followOffset;
-        _followPos = Vector2.Lerp(transform.position, pos + offset, Time.deltaTime * _moveSpeed);
-    }
-
-    private void MoveToFollower()
-    {
-        _moveComponent.Move(_followPos);
+        _trackComponent.ResetFollower(followable);
     }
 
     ITarget ReturnCapturedTarget()
@@ -96,15 +80,8 @@ public class Shooter : BaseWeapon
         projectile.Shoot(direction, _shootForce);
     }
 
-    private void FixedUpdate()
-    {
-        MoveToFollower();
-    }
-
     private void Update()
     {
-        CalculateNextPos();
-
         ITarget target = ReturnCapturedTarget();
         if (target == null) return;
 

@@ -18,46 +18,46 @@ MonoBehaviour:
   m_GUID: c069197df16d0654c89c5087054bb06a
   m_SerializeEntries:
   - m_GUID: 1baea2aad3ab5314bab2a245c103178d
-    m_Address: ImpactCard
+    m_Address: ImpactIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fb5bfd49c65e3ab4ba29ef5ce9db6ff6
-    m_Address: StatikkCard
+    m_Address: StatikkIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b4a9ad1c2b6915a4489803a09b8b63c5
-    m_Address: BladeCard
+    m_Address: SpawnBladeIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe8a370a88bb9894e8fa8fa6d01baa8e
-    m_Address: KnockbackCard
+    m_Address: KnockbackIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f7ba03dd3cb98c4eb1f4c5d7fc0e2a5
-    m_Address: BlackholeCard
+    m_Address: SpawnBlackholeIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6513774f28df4094090add773266d64b
-    m_Address: ShooterCard
+    m_Address: SpawnShooterIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1fbb4336fc4fd1b45b5f84c6ae998f38
-    m_Address: StickyBombCard
+    m_Address: SpawnStickyBombIcon
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Icon
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}

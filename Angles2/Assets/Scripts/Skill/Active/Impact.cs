@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Impact : ActiveSkill
+public class Impact : RandomSkill
 {
     public float _damage;
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public Impact(ImpactData data) : base(data._probability)
+    public Impact(ImpactData data) : base(data._maxUpgradePoint, data._probability)
     {
         _damage = data._damage;
         _range = data._range;
@@ -27,7 +27,7 @@ public class Impact : ActiveSkill
         Debug.Log("Impact");
 
         Vector3 contactPos = collision.contacts[0].point;
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.Impact);
+        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ImpactEffect);
         effect.ResetPosition(contactPos);
         effect.Play();
 
