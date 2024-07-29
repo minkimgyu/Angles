@@ -14,20 +14,19 @@ public class BattleManager : MonoBehaviour
         _stageController = GetComponent<StageController>();
 
         _mapGenerator.Initialize();
-        _stageController.Initialize();
+        _stageController.Initialize(OnGameClearRequested, OnGameOverRequested);
 
         _mapGenerator.CreateMap();
-        List<BaseStage> stages = _mapGenerator.ReturnStageObjects();
+        Dictionary<BaseStage.Type, List<BaseStage>> = _mapGenerator.ReturnStageObjects();
 
         _stageController.CreateRandomStageQueue(stages);
     }
-
-    void OnGameOverRequested()
+    void OnGameClearRequested()
     {
 
     }
 
-    void OnGameClearRequested()
+    void OnGameOverRequested()
     {
 
     }

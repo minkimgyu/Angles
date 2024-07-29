@@ -4,6 +4,9 @@ using System;
 using UnityEngine;
 
 [Serializable]
+public class TrasformEnemyNameDictionary : SerializableDictionary<Transform, BaseEnemy.Name> { }
+
+[Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> {}
 
 //[Serializable]

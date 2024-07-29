@@ -31,4 +31,9 @@ public class Portal : MonoBehaviour, IInteractable
     }
 
     public void OnInteractExit(InteractExitData data) { }
+
+    public Object ReturnObject()
+    {
+        return this;
+    }
 }

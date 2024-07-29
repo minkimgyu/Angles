@@ -2,8 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct StageSpawnData
+{
+    public StageSpawnData(int totalStageCount, int currentStageCount)
+    {
+        _totalStageCount = totalStageCount;
+        _currentStageCount = currentStageCount;
+    }
+
+    int _totalStageCount;
+    int _currentStageCount;
+
+    public float ProgressRatio { get { return _currentStageCount / _totalStageCount; } }
+}
+
 public class BaseStage : MonoBehaviour
 {
+    public enum Type
+    {
+        Start,
+        Battle,
+        Bonus
+    }
+
     protected System.Action OnClearRequested;
 
     [SerializeField] Transform _entryPoint;
@@ -14,7 +35,7 @@ public class BaseStage : MonoBehaviour
         _exitPortal.Active(movePos);
     }
 
-    public void Initialize(System.Action OnClearRequested)
+    public virtual void Initialize(System.Action OnClearRequested)
     {
         this.OnClearRequested = OnClearRequested;
 
@@ -27,28 +48,5 @@ public class BaseStage : MonoBehaviour
         return _entryPoint.position;
     }
 
-    public virtual void Spawn(List<BaseLife.Name> names) { }
-    public virtual void Spawn(List<IInteractable.Name> names) { }
-}
-
-
-
-
-
-
-public class BonusStage : BaseStage
-{
-    [SerializeField] List<Transform> _bonusPostions;
-
-    public override void Spawn(List<IInteractable.Name> names)
-    {
-        OnClearRequested?.Invoke();
-
-        int randomRange = Random.Range(0, _bonusPostions.Count);
-        for (int i = 0; i < randomRange; i++)
-        {
-            IInteractable.Name randomName = names[Random.Range(0, names.Count)];
-            InteractableObjectFactory.Create(randomName);
-        }
-    }
+    public virtual void Spawn(StageSpawnData data) { }
 }

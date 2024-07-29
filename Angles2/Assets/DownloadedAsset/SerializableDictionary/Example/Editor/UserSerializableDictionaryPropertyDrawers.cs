@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+[CustomPropertyDrawer(typeof(TrasformEnemyNameDictionary))]
 [CustomPropertyDrawer(typeof(FlockBehaviorDictionary))]
 [CustomPropertyDrawer(typeof(StringStringDictionary))]
 

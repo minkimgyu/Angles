@@ -29,4 +29,9 @@ public class Coin : MonoBehaviour, IInteractable
     }
 
     public void OnInteractExit(InteractExitData data) { }
+
+    public UnityEngine.Object ReturnObject()
+    {
+        return this;
+    }
 }

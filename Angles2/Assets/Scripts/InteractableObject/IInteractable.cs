@@ -46,6 +46,9 @@ public interface IInteractable
         CardTable
     }
 
+    // Create 함수에서 pos나 trasform을 받을 수 있게 개량해보자
+    UnityEngine.Object ReturnObject();
+
     void OnInteractEnter(InteractEnterData data);
     void OnInteract(InteractData data);
     void OnInteractExit(InteractExitData data);

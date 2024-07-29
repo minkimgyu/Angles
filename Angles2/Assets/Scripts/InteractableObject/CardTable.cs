@@ -39,4 +39,9 @@ public class CardTable : MonoBehaviour, IInteractable
     {
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
     }
+
+    public UnityEngine.Object ReturnObject()
+    {
+        return this;
+    }
 }

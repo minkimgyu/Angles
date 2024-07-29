@@ -4,29 +4,21 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public enum StageType
-    {
-        StartStage,
-        BonusStage,
-
-        FightStage
-    }
-
     [SerializeField] Vector3 _offsetFromCenter;
 
-    Dictionary<StageType, GameObject> _stagePrefabs;
-    Dictionary<StageType, BaseStage> _stageObjects;
+    Dictionary<BaseStage.Type, GameObject> _stagePrefabs;
+    Dictionary<BaseStage.Type, List<BaseStage>> _stageObjects;
 
     const int _maxRow = 3;
     const int _offset = 50;
 
     public void Initialize()
     {
-        _stagePrefabs = new Dictionary<StageType, GameObject>();
-        _stageObjects = new Dictionary<StageType, BaseStage>();
+        _stagePrefabs = new Dictionary<BaseStage.Type, GameObject>();
+        _stageObjects = new Dictionary<BaseStage.Type, List<BaseStage>>();
     }
 
-    public Dictionary<string, BaseStage> ReturnStageObjects() { return _stageObjects; }
+    public Dictionary<BaseStage.Type, List<BaseStage>> ReturnStageObjects() { return _stageObjects; }
 
     public void CreateMap()
     {
