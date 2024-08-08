@@ -29,8 +29,8 @@ public class SkillController : MonoBehaviour
     Dictionary<BaseSkill.Name, BaseSkill> _skillDictionary;
     CastingData _castingData;
 
-    Action<BaseSkill.Name, BaseSkill> AddViewer;
-    Action<BaseSkill.Name, BaseSkill> RemoveViewer;
+    public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested;
+    public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested;
 
     public void Initialize()
     {
@@ -38,70 +38,32 @@ public class SkillController : MonoBehaviour
         _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
     }
 
-    public void Initialize(Action<BaseSkill.Name, BaseSkill> AddViewer, Action<BaseSkill.Name, BaseSkill> RemoveViewer)
-    {
-        _castingData = new CastingData(gameObject, transform);
-        _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
-
-        this.AddViewer = AddViewer;
-        this.RemoveViewer = RemoveViewer;
-    }
-
-    // µñ¼Å³Ê¸®·Î º¯°æ
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas()
     {
         List<SkillUpgradeData> upgradeDatas = new List<SkillUpgradeData>();
-
-        List<BaseSkill.Name> upgradeableSkills = Database.Instance.UpgradeableSkills;
-
-        for (int i = 0; i < upgradeableSkills.Count; i++)
+        foreach (var item in _skillDictionary)
         {
-            BaseSkill.Name key = upgradeableSkills[i];
-            
-            if(_skillDictionary.ContainsKey(key))
-            {
-                bool canUpgrade = _skillDictionary[key].CanUpgrade();
-                if (canUpgrade == false) continue;
-
-                SkillUpgradeData skillUpgradeData = new SkillUpgradeData(key, _skillDictionary[key].UpgradePoint, _skillDictionary[key].MaxUpgradePoint);
-                upgradeDatas.Add(skillUpgradeData);
-            }
-            else
-            {
-                BaseSkillData skillData = Database.Instance.SkillDatas[key];
-
-                SkillUpgradeData skillUpgradeData = new SkillUpgradeData(key, 0, skillData._maxUpgradePoint);
-                upgradeDatas.Add(skillUpgradeData);
-            }
-              
+            SkillUpgradeData upgradeData = new SkillUpgradeData(item.Key, item.Value.UpgradePoint, item.Value.MaxUpgradePoint);
+            upgradeDatas.Add(upgradeData);
         }
 
         return upgradeDatas;
     }
 
-    public void AddSkill(BaseSkill.Name skillName)
+    public void AddSkill(BaseSkill.Name name, BaseSkill skill)
     {
-        bool alreadyHave = _skillDictionary.ContainsKey(skillName);
+        bool alreadyHave = _skillDictionary.ContainsKey(name);
         if(alreadyHave)
         {
-            _skillDictionary[skillName].Upgrade();
+            _skillDictionary[name].Upgrade();
             return;
         }
 
-        BaseSkill skill = SkillFactory.Create(skillName);
         skill.Initialize(_castingData);
         skill.OnAdd();
 
-        _skillDictionary.Add(skillName, skill);
-        AddViewer?.Invoke(skillName, skill);
-    }
-
-    public void AddSkill(List<BaseSkill.Name> skillNames)
-    {
-        for (int i = 0; i < skillNames.Count; i++)
-        {
-            AddSkill(skillNames[i]);
-        }
+        _skillDictionary.Add(name, skill);
+        OnAddSkillRequested?.Invoke(name, skill);
     }
 
     public void OnReflect(Collision2D collision)

@@ -13,16 +13,16 @@ namespace Player.FSM
 
         float _dashSpeed;
         float _dashDuration;
-
+        MoveComponent _moveComponent;
         Timer _timer;
 
         public DashState(
             FSM<Player.MovementState> fsm,
-            float dashSpeed, float dashDuration,
-
+            float dashSpeed, 
+            float dashDuration,
+            MoveComponent moveComponent,
             Action<bool, float> ChangeBodyScale,
-
-            Action EndDash, Action<Vector2, float> AddForce)
+            Action EndDash)
         : base(fsm)
         {
             _dashSpeed = dashSpeed;
@@ -33,7 +33,7 @@ namespace Player.FSM
             this.ChangeBodyScale = ChangeBodyScale;
 
             this.EndDash = EndDash;
-            this.AddForce = AddForce;
+            _moveComponent = moveComponent;
         }
 
         public override void OnStateEnter(Vector2 direction, string message)
@@ -42,7 +42,7 @@ namespace Player.FSM
             Debug.Log(message);
             ChangeBodyScale?.Invoke(false, 0);
 
-            AddForce?.Invoke(direction, _dashSpeed);
+            _moveComponent.AddForce(direction, _dashSpeed);
             _timer.Start(_dashDuration);
         }
 

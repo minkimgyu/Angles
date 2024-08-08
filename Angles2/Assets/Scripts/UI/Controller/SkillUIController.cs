@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class SkillUIController : MonoBehaviour
 {
     Dictionary<BaseSkill.Name, BaseViewer> _viewers; // 생성해서 딕셔너리에 넣어준다.
+    Dictionary<BaseSkill.Name, Sprite> _skillIcons;
+
     [SerializeField] RectTransform _skillViewerParent;
-    const string _IconString = "Icon";
 
     List<BaseSkill.Type> _showTypes;
+    System.Func<BaseViewer.Name, BaseViewer> SpawnViewer;
 
-    public void Initialize(List<BaseSkill.Type> types)
+
+    public void Initialize(List<BaseSkill.Type> showTypes, Dictionary<BaseSkill.Name, Sprite> skillIcons, System.Func<BaseViewer.Name, BaseViewer> SpawnViewer)
     {
         _viewers = new Dictionary<BaseSkill.Name, BaseViewer>();
-        _showTypes = types;
+        _showTypes = showTypes;
+        _skillIcons = skillIcons;
+        this.SpawnViewer = SpawnViewer;
     }
 
     public void AddViewer(BaseSkill.Name skillName, BaseSkill skill)
@@ -22,8 +26,8 @@ public class SkillUIController : MonoBehaviour
         bool isShowType = _showTypes.Contains(skill.SkillType);
         if (isShowType == false) return;
 
-        BaseViewer viewer = ViewerFactory.Create(BaseViewer.Name.SkillViewer);
-        Sprite skillIcon = AddressableManager.Instance.SpriteAssetDictionary[skillName.ToString() + _IconString];
+        BaseViewer viewer = SpawnViewer?.Invoke(BaseViewer.Name.SkillViewer);
+        Sprite skillIcon = _skillIcons[skillName];
         viewer.Initialize(skillIcon);
 
         skill.ResetViewerValue += viewer.UpdateViewer;
@@ -36,7 +40,7 @@ public class SkillUIController : MonoBehaviour
     {
         BaseViewer viewer = _viewers[skillName];
 
-        skill.ResetViewerValue += viewer.UpdateViewer;
+        skill.ResetViewerValue -= viewer.UpdateViewer;
         _viewers.Remove(skillName);
         Destroy(viewer.gameObject);
     }

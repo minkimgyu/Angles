@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class ImpactData : RandomSkillData
@@ -19,9 +20,16 @@ public class ImpactData : RandomSkillData
 
 public class ImpactCreater : SkillCreater
 {
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public ImpactCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     public override BaseSkill Create()
     {
-        ImpactData data = Database.Instance.SkillDatas[BaseSkill.Name.Impact] as ImpactData;
-        return new Impact(data);
+        ImpactData data = _skillData as ImpactData;
+        return new Impact(data, CreateEffect);
     }
 }

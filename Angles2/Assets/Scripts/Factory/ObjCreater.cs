@@ -7,8 +7,8 @@ abstract public class BaseCreater<Output>
     public virtual Output Create() { return default; }
 }
 
-abstract public class ObjCreater<Output> : BaseCreater<Output>
+abstract public class ObjCreater<Input> : BaseCreater<Input>
 {
-    protected GameObject _prefab;
-    public virtual void Initialize(GameObject prefab) { _prefab = prefab; }
+    protected Input _prefab;
+    public virtual void Initialize(Input prefab) { _prefab = prefab; }
 }

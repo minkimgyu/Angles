@@ -17,7 +17,7 @@ public class DashCountViewer : BaseViewer
         _fillContent.fillAmount = ratio;
     }
 
-    public override void OnOffViewer(bool show)
+    public override void TurnOnViewer(bool show)
     {
         gameObject.SetActive(show);
     }

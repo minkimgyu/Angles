@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class SpreadBulletsData : BaseSkillData
 {
     public float _damage;
@@ -29,9 +30,16 @@ public class SpreadBulletsData : BaseSkillData
 
 public class SpreadBulletsCreater : SkillCreater
 {
+    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+
+    public SpreadBulletsCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    {
+        this.CreateWeapon = CreateWeapon;
+    }
+
     public override BaseSkill Create()
     {
-        SpreadBulletsData data = Database.Instance.SkillDatas[BaseSkill.Name.SpreadBullets] as SpreadBulletsData;
-        return new SpreadBullets(data);
+        SpreadBulletsData data = _skillData as SpreadBulletsData;
+        return new SpreadBullets(data, CreateWeapon);
     }
 }

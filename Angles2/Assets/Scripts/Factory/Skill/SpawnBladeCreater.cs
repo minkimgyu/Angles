@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class SpawnBladeData : RandomSkillData
 {
     public List<ITarget.Type> _targetTypes;
@@ -17,9 +18,16 @@ public class SpawnBladeData : RandomSkillData
 
 public class SpawnBladeCreater : SkillCreater
 {
+    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+
+    public SpawnBladeCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    {
+        this.CreateWeapon = CreateWeapon;
+    }
+
     public override BaseSkill Create()
     {
-        SpawnBladeData data = Database.Instance.SkillDatas[BaseSkill.Name.SpawnBlade] as SpawnBladeData;
-        return new SpawnBlade(data);
+        SpawnBladeData data = _skillData as SpawnBladeData;
+        return new SpawnBlade(data, CreateWeapon);
     }
 }

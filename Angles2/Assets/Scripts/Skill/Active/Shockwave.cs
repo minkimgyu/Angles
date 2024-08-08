@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class Shockwave : BaseSkill
 {
@@ -12,7 +13,9 @@ public class Shockwave : BaseSkill
     List<ITarget> _targets;
     Timer _delayTimer;
 
-    public Shockwave(ShockwaveData data) : base(Type.Basic, data._maxUpgradePoint)
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public Shockwave(ShockwaveData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(Type.Basic, data._maxUpgradePoint)
     {
         _delay = data._delay;
         _damage = data._damage;
@@ -21,6 +24,8 @@ public class Shockwave : BaseSkill
 
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
+
+        this.CreateEffect = CreateEffect;
     }
 
     public override void OnUpdate()
@@ -33,13 +38,12 @@ public class Shockwave : BaseSkill
                 _delayTimer.Start(_delay);
                 break;
             case Timer.State.Finish:
-                //Debug.Log("Shockwave");
 
-                BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ShockwaveEffect);
+                BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.ShockwaveEffect);
                 effect.ResetPosition(_castingData.MyTransform.position);
                 effect.Play();
 
-                DamageData damageData = new DamageData(_damage, _targetTypes, 0, Color.red);
+                DamageData damageData = new DamageData(_damage, _targetTypes, 0, false, Color.red);
                 Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _range, true, Color.red, 3);
 
                 _delayTimer.Reset();

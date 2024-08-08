@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class KnockbackData : CooltimeSkillData
 {
     public float _damage;
@@ -21,9 +22,16 @@ public class KnockbackData : CooltimeSkillData
 
 public class KnockbackCreater : SkillCreater
 {
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public KnockbackCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     public override BaseSkill Create()
     {
-        KnockbackData data = Database.Instance.SkillDatas[BaseSkill.Name.Knockback] as KnockbackData;
-        return new Knockback(data);
+        KnockbackData data = _skillData as KnockbackData;
+        return new Knockback(data, CreateEffect);
     }
 }

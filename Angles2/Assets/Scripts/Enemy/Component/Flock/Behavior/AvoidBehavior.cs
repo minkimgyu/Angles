@@ -16,8 +16,8 @@ public class AvoidBehavior : BaseBehavior
 
         Vector3 reflect = Vector2.Reflect(_myTransform.right, hit.normal);
 
-        Debug.DrawRay(start, dir * hit.distance, Color.blue, 3);
-        Debug.DrawRay(hit.point, reflect * 5f, Color.red, 3);
+        //Debug.DrawRay(start, dir * hit.distance, Color.blue, 3);
+        //Debug.DrawRay(hit.point, reflect * 5f, Color.red, 3);
         return reflect;
     }
 

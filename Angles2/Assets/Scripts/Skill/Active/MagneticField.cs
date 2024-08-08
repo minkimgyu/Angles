@@ -30,7 +30,7 @@ public class MagneticField : BaseSkill
                 _delayTimer.Start(_delay);
                 break;
             case Timer.State.Finish:
-                DamageData damageData = new DamageData(_damage, _targetTypes, 0, Color.red);
+                DamageData damageData = new DamageData(_damage, _targetTypes, 0, false, Color.red);
                 for (int i = 0; i < _damageableTargets.Count; i++)
                 {
                     _damageableTargets[i].GetDamage(damageData);
@@ -47,18 +47,14 @@ public class MagneticField : BaseSkill
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
 
-        Debug.Log(damageable);
         _damageableTargets.Add(damageable);
     }
 
     public override void OnCaptureExit(ITarget target, IDamageable damageable)
     {
-        Debug.Log(damageable);
-
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
 
-        Debug.Log(damageable);
         _damageableTargets.Remove(damageable);
     }
 }

@@ -17,44 +17,56 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: c069197df16d0654c89c5087054bb06a
   m_SerializeEntries:
-  - m_GUID: 1baea2aad3ab5314bab2a245c103178d
-    m_Address: ImpactIcon
+  - m_GUID: eff2a75ab41645b478df3461ad9fa76c
+    m_Address: SpawnRocketShooter
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fb5bfd49c65e3ab4ba29ef5ce9db6ff6
-    m_Address: StatikkIcon
+  - m_GUID: 4163a77e278834743aa0ff1dce76bf6b
+    m_Address: SpawnRifleShooter
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b4a9ad1c2b6915a4489803a09b8b63c5
-    m_Address: SpawnBladeIcon
+  - m_GUID: dde237ca0b5bd9e4a8e304d355864e0c
+    m_Address: SpawnOrb
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fe8a370a88bb9894e8fa8fa6d01baa8e
-    m_Address: KnockbackIcon
+  - m_GUID: 660548547c5a5ac46be7586384305357
+    m_Address: SpawnBlade
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6f7ba03dd3cb98c4eb1f4c5d7fc0e2a5
-    m_Address: SpawnBlackholeIcon
+  - m_GUID: 65921646a2afbe74bb48001aa9776e74
+    m_Address: SpawnBlackhole
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6513774f28df4094090add773266d64b
-    m_Address: SpawnShooterIcon
+  - m_GUID: d197fda9cb95757428a0f86618b0031e
+    m_Address: Knockback
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1fbb4336fc4fd1b45b5f84c6ae998f38
-    m_Address: SpawnStickyBombIcon
+  - m_GUID: 8d8b75eff426b534db1be05b2513fbf1
+    m_Address: Impact
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ac04d32bcf04794998114729a63e86d
+    m_Address: Statikk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f1101c96a0a32440b22c96d0b7136b4
+    m_Address: SpawnStickyBomb
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon

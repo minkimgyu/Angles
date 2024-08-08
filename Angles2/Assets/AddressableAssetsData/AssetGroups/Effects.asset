@@ -41,12 +41,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Effect
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5917ec5d10f6b16498518bdfe29548ce
-    m_Address: BladeEffect
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Effect
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ff9ff23fce2be444faf7c4219549e792
     m_Address: DamageTextEffect
     m_ReadOnly: 0
@@ -85,12 +79,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c6814065a192e9d4ea0bb1d9bce4f9b9
     m_Address: ShockwaveEffect
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Effect
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0cc831c5107ba8e4fb42c5e007a02c49
-    m_Address: SignalEffect
     m_ReadOnly: 0
     m_SerializedLabels:
     - Effect

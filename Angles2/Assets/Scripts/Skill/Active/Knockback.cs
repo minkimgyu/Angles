@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class Knockback : CooltimeSkill
 {
@@ -9,13 +10,16 @@ public class Knockback : CooltimeSkill
     Vector2 _offset;
     float _damage;
     List<ITarget.Type> _targetTypes;
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
 
-    public Knockback(KnockbackData data) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public Knockback(KnockbackData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _damage = data._damage;
         _size = new Vector2(data._size.x, data._size.y);
         _offset = new Vector2(data._offset.x, data._offset.y);
         _targetTypes = data._targetTypes;
+
+        this.CreateEffect = CreateEffect;
     }
 
     public override void OnReflect(Collision2D collision) 
@@ -30,7 +34,7 @@ public class Knockback : CooltimeSkill
 
         Debug.Log("Knockback");
 
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.KnockbackEffect);
+        BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.KnockbackEffect);
         effect.ResetPosition(_castingData.MyTransform.position, _castingData.MyTransform.right);
         effect.Play();
 

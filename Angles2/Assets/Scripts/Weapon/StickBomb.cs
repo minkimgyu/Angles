@@ -11,8 +11,12 @@ public class StickBomb : BaseWeapon
 
     IFollowable _followable;
 
-    public override void Initialize(StickyBombData data) 
+    System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
+
+    public override void Initialize(StickyBombData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) 
     {
+        this.SpawnEffect = SpawnEffect;
+
         _damage = data._damage;
         _range = data._range;
         _explosionDelay = data._explosionDelay;
@@ -30,7 +34,7 @@ public class StickBomb : BaseWeapon
     {
         Debug.Log("Explode");
 
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ExplosionEffect);
+        BaseEffect effect = SpawnEffect?.Invoke(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
 

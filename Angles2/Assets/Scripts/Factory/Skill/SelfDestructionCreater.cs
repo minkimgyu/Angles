@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class SelfDestructionData : BaseSkillData
 {
     public float _delay;
@@ -21,9 +22,16 @@ public class SelfDestructionData : BaseSkillData
 
 public class SelfDestructionCreater : SkillCreater
 {
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public SelfDestructionCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     public override BaseSkill Create()
     {
-        SelfDestructionData data = Database.Instance.SkillDatas[BaseSkill.Name.SelfDestruction] as SelfDestructionData;
-        return new SelfDestruction(data);
+        SelfDestructionData data = _skillData as SelfDestructionData;
+        return new SelfDestruction(data, CreateEffect);
     }
 }

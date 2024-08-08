@@ -27,8 +27,12 @@ abstract public class BaseSkill
         Impact,
         ContactAttack,
 
+        SpawnOrb,
+
+        SpawnRifleShooter, // weapon
+        SpawnRocketShooter, // weapon
+
         SpawnBlackhole, // weapon
-        SpawnShooter, // weapon
         SpawnBlade, // projectile
         SpawnStickyBomb, // projectile
 

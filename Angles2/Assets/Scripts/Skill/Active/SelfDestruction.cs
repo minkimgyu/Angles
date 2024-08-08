@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class SelfDestruction : BaseSkill
 {
@@ -12,11 +13,15 @@ public class SelfDestruction : BaseSkill
     List<ITarget.Type> _targetTypes;
     Timer _delayTimer;
 
-    public SelfDestruction(SelfDestructionData data) : base(Type.Basic, data._maxUpgradePoint)
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public SelfDestruction(SelfDestructionData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(Type.Basic, data._maxUpgradePoint)
     {
         _damage = data._damage;
         _range = data._range;
         _targetTypes = data._targetTypes;
+
+        this.CreateEffect = CreateEffect;
     }
 
     public override void OnUpdate()
@@ -24,8 +29,9 @@ public class SelfDestruction : BaseSkill
         if (_delayTimer.CurrentState == Timer.State.Finish)
         {
             Debug.Log("SelfDestruction");
+            BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.ImpactEffect);
+            if (effect == null) return;
 
-            BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ImpactEffect);
             effect.ResetPosition(_castingData.MyObject.transform.position);
             effect.Play();
 
@@ -48,11 +54,5 @@ public class SelfDestruction : BaseSkill
 
         if (_delayTimer.CurrentState != Timer.State.Ready) return;
         _delayTimer.Start(_delay);
-
-        BaseEffect effect = EffectFactory.Create(BaseEffect.Name.ImpactEffect);
-        effect.ResetPosition(_castingData.MyObject.transform.position);
-        effect.Play();
-        // 여기에 사전 이팩트 생성
-        // attachable 적용
     }
 }

@@ -12,6 +12,7 @@ public class PentagonEnemy : RangedEnemy
         _targetType = data._targetType;
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
+        _dropData = data._dropData;
 
         _offsetFromCenter = 0.7f;
 
@@ -24,7 +25,6 @@ public class PentagonEnemy : RangedEnemy
     public override void Initialize()
     {
         base.Initialize();
-
         _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
         _targetCaptureComponent.Initialize(OnEnter, OnExit);
     }

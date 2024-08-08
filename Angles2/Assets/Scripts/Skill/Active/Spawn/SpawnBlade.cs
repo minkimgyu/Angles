@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SpawnBlade : RandomSkill
 {
     List<ITarget.Type> _targetTypes;
     public float _force;
 
-    public SpawnBlade(SpawnBladeData data) :base(data._maxUpgradePoint, data._probability)
+    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+
+    public SpawnBlade(SpawnBladeData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) :base(data._maxUpgradePoint, data._probability)
     {
         _targetTypes = data._targetTypes;
         _force = data._force;
+
+        this.CreateWeapon = CreateWeapon;
     }
 
     public override void OnReflect(Collision2D collision)
@@ -21,7 +26,7 @@ public class SpawnBlade : RandomSkill
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
 
-        BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.Blade);
+        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.Blade);
         if (weapon == null) return;
 
         weapon.ResetTargetTypes(_targetTypes);

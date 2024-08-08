@@ -7,16 +7,16 @@ namespace Player.FSM
 {
     public class StopState : State<Player.MovementState>
     {
-        Action Stop;
+        MoveComponent _moveComponent;
 
-        public StopState(FSM<Player.MovementState> baseFSM, Action Stop) : base(baseFSM)
+        public StopState(FSM<Player.MovementState> baseFSM, MoveComponent moveComponent) : base(baseFSM)
         {
-            this.Stop = Stop;
+            _moveComponent = moveComponent;
         }
 
         public override void OnStateEnter()
         {
-            Stop?.Invoke();
+            _moveComponent.Stop();
         }
 
         public override void OnMoveStart()

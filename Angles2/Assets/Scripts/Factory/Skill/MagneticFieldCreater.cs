@@ -21,9 +21,13 @@ public class MagneticFieldData : BaseSkillData
 
 public class MagneticFieldCreater : SkillCreater
 {
+    public MagneticFieldCreater(BaseSkillData data) : base(data)
+    {
+    }
+
     public override BaseSkill Create()
     {
-        MagneticFieldData data = Database.Instance.SkillDatas[BaseSkill.Name.MagneticField] as MagneticFieldData;
+        MagneticFieldData data = _skillData as MagneticFieldData;
         return new MagneticField(data);
     }
 }

@@ -6,7 +6,7 @@ public class Blackhole : BaseWeapon
 {
     public class TargetData
     {
-        public TargetData(float captureTime, IAbsorbable absorbableTarget, IDamageable damageableTarget)
+        public TargetData(float captureTime, IForce absorbableTarget, IDamageable damageableTarget)
         {
             _captureTime = captureTime;
             _absorbableTarget = absorbableTarget;
@@ -14,11 +14,11 @@ public class Blackhole : BaseWeapon
         }
 
         public float CaptureTime { get { return _captureTime; } set { _captureTime = value; } }
-        public IAbsorbable AbsorbableTarget { get { return _absorbableTarget; } }
+        public IForce AbsorbableTarget { get { return _absorbableTarget; } }
         public IDamageable DamageableTarget { get { return _damageableTarget; } }
 
         float _captureTime;
-        IAbsorbable _absorbableTarget;
+        IForce _absorbableTarget;
         IDamageable _damageableTarget;
     }
 
@@ -48,13 +48,13 @@ public class Blackhole : BaseWeapon
         _absorbCaptureComponent.Initialize(OnEnter, OnExit);
     }
 
-    void OnEnter(IAbsorbable absorbable, IDamageable damageable)
+    void OnEnter(IForce absorbable, IDamageable damageable)
     {
         if (_targetDatas.Count >= _maxTargetCount) return;
         _targetDatas.Add(new TargetData(Time.time, absorbable, damageable));
     }
 
-    void OnExit(IAbsorbable absorbable, IDamageable damageable)
+    void OnExit(IForce absorbable, IDamageable damageable)
     {
         TargetData data = _targetDatas.Find(x => x.AbsorbableTarget == absorbable && x.DamageableTarget == damageable);
         _targetDatas.Remove(data);
@@ -68,15 +68,17 @@ public class Blackhole : BaseWeapon
             return;
         }
 
-        for (int i = 0; i < _targetDatas.Count; i++)
+        for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if(duration > _forceDelay)
             {
-                _targetDatas[i].AbsorbableTarget.Absorb(transform.position, _absorbForce);
+                _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, _absorbForce, ForceMode2D.Force);
 
-                DamageData damageData = new DamageData(_damage, _targetTypes);
+                DamageData damageData = new DamageData(_damage, _targetTypes, 1f, false);
                 _targetDatas[i].DamageableTarget.GetDamage(damageData);
+
+                if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;
             }
         }

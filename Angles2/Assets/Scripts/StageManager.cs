@@ -19,8 +19,8 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        BaseLife player = LifeFactory.Create(BaseLife.Name.Player);
-        player.transform.position = Vector2.zero;
+        //BaseLife player = LifeFactory.Create(BaseLife.Name.Player);
+        //player.transform.position = Vector2.zero;
 
         //BaseLife triangle1 = LifeFactory.Create(BaseLife.Name.Triangle);
         //triangle1.transform.position = new Vector2(3, 3);

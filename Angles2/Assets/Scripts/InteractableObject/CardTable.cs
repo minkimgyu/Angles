@@ -5,43 +5,55 @@ using System;
 
 public class CardTable : MonoBehaviour, IInteractable
 {
-    Action<List<SkillUpgradeData>> CreateCards;
     OutlineComponent _outlineComponent;
+    Command<int, List<SkillUpgradeData>> CreateCardsCommand;
+    bool _isActive;
+    int _cardCount;
 
-    private void Start()
+    public void Initialize(CardTableData data)
     {
-        Initialize();
-    }
+        _cardCount = data._cardCount;
 
-    public void Initialize()
-    {
-        CardController cardController = FindObjectOfType<CardController>();
-        CreateCards = cardController.CreateCards;
-
+        _isActive = true;
         _outlineComponent = GetComponentInChildren<OutlineComponent>();
         _outlineComponent.Initialize();
     }
 
-    public void OnInteractEnter(InteractEnterData data)
+    public void AddCommand(Command<int, List<SkillUpgradeData>> CreateCardsCommand)
     {
+        this.CreateCardsCommand = CreateCardsCommand;
+    }
+
+    public void OnInteractEnter(IInteracter interacter)
+    {
+        if (_isActive == false) return;
+
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnInteract);
     }
 
-    public void OnInteract(InteractData data)
+    public void OnInteract(IInteracter interacter)
     {
-        List<SkillUpgradeData> upgradeDatas = data.ReturnSkillUpgradeDatas?.Invoke();
+        if (_isActive == false) return;
 
+        _isActive = false;
+        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
+
+        List<SkillUpgradeData> upgradeDatas = interacter.ReturnSkillUpgradeDatas();
         if (upgradeDatas.Count == 0) return;
-        CreateCards?.Invoke(upgradeDatas);
+        CreateCardsCommand.Execute(_cardCount, upgradeDatas);
     }
 
-    public void OnInteractExit(InteractExitData data)
+    public void OnInteractExit(IInteracter interacter)
     {
+        if (_isActive == false) return;
+
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
     }
 
-    public UnityEngine.Object ReturnObject()
+    public void ResetPosition(Vector3 pos)
     {
-        return this;
+        transform.position = pos;
     }
+
+    GameObject IInteractable.ReturnGameObject() { return gameObject; }
 }

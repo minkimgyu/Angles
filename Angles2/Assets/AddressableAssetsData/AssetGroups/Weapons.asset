@@ -42,13 +42,19 @@ MonoBehaviour:
     - Weapon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 601aa820652874740ae7c05acf8ba044
-    m_Address: Shooter
+    m_Address: RocketShooter
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2360825c86028d542a247f1d8e5f91e9
     m_Address: StickyBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f4424c944b01a844a914f72eab70ab7
+    m_Address: RifleShooter
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon

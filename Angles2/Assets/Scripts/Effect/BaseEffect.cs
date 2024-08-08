@@ -10,10 +10,8 @@ abstract public class BaseEffect : MonoBehaviour
         ExplosionEffect,
         KnockbackEffect,
         ImpactEffect,
-        SignalEffect,
         LaserEffect,
 
-        BladeEffect,
         HitEffect,
         ShockwaveEffect,
 
@@ -37,8 +35,10 @@ abstract public class BaseEffect : MonoBehaviour
     public virtual void ResetText(float damage) { }
     public virtual void ResetColor(Color color) { }
     public virtual void ResetLine(Vector3 endPoint) { }
-   
+
 
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { }
+
+    // Creater 내부에서 같이 처리해주기
 }

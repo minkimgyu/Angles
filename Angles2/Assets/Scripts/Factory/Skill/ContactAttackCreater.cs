@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ContactAttackData : BaseSkillData
 {
     public float _damage;
@@ -17,9 +18,16 @@ public class ContactAttackData : BaseSkillData
 
 public class ContactAttackCreater : SkillCreater
 {
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public ContactAttackCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     public override BaseSkill Create()
     {
-        ContactAttackData data = Database.Instance.SkillDatas[BaseSkill.Name.ContactAttack] as ContactAttackData;
-        return new ContactAttack(data);
+        ContactAttackData data = _skillData as ContactAttackData;
+        return new ContactAttack(data, CreateEffect);
     }
 }

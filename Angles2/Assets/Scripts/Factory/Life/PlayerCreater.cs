@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class PlayerData : BaseLifeData
 {
     public float _moveSpeed;
+    public float _chargeDuration;
+    public float _maxChargePower;
 
     public float _dashSpeed;
     public float _dashDuration;
@@ -15,7 +18,7 @@ public class PlayerData : BaseLifeData
 
     public float _minJoystickLength;
 
-    public int _dashCount;
+    public int _maxDashCount;
 
     public int _dashConsumeCount;
     public float _dashRestoreDuration;
@@ -26,7 +29,7 @@ public class PlayerData : BaseLifeData
     public List<BaseSkill.Name> _skillNames;
 
     public PlayerData(float maxHp, ITarget.Type targetType,
-        float moveSpeed, float dashSpeed, float dashDuration, 
+        float moveSpeed, float chargeDuration, float maxChargePower, float dashSpeed, float dashDuration, 
         float shootSpeed, float shootDuration,
         float minJoystickLength, int maxDashCount, 
         int dashConsumeCount, float dashRestoreDuration,
@@ -34,6 +37,9 @@ public class PlayerData : BaseLifeData
         float shrinkScale, float normalScale, List<BaseSkill.Name> skillNames) : base(maxHp, targetType)
     {
         _moveSpeed = moveSpeed;
+        _chargeDuration = chargeDuration;
+        _maxChargePower = maxChargePower;
+
         _dashSpeed = dashSpeed;
         _dashDuration = dashDuration;
 
@@ -41,7 +47,7 @@ public class PlayerData : BaseLifeData
         _shootDuration = shootDuration;
 
         _minJoystickLength = minJoystickLength;
-        _dashCount = maxDashCount;
+        _maxDashCount = maxDashCount;
 
         _dashConsumeCount = dashConsumeCount;
         _dashRestoreDuration = dashRestoreDuration;
@@ -55,15 +61,32 @@ public class PlayerData : BaseLifeData
 
 public class PlayerCreater : LifeCreater
 {
+    Func<BaseSkill.Name, BaseSkill> CreateSkill;
+
+    public PlayerCreater(BaseLife lifePrefab, BaseLifeData lifeData, 
+        Func<BaseEffect.Name, BaseEffect> CreateEffect, Func<BaseSkill.Name, BaseSkill> CreateSkill) : base(lifePrefab, lifeData, CreateEffect)
+    {
+        this.CreateSkill = CreateSkill;
+    }
+
     public override BaseLife Create()
     {
-        GameObject obj = Object.Instantiate(_prefab);
-        BaseLife life = obj.GetComponent<Player.Player>();
+        BaseLife life = UnityEngine.Object.Instantiate(_lifePrefab);
         if (life == null) return null;
 
-        PlayerData playerData = Database.Instance.LifeDatas[BaseLife.Name.Player] as PlayerData;
-        life.ResetData(playerData);
+        PlayerData data = _lifeData as PlayerData;
+
+        life.ResetData(data);
         life.Initialize();
+        life.AddCreateEvent(CreateEffect, CreateSkill);
+
+        ISkillUser skillUser = life.GetComponent<ISkillUser>();
+        if (skillUser == null) return life;
+
+        for (int i = 0; i < data._skillNames.Count; i++)
+        {
+            skillUser.AddSkill(data._skillNames[i]);
+        }
 
         return life;
     }

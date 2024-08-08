@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ShockwaveData : BaseSkillData
 {
     public float _damage;
@@ -21,9 +22,16 @@ public class ShockwaveData : BaseSkillData
 
 public class ShockwaveCreater : SkillCreater
 {
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public ShockwaveCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     public override BaseSkill Create()
     {
-        ShockwaveData data = Database.Instance.SkillDatas[BaseSkill.Name.Shockwave] as ShockwaveData;
-        return new Shockwave(data);
+        ShockwaveData data = _skillData as ShockwaveData;
+        return new Shockwave(data, CreateEffect);
     }
 }

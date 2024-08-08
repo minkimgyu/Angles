@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DamageUtility;
 using System;
 
 public class SpawnStickyBomb : CooltimeSkill
 {
     List<ITarget.Type> _targetTypes;
+    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
 
-    public SpawnStickyBomb(SpawnStickyBombData data) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public SpawnStickyBomb(SpawnStickyBombData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _targetTypes = data._targetTypes;
+        this.CreateWeapon = CreateWeapon;
     }
 
     public override void OnReflect(Collision2D collision)
@@ -24,7 +25,7 @@ public class SpawnStickyBomb : CooltimeSkill
         IFollowable followable = collision.gameObject.GetComponent<IFollowable>();
         if (followable == null) return;
 
-        BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.StickyBomb);
+        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
 
         if (_stackCount <= 0) return;

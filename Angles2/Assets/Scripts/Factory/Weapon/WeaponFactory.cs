@@ -13,43 +13,40 @@ public class BaseWeaponData
     public float _damage;
 }
 
-public class WeaponCreater : ObjCreater<BaseWeapon> { }
+public class WeaponCreater
+{
+    protected BaseWeapon _weaponPrefab;
+    protected BaseWeaponData _weaponData;
 
-public class WeaponFactory : MonoBehaviour
+    public WeaponCreater(BaseWeapon weaponPrefab, BaseWeaponData weaponData) { _weaponPrefab = weaponPrefab; _weaponData = weaponData; }
+
+    public virtual BaseWeapon Create() { return default; }
+}
+
+public class WeaponFactory
 {
     Dictionary<BaseWeapon.Name, WeaponCreater> _weaponCreaters;
 
-    private static WeaponFactory _instance;
-
-    private void Awake()
-    {
-        if (_instance == null) _instance = this;
-        else Destroy(gameObject);
-
-        Initialize();
-    }
-
-    private void Initialize()
+    public WeaponFactory(Dictionary<BaseWeapon.Name, BaseWeapon> weaponPrefabs, Dictionary<BaseWeapon.Name, BaseWeaponData> weaponDatas,
+        System.Func<BaseEffect.Name, BaseEffect> SpawnEffect)
     {
         _weaponCreaters = new Dictionary<BaseWeapon.Name, WeaponCreater>();
 
-        _weaponCreaters[BaseWeapon.Name.Blade] = new BladeCreater();
-        _weaponCreaters[BaseWeapon.Name.Bullet] = new BulletCreater();
-        _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater();
+        _weaponCreaters[BaseWeapon.Name.Blade] = new BladeCreater(weaponPrefabs[BaseWeapon.Name.Blade], weaponDatas[BaseWeapon.Name.Blade]);
+        _weaponCreaters[BaseWeapon.Name.Blackhole] = new BlackholeCreater(weaponPrefabs[BaseWeapon.Name.Blackhole], weaponDatas[BaseWeapon.Name.Blackhole]);
 
-        _weaponCreaters[BaseWeapon.Name.Blackhole] = new BlackholeCreater();
-        _weaponCreaters[BaseWeapon.Name.Shooter] = new ShooterCreater();
-        _weaponCreaters[BaseWeapon.Name.StickyBomb] = new StickyBombCreater();
 
-        foreach (var creater in _weaponCreaters)
-        {
-            GameObject prefab = AddressableManager.Instance.PrefabAssetDictionary[creater.Key.ToString()];
-            creater.Value.Initialize(prefab);
-        }
+        _weaponCreaters[BaseWeapon.Name.Bullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.Bullet], weaponDatas[BaseWeapon.Name.Bullet], SpawnEffect);
+        _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.Rocket], weaponDatas[BaseWeapon.Name.Rocket], SpawnEffect);
+
+        _weaponCreaters[BaseWeapon.Name.RifleShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RifleShooter], weaponDatas[BaseWeapon.Name.RifleShooter], Create);
+        _weaponCreaters[BaseWeapon.Name.RocketShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RocketShooter], weaponDatas[BaseWeapon.Name.RocketShooter], Create);
+
+        _weaponCreaters[BaseWeapon.Name.StickyBomb] = new StickyBombCreater(weaponPrefabs[BaseWeapon.Name.StickyBomb], weaponDatas[BaseWeapon.Name.StickyBomb], SpawnEffect);
     }
 
-    public static BaseWeapon Create(BaseWeapon.Name name)
+    public BaseWeapon Create(BaseWeapon.Name name)
     {
-        return _instance._weaponCreaters[name].Create();
+        return _weaponCreaters[name].Create();
     }
 }

@@ -17,47 +17,53 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 25c75a84daf201e4180068139bdb7f0f
   m_SerializeEntries:
-  - m_GUID: af0ff672479be764c91dfe43561325d5
-    m_Address: Stage1
+  - m_GUID: 60f05ce0be54b2f44ac4852ceaf95ed4
+    m_Address: BattleStage5
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map1
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e668ca3e0f1699d4291dafb8a37e74f3
-    m_Address: Stage2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Map1
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9835b6a0c9eac24418d906b53aba69ca
-    m_Address: Stage3
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Map1
+    - BattleStage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aa8f422e93d171641a4aa3e6b9b51fc6
-    m_Address: Stage4
+    m_Address: BattleStage4
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map1
+    - BattleStage
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 60f05ce0be54b2f44ac4852ceaf95ed4
-    m_Address: Stage5
+  - m_GUID: 9835b6a0c9eac24418d906b53aba69ca
+    m_Address: BattleStage3
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map1
+    - BattleStage
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7044abd5bbd401b49bbb8194abe6cfb1
-    m_Address: Stage6
+  - m_GUID: e668ca3e0f1699d4291dafb8a37e74f3
+    m_Address: BattleStage2
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map1
+    - BattleStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af0ff672479be764c91dfe43561325d5
+    m_Address: BattleStage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BattleStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68dfe7591df2b4842ac105df8c3ba704
+    m_Address: BonusStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BonusStage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2c22ad13483b464ab5c8b368f4d748a
     m_Address: StartStage
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map1
+    - StartStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7044abd5bbd401b49bbb8194abe6cfb1
+    m_Address: BattleStage6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BattleStage
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}

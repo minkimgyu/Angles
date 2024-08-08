@@ -6,31 +6,47 @@ using System;
 public class SkillBubble : MonoBehaviour, IInteractable
 {
     TrackComponent _trackComponent;
-    [SerializeField] float _moveSpeed = 8f;
-    [SerializeField] BaseSkill.Name _skillName;
+    Command<int, List<SkillUpgradeData>> CreateCardsCommand;
 
-    private void Start()
+    int _cardCount;
+    float _moveSpeed;
+
+    public void Initialize(SkillBubbleData data) 
     {
+        _cardCount = data._cardCount;
+        _moveSpeed = data._moveSpeed;
+
         _trackComponent = GetComponent<TrackComponent>();
         _trackComponent.Initialize(_moveSpeed);
     }
 
-    public void OnInteractEnter(InteractEnterData data)
+    public void AddCommand(Command<int, List<SkillUpgradeData>> CreateCardsCommand)
     {
-        _trackComponent.ResetFollower(data.Followable);
+        this.CreateCardsCommand = CreateCardsCommand;
     }
 
-    public void OnInteract(InteractData data) 
+    public void OnInteractEnter(IInteracter interacter)
     {
-        Action<BaseSkill.Name> AddSkill = data.AddSkill;
-        AddSkill?.Invoke(_skillName);
+        IFollowable followable = interacter.ReturnFollower();
+        _trackComponent.ResetFollower(followable);
+    }
+
+    public void OnInteract(IInteracter interacter) 
+    {
+        List<SkillUpgradeData> upgradeDatas = interacter.ReturnSkillUpgradeDatas();
+
+        if (upgradeDatas.Count == 0) return;
+
+        CreateCardsCommand.Execute(_cardCount, upgradeDatas);
         Destroy(gameObject);
     }
 
-    public void OnInteractExit(InteractExitData data) { }
+    public void OnInteractExit(IInteracter interacter) { }
 
-    public UnityEngine.Object ReturnObject()
+    public void ResetPosition(Vector3 pos)
     {
-        return this;
+        transform.position = pos;
     }
+
+    GameObject IInteractable.ReturnGameObject() { return gameObject; }
 }

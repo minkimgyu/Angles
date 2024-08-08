@@ -6,14 +6,15 @@ public class DashUIController : MonoBehaviour
 {
     [SerializeField] RectTransform _dashViewerParent;
     List<BaseViewer> _viwers;
+    const int _maxDashCount = 3;
 
-    public void Initialize(int dashCount)
+    public void Initialize(System.Func<BaseViewer.Name, BaseViewer> SpawnViewer)
     {
         _viwers = new List<BaseViewer>();
 
-        for (int i = 0; i < dashCount; i++)
+        for (int i = 0; i < _maxDashCount; i++)
         {
-            BaseViewer viewer = ViewerFactory.Create(BaseViewer.Name.DashViewer);
+            BaseViewer viewer = SpawnViewer?.Invoke(BaseViewer.Name.DashViewer);
             viewer.transform.SetParent(_dashViewerParent);
             _viwers.Add(viewer);
         }

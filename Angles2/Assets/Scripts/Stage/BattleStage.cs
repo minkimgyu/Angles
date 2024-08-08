@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public struct BattleStageLevelData
@@ -22,13 +23,12 @@ public class BattleStage : BaseStage
     }
 
     Dictionary<Vector2, Difficulty> _difficultyRangeDictionary;
-
     [SerializeField] List<BattleStageLevelData> _stageDatas;
     int _enemyCount = 0;
 
-    public override void Initialize(System.Action OnClearRequested)
+    public override void Initialize(Events stageEvents) 
     {
-        base.Initialize(OnClearRequested);
+        base.Initialize(stageEvents);
         _difficultyRangeDictionary = new Dictionary<Vector2, Difficulty>
         {
             { new Vector2(0f, 0.3f), Difficulty.Easy},
@@ -40,9 +40,10 @@ public class BattleStage : BaseStage
     void OnEnemyDieRequested()
     {
         _enemyCount -= 1;
+        _events.ObserberEventCollection.OnEnemyDieRequested?.Invoke();
         if (_enemyCount > 0) return;
 
-        OnClearRequested?.Invoke();
+        _events.OnStageClearRequested?.Invoke();
     }
 
     Difficulty ReturnDifficultyByProgress(float ratio)
@@ -57,9 +58,9 @@ public class BattleStage : BaseStage
         return Difficulty.Nomal;
     }
 
-    public override void Spawn(StageSpawnData data)
+    public override void Spawn(int totalStageCount, int currentStageCount, IFactory factory)
     {
-        Difficulty difficulty = ReturnDifficultyByProgress(data.ProgressRatio);
+        Difficulty difficulty = ReturnDifficultyByProgress((float)totalStageCount / currentStageCount);
 
         List<BattleStageLevelData> possibleLevelDatas = new List<BattleStageLevelData>();
 
@@ -70,14 +71,16 @@ public class BattleStage : BaseStage
             possibleLevelDatas.Add(_stageDatas[i]);
         }
 
-        BattleStageLevelData levelData = possibleLevelDatas[Random.Range(0, _stageDatas.Count)];
+        BattleStageLevelData levelData = possibleLevelDatas[UnityEngine.Random.Range(0, possibleLevelDatas.Count)];
 
         foreach (var item in levelData.LevelDictionary)
         {
-            BaseLife enemy = LifeFactory.Create(item.Value);
+            BaseLife enemy = factory.Create(item.Value);
             enemy.transform.position = item.Key.position;
 
-            enemy.AddDieEvent(OnEnemyDieRequested);
+            enemy.AddObserverEvent(OnEnemyDieRequested, _events.ObserberEventCollection.OnDropRequested);
+            enemy.SetTarget(Target);
+
             _enemyCount++;
         }
     }

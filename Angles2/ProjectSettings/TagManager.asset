@@ -48,3 +48,12 @@ TagManager:
   - name: Wall
     uniqueID: 2999528071
     locked: 0
+  - name: Life
+    uniqueID: 191716789
+    locked: 0
+  - name: Object
+    uniqueID: 2115840695
+    locked: 0
+  - name: Effect
+    uniqueID: 2176863941
+    locked: 0

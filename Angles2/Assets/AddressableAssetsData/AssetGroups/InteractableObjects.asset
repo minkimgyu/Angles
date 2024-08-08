@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: InteractableObjects
+  m_EditorClassIdentifier: 
+  m_GroupName: InteractableObjects
+  m_Data:
+    m_SerializedData: []
+  m_GUID: a88aaf339a0cfd84c8deafda17fa5677
+  m_SerializeEntries:
+  - m_GUID: 12533fe2d375207409175cfa7ca28189
+    m_Address: CardTable
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InteractableObject
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 825762dd6acc57c4b99c815c61735d28
+    m_Address: Coin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InteractableObject
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae24ac52410987a4f895e399e385ca5a
+    m_Address: SkillBubble
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InteractableObject
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27f22facdccc36646a4921990d8af6f2
+    m_Address: Shop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InteractableObject
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b92693c4cc5a379429bcdea1baba6226, type: 2}
+    - {fileID: 11400000, guid: b44bbb2929330ec40b7329bc0e1dca1b, type: 2}

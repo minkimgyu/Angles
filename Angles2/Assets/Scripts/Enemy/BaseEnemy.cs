@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
+public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
 {
     FlockCaptureComponent _flockCaptureComponent;
     ObstacleCaptureComponent _obstacleCaptureComponent;
@@ -20,15 +20,18 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
     List<IFlock> _nearAgents;
     List<IObstacle> _obstacles;
 
-    protected BaseEffect.Name _destoryEffect;
-
     protected IPos _followTarget;
 
     protected float _offsetFromCenter;
+    protected DropData _dropData;
+
+    public override void SetTarget(IPos follower)
+    {
+        _followTarget = follower;
+    }
 
     public override void Initialize()
     {
-        _followTarget = FindObjectOfType<Player.Player>();
         _groggyTimer = new Timer();
         _hp = _maxHp;
 
@@ -49,7 +52,6 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
 
         _skillController = GetComponent<SkillController>();
         _skillController.Initialize();
-        _skillController.AddSkill(_skillNames);
     }
 
     protected override void Update()
@@ -58,9 +60,29 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
         _skillController.OnUpdate();
     }
 
+    protected override void OnDie()
+    {
+        // 아이템 드랍 기능 넣기
+        OnDropRequested?.Invoke(_dropData, transform.position);
+        base.OnDie();
+    }
+
+    Action<DropData, Vector3> OnDropRequested; // 드랍 시 호출
+
+    public override void AddObserverEvent(Action OnDieRequested, Action<DropData, Vector3> OnDropRequested)
+    {
+        this.OnDieRequested = OnDieRequested;
+        this.OnDropRequested = OnDropRequested;
+    }
+
+    public override void AddCreateEvent(Func<BaseEffect.Name, BaseEffect> CreateEffect) 
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     protected void ResetDirection()
     {
-        if (_followTarget == null) return;
+        if ((_followTarget as UnityEngine.Object) == null) return;
 
         Vector3 targetPos = _followTarget.ReturnPosition();
         BehaviorData data = new BehaviorData(_nearAgents, _obstacles, targetPos, _offsetFromCenter);
@@ -72,17 +94,10 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
         if (_aliveState == AliveState.Groggy) return; // 그로기 상태인 경우 실행 X
         _moveComponent.Move(_dir.normalized, _moveSpeed);
     }
-    protected override void OnDie()
-    {
-        BaseEffect effect = EffectFactory.Create(_destoryEffect);
-        effect.ResetPosition(transform.position);
-        effect.Play();
-
-        Destroy(gameObject);
-    }
 
     public Vector3 ReturnFowardDirection()
     {
+        if (transform == null) return Vector3.zero;
         return transform.right;
     }
 
@@ -96,9 +111,12 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IAbsorbable
         return _lifeState == LifeState.Alive;
     }
 
-    public void Absorb(Vector3 pos, float speed)
+    public void ApplyForce(Vector3 pos, float speed, ForceMode2D forceMode)
     {
         Vector3 direction = pos - transform.position;
-        _moveComponent.AddForce(direction, speed);
+        _moveComponent.AddForce(direction, speed, forceMode);
     }
+
+    public void AddSkill(BaseSkill.Name name) { }
+    public void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { _skillController.AddSkill(skillName, skill); }
 }

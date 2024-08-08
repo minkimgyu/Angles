@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class Statikk : CooltimeSkill
 {
@@ -9,14 +10,16 @@ public class Statikk : CooltimeSkill
     float _range;
     int _maxTargetCount;
     List<ITarget.Type> _targetTypes;
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
 
-    public Statikk(StatikkData data) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public Statikk(StatikkData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _damage = data._damage;
         _range = data._range;
         _maxTargetCount = data._maxTargetCount;
 
         _targetTypes = data._targetTypes;
+        this.CreateEffect = CreateEffect;
     }
 
     public override void OnReflect(Collision2D collision)
@@ -39,7 +42,7 @@ public class Statikk : CooltimeSkill
 
         for (int i = 0; i < hitPoints.Count; i++)
         {
-            BaseEffect effect = EffectFactory.Create(BaseEffect.Name.LaserEffect);
+            BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.LaserEffect);
             effect.ResetPosition(collision.transform.position);
             effect.ResetLine(hitPoints[i]);
 

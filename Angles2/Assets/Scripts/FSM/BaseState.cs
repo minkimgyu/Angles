@@ -9,6 +9,7 @@ abstract public class BaseState<T>
 
     public abstract void OnStateEnter();
     public abstract void OnStateEnter(Vector2 vec2, string message);
+    public abstract void OnStateEnter(Vector2 vec2, float ratio, string message);
     public abstract void OnStateEnter(Collision2D collision, string message);
 
     public abstract void OnStateUpdate();
@@ -35,6 +36,7 @@ public class State<T> : BaseState<T>
 
     public override void OnStateEnter() { }
     public override void OnStateEnter(Vector2 vec2, string message) { }
+    public override void OnStateEnter(Vector2 vec2, float ratio, string message) { }
     public override void OnStateEnter(Collision2D collision, string message) { }
 
 

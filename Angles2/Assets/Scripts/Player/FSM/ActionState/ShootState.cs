@@ -12,57 +12,88 @@ namespace Player.FSM
         Action<bool> SetInvincible;
         Action<Collision2D> OnReflect;
 
-        Action<Vector2, float> AddForce;
-        Action Stop;
-
         float _shootSpeed;
         float _shootDuration;
 
+        float _ratio;
+        float _maxChargePower;
+
         Timer _timer;
+        Transform _myTransform;
+        MoveComponent _moveComponent;
 
         public ShootState(
             FSM<Player.ActionState> fsm,
-            float shootSpeed, float shootDuration,
+            float shootSpeed, 
+            float shootDuration,
+            float maxChargePower,
+
+            Transform myTransform,
+            MoveComponent moveComponent,
+
             Action<bool, float> ChangeBodyScale,
             Action<Collision2D> OnReflect,
 
-            Action<bool> SetInvincible,
-
-            Action Stop,
-            Action<Vector2, float> AddForce) : base(fsm)
+            Action<bool> SetInvincible) : base(fsm)
         {
             _shootSpeed = shootSpeed;
             _shootDuration = shootDuration;
+            _myTransform = myTransform;
+            _moveComponent = moveComponent;
+            _maxChargePower = maxChargePower;
 
             this.ChangeBodyScale = ChangeBodyScale;
             this.OnReflect = OnReflect;
 
             _timer = new Timer();
-
             this.SetInvincible = SetInvincible;
-
-            this.Stop = Stop;
-            this.AddForce = AddForce;
         }
 
         public override void OnCollisionEnter(Collision2D collision)
         {
             OnReflect?.Invoke(collision);
-            _baseFSM.SetState(Player.ActionState.Reflect, collision.contacts[0].normal, "GoToReflect");
+
+            Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, collision.contacts[0].normal);
+            _myTransform.right = reflectDirection;
+
+            Debug.DrawRay(_myTransform.position, reflectDirection, Color.red, 5);
+
+            Shoot(reflectDirection * _ratio * _maxChargePower);
         }
 
-        public override void OnStateEnter(Vector2 direction, string message)
+        public override void OnStateEnter(Vector2 direction, float ratio, string message)
         {
-            _timer.Reset();
-            ChangeBodyScale?.Invoke(false, 0);
+            _ratio = ratio;
 
-            Stop?.Invoke();
-            AddForce?.Invoke(direction, _shootSpeed);
+            _timer.Reset();
             _timer.Start(_shootDuration);
+
+            ChangeBodyScale?.Invoke(false, 0);
+            Shoot(direction * _ratio * _maxChargePower);
+        }
+
+        public override void OnStateUpdate()
+        {
+            if(_timer.CurrentState == Timer.State.Finish)
+            {
+                GoToReadyState();
+                return;
+            }
         }
 
         // move가 검출된다면 바로 Ready로 보냄
         public override void OnMove(Vector2 vec2)
+        {
+            GoToReadyState();
+        }
+
+        void Shoot(Vector2 direction)
+        {
+            _moveComponent.Stop();
+            _moveComponent.AddForce(direction, _shootSpeed);
+        }
+
+        void GoToReadyState()
         {
             SetInvincible?.Invoke(false);
 

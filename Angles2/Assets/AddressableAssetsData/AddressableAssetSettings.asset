@@ -52,6 +52,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4e52011b27370694cbc74da50b894c9b, type: 2}
   - {fileID: 11400000, guid: 7a43d66bd5ed81f4dbee0624b625c870, type: 2}
   - {fileID: 11400000, guid: 7be2f013107a49a4588f0b3b4f236f15, type: 2}
+  - {fileID: 11400000, guid: 18b001d998107104990fe7cb0c482547, type: 2}
+  - {fileID: 11400000, guid: 2d1d17dcb8fc94c4bb59cd35dcee9e01, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -98,7 +100,11 @@ MonoBehaviour:
     - Effect
     - Life
     - Viewer
-    - Map1
+    - StartStage
+    - BonusStage
+    - BattleStage
+    - InteractableObject
+    - Sound
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: e12fe35937006864a81e8bb7a1736e46, type: 2}

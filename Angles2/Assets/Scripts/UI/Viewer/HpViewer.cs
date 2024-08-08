@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class HpViewer : BaseViewer
 {
     [SerializeField] Image _bar;
+    [SerializeField] TMP_Text _hpTxt;
     [SerializeField] float _changeDuration;
     [SerializeField] float _topOffset;
 
@@ -20,8 +22,11 @@ public class HpViewer : BaseViewer
         _bar.color = _startColor;
     }
 
-    public override void UpdateViewer(float ratio)
+    public override void UpdateViewer(float current, float total) 
     {
+        float ratio = current / total;
+
+        _hpTxt.text = current.ToString();
         _bar.DOFillAmount(ratio, _changeDuration);
 
         Color targetColor = Color.Lerp(_startColor, _endColor, 1f - ratio);
@@ -35,6 +40,8 @@ public class HpViewer : BaseViewer
 
     private void Update()
     {
+        if ((_followTarget as UnityEngine.Object) == null) return;
+
         Vector3 offset = Vector2.down * _topOffset;
         transform.position = _followTarget.ReturnPosition() + offset;
     }

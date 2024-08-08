@@ -1,52 +1,83 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct StageSpawnData
-{
-    public StageSpawnData(int totalStageCount, int currentStageCount)
-    {
-        _totalStageCount = totalStageCount;
-        _currentStageCount = currentStageCount;
-    }
-
-    int _totalStageCount;
-    int _currentStageCount;
-
-    public float ProgressRatio { get { return _currentStageCount / _totalStageCount; } }
-}
-
 public class BaseStage : MonoBehaviour
 {
+    public struct Events
+    {
+        public Events(
+            DungeonSystem.CommandCollection commandCollection,
+            DungeonSystem.ObserverEventCollection eventCollection,
+
+            Action OnStageClearRequested, 
+            Action OnMoveToNextStageRequested
+        )
+        {
+            _commandCollection = commandCollection;
+            _eventCollection = eventCollection;
+
+            _OnStageClearRequested = OnStageClearRequested;
+            _OnMoveToNextStageRequested = OnMoveToNextStageRequested;
+        }
+
+        DungeonSystem.CommandCollection _commandCollection;
+        public DungeonSystem.CommandCollection CommandCollection { get { return _commandCollection; } }
+
+        DungeonSystem.ObserverEventCollection _eventCollection;
+        public DungeonSystem.ObserverEventCollection ObserberEventCollection { get { return _eventCollection; } }
+
+
+        Action _OnStageClearRequested;
+        public Action OnStageClearRequested { get { return _OnStageClearRequested; } }
+
+        Action _OnMoveToNextStageRequested;
+        public Action OnMoveToNextStageRequested { get { return _OnMoveToNextStageRequested; } }
+    }
+
     public enum Type
     {
         Start,
-        Battle,
-        Bonus
+        Bonus,
+        Battle
     }
 
-    protected System.Action OnClearRequested;
+    [SerializeField] protected Transform _entryPoint;
+    [SerializeField] protected Portal _portal;
 
-    [SerializeField] Transform _entryPoint;
-    protected Portal _exitPortal;
+    protected List<GameObject> _spawnedObjects;
+
+    protected Events _events;
+
+    public virtual void Initialize(Events events) 
+    { 
+        _events = events;
+        _spawnedObjects = new List<GameObject>();
+        _portal.Initialize(_events.OnMoveToNextStageRequested);
+    }
 
     public void ActivePortal(Vector2 movePos)
     {
-        _exitPortal.Active(movePos);
+        _portal.Active(movePos);
+        Debug.Log("ActivePortal");
     }
 
-    public virtual void Initialize(System.Action OnClearRequested)
-    {
-        this.OnClearRequested = OnClearRequested;
-
-        //InteractableObjectFactory.Create();
-        _exitPortal.Initialize();
-    }
+    public IPos Target;
 
     public Vector3 ReturnEntryPosition()
     {
         return _entryPoint.position;
     }
 
-    public virtual void Spawn(StageSpawnData data) { }
+    public virtual void Spawn(int totalStageCount, int currentStageCount, IFactory factory) { }
+
+    public virtual void Exit() 
+    {
+        for (int i = 0; i < _spawnedObjects.Count; i++)
+        {
+            Destroy(_spawnedObjects[i]);
+        }
+
+        _portal.Disable();
+    }
 }

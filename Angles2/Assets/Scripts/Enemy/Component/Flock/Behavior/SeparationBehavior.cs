@@ -9,8 +9,9 @@ public class SeparationBehavior : BaseBehavior
         if (behaviorData.NearAgents.Count == 0) return Vector3.zero;
 
         Vector3 combinedPos = new Vector3();
-        for (int i = 0; i < behaviorData.NearAgents.Count; i++)
+        for (int i = behaviorData.NearAgents.Count - 1; i >= 0; i--)
         {
+            if ((behaviorData.NearAgents[i] as UnityEngine.Object) == null) continue;
             combinedPos += behaviorData.NearAgents[i].ReturnPosition();
         }
 

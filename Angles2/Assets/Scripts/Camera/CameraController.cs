@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
     Vector2 MapMinPos { get { return _mapPos - _mapSize / 2; } }
     Vector2 MapMaxPos { get { return _mapPos + _mapSize / 2; } }
 
-    [SerializeField] float _fieldOfView = 70;
+    [SerializeField] float _orthographicSize = 13;
     [SerializeField] float _followSpeed = 1;
     Camera _mainCamera;
 
@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
     public void Initialize()
     {
         _mainCamera = Camera.main;
-        _mainCamera.fieldOfView = _fieldOfView;
+        _mainCamera.orthographicSize = _orthographicSize;
         _mainCamera.transform.position = new Vector3(_cameraArea.position.x, _cameraArea.position.y, -10);
 
         AreaReflecter areaReflecter = GetComponentInChildren<AreaReflecter>();
@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (_followTarget == null) return;
+        if ((_followTarget as UnityEngine.Object) == null) return;
         Vector3 targetPos = _followTarget.ReturnPosition();
 
         //float xPos = Mathf.Clamp(targetPos.x, MapMinPos.x + _cameraArea.width / 2, MapMaxPos.x - _cameraArea.width / 2);

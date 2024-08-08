@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectCreater : ObjCreater<BaseEffect> 
+public class EffectCreater
 {
-    public override BaseEffect Create()
+    BaseEffect _effectPrefab;
+
+    public EffectCreater(BaseEffect effectPrefab)
     {
-        GameObject obj = Object.Instantiate(_prefab);
-        BaseEffect effect = obj.GetComponent<BaseEffect>();
+        _effectPrefab = effectPrefab;
+    }
+
+    public BaseEffect Create()
+    {
+        BaseEffect effect = Object.Instantiate(_effectPrefab);
         if (effect == null) return null;
 
         effect.Initialize();
@@ -15,20 +21,11 @@ public class EffectCreater : ObjCreater<BaseEffect>
     }
 }
 
-public class EffectFactory : MonoBehaviour
+public class EffectFactory
 {
     Dictionary<BaseEffect.Name, EffectCreater> _effectCreaters;
-    private static EffectFactory _instance;
 
-    private void Awake()
-    {
-        if (_instance == null) _instance = this;
-        else Destroy(gameObject);
-
-        Initialize();
-    }
-
-    private void Initialize()
+    public EffectFactory(Dictionary<BaseEffect.Name, BaseEffect> effectPrefabs)
     {
         _effectCreaters = new Dictionary<BaseEffect.Name, EffectCreater>();
 
@@ -36,15 +33,14 @@ public class EffectFactory : MonoBehaviour
         for (int i = 0; i < effectCount; i++)
         {
             BaseEffect.Name key = (BaseEffect.Name)i;
-            GameObject prefab = AddressableManager.Instance.PrefabAssetDictionary[key.ToString()];
+            BaseEffect prefab = effectPrefabs[key];
 
-            _effectCreaters[key] = new EffectCreater();
-            _effectCreaters[key].Initialize(prefab);
+            _effectCreaters[key] = new EffectCreater(prefab);
         }
     }
 
-    public static BaseEffect Create(BaseEffect.Name name)
+    public BaseEffect Create(BaseEffect.Name name)
     {
-        return _instance._effectCreaters[name].Create();
+        return _effectCreaters[name].Create();
     }
 }

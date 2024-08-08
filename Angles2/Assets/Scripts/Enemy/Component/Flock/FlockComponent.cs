@@ -9,7 +9,7 @@ public class FlockComponent : MonoBehaviour
         Alignment,
         Cohesion,
         Separation,
-        Stay,
+        //Stay,
         Avoid,
         Follow
     }
@@ -29,8 +29,8 @@ public class FlockComponent : MonoBehaviour
                 return new CohesionBehavior();
             case BehaviorType.Separation:
                 return new SeparationBehavior();
-            case BehaviorType.Stay:
-                return new StayInRadiusBehavior();
+            //case BehaviorType.Stay:
+            //    return new StayInRadiusBehavior();
             case BehaviorType.Avoid:
                 return new AvoidBehavior();
             case BehaviorType.Follow:

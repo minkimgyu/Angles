@@ -17,14 +17,20 @@ public class StickyBombData : BaseWeaponData
 
 public class StickyBombCreater : WeaponCreater
 {
+    System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
+
+    public StickyBombCreater(BaseWeapon weaponPrefab, BaseWeaponData weaponData, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) : base(weaponPrefab, weaponData)
+    {
+        this.SpawnEffect = SpawnEffect;
+    }
+
     public override BaseWeapon Create()
     {
-        GameObject obj = Object.Instantiate(_prefab);
-        BaseWeapon weapon = obj.GetComponent<BaseWeapon>();
+        BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        StickyBombData data = Database.Instance.WeaponData[BaseWeapon.Name.StickyBomb] as StickyBombData;
-        weapon.Initialize(data);
+        StickyBombData data = _weaponData as StickyBombData;
+        weapon.Initialize(data, SpawnEffect);
         return weapon;
     }
 }

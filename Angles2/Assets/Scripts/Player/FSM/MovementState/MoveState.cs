@@ -7,10 +7,10 @@ namespace Player.FSM
 {
     public class MoveState : State<Player.MovementState>
     {
-        Action<Vector2, float> Move;
         Func<bool> CanUseDash;
         Action UseDash;
 
+        MoveComponent _moveComponent;
         Vector2 _storedInput;
         float _moveSpeed;
 
@@ -21,13 +21,13 @@ namespace Player.FSM
             Func<bool> CanUseDash,
             Action UseDash,
 
-            Action<Vector2, float> Move) : base(fsm)
+            MoveComponent moveComponent) : base(fsm)
         {
             _moveSpeed = moveSpeed;
+            _moveComponent = moveComponent;
 
             this.CanUseDash = CanUseDash;
             this.UseDash = UseDash;
-            this.Move = Move;
         }
 
         public override void OnMove(Vector2 input)
@@ -37,7 +37,7 @@ namespace Player.FSM
 
         public override void OnFixedUpdate()
         {
-            Move?.Invoke(_storedInput, _moveSpeed);
+            _moveComponent.Move(_storedInput, _moveSpeed);
         }
 
         public override void OnMoveEnd()

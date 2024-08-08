@@ -28,6 +28,11 @@ abstract public class BaseFSM<T>
         return ChangeState(_states[stateName], direction, message);
     }
 
+    public bool SetState(T stateName, Vector2 direction, float ratio, string message)
+    {
+        return ChangeState(_states[stateName], direction, ratio, message);
+    }
+
     public bool RevertToPreviousState()
     {
         return ChangeState(_previousState);
@@ -36,6 +41,11 @@ abstract public class BaseFSM<T>
     public bool RevertToPreviousState(Vector2 vec2, string message)
     {
         return ChangeState(_previousState, vec2, message);
+    }
+
+    public bool RevertToPreviousState(Vector2 vec2, float ratio, string message)
+    {
+        return ChangeState(_previousState, vec2, ratio, message);
     }
 
     bool ChangeState(BaseState<T> state)
@@ -83,6 +93,31 @@ abstract public class BaseFSM<T>
         if (_currentState != null) //새 상태의 Enter를 호출한다.
         {
             _currentState.OnStateEnter(direction, message);
+        }
+
+        return true;
+    }
+
+    bool ChangeState(BaseState<T> state, Vector2 direction, float ratio, string message)
+    {
+        if (_states.ContainsValue(state) == false) return false;
+
+        if (_currentState == state) // 같은 State로 전환하지 못하게 막기
+        {
+            return false;
+        }
+
+        if (_currentState != null) //상태가 바뀌기 전에, 이전 상태의 Exit를 호출
+            _currentState.OnStateExit();
+
+        _previousState = _currentState;
+
+        _currentState = state;
+
+
+        if (_currentState != null) //새 상태의 Enter를 호출한다.
+        {
+            _currentState.OnStateEnter(direction, ratio, message);
         }
 
         return true;

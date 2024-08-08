@@ -18,6 +18,7 @@ public struct DamageData
 
         _groggyDuration = 0;
         _damageTxtColor = Color.white;
+        _showTxt = true;
     }
 
     public DamageData(float damage, List<ITarget.Type> damageableTypes)
@@ -26,6 +27,7 @@ public struct DamageData
         _targetType = damageableTypes;
         _groggyDuration = 0;
         _damageTxtColor = Color.white;
+        _showTxt = true;
     }
 
     public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration)
@@ -34,18 +36,32 @@ public struct DamageData
         _targetType = damageableTypes;
         _groggyDuration = groggyDuration;
         _damageTxtColor = Color.white;
+        _showTxt = true;
     }
 
-    public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration, Color damageTxtColor)
+    public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration, bool showTxt)
     {
         _damage = damage;
         _targetType = damageableTypes;
         _groggyDuration = groggyDuration;
+        _damageTxtColor = Color.white;
+        _showTxt = showTxt;
+    }
+
+    public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration, bool showTxt, Color damageTxtColor)
+    {
+        _damage = damage;
+        _targetType = damageableTypes;
+        _groggyDuration = groggyDuration;
+        _showTxt = showTxt;
         _damageTxtColor = damageTxtColor;
     }
 
     float _damage;
     public float Damage { get { return _damage; } }
+
+    bool _showTxt;
+    public bool ShowTxt { get { return _showTxt; } }
 
     List<ITarget.Type> _targetType;
     public List<ITarget.Type> DamageableTypes { get { return _targetType; } }

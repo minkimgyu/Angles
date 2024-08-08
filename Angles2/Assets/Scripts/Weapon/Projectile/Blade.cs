@@ -70,12 +70,14 @@ public class Blade : ProjectileWeapon
             return;
         }
 
-        for (int i = 0; i < _targetDatas.Count; i++)
+        for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if (duration > _attackDelay)
             {
                 ApplyDamage(_targetDatas[i].Damageable);
+
+                if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;
             }
         }

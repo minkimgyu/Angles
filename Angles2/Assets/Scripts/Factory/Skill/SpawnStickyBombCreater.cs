@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class SpawnStickyBombData : CooltimeSkillData
 {
     public int maxStackCount;
@@ -16,9 +17,16 @@ public class SpawnStickyBombData : CooltimeSkillData
 
 public class SpawnStickyBombCreater : SkillCreater
 {
+    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+
+    public SpawnStickyBombCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    {
+        this.CreateWeapon = CreateWeapon;
+    }
+
     public override BaseSkill Create()
     {
-        SpawnStickyBombData data = Database.Instance.SkillDatas[BaseSkill.Name.SpawnStickyBomb] as SpawnStickyBombData;
-        return new SpawnStickyBomb(data);
+        SpawnStickyBombData data = _skillData as SpawnStickyBombData;
+        return new SpawnStickyBomb(data, CreateWeapon);
     }
 }

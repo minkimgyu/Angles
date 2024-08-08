@@ -10,9 +10,12 @@ public class CardViewer : BaseViewer, IPointerClickHandler
 {
     [SerializeField] TMP_Text _nameText;
     [SerializeField] Image _iconImage;
-    [SerializeField] Transform _upgradeImageParent;
     [SerializeField] TMP_Text _infoText;
 
+    [SerializeField] GameObject _costParent;
+    [SerializeField] TMP_Text _costText;
+
+    [SerializeField] List<GameObject> _upgradeIcons;
     Action OnClick;
 
     public override void Initialize(SKillCardData cardData, Action OnClick)
@@ -20,12 +23,18 @@ public class CardViewer : BaseViewer, IPointerClickHandler
         _nameText.text = cardData.Name.ToString();
         _iconImage.sprite = cardData.Icon;
         _infoText.text = cardData.Info;
-        this.OnClick = OnClick;
-    }
+        _costText.text = cardData.Cost.ToString();
 
-    public override void AddChildUI(Transform child)
-    {
-        child.SetParent(_upgradeImageParent);
+        bool shotCost = cardData.Cost != 0;
+        _costParent.SetActive(shotCost);
+
+        for (int i = 0; i < cardData.MaxUpgradeCount; i++)
+        {
+            if (i > cardData.UpgradeCount) _upgradeIcons[i].SetActive(false);
+            else _upgradeIcons[i].SetActive(true);
+        }
+
+        this.OnClick = OnClick;
     }
 
     public void OnPointerClick(PointerEventData eventData)

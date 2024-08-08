@@ -6,32 +6,47 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour, IInteractable
 {
-    [SerializeField] int _upCount = 1;
-    [SerializeField] float _moveSpeed = 8f;
+    int _upCount;
+    float _moveSpeed;
 
+    Command<int> AddCoin;
     TrackComponent _trackComponent;
 
-    private void Start()
+    public void OnInteractEnter(IInteracter interacter)
     {
-        _trackComponent = GetComponent<TrackComponent>();
-        _trackComponent.Initialize(_moveSpeed);
+        _trackComponent.FreezePosition(false);
+
+        IFollowable followable = interacter.ReturnFollower();
+        _trackComponent.ResetFollower(followable);
     }
 
-    public void OnInteractEnter(InteractEnterData data)
+    public void OnInteract(IInteracter interacter) 
     {
-        _trackComponent.ResetFollower(data.Followable);
-    }
-
-    public void OnInteract(InteractData data) 
-    {
-        StageManager.Instance.CoinCount += _upCount;
+        AddCoin.Execute(_upCount);
         Destroy(gameObject);
     }
 
-    public void OnInteractExit(InteractExitData data) { }
+    public void OnInteractExit(IInteracter interacter) { }
 
-    public UnityEngine.Object ReturnObject()
+    public void ResetPosition(Vector3 pos)
     {
-        return this;
+        transform.position = pos;
+    }
+
+    public void Initialize(CoinData data) 
+    {
+        _upCount = data._upCount;
+        _moveSpeed = data._moveSpeed;
+
+        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent.Initialize(_moveSpeed);
+        _trackComponent.FreezePosition(true);
+    }
+
+    GameObject IInteractable.ReturnGameObject() { return gameObject; }
+
+    public void AddCommand(Command<int> AddCoin) 
+    { 
+        this.AddCoin = AddCoin; 
     }
 }

@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+
+[Serializable]
 public class StatikkData : CooltimeSkillData
 {
     public float _damage;
@@ -21,9 +23,16 @@ public class StatikkData : CooltimeSkillData
 
 public class StatikkCreater : SkillCreater
 {
+    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+
+    public StatikkCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data) 
+    {
+        this.CreateEffect = CreateEffect;
+    }
+
     public override BaseSkill Create()
     {
-        StatikkData data = Database.Instance.SkillDatas[BaseSkill.Name.Statikk] as StatikkData;
-        return new Statikk(data);
+        StatikkData data = _skillData as StatikkData;
+        return new Statikk(data, CreateEffect);
     }
 }

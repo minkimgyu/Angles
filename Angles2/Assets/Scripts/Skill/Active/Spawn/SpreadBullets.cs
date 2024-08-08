@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SpreadBullets : BaseSkill
 {
@@ -16,7 +17,9 @@ public class SpreadBullets : BaseSkill
 
     Timer _delayTimer;
 
-    public SpreadBullets(SpreadBulletsData data) : base(Type.Basic, data._maxUpgradePoint)
+    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+
+    public SpreadBullets(SpreadBulletsData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(Type.Basic, data._maxUpgradePoint)
     {
         _delay = data._delay;
         _damage = data._damage;
@@ -28,6 +31,8 @@ public class SpreadBullets : BaseSkill
 
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
+
+        this.CreateWeapon = CreateWeapon;
     }
 
     void ShootBullet(float angle)
@@ -37,7 +42,7 @@ public class SpreadBullets : BaseSkill
         Vector3 direction = new Vector3(x, y, 0);
         Vector3 spawnPosition = _castingData.MyTransform.position + direction * _distanceFromCaster;
 
-        BaseWeapon weapon = WeaponFactory.Create(BaseWeapon.Name.Bullet);
+        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.Bullet);
         if (weapon == null) return;
 
         weapon.ResetDamage(_damage);

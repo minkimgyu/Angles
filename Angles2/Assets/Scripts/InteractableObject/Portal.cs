@@ -8,32 +8,49 @@ public class Portal : MonoBehaviour, IInteractable
     Vector2 _movePos;
     bool _isActive;
 
-    public void Initialize()
-    {
-        _outlineComponent = GetComponentInChildren<OutlineComponent>();
+    System.Action OnInteractRequested;
 
-        _isActive = false;
-        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnEnabled);
+    public void Initialize(System.Action OnInteractRequested)
+    {
+        this.OnInteractRequested = OnInteractRequested;
+        _outlineComponent = GetComponentInChildren<OutlineComponent>();
+        _outlineComponent.Initialize();
+
+        Disable();
     }
 
     public void Active(Vector2 movePos)
     {
         _movePos = movePos;
         _isActive = true;
+        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnEnabled);
     }
 
-    public void OnInteractEnter(InteractEnterData data) { }
-
-    public void OnInteract(InteractData data)
+    public void Disable()
     {
-        if (_isActive == true) return;
-        data.ResetPosition?.Invoke(_movePos);
+        _isActive = false;
+        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
     }
 
-    public void OnInteractExit(InteractExitData data) { }
+    public void OnInteractEnter(IInteracter interacter) { }
+
+    public void OnInteract(IInteracter interacter)
+    {
+        if (_isActive == false) return;
+        OnInteractRequested?.Invoke();
+
+        interacter.MovePosition(_movePos);
+    }
+
+    public void OnInteractExit(IInteracter interacter) { }
 
     public Object ReturnObject()
     {
         return this;
+    }
+
+    public void ResetPosition(Vector3 pos)
+    {
+        transform.position = pos;
     }
 }

@@ -17,11 +17,18 @@ public class MoveComponent : MonoBehaviour
     public void Stop()
     {
         _rigid.velocity = Vector2.zero;
+        FaceDirection(Vector2.right);
     }
 
     public void FreezeRotation(bool freeze)
     {
         if(freeze) _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+        else _rigid.constraints = RigidbodyConstraints2D.None;
+    }
+
+    public void FreezePosition(bool freeze)
+    {
+        if (freeze) _rigid.constraints = RigidbodyConstraints2D.FreezePosition;
         else _rigid.constraints = RigidbodyConstraints2D.None;
     }
 

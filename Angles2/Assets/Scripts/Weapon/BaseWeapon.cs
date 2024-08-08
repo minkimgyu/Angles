@@ -11,19 +11,23 @@ public class BaseWeapon : MonoBehaviour
         Rocket,
 
         Blackhole,
-        Shooter,
         StickyBomb,
+
+        ShotgunShooter,
+        RifleShooter,
+        RocketShooter,
     }
 
     protected float _damage;
     protected List<ITarget.Type> _targetTypes;
 
-    public virtual void Initialize(ShooterData data) { }
-    public virtual void Initialize(RocketData data) { }
-    public virtual void Initialize(BulletData data) { }
+    public virtual void Initialize(ShooterData data, System.Func<Name, BaseWeapon> SpawnWeapon) { }
+    public virtual void Initialize(RocketData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
+    public virtual void Initialize(BulletData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
+    public virtual void Initialize(StickyBombData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
+
     public virtual void Initialize(BladeData data) { }
     public virtual void Initialize(BlackholeData data) { }
-    public virtual void Initialize(StickyBombData data) { }
 
     public virtual void ResetFollower(IFollowable followable) { }
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
