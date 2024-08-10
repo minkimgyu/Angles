@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
 using System;
 
-public class AddressableHandler /* : Singleton<AddressableManager>*/
+public class AddressableHandler
 {
     public enum Labels
     {
@@ -169,11 +169,6 @@ public class AddressableHandler /* : Singleton<AddressableManager>*/
             {
                 case AsyncOperationStatus.Succeeded:
                     T1 key = (T1)Enum.Parse(typeof(T1), location.PrimaryKey);
-
-                    if(location.PrimaryKey == "Die")
-                    {
-                        int b = 3;
-                    }
 
                     dictionary.Add(key, handle.Result);
                     OnComplete?.Invoke();
