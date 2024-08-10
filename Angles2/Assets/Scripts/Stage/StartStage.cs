@@ -45,7 +45,7 @@ public class StartStage : BaseStage
         interactableObject.AddCommand(_events.CommandCollection.RecreatableCardsCommand);
 
 
-        IInteractable bubble = factory.Create(IInteractable.Name.CardTable);
+        IInteractable bubble = factory.Create(IInteractable.Name.SkillBubble);
         _spawnedObjects.Add(bubble.ReturnGameObject());
         bubble.ResetPosition(_bonusPostion.position + Vector3.one * 3);
         bubble.AddCommand(_events.CommandCollection.CreateCardsCommand);

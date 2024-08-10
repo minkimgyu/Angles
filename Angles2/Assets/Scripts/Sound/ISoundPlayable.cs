@@ -6,6 +6,18 @@ public interface ISoundPlayable
 {
     public enum SoundName
     {
+        Shoot,
+        Dash,
+        GameClear,
+        GameOver,
+        StageClear,
+        Hit,
+        Impact,
+        Explosion,
+        Get,
+
+
+
         Die
     }
 
