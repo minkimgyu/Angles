@@ -114,3 +114,6 @@ AttackUnit, AttackBuilding, LiveOutSpawnBuilding에 Behavior Tree를 구현하�
  <div align="center">
    Pathfinder 내부에 A* 알고리즘을 구현하여 Unit에 길찾기 기능을 추가했습니다.
  </div>
+ 
+## 회고
+졸업 작품 프로젝트를 진행하면서 많은 부분을 새롭게 배우고 적용해봤습니다. 지금까지 했던 프로젝트 중에서 가장 많은 것을 얻어갈 수 있던 시간이었습니다.
