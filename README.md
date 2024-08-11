@@ -99,16 +99,16 @@ Unity (C#)
 
 ### DotTween 에셋 활용하여 UI 애니메이션 적용
   <div align="center">
-    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/abac3128-2fa6-4cac-87ff-399256cd6b0a" width="60%" height="60%"/>
+    <img src="https://github.com/user-attachments/assets/afab2d8f-6749-41ef-9ec8-056b37da60ca" width="60%" height="60%"/>
   </div>
 
   <div align="center">
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Grid/PathFinder.cs#L29">Pathfinder 코드 보러가기</a>
+    <a href="https://github.com/minkimgyu/Angles/blob/a97cf9e1f6d963d1f5a27f5047298a03a89803cf/Angles2/Assets/Scripts/UI/Viewer/GameEndViewer.cs#L28">코드 보러가기</a>
   </div>
   </br>
 
  <div align="center">
-   Pathfinder 내부에 A* 알고리즘을 구현하여 Unit에 길찾기 기능을 추가했습니다.
+   DotTween 에셋을 활용하여 UI 애니메이션을 제작해봤습니다.
  </div>
  
 ## 회고
