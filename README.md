@@ -51,22 +51,16 @@ Unity (C#)
 
 
 ### Factory 패턴을 사용한 생성 시스템 개발
-   <div align="center">
-    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/902c6289-c666-4228-a484-86473a3aa128" width="30%" height="30%"/>
-    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/8c24f618-dc03-49e5-9dfb-f50dcef90d6d" width="30%" height="30%"/>
-  </div>
-
-   <div align="center">
-    <img src="https://github.com/user-attachments/assets/9038cf6d-76ed-4de5-9248-614217025ad5" width="60%" height="60%"/>
-  </div>
-
   <div align="center">
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/9698e9124fb9c4698ac4604625f451922181f8bb/Winter_Portfolio_Project/Assets/Scripts/AI/Grid/GridController.cs#L12">GridController 코드 보러가기</a>
+    <img src="https://github.com/user-attachments/assets/c19bae57-8c80-482e-9bf5-ed52eaa0d657" width="60%" height="60%"/>
+  </div>
+  <div align="center">
+    <a href="https://github.com/minkimgyu/Angles/blob/5db5c73fec6d43f2bbef57e8db8e99c0a35a4d0a/Angles2/Assets/Scripts/Factory/FactoryCollection.cs#L15">Factory 코드 보러가기</a>
   </div>
   
   <div align="center">
     </br>
-    GridController 내부에 FSM을 추가하여 Ready, Select, Plant State 기능을 구현했습니다.
+    Factory 패턴을 적용하여 객체를 생성하는 시스템을 분리해서 개발했습니다.
   </div>
 
 ### MVC 패턴과 Observer 패턴을 활용하여 Skill, Card UI 개발
