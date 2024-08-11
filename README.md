@@ -63,18 +63,23 @@ Unity (C#)
     Factory 패턴을 적용하여 객체를 생성하는 시스템을 분리해서 개발했습니다.
   </div>
 
-### MVC 패턴과 Observer 패턴을 활용하여 Skill, Card UI 개발
+### MVC 패턴과 Observer 패턴을 활용하여 Card UI 개발
   <div align="center">
-    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/abac3128-2fa6-4cac-87ff-399256cd6b0a" width="60%" height="60%"/>
+    <img src="https://github.com/user-attachments/assets/10977106-5595-40dd-850d-8fe411dd8ce1" width="60%" height="60%"/>
   </div>
 
   <div align="center">
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Grid/PathFinder.cs#L29">Pathfinder 코드 보러가기</a>
+    <a href="https://github.com/minkimgyu/Angles/blob/c57fee5b75addeed51b7f2a095265613e0eb14fc/Angles2/Assets/Scripts/Card/CardViewer.cs#L9">CardViewer 코드 보러가기</a>
+    </br>
+    <a href="https://github.com/minkimgyu/Angles/blob/c57fee5b75addeed51b7f2a095265613e0eb14fc/Angles2/Assets/Scripts/Card/CardUIController.cs#L10">SkillCardData 코드 보러가기</a>
+    </br>
+    <a href="https://github.com/minkimgyu/Angles/blob/c57fee5b75addeed51b7f2a095265613e0eb14fc/Angles2/Assets/Scripts/Card/CardUIController.cs#L52">CardUIController 코드 보러가기</a>
+    </br>
   </div>
   </br>
 
  <div align="center">
-   Pathfinder 내부에 A* 알고리즘을 구현하여 Unit에 길찾기 기능을 추가했습니다.
+   MVC, Observer 패턴을 적용하여 결합도를 낮추어 코드의 재사용성을 높혔습니다.
  </div>
 
 ### Addressable 사용하여 에셋 로드 시스템 개발
