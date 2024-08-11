@@ -63,7 +63,7 @@ Unity (C#)
     Factory 패턴을 적용하여 객체를 생성하는 시스템을 분리해서 개발했습니다.
   </div>
 
-### MVC 패턴과 Observer 패턴을 활용하여 Card UI 시스템 개발
+### MVC 패턴과 Observer 패턴을 활용하여 Card UI Controller 개발
   <div align="center">
     <img src="https://github.com/user-attachments/assets/10977106-5595-40dd-850d-8fe411dd8ce1" width="60%" height="60%"/>
   </div>
