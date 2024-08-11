@@ -85,16 +85,16 @@ Unity (C#)
 
 ### Addressable 사용하여 에셋 로드 시스템 개발
   <div align="center">
-    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/abac3128-2fa6-4cac-87ff-399256cd6b0a" width="60%" height="60%"/>
+    <img src="https://github.com/user-attachments/assets/99bfc0f5-e4a9-4f46-89ca-d3c3a16f2385" width="60%" height="60%"/>
   </div>
 
   <div align="center">
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Grid/PathFinder.cs#L29">Pathfinder 코드 보러가기</a>
+    <a href="https://github.com/minkimgyu/Angles/blob/0ecc75af92c25b288bed8dc2d4138601570dc52a/Angles2/Assets/Scripts/AddressableHandler.cs#L10">AddressableHandler 코드 보러가기</a>
   </div>
   </br>
 
  <div align="center">
-   Pathfinder 내부에 A* 알고리즘을 구현하여 Unit에 길찾기 기능을 추가했습니다.
+   Addressable를 활용하여 에셋을 로드하는 기능을 개발했습니다.
  </div>
 
 ### DotTween 에셋 활용하여 UI 애니메이션 적용
