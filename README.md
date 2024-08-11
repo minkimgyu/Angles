@@ -2,7 +2,7 @@
 
 ![ezgif-2-1745cfa890](https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/cb1023ec-0d6a-41c4-9027-29aae4e79449)
 </br>
-플레이 영상: https://youtu.be/tywLCf7nhVU?si=j_xwbnCZY-g1Uv2o
+플레이 영상: https://www.youtube.com/watch?v=gC9k8V1H3kU
 
 ## 프로젝트 소개
 Unity를 사용하여 개발한 캐주얼 2D 게임
