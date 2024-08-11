@@ -18,7 +18,7 @@ Unity (C#)
 
 ## 기능 설명
 
-### 상속을 활용하여 Unit, Building 구현  
+### FSM을 활용하여 Player 기능 구현  
   <div align="center">
     <img src="https://github.com/user-attachments/assets/653c3344-6b58-495e-a3cf-30f903baa9e4" width="80%" height="80%"/>
   </div>
@@ -38,8 +38,7 @@ Unity (C#)
 
 
 
-### FSM과 Behavior Tree를 활용하여 AI 시스템 구축
-
+### Flock Algorithm를 활용한 AI 구현
   <div align="center">
     <img src="https://github.com/user-attachments/assets/05ebb2ec-d8aa-42d0-893c-fc400965218a" width="70%" height="70%"/>
     <img src="https://github.com/user-attachments/assets/388290ff-2805-4ce0-a67a-20418c08f1c6" width="60%" height="60%"/>
@@ -55,7 +54,7 @@ Unity (C#)
   </br>
 AttackUnit, AttackBuilding, LiveOutSpawnBuilding에 Behavior Tree를 구현하여 공격, 생성 기능을 구현하여 유닛의 Base Class를 제작했습니다.
 
-### FSM을 사용하여 GridController 구현
+### Factory 패턴을 사용한 생성 시스템 개발
    <div align="center">
     <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/902c6289-c666-4228-a484-86473a3aa128" width="30%" height="30%"/>
     <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/8c24f618-dc03-49e5-9dfb-f50dcef90d6d" width="30%" height="30%"/>
@@ -74,7 +73,35 @@ AttackUnit, AttackBuilding, LiveOutSpawnBuilding에 Behavior Tree를 구현하�
     GridController 내부에 FSM을 추가하여 Ready, Select, Plant State 기능을 구현했습니다.
   </div>
 
-### A* 알고리즘을 활용한 길 찾기 알고리즘 구현 및 적용
+### MVC 패턴과 Observer 패턴을 활용하여 Skill, Card UI 개발
+  <div align="center">
+    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/abac3128-2fa6-4cac-87ff-399256cd6b0a" width="60%" height="60%"/>
+  </div>
+
+  <div align="center">
+    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Grid/PathFinder.cs#L29">Pathfinder 코드 보러가기</a>
+  </div>
+  </br>
+
+ <div align="center">
+   Pathfinder 내부에 A* 알고리즘을 구현하여 Unit에 길찾기 기능을 추가했습니다.
+ </div>
+
+### Addressable 사용하여 에셋 로드 시스템 개발
+  <div align="center">
+    <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/abac3128-2fa6-4cac-87ff-399256cd6b0a" width="60%" height="60%"/>
+  </div>
+
+  <div align="center">
+    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Grid/PathFinder.cs#L29">Pathfinder 코드 보러가기</a>
+  </div>
+  </br>
+
+ <div align="center">
+   Pathfinder 내부에 A* 알고리즘을 구현하여 Unit에 길찾기 기능을 추가했습니다.
+ </div>
+
+### DotTween 에셋 활용하여 UI 애니메이션 적용
   <div align="center">
     <img src="https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/abac3128-2fa6-4cac-87ff-399256cd6b0a" width="60%" height="60%"/>
   </div>
