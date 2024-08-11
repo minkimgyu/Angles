@@ -1,6 +1,6 @@
 # Angles
 
-![ezgif-2-1745cfa890](https://github.com/minkimgyu/Winter_Portfolio_Project/assets/48249824/cb1023ec-0d6a-41c4-9027-29aae4e79449)
+![image](https://github.com/user-attachments/assets/f9ee135b-5ee9-484a-b449-97ea97b02889)
 </br>
 플레이 영상: https://www.youtube.com/watch?v=gC9k8V1H3kU
 
