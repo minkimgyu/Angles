@@ -21,7 +21,7 @@ Unity (C#)
 ### FSM을 활용하여 Player 기능 구현  
 
   <div align="center">
-    <img src="https://github.com/user-attachments/assets/3d8a0394-e7f1-4673-ac25-cdaa950e8f9a" width="80%" height="80%"/>
+    <img src="https://github.com/user-attachments/assets/3d8a0394-e7f1-4673-ac25-cdaa950e8f9a" width="40%" height="40%"/>
   </div>
 
    <div align="center">
@@ -29,8 +29,10 @@ Unity (C#)
   </div>
   
   </br>
-
-플레이어의 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
+  
+   <div align="center">
+    플레이어의 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
+  </div>
 
 
 
