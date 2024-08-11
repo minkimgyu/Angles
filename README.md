@@ -85,7 +85,7 @@ Unity (C#)
 
 ### Addressable 사용하여 에셋 로드 시스템 개발
   <div align="center">
-    <img src="https://github.com/user-attachments/assets/36949272-e945-4ef1-bde0-88abf2137a0d" width="60%" height="60%"/>
+    <img src="https://github.com/user-attachments/assets/36949272-e945-4ef1-bde0-88abf2137a0d" width="70%" height="70%"/>
   </div>
 
   <div align="center">
