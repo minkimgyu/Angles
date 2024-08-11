@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/1c5048f2-f4a6-4085-a83c-40e0e3153d8d)# Angles
+# Angles
 
 ![ezgif-3-d13b2d286e](https://github.com/user-attachments/assets/1c205434-7dd6-4cb2-b618-ed5f4a5f8bfc)
 </br>
