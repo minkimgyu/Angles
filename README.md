@@ -1,6 +1,6 @@
 # Angles
 
-![image](https://github.com/user-attachments/assets/f9ee135b-5ee9-484a-b449-97ea97b02889)
+![ezgif-3-d13b2d286e](https://github.com/user-attachments/assets/1c205434-7dd6-4cb2-b618-ed5f4a5f8bfc)
 </br>
 플레이 영상: https://www.youtube.com/watch?v=gC9k8V1H3kU
 
