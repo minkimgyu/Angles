@@ -34,13 +34,15 @@ Unity (C#)
     플레이어의 움직임, 슈팅 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
   </div>
 
-### Flock Algorithm를 활용한 AI 구현
+### Flock Algorithm를 활용한 Enemy AI 구현
   <div align="center">
     <img src="https://github.com/user-attachments/assets/28c82035-7b42-4b73-a3f5-03c8100c37a8" width="40%" height="40%"/>
   </div>
 
    <div align="center">
     <a href="https://github.com/minkimgyu/Angles/tree/main/Angles2/Assets/Scripts/Enemy/Component/Flock/Behavior">Behavior 코드 보러가기</a>
+    </br>
+    <a href="https://github.com/minkimgyu/Angles/blob/d24868f5af10776a53480baafc25e3bd9e0c78d8/Angles2/Assets/Scripts/Enemy/BaseEnemy.cs#L87">Enemy 코드 보러가기</a>
   </div>
   </br>
 
