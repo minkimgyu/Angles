@@ -1,4 +1,4 @@
-# Angles
+![image](https://github.com/user-attachments/assets/1c5048f2-f4a6-4085-a83c-40e0e3153d8d)# Angles
 
 ![ezgif-3-d13b2d286e](https://github.com/user-attachments/assets/1c205434-7dd6-4cb2-b618-ed5f4a5f8bfc)
 </br>
@@ -34,23 +34,19 @@ Unity (C#)
     플레이어의 움직임, 슈팅 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
   </div>
 
-
-
 ### Flock Algorithm를 활용한 AI 구현
   <div align="center">
-    <img src="https://github.com/user-attachments/assets/05ebb2ec-d8aa-42d0-893c-fc400965218a" width="70%" height="70%"/>
-    <img src="https://github.com/user-attachments/assets/388290ff-2805-4ce0-a67a-20418c08f1c6" width="60%" height="60%"/>
+    <img src="https://github.com/user-attachments/assets/28c82035-7b42-4b73-a3f5-03c8100c37a8" width="40%" height="40%"/>
   </div>
 
    <div align="center">
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Entity/Life/Unit/Unit.cs#L99">AttackUnit 코드 보러가기</a>
-   </br>
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Entity/Life/Building/Building.cs#L54C27-L54C42">AttackBuilding 코드 보러가기</a>
-   </br>
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Entity/Life/Building/Building.cs#L172">LiveOutSpawnBuilding 코드 보러가기</a>
+    <a href="https://github.com/minkimgyu/Angles/tree/main/Angles2/Assets/Scripts/Enemy/Component/Flock/Behavior">Behavior 코드 보러가기</a>
   </div>
   </br>
-AttackUnit, AttackBuilding, LiveOutSpawnBuilding에 Behavior Tree를 구현하여 공격, 생성 기능을 구현하여 유닛의 Base Class를 제작했습니다.
+
+* Flocking Algorithm을 활용하여 기본적인 움직임을 구현하기 위해 Alignment, Cohesion, Separation Behavior를 개발했습니다.
+* 추적과 회피 기능을 구현하기 위해 Follow, Avoid Behavior를 개발하여 적용했습니다.
+
 
 ### Factory 패턴을 사용한 생성 시스템 개발
    <div align="center">
