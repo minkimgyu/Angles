@@ -31,7 +31,7 @@ Unity (C#)
   </br>
   
    <div align="center">
-    플레이어의 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
+    플레이어의 움직임, 슈팅 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
   </div>
 
 
