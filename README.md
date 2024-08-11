@@ -19,22 +19,18 @@ Unity (C#)
 ## 기능 설명
 
 ### FSM을 활용하여 Player 기능 구현  
+
   <div align="center">
-    <img src="https://github.com/user-attachments/assets/653c3344-6b58-495e-a3cf-30f903baa9e4" width="80%" height="80%"/>
+    <img src="https://github.com/user-attachments/assets/3d8a0394-e7f1-4673-ac25-cdaa950e8f9a" width="80%" height="80%"/>
   </div>
 
    <div align="center">
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/4ed4d99131ea823d88696ea89eb4fdc2b6e46629/Winter_Portfolio_Project/Assets/Scripts/AI/Entity/Entity.cs#L15">Entity 코드 보러가기</a>
-    </br>
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/86f37a56c46095dc7d33d6202c4ad793d9856898/Winter_Portfolio_Project/Assets/Scripts/AI/Entity/Life/Building/Building.cs#L252">Building 코드 보러가기</a>
-    </br>
-    <a href="https://github.com/minkimgyu/Winter_Portfolio_Project/blob/c975441a8055f5e664d597710e416eef119e1bea/Winter_Portfolio_Project/Assets/Scripts/AI/Entity/Life/Unit/Unit.cs#L18">Unit 코드 보러가기</a>
+    <a href="https://github.com/minkimgyu/Angles/blob/7e1eb739d7b079452b59aaefde1a2fae9bbe6ef0/Angles2/Assets/Scripts/Player/Player.cs#L203">Player FSM 코드 보러가기</a>
   </div>
   
   </br>
 
-  * Entity, IDamagable, ITarget을 상속 받아서 Life 클래스를 구현했습니다.
-  * Unit, Building의 Base Class가 되는 LifeAI를 구현했습니다.
+플레이어의 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
 
 
 
