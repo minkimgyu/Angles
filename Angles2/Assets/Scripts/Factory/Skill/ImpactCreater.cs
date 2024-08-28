@@ -3,17 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[System.Serializable]
-public class ImpactData : RandomSkillData
+public struct ImpactUpgradableData
 {
-    public float _damage;
-    public float _range;
-    public List<ITarget.Type> _targetTypes;
-
-    public ImpactData(int maxUpgradePoint, float probability, float damage, float range, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    public ImpactUpgradableData(float damage, float range)
     {
         _damage = damage;
         _range = range;
+    }
+
+    private float _damage;
+    private float _range;
+
+    public float Damage { get => _damage; }
+    public float Range { get => _range; }
+}
+
+
+[System.Serializable]
+public class ImpactData : RandomSkillData
+{
+    public List<ImpactUpgradableData> _upgradableDatas;
+    public List<ITarget.Type> _targetTypes;
+
+    public ImpactData(int maxUpgradePoint, float probability, List<ImpactUpgradableData> upgradableDatas, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    {
+        _upgradableDatas = upgradableDatas;
         _targetTypes = targetTypes;
     }
 }

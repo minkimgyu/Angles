@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 abstract public class BaseEffect : MonoBehaviour
@@ -36,6 +37,7 @@ abstract public class BaseEffect : MonoBehaviour
     public virtual void ResetColor(Color color) { }
     public virtual void ResetLine(Vector3 endPoint) { }
 
+    public virtual void ResetSize(float ratio) { transform.localScale *= ratio; }
 
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { }

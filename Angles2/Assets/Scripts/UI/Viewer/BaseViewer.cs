@@ -8,6 +8,8 @@ public class BaseViewer : MonoBehaviour
     public enum Name
     {
         CardViewer,
+        CostCardViewer,
+
         HpViewer,
         SkillViewer,
         DashViewer,

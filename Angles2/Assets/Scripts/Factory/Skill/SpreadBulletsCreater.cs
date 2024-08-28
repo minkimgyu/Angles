@@ -6,7 +6,7 @@ using System;
 [Serializable]
 public class SpreadBulletsData : BaseSkillData
 {
-    public float _damage;
+    public BulletData _bulletData;
     public float _force;
     public float _delay;
 
@@ -15,9 +15,9 @@ public class SpreadBulletsData : BaseSkillData
 
     public List<ITarget.Type> _targetTypes;
 
-    public SpreadBulletsData(int maxUpgradePoint, float damage, float force, float delay, float distanceFromCaster, int bulletCount, List<ITarget.Type> targetTypes) : base(maxUpgradePoint) 
+    public SpreadBulletsData(int maxUpgradePoint, float force, float delay, float distanceFromCaster, int bulletCount, BulletData bulletData, List<ITarget.Type> targetTypes) : base(maxUpgradePoint) 
     {
-        _damage = damage;
+        _bulletData = bulletData;
         _force = force;
         _delay = delay;
         _distanceFromCaster = distanceFromCaster;

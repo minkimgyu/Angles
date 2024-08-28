@@ -92,7 +92,7 @@ public class AddressableHandler
             () => 
             {
                 labelCount++;
-                Debug.Log(labelCount);
+                //Debug.Log(labelCount);
                 if (labelCount == _assetLabels.Count)
                 {
                     OnCompleted?.Invoke();
@@ -195,8 +195,8 @@ public class AddressableHandler
                     T1 key = (T1)Enum.Parse(typeof(T1), location.PrimaryKey);
                     T2 value = handle.Result.GetComponent<T2>();
 
-                    Debug.Log(key);
-                    Debug.Log(handle.Result);
+                    //Debug.Log(key);
+                    //Debug.Log(handle.Result);
 
                     dictionary.Add(key, value);
                     OnComplete?.Invoke();

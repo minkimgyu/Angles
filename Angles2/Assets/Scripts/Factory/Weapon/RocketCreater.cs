@@ -1,29 +1,36 @@
+using DamageUtility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class ProjectileData : BaseWeaponData
+public struct RocketUpgradableData
 {
-    public float _lifeTime;
-    public float _force;
-
-    public ProjectileData(float damage, float lifeTime) : base(damage)
+    public RocketUpgradableData(float damage, float explosionDamage, int explosionRange)
     {
-        _lifeTime = lifeTime;
+        _damage = damage;
+        _explosionDamage = explosionDamage;
+        _explosionRange = explosionRange;
     }
+
+    private float _damage;
+    private float _explosionDamage;
+    private int _explosionRange;
+
+    public float Damage { get => _damage; }
+    public float ExplosionDamage { get => _explosionDamage; }
+    public int ExplosionRange { get => _explosionRange; }
 }
 
 [System.Serializable]
-public class RocketData : ProjectileData
+public class RocketData : BaseWeaponData
 {
-    public float _explosionDamage;
-    public float _explosionRange;
+    public float _lifeTime;
+    public List<RocketUpgradableData> _upgradableDatas;
 
-    public RocketData(float damage, float lifeTime, float explosionDamage, float explosionRange) : base(damage, lifeTime)
+    public RocketData(List<RocketUpgradableData> upgradableDatas, float lifeTime)
     {
-        _explosionDamage = explosionDamage;
-        _explosionRange = explosionRange;
+        _upgradableDatas = upgradableDatas;
+        _lifeTime = lifeTime;
     }
 }
 
@@ -31,7 +38,7 @@ public class RocketCreater : WeaponCreater
 {
     System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
 
-    public RocketCreater(BaseWeapon weaponPrefab, BaseWeaponData weaponData, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) : base(weaponPrefab, weaponData)
+    public RocketCreater(BaseWeapon weaponPrefab, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) : base(weaponPrefab)
     {
         this.SpawnEffect = SpawnEffect;
     }
@@ -41,9 +48,7 @@ public class RocketCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        RocketData data = _weaponData as RocketData;
-        weapon.Initialize(data, SpawnEffect);
-
+        weapon.Initialize(SpawnEffect);
         return weapon;
     }
 }

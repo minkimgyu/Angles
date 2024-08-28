@@ -27,7 +27,7 @@ public class FactoryCollection : IFactory
 
         _effectFactory = new EffectFactory(addressableHandler.EffectPrefabs);
 
-        _weaponFactory = new WeaponFactory(addressableHandler.WeaponPrefabs, database.WeaponDatas, _effectFactory.Create);
+        _weaponFactory = new WeaponFactory(addressableHandler.WeaponPrefabs, _effectFactory.Create);
 
         _skillFactory = new SkillFactory(database.SkillDatas, _effectFactory.Create, _weaponFactory.Create);
 

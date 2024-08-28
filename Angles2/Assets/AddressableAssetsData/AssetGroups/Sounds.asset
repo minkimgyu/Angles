@@ -23,6 +23,42 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6f935b673fca66419c8f85408a08a71
+    m_Address: Dash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1c4e86e99afbef438954669e392e601
+    m_Address: Bounce
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa0bbbe57fab53d4aa45b7256f5cbbc7
+    m_Address: EnemyDie
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06a187fecd71fe0408052e89d2bf8b97
+    m_Address: Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be85dbc118a424045928a9a66b958403
+    m_Address: GetCoin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fd10431695421042aecf4719ae2ea14
+    m_Address: Shooting
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

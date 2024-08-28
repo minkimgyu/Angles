@@ -47,6 +47,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Viewer
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c01d092753d55744b977a9e005e2b397
+    m_Address: CostCardViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

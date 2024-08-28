@@ -18,7 +18,7 @@ public struct CastingData
     public Transform MyTransform { get { return _myTransform; } }
 }
 
-abstract public class BaseSkill
+abstract public class BaseSkill : IUpgradable
 {
     public enum Name
     {
@@ -70,6 +70,11 @@ abstract public class BaseSkill
 
     public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
 
+    public virtual void Upgrade(int step)
+    {
+        _upgradePoint = step;
+    }
+
     public virtual void Upgrade() 
     {
         _upgradePoint++;
@@ -90,6 +95,5 @@ abstract public class BaseSkill
     public virtual void OnCaptureExit(ITarget target, IDamageable damageable) { }
 
     public virtual void OnUpdate() { }
-
     public virtual void OnAdd() { }
 }

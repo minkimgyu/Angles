@@ -8,12 +8,9 @@ using System;
 
 public class CardViewer : BaseViewer, IPointerClickHandler
 {
-    [SerializeField] TMP_Text _nameText;
-    [SerializeField] Image _iconImage;
-    [SerializeField] TMP_Text _infoText;
-
-    [SerializeField] GameObject _costParent;
-    [SerializeField] TMP_Text _costText;
+    [SerializeField] protected TMP_Text _nameText;
+    [SerializeField] protected Image _iconImage;
+    [SerializeField] protected TMP_Text _infoText;
 
     [SerializeField] List<GameObject> _upgradeIcons;
     Action OnClick;
@@ -23,10 +20,6 @@ public class CardViewer : BaseViewer, IPointerClickHandler
         _nameText.text = cardData.Name.ToString();
         _iconImage.sprite = cardData.Icon;
         _infoText.text = cardData.Info;
-        _costText.text = cardData.Cost.ToString();
-
-        bool shotCost = cardData.Cost != 0;
-        _costParent.SetActive(shotCost);
 
         for (int i = 0; i < cardData.MaxUpgradeCount; i++)
         {

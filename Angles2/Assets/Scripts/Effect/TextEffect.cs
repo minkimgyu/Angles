@@ -29,6 +29,12 @@ public class TextEffect : BaseEffect
         _text.text = damage.ToString();
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        _text.DOKill();
+    }
+
     void Fade(float alpha, float scale, Action WhenCompleted)
     {
         _text.transform.DOScale(Vector3.one * scale, _fadeInDuration);

@@ -59,7 +59,7 @@ public class BaseStage : MonoBehaviour
     public void ActivePortal(Vector2 movePos)
     {
         _portal.Active(movePos);
-        Debug.Log("ActivePortal");
+        //Debug.Log("ActivePortal");
     }
 
     public IPos Target;

@@ -2,27 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class BlackholeData : BaseWeaponData
+public struct BlackholeUpgradableData
 {
-    public float _lifeTime;
-
-    public float _absorbForce;
-    public float _forceDelay;
-    public int _maxTargetCount;
-
-    public BlackholeData(float damage, float lifeTime, float absorbForce, float forceDelay, int maxTargetCount) : base(damage)
+    public BlackholeUpgradableData(float lifeTime, float absorbForce, int maxTargetCount, float range)
     {
         _lifeTime = lifeTime;
         _absorbForce = absorbForce;
-        _forceDelay = forceDelay;
         _maxTargetCount = maxTargetCount;
+        _range = range;
+    }
+
+    private float _lifeTime;
+    private float _absorbForce;
+    private int _maxTargetCount;
+    private float _range;
+
+    public float LifeTime { get => _lifeTime; }
+    public float AbsorbForce { get => _absorbForce; }
+    public int MaxTargetCount { get => _maxTargetCount; }
+    public float Range { get => _range; }
+}
+
+[System.Serializable]
+public class BlackholeData : BaseWeaponData
+{
+    public List<BlackholeUpgradableData> _upgradableDatas;
+    public float _forceDelay;
+
+    public BlackholeData(List<BlackholeUpgradableData> upgradableDatas, float forceDelay)
+    {
+        _upgradableDatas = upgradableDatas;
+        _forceDelay = forceDelay;
     }
 }
 
 public class BlackholeCreater : WeaponCreater
 {
-    public BlackholeCreater(BaseWeapon weaponPrefab, BaseWeaponData weaponData) : base(weaponPrefab, weaponData)
+    public BlackholeCreater(BaseWeapon weaponPrefab) : base(weaponPrefab)
     {
     }
 
@@ -31,8 +47,7 @@ public class BlackholeCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        BlackholeData data = _weaponData as BlackholeData;
-        weapon.Initialize(data);
+        weapon.Initialize();
         return weapon;
     }
 }

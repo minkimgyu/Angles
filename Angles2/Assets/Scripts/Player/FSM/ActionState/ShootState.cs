@@ -52,6 +52,7 @@ namespace Player.FSM
         public override void OnCollisionEnter(Collision2D collision)
         {
             OnReflect?.Invoke(collision);
+            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce);
 
             Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, collision.contacts[0].normal);
             _myTransform.right = reflectDirection;
@@ -63,6 +64,8 @@ namespace Player.FSM
 
         public override void OnStateEnter(Vector2 direction, float ratio, string message)
         {
+            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shooting);
+
             _ratio = ratio;
 
             _timer.Reset();

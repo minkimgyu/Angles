@@ -8,10 +8,12 @@ public class SpawnStickyBombData : CooltimeSkillData
 {
     public int maxStackCount;
     public List<ITarget.Type> _targetTypes;
+    public StickyBombData _data;
 
-    public SpawnStickyBombData(int maxUpgradePoint, float coolTime, int maxStackCount, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
+    public SpawnStickyBombData(int maxUpgradePoint, float coolTime, int maxStackCount, StickyBombData data, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _targetTypes = targetTypes;
+        _data = data;
     }
 }
 

@@ -4,56 +4,34 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SpawnRifleShooterData : BaseSkillData
+public class SpawnShooterData : BaseSkillData
 {
+    public BaseWeapon.Name _shooterType;
     public List<ITarget.Type> _targetTypes;
+    public ShooterData _data;
 
-    public SpawnRifleShooterData(int maxUpgradePoint, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public SpawnShooterData(int maxUpgradePoint, BaseWeapon.Name shooterType, ShooterData data, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
+        _shooterType = shooterType;
         _targetTypes = targetTypes;
+        _data = data;
     }
 }
 
 
-public class SpawnRifleShooterCreater : SkillCreater
+public class SpawnShooterCreater : SkillCreater
 {
     Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    public ShooterData _data;
 
-    public SpawnRifleShooterCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    public SpawnShooterCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
     {
         this.CreateWeapon = CreateWeapon;
     }
 
     public override BaseSkill Create()
     {
-        SpawnRifleShooterData data = _skillData as SpawnRifleShooterData;
-        return new SpawnRifleShooter(data, CreateWeapon);
-    }
-}
-
-[Serializable]
-public class SpawnRocketShooterData : BaseSkillData
-{
-    public List<ITarget.Type> _targetTypes;
-
-    public SpawnRocketShooterData(int maxUpgradePoint, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
-    {
-        _targetTypes = targetTypes;
-    }
-}
-
-public class SpawnRocketShooterCreater : SkillCreater
-{
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
-
-    public SpawnRocketShooterCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
-    {
-        this.CreateWeapon = CreateWeapon;
-    }
-
-    public override BaseSkill Create()
-    {
-        SpawnRocketShooterData data = _skillData as SpawnRocketShooterData;
-        return new SpawnRocketShooter(data, CreateWeapon);
+        SpawnShooterData data = _skillData as SpawnShooterData;
+        return new SpawnShooter(data, CreateWeapon);
     }
 }

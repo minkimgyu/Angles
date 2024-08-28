@@ -2,38 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shooter : BaseWeapon
+abstract public class Shooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
     TrackComponent _trackComponent;
 
-    float _moveSpeed;
-    float _shootForce;
-    float _fireDelay;
-    float _followOffset;
-    float _waitFire;
-    float _maxDistanceFromPlayer;
-    Name _fireWeaponName;
+    List<ShooterUpgradableData> _upgradableDatas;
+    ShooterUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint]; } }
+
+    protected BaseWeaponData _weaponData;
+
+    protected abstract BaseWeapon ReturnProjectileWeapon();
+
+    void FireProjectile(Vector2 direction)
+    {
+        _waitFire += Time.deltaTime;
+        if (UpgradableData.FireDelay > _waitFire) return;
+
+        _waitFire = 0;
+
+        BaseWeapon weapon = ReturnProjectileWeapon();
+        IProjectable projectile = weapon.GetComponent<IProjectable>();
+        if (projectile == null) return;
+
+        projectile.Shoot(direction, UpgradableData.ShootForce);
+    }
+
+    protected float _moveSpeed;
+    protected float _followOffset;
+    protected float _waitFire;
+    protected float _maxDistanceFromPlayer;
+    protected Name _fireWeaponName;
 
     List<ITarget> _targetDatas;
 
-    System.Func<Name, BaseWeapon> SpawnWeapon;
+    protected System.Func<Name, BaseWeapon> SpawnWeapon;
 
-    public override void Initialize(ShooterData data, System.Func<Name, BaseWeapon> SpawnWeapon)
+    public override void ResetData(ShooterData data)
     {
-        this.SpawnWeapon = SpawnWeapon;
+        _upgradableDatas = data._upgradableDatas;
 
+        _weaponData = data._fireWeaponData;
         _moveSpeed = data._moveSpeed;
-        _shootForce = data._shootForce;
-        _fireDelay = data._fireDelay;
         _followOffset = data._followOffset;
         _maxDistanceFromPlayer = data._maxDistanceFromPlayer;
         _fireWeaponName = data._fireWeaponName;
 
+        _trackComponent.Initialize(_moveSpeed, _followOffset, _maxDistanceFromPlayer);
+    }
+
+    public override void Initialize(System.Func<Name, BaseWeapon> SpawnWeapon)
+    {
+        this.SpawnWeapon = SpawnWeapon;
         _waitFire = 0;
 
         _trackComponent = GetComponent<TrackComponent>();
-        _trackComponent.Initialize(_moveSpeed, _followOffset, _maxDistanceFromPlayer);
 
         _targetDatas = new List<ITarget>();
         _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
@@ -71,21 +94,6 @@ public class Shooter : BaseWeapon
         }
 
         return capturedTarget;
-    }
-    void FireProjectile(Vector2 direction)
-    {
-        _waitFire += Time.deltaTime;
-        if (_fireDelay > _waitFire) return;
-
-        _waitFire = 0;
-        BaseWeapon weapon = SpawnWeapon?.Invoke(_fireWeaponName);
-        weapon.ResetPosition(transform.position);
-        weapon.ResetTargetTypes(_targetTypes);
-
-        IProjectable projectile = weapon.GetComponent<IProjectable>();
-        if (projectile == null) return;
-
-        projectile.Shoot(direction, _shootForce);
     }
 
     private void Update()

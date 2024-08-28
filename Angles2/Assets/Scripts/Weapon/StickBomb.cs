@@ -6,23 +6,23 @@ using DamageUtility;
 public class StickBomb : BaseWeapon
 {
     Timer _lifeTimer = null;
-    float _range = 0;
-    float _explosionDelay = 0;
-
     IFollowable _followable;
 
-    System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
+    System.Func<BaseEffect.Name, BaseEffect> CreateEffect;
 
-    public override void Initialize(StickyBombData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) 
+    List<StickyBombUpgradableData> _upgradableDatas;
+    StickyBombUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
+
+    public override void ResetData(StickyBombData data)
     {
-        this.SpawnEffect = SpawnEffect;
+        _upgradableDatas = data._upgradableDatas;
+        _lifeTimer.Start(UpgradableData.ExplosionDelay);
+    }
 
-        _damage = data._damage;
-        _range = data._range;
-        _explosionDelay = data._explosionDelay;
-
+    public override void Initialize(System.Func<BaseEffect.Name, BaseEffect> CreateEffect) 
+    {
+        this.CreateEffect = CreateEffect;
         _lifeTimer = new Timer();
-        _lifeTimer.Start(_explosionDelay);
     }
 
     public override void ResetFollower(IFollowable followable) 
@@ -34,12 +34,13 @@ public class StickBomb : BaseWeapon
     {
         Debug.Log("Explode");
 
-        BaseEffect effect = SpawnEffect?.Invoke(BaseEffect.Name.ExplosionEffect);
+        BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
+        effect.ResetSize(UpgradableData.Range);
         effect.Play();
 
-        DamageData damageData = new DamageData(_damage, _targetTypes);
-        Damage.HitCircleRange(damageData, transform.position, _range, true, Color.red, 3);
+        DamageData damageData = new DamageData(UpgradableData.Damage, _targetTypes);
+        Damage.HitCircleRange(damageData, transform.position, UpgradableData.Range, true, Color.red, 3);
     }
 
     void Update()

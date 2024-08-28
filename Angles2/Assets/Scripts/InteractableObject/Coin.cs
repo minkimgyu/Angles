@@ -22,6 +22,7 @@ public class Coin : MonoBehaviour, IInteractable
 
     public void OnInteract(IInteracter interacter) 
     {
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.GetCoin);
         AddCoin.Execute(_upCount);
         Destroy(gameObject);
     }

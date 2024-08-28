@@ -5,8 +5,9 @@ using System;
 
 public class SpreadBullets : BaseSkill
 {
+    BulletData _bulletData;
+
     float _delay;
-    float _damage;
     float _force;
     float _distanceFromCaster;
 
@@ -19,10 +20,12 @@ public class SpreadBullets : BaseSkill
 
     Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
 
+
     public SpreadBullets(SpreadBulletsData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(Type.Basic, data._maxUpgradePoint)
     {
+        _bulletData = data._bulletData;
+
         _delay = data._delay;
-        _damage = data._damage;
         _force = data._force;
         _distanceFromCaster = data._distanceFromCaster;
 
@@ -45,7 +48,9 @@ public class SpreadBullets : BaseSkill
         BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.Bullet);
         if (weapon == null) return;
 
-        weapon.ResetDamage(_damage);
+        weapon.ResetData(_bulletData);
+
+        weapon.Upgrade(_upgradePoint);
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(spawnPosition, direction);
 

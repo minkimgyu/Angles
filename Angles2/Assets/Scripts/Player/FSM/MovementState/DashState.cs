@@ -38,6 +38,8 @@ namespace Player.FSM
 
         public override void OnStateEnter(Vector2 direction, string message)
         {
+            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Dash);
+
             _timer.Reset();
             Debug.Log(message);
             ChangeBodyScale?.Invoke(false, 0);

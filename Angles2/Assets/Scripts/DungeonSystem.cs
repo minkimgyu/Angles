@@ -79,11 +79,11 @@ public class DungeonSystem : MonoBehaviour
         Action<float> _OnChargeRatioChangeRequested; // 차지 옵저버 이벤트
         public Action<float> OnChargeRatioChangeRequested { get { return _OnChargeRatioChangeRequested; } } // 차지 옵저버 이벤트
 
-        Action<BaseSkill.Name, BaseSkill> _OnAddSkillRequested; // 대쉬 옵저버 이벤트
-        public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested { get { return _OnAddSkillRequested; } } // 대쉬 옵저버 이벤트
+        Action<BaseSkill.Name, BaseSkill> _OnAddSkillRequested; // 스킬 옵저버 이벤트
+        public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested { get { return _OnAddSkillRequested; } } // 스킬 옵저버 이벤트
 
-        Action<BaseSkill.Name, BaseSkill> _OnRemoveSkillRequested; // 대쉬 옵저버 이벤트
-        public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested { get { return _OnRemoveSkillRequested; } } // 대쉬 옵저버 이벤트
+        Action<BaseSkill.Name, BaseSkill> _OnRemoveSkillRequested; // 스킬 옵저버 이벤트
+        public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested { get { return _OnRemoveSkillRequested; } } // 스킬 옵저버 이벤트
 
 
         Action _OnGameClearRequested;
@@ -127,7 +127,7 @@ public class DungeonSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CoinCount = 1000;
+        CoinCount = 0;
         EnemyDieCount = 0;
 
         _database = new Database();

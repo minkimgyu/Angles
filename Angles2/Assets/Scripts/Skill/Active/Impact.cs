@@ -6,15 +6,15 @@ using System;
 
 public class Impact : RandomSkill
 {
-    public float _damage;
-    public float _range;
     public List<ITarget.Type> _targetTypes;
     Func<BaseEffect.Name, BaseEffect> CreateEffect;
 
+    List<ImpactUpgradableData> _upgradableDatas;
+    ImpactUpgradableData CurrentUpgradableData { get { return _upgradableDatas[_upgradePoint]; } }
+
     public Impact(ImpactData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data._maxUpgradePoint, data._probability)
     {
-        _damage = data._damage;
-        _range = data._range;
+        _upgradableDatas = data._upgradableDatas;
         _targetTypes = data._targetTypes;
 
         this.CreateEffect = CreateEffect;
@@ -35,9 +35,10 @@ public class Impact : RandomSkill
         if (effect == null) return;
 
         effect.ResetPosition(contactPos);
+        effect.ResetSize(CurrentUpgradableData.Range);
         effect.Play();
 
-        DamageData damageData = new DamageData(_damage, _targetTypes);
-        Damage.HitCircleRange(damageData, contactPos, _range, true, Color.red, 3);
+        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
+        Damage.HitCircleRange(damageData, contactPos, CurrentUpgradableData.Range, true, Color.red, 3);
     }
 }

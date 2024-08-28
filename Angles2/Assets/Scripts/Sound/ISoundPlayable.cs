@@ -6,19 +6,20 @@ public interface ISoundPlayable
 {
     public enum SoundName
     {
-        Shoot,
+        Die,
         Dash,
+        Bounce,
+        EnemyDie,
+        Explosion,
+        GetCoin,
+        Shooting,
+
+
         GameClear,
         GameOver,
         StageClear,
         Hit,
         Impact,
-        Explosion,
-        Get,
-
-
-
-        Die
     }
 
     //void Initialize(Dictionary<SoundName, AudioClip> clipDictionary);

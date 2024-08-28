@@ -23,7 +23,16 @@ public class Blade : ProjectileWeapon
     DamageableCaptureComponent _captureComponent;
     List<TargetData> _targetDatas;
     Timer _lifeTimer;
-    float _attackDelay;
+    //float _attackDelay;
+
+    List<BladeUpgradableData> _upgradableDatas;
+    BladeUpgradableData CurrentUpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
+
+    protected void ApplyDamage(IDamageable damageable)
+    {
+        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
+        damageable.GetDamage(damageData);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -34,17 +43,20 @@ public class Blade : ProjectileWeapon
         Shoot(direction, _force);
     }
 
-    public override void Initialize(BladeData data)
+    public override void ResetData(BladeData data)
     {
-        _damage = data._damage;
+        _upgradableDatas = data._upgradableDatas;
         _lifeTime = data._lifeTime;
-        _attackDelay = data._attackDelay;
+        _lifeTimer.Start(_lifeTime);
+        ResetSize(CurrentUpgradableData.Range);
+    }
 
+    public override void Initialize()
+    {
         _targetDatas = new List<TargetData>();
         _captureComponent = GetComponentInChildren<DamageableCaptureComponent>();
         _captureComponent.Initialize(OnEnter, OnExit);
         _lifeTimer = new Timer();
-        _lifeTimer.Start(_lifeTime);
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
@@ -73,7 +85,7 @@ public class Blade : ProjectileWeapon
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
-            if (duration > _attackDelay)
+            if (duration > CurrentUpgradableData.AttackDelay)
             {
                 ApplyDamage(_targetDatas[i].Damageable);
 

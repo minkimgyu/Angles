@@ -90,7 +90,7 @@ GameObject:
   m_Component:
   - component: {fileID: 309482340905434415}
   - component: {fileID: 1010609372302865296}
-  - component: {fileID: 8817283522166032132}
+  - component: {fileID: 5288266156574044141}
   - component: {fileID: 417804795302857884}
   - component: {fileID: 8499463965593798976}
   m_Layer: 0
@@ -157,8 +157,8 @@ SpriteRenderer:
   m_SortingLayerID: 191716789
   m_SortingLayer: 3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 47599e948bf232b4182fb22810f8c3a8, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 835e3adc6868ec641a2037921602409f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -168,7 +168,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8817283522166032132
+--- !u!114 &5288266156574044141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,10 +177,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8528467250574736875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1c2365e34ebcd34ca293cfc0a94c364, type: 3}
+  m_Script: {fileID: 11500000, guid: 364d0c08b7968fb4882a7076f0b330e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fireWeaponName: 0
 --- !u!114 &417804795302857884
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,9 +7,11 @@ public class SpawnStickyBomb : CooltimeSkill
 {
     List<ITarget.Type> _targetTypes;
     Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    StickyBombData _data;
 
     public SpawnStickyBomb(SpawnStickyBombData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
+        _data = data._data;
         _targetTypes = data._targetTypes;
         this.CreateWeapon = CreateWeapon;
     }
@@ -31,6 +33,8 @@ public class SpawnStickyBomb : CooltimeSkill
         if (_stackCount <= 0) return;
         _stackCount--;
 
+        weapon.ResetData(_data);
+        weapon.Upgrade(_upgradePoint);
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetFollower(followable);
     }

@@ -71,10 +71,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2118103355
-  m_SortingLayer: 5
+  m_SortingLayerID: 191716789
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 85bc32f2677f8cb43ab2b2c5b87a7582, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 925e0d4902d469c43bb8bad90bc1642b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 6189209790164662866}
   - component: {fileID: 6266106441622929545}
   - component: {fileID: 8630776330495113496}
-  - component: {fileID: 4105170333244542388}
+  - component: {fileID: 8149224354449965172}
   - component: {fileID: 4426356126274107325}
   m_Layer: 12
   m_Name: Shop
@@ -127,7 +127,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2606453702785330226}
@@ -171,10 +171,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 2115840695
-  m_SortingLayer: 4
+  m_SortingLayerID: 191716789
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6513774f28df4094090add773266d64b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3745989c46c76f145b96f93dafdd4bf8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -197,8 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31dca9a9e6449c142adc2829a3331842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &4105170333244542388
-CircleCollider2D:
+--- !u!61 &8149224354449965172
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -229,9 +229,19 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0047329664, y: 0.041546226}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 2.06
+  m_Size: {x: 3.785229, y: 4.2227926}
+  m_EdgeRadius: 0
 --- !u!50 &4426356126274107325
 Rigidbody2D:
   serializedVersion: 4

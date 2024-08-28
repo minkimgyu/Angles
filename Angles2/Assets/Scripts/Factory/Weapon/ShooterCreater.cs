@@ -2,21 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct ShooterUpgradableData
+{
+    public ShooterUpgradableData(float shootForce, float fireDelay)
+    {
+        _shootForce = shootForce; // 날리는 속도
+        _fireDelay = fireDelay; // 연사 속도
+    }
+
+    private float _shootForce;
+    private float _fireDelay;
+
+    public float ShootForce { get => _shootForce; }
+    public float FireDelay { get => _fireDelay; }
+}
+
 [System.Serializable]
 public class ShooterData : BaseWeaponData
 {
-    public float _moveSpeed;
-    public float _shootForce;
-    public float _fireDelay;
-    public float _followOffset;
-    public float _maxDistanceFromPlayer;
+    public List<ShooterUpgradableData> _upgradableDatas;
+    public BaseWeaponData _fireWeaponData;
     public BaseWeapon.Name _fireWeaponName;
 
-    public ShooterData(float damage, float moveSpeed, float shootForce, float fireDelay, float followOffset, float maxDistanceFromPlayer, BaseWeapon.Name fireWeaponName) : base(damage)
+    public float _moveSpeed;
+    public float _followOffset;
+    public float _maxDistanceFromPlayer;
+
+    public ShooterData(List<ShooterUpgradableData> upgradableDatas, BaseWeaponData weaponData, float moveSpeed, float followOffset, float maxDistanceFromPlayer, BaseWeapon.Name fireWeaponName)
     {
+        _upgradableDatas = upgradableDatas;
+        _fireWeaponData = weaponData;
+
         _moveSpeed = moveSpeed;
-        _shootForce = shootForce;
-        _fireDelay = fireDelay;
         _followOffset = followOffset;
         _maxDistanceFromPlayer = maxDistanceFromPlayer;
         _fireWeaponName = fireWeaponName;
@@ -27,7 +44,7 @@ public class ShooterCreater : WeaponCreater
 {
     System.Func<BaseWeapon.Name, BaseWeapon> SpawnWeapon;
 
-    public ShooterCreater(BaseWeapon weaponPrefab, BaseWeaponData weaponData, System.Func<BaseWeapon.Name, BaseWeapon> SpawnWeapon) : base(weaponPrefab, weaponData)
+    public ShooterCreater(BaseWeapon weaponPrefab, System.Func<BaseWeapon.Name, BaseWeapon> SpawnWeapon) : base(weaponPrefab)
     {
         this.SpawnWeapon = SpawnWeapon;
     }
@@ -37,8 +54,7 @@ public class ShooterCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        ShooterData data = _weaponData as ShooterData;
-        weapon.Initialize(data, SpawnWeapon);
+        weapon.Initialize(SpawnWeapon);
         return weapon;
     }
 }

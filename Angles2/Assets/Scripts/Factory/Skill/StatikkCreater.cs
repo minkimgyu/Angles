@@ -4,20 +4,36 @@ using UnityEngine;
 using System;
 
 
-[Serializable]
-public class StatikkData : CooltimeSkillData
-{
-    public float _damage;
-    public float _range;
-    public int _maxTargetCount;
-    public List<ITarget.Type> _targetTypes;
+// 업그레이드 가능한 스킬 데이터를 따로 Struct로 빼서 관리하자
 
-    public StatikkData(int maxUpgradePoint, float coolTime, int maxStackCount, float damage, float range, int maxTargetCount, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
+public struct StatikkUpgradableData
+{
+    public StatikkUpgradableData(float damage, float range, int maxTargetCount)
     {
         _damage = damage;
         _range = range;
-        _targetTypes = targetTypes;
         _maxTargetCount = maxTargetCount;
+    }
+
+    private float _damage;
+    private float _range;
+    private int _maxTargetCount;
+
+    public float Damage { get => _damage; }
+    public float Range { get => _range; }
+    public int MaxTargetCount { get => _maxTargetCount; }
+}
+
+[Serializable]
+public class StatikkData : CooltimeSkillData
+{
+    public List<StatikkUpgradableData> _upgradableDatas;
+    public List<ITarget.Type> _targetTypes;
+
+    public StatikkData(int maxUpgradePoint, float coolTime, int maxStackCount, List<StatikkUpgradableData> upgradableDatas, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
+    {
+        _upgradableDatas = upgradableDatas;
+        _targetTypes = targetTypes;
     }
 }
 

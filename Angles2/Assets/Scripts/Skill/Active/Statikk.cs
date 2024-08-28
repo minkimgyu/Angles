@@ -6,18 +6,15 @@ using System;
 
 public class Statikk : CooltimeSkill
 {
-    float _damage;
-    float _range;
-    int _maxTargetCount;
     List<ITarget.Type> _targetTypes;
     Func<BaseEffect.Name, BaseEffect> CreateEffect;
 
+    List<StatikkUpgradableData> _upgradableDatas;
+    StatikkUpgradableData CurrentUpgradableData { get { return _upgradableDatas[_upgradePoint]; } }
+
     public Statikk(StatikkData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
-        _damage = data._damage;
-        _range = data._range;
-        _maxTargetCount = data._maxTargetCount;
-
+        _upgradableDatas = data._upgradableDatas;
         _targetTypes = data._targetTypes;
         this.CreateEffect = CreateEffect;
     }
@@ -36,9 +33,9 @@ public class Statikk : CooltimeSkill
         Debug.Log("Statikk");
 
         List<Vector2> hitPoints;
-        DamageData damageData = new DamageData(_damage, _targetTypes);
+        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
 
-        Damage.HitRaycast(damageData, _maxTargetCount, collision.transform.position, _range, out hitPoints, true, Color.red, 3);
+        Damage.HitRaycast(damageData, CurrentUpgradableData.MaxTargetCount, collision.transform.position, CurrentUpgradableData.Range, out hitPoints, true, Color.red, 3);
 
         for (int i = 0; i < hitPoints.Count; i++)
         {

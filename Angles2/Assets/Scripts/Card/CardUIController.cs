@@ -135,7 +135,7 @@ public class CardUIController : MonoBehaviour
                 upgradeCount,
                 maxUpgradeCount
             );
-            AddCard(cardData);
+            AddCard(cardData, BaseViewer.Name.CardViewer);
         }
 
         _recreateCountParent.gameObject.SetActive(false);
@@ -171,7 +171,7 @@ public class CardUIController : MonoBehaviour
                 maxUpgradeCount
             );
 
-            AddCard(cardData);
+            AddCard(cardData, BaseViewer.Name.CostCardViewer);
         }
 
         recreateCount -= 1;
@@ -276,14 +276,14 @@ public class CardUIController : MonoBehaviour
         int coin = ReturnCoin();
         if (cost > coin) return;
 
-        ChangeCoin?.Invoke(coin - cost);
+        ChangeCoin?.Invoke(-cost);
         CloseTab();
         _skillUsable.AddSkill(name);
     }
 
-    void AddCard(SKillCardData skillCardData)
+    void AddCard(SKillCardData skillCardData, BaseViewer.Name type)
     {
-        BaseViewer viewer = SpawnViewer?.Invoke(BaseViewer.Name.CardViewer);
+        BaseViewer viewer = SpawnViewer?.Invoke(type);
         viewer.transform.SetParent(_cardParent);
 
         viewer.Initialize

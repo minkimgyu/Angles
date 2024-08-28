@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Blackhole : BaseWeapon
 {
+    List<BlackholeUpgradableData> _upgradableDatas;
+    BlackholeUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
+
     public class TargetData
     {
         public TargetData(float captureTime, IForce absorbableTarget, IDamageable damageableTarget)
@@ -26,23 +29,23 @@ public class Blackhole : BaseWeapon
     List<TargetData> _targetDatas;
     Timer _lifeTimer;
 
-    float _lifeTime;
+    //float _lifeTime;
     float _forceDelay;
-    float _absorbForce;
-    float _maxTargetCount;
+    //float _absorbForce;
+    //float _maxTargetCount;
 
-    public override void Initialize(BlackholeData data) 
+    public override void ResetData(BlackholeData data)
     {
-        _damage = data._damage;
-        _lifeTime = data._lifeTime;
+        _upgradableDatas = data._upgradableDatas;
         _forceDelay = data._forceDelay;
-        _absorbForce = data._absorbForce;
-        _maxTargetCount = data._maxTargetCount;
+        _lifeTimer.Start(UpgradableData.LifeTime);
+        ResetSize(UpgradableData.Range);
+    }
 
+    public override void Initialize() 
+    {
         _targetDatas = new List<TargetData>();
         _lifeTimer = new Timer();
-
-        _lifeTimer.Start(_lifeTime);
 
         _absorbCaptureComponent = GetComponentInChildren<AbsorbableCaptureComponent>();
         _absorbCaptureComponent.Initialize(OnEnter, OnExit);
@@ -50,7 +53,7 @@ public class Blackhole : BaseWeapon
 
     void OnEnter(IForce absorbable, IDamageable damageable)
     {
-        if (_targetDatas.Count >= _maxTargetCount) return;
+        if (_targetDatas.Count >= UpgradableData.MaxTargetCount) return;
         _targetDatas.Add(new TargetData(Time.time, absorbable, damageable));
     }
 
@@ -73,7 +76,7 @@ public class Blackhole : BaseWeapon
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if(duration > _forceDelay)
             {
-                _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, _absorbForce, ForceMode2D.Force);
+                _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, UpgradableData.AbsorbForce, ForceMode2D.Force);
 
                 DamageData damageData = new DamageData(_damage, _targetTypes, 1f, false);
                 _targetDatas[i].DamageableTarget.GetDamage(damageData);

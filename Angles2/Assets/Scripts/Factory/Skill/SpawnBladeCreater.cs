@@ -8,11 +8,13 @@ public class SpawnBladeData : RandomSkillData
 {
     public List<ITarget.Type> _targetTypes;
     public float _force;
+    public BladeData _data;
 
-    public SpawnBladeData(int maxUpgradePoint, float probability, float force, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    public SpawnBladeData(int maxUpgradePoint, float probability, float force, BladeData data, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
         _targetTypes = targetTypes;
         _force = force;
+        _data = data;
     }
 }
 

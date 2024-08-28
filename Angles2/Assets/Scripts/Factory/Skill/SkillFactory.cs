@@ -62,8 +62,8 @@ public class SkillFactory
         _skillCreaters[BaseSkill.Name.SpawnBlackhole] = new SpawnBlackholeCreater(skillDatas[BaseSkill.Name.SpawnBlackhole], CreateWeapon);
         _skillCreaters[BaseSkill.Name.SpawnBlade] = new SpawnBladeCreater(skillDatas[BaseSkill.Name.SpawnBlade], CreateWeapon);
 
-        _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnRifleShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], CreateWeapon);
-        _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnRocketShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], CreateWeapon);
+        _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], CreateWeapon);
+        _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], CreateWeapon);
 
 
         _skillCreaters[BaseSkill.Name.SpawnStickyBomb] = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], CreateWeapon);

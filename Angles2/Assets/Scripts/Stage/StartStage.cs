@@ -39,15 +39,9 @@ public class StartStage : BaseStage
             directionViewer.UpdateViewer
         );
 
-        IInteractable interactableObject = factory.Create(IInteractable.Name.Shop);
+        IInteractable interactableObject = factory.Create(IInteractable.Name.CardTable);
         _spawnedObjects.Add(interactableObject.ReturnGameObject());
         interactableObject.ResetPosition(_bonusPostion.position);
-        interactableObject.AddCommand(_events.CommandCollection.RecreatableCardsCommand);
-
-
-        IInteractable bubble = factory.Create(IInteractable.Name.SkillBubble);
-        _spawnedObjects.Add(bubble.ReturnGameObject());
-        bubble.ResetPosition(_bonusPostion.position + Vector3.one * 3);
-        bubble.AddCommand(_events.CommandCollection.CreateCardsCommand);
+        interactableObject.AddCommand(_events.CommandCollection.CreateCardsCommand);
     }
 }

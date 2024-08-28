@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseWeapon : MonoBehaviour
+public class BaseWeapon : MonoBehaviour, IUpgradable
 {
     public enum Name
     {
@@ -21,18 +21,43 @@ public class BaseWeapon : MonoBehaviour
     protected float _damage;
     protected List<ITarget.Type> _targetTypes;
 
-    public virtual void Initialize(ShooterData data, System.Func<Name, BaseWeapon> SpawnWeapon) { }
-    public virtual void Initialize(RocketData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
-    public virtual void Initialize(BulletData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
-    public virtual void Initialize(StickyBombData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
+    // 이하 5개는 스킬에서 데이터를 받아서 사용할 수 있게 만들기
+    public virtual void ResetData(RocketData data) { }
+    public virtual void ResetData(BulletData data) { }
+    public virtual void ResetData(StickyBombData data) { }
+    public virtual void ResetData(BladeData data) { }
+    public virtual void ResetData(BlackholeData data) { }
+    public virtual void ResetData(ShooterData data) { }
 
-    public virtual void Initialize(BladeData data) { }
-    public virtual void Initialize(BlackholeData data) { }
+    public virtual void Initialize() { }
+    public virtual void Initialize(System.Func<Name, BaseWeapon> SpawnWeapon) { }
+    public virtual void Initialize(System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
 
     public virtual void ResetFollower(IFollowable followable) { }
+    public virtual void ResetSize(float ratio) { transform.localScale *= ratio; }
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { transform.position = pos; transform.right = direction; }
 
-    public void ResetDamage(float damage) { _damage = damage; }
+    //public void ResetDamage(float damage) { _damage = damage; } --> 이거 대신 위의 ResetData를 사용한다.
     public void ResetTargetTypes(List<ITarget.Type> types) { _targetTypes = types; }
+
+
+    protected int _maxUpgradePoint;
+    public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
+
+
+    protected int _upgradePoint = 1;
+    public int UpgradePoint { get { return _upgradePoint; } }
+
+    public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
+
+    public virtual void Upgrade(int step)
+    {
+        _upgradePoint = step;
+    }
+
+    public virtual void Upgrade()
+    {
+        _upgradePoint++;
+    }
 }

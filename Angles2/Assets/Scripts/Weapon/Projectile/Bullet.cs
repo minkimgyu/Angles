@@ -5,6 +5,15 @@ using DamageUtility;
 
 public class Bullet : ProjectileWeapon
 {
+    List<BulletUpgradableData> _upgradableDatas;
+    BulletUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
+
+    protected void ApplyDamage(IDamageable damageable)
+    {
+        DamageData damageData = new DamageData(UpgradableData.Damage, _targetTypes);
+        damageable.GetDamage(damageData);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IObstacle obstacle = collision.GetComponent<IObstacle>();
@@ -34,12 +43,15 @@ public class Bullet : ProjectileWeapon
         effect.Play();
     }
 
-    public override void Initialize(BulletData data, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect)
+    public override void ResetData(BulletData data)
+    {
+        _upgradableDatas = data._upgradableDatas;
+        _lifeTime = data._lifeTime;
+    }
+
+    public override void Initialize(System.Func<BaseEffect.Name, BaseEffect> SpawnEffect)
     {
         this.SpawnEffect = SpawnEffect;
-
-        _damage = data._damage;
-        _lifeTime = data._lifeTime;
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
