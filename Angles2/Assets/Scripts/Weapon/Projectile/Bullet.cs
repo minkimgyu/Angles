@@ -34,11 +34,11 @@ public class Bullet : ProjectileWeapon
         Destroy(gameObject);
     }
 
-    System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
+    BaseFactory _effectFactory;
 
     void SpawnHitEffect()
     {
-        BaseEffect effect = SpawnEffect?.Invoke(BaseEffect.Name.HitEffect);
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.HitEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
     }
@@ -49,9 +49,9 @@ public class Bullet : ProjectileWeapon
         _lifeTime = data._lifeTime;
     }
 
-    public override void Initialize(System.Func<BaseEffect.Name, BaseEffect> SpawnEffect)
+    public override void Initialize(BaseFactory effectFactory)
     {
-        this.SpawnEffect = SpawnEffect;
+        _effectFactory = effectFactory;
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();

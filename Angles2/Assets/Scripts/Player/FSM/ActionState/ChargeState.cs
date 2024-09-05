@@ -10,10 +10,9 @@ namespace Player.FSM
         Action<bool, float> ChangeBodyScale;
         Action<bool> SetInvincible;
 
-        Action<float> OnChargeRatioChangeRequested;
+        //Action<float> OnChargeRatioChangeRequested;
 
-        Action<bool> ShowShootDirection;
-        Action<Vector3, Vector2> UpdateShootDirection;
+        //Action<bool> ShowShootDirection;
 
         float _minShootValue;
         Transform _myTransform;
@@ -21,22 +20,18 @@ namespace Player.FSM
         MoveComponent _moveComponent;
 
         Timer _chargeTimer;
-        float _chargeDuration;
+        BuffFloat _chargeDuration;
         float _maxChargePower;
 
         public ChargeState(
             FSM<Player.ActionState> fsm, 
             float minShootValue, 
-            float chargeDuration,
+            BuffFloat chargeDuration,
             Transform myTransform,
             MoveComponent moveComponent,
 
             Action<bool, float> ChangeBodyScale,
-            Action<bool> SetInvincible,
-
-            Action<float> OnChargeRatioChangeRequested,
-            Action<bool> ShowShootDirection,
-            Action<Vector3, Vector2> UpdateShootDirection) : base(fsm)
+            Action<bool> SetInvincible) : base(fsm)
         {
             _minShootValue = minShootValue;
             _myTransform = myTransform;
@@ -48,10 +43,9 @@ namespace Player.FSM
             this.ChangeBodyScale = ChangeBodyScale;
             this.SetInvincible = SetInvincible;
 
-            this.OnChargeRatioChangeRequested = OnChargeRatioChangeRequested;
+            //this.OnChargeRatioChangeRequested = OnChargeRatioChangeRequested;
 
-            this.ShowShootDirection = ShowShootDirection;
-            this.UpdateShootDirection = UpdateShootDirection;
+            //this.ShowShootDirection = ShowShootDirection;
         }
 
         bool CanShoot(Vector2 input)
@@ -61,16 +55,16 @@ namespace Player.FSM
 
         public override void OnStateEnter()
         {
-            _chargeTimer.Start(_chargeDuration);
+            _chargeTimer.Start(_chargeDuration.Value);
 
-            ShowShootDirection?.Invoke(true);
+            ObserverEventBus.Publish(ObserverEventBus.State.OnTurnOnOffDirection, true);
+            //ShowShootDirection?.Invoke(true);
             _moveComponent.ApplyDirection = false;
         }
 
         public override void OnStateExit()
         {
             _chargeTimer.Reset();
-            OnChargeRatioChangeRequested?.Invoke(_chargeTimer.Ratio);
         }
 
         public override void OnStateUpdate()
@@ -78,8 +72,7 @@ namespace Player.FSM
             ChangeBodyScale?.Invoke(true, 1 - _storedInput.magnitude);
             _moveComponent.FaceDirection(_storedInput);
 
-            OnChargeRatioChangeRequested?.Invoke(_chargeTimer.Ratio);
-            UpdateShootDirection?.Invoke(_myTransform.position, _storedInput);
+            ObserverEventBus.Publish(ObserverEventBus.State.OnChargeRatioChange, _chargeTimer.Ratio);
         }
 
         public override void OnCharge(Vector2 input)
@@ -91,7 +84,8 @@ namespace Player.FSM
         {
             Debug.Log("OnChargeEnd");
 
-            ShowShootDirection?.Invoke(false);
+            ObserverEventBus.Publish(ObserverEventBus.State.OnTurnOnOffDirection, false);
+            //ShowShootDirection?.Invoke(false);
             _moveComponent.ApplyDirection = true;
 
             bool canShoot = CanShoot(_storedInput);

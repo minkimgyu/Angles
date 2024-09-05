@@ -13,10 +13,9 @@ namespace Player.FSM
         Action<Collision2D> OnReflect;
 
         float _shootSpeed;
-        float _shootDuration;
+        BuffFloat _shootDuration;
 
         float _ratio;
-        float _maxChargePower;
 
         Timer _timer;
         Transform _myTransform;
@@ -24,9 +23,8 @@ namespace Player.FSM
 
         public ShootState(
             FSM<Player.ActionState> fsm,
-            float shootSpeed, 
-            float shootDuration,
-            float maxChargePower,
+            float shootSpeed,
+            BuffFloat shootDuration,
 
             Transform myTransform,
             MoveComponent moveComponent,
@@ -40,7 +38,6 @@ namespace Player.FSM
             _shootDuration = shootDuration;
             _myTransform = myTransform;
             _moveComponent = moveComponent;
-            _maxChargePower = maxChargePower;
 
             this.ChangeBodyScale = ChangeBodyScale;
             this.OnReflect = OnReflect;
@@ -59,7 +56,7 @@ namespace Player.FSM
 
             Debug.DrawRay(_myTransform.position, reflectDirection, Color.red, 5);
 
-            Shoot(reflectDirection * _ratio * _maxChargePower);
+            Shoot(reflectDirection);
         }
 
         public override void OnStateEnter(Vector2 direction, float ratio, string message)
@@ -69,10 +66,10 @@ namespace Player.FSM
             _ratio = ratio;
 
             _timer.Reset();
-            _timer.Start(_shootDuration);
+            _timer.Start(_shootDuration.Value);
 
             ChangeBodyScale?.Invoke(false, 0);
-            Shoot(direction * _ratio * _maxChargePower);
+            Shoot(direction);
         }
 
         public override void OnStateUpdate()
@@ -93,7 +90,7 @@ namespace Player.FSM
         void Shoot(Vector2 direction)
         {
             _moveComponent.Stop();
-            _moveComponent.AddForce(direction, _shootSpeed);
+            _moveComponent.AddForce(direction, _shootSpeed * _ratio);
         }
 
         void GoToReadyState()

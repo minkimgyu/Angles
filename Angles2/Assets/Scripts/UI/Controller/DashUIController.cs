@@ -2,21 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class DashModel
+{
+    BaseViewer _dashViewer;
+
+    public DashModel(BaseViewer dashViewer)
+    {
+        _dashViewer = dashViewer;
+    }
+
+    float _ratio;
+    public float Ratio
+    {
+        get => _ratio;
+        set
+        {
+            _ratio = value;
+            _dashViewer.UpdateViewer(_ratio);
+        }
+    }
+}
+
 public class DashUIController : MonoBehaviour
 {
     [SerializeField] RectTransform _dashViewerParent;
-    List<BaseViewer> _viwers;
+    List<DashModel> _dashModels;
     const int _maxDashCount = 3;
 
-    public void Initialize(System.Func<BaseViewer.Name, BaseViewer> SpawnViewer)
+    public void Initialize(BaseFactory viewerFactory)
     {
-        _viwers = new List<BaseViewer>();
+        ObserverEventBus.Register(ObserverEventBus.State.OnDashRatioChange, new ChangeRatioCommand(UpdateViewer));
+        _dashModels = new List<DashModel>();
 
         for (int i = 0; i < _maxDashCount; i++)
         {
-            BaseViewer viewer = SpawnViewer?.Invoke(BaseViewer.Name.DashViewer);
+            BaseViewer viewer = viewerFactory.Create(BaseViewer.Name.DashViewer);
             viewer.transform.SetParent(_dashViewerParent);
-            _viwers.Add(viewer);
+            _dashModels.Add(new DashModel(viewer));
         }
     }
 
@@ -24,10 +46,10 @@ public class DashUIController : MonoBehaviour
     {
         float totalRatio = fillRatio;
 
-        for (int i = 0; i < _viwers.Count; i++)
+        for (int i = 0; i < _dashModels.Count; i++)
         {
             float ratio = Mathf.Clamp(totalRatio, 0, 1);
-            _viwers[i].UpdateViewer(ratio);
+            _dashModels[i].Ratio = ratio;
             totalRatio -= ratio;
         }
     }

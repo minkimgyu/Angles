@@ -4,7 +4,8 @@ using UnityEngine;
 
 public interface IInteracter
 {
-    List<SkillUpgradeData> ReturnSkillUpgradeDatas();
+    //List<SkillUpgradeData> ReturnSkillUpgradeDatas();
     void MovePosition(Vector3 pos);
     IFollowable ReturnFollower();
+    void GetHeal(float point);
 }

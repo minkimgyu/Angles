@@ -22,16 +22,16 @@ public class SelfDestructionData : BaseSkillData
 
 public class SelfDestructionCreater : SkillCreater
 {
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public SelfDestructionCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    public SelfDestructionCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
     {
-        this.CreateEffect = CreateEffect;
+        this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        SelfDestructionData data = _skillData as SelfDestructionData;
-        return new SelfDestruction(data, CreateEffect);
+        SelfDestructionData data = _buffData as SelfDestructionData;
+        return new SelfDestruction(data, _effectFactory);
     }
 }

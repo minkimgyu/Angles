@@ -7,16 +7,17 @@ using System;
 public class Statikk : CooltimeSkill
 {
     List<ITarget.Type> _targetTypes;
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
 
     List<StatikkUpgradableData> _upgradableDatas;
-    StatikkUpgradableData CurrentUpgradableData { get { return _upgradableDatas[_upgradePoint]; } }
+    StatikkUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
 
-    public Statikk(StatikkData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    BaseFactory _effectFactory;
+
+    public Statikk(StatikkData data, BaseFactory effectFactory) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _upgradableDatas = data._upgradableDatas;
         _targetTypes = data._targetTypes;
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
     }
 
     public override void OnReflect(Collision2D collision)
@@ -39,7 +40,7 @@ public class Statikk : CooltimeSkill
 
         for (int i = 0; i < hitPoints.Count; i++)
         {
-            BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.LaserEffect);
+            BaseEffect effect = _effectFactory.Create(BaseEffect.Name.LaserEffect);
             effect.ResetPosition(collision.transform.position);
             effect.ResetLine(hitPoints[i]);
 

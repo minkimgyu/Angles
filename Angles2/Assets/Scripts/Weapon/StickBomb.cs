@@ -8,7 +8,7 @@ public class StickBomb : BaseWeapon
     Timer _lifeTimer = null;
     IFollowable _followable;
 
-    System.Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
     List<StickyBombUpgradableData> _upgradableDatas;
     StickyBombUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
@@ -19,9 +19,9 @@ public class StickBomb : BaseWeapon
         _lifeTimer.Start(UpgradableData.ExplosionDelay);
     }
 
-    public override void Initialize(System.Func<BaseEffect.Name, BaseEffect> CreateEffect) 
+    public override void Initialize(BaseFactory effectFactory) 
     {
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
         _lifeTimer = new Timer();
     }
 
@@ -34,7 +34,7 @@ public class StickBomb : BaseWeapon
     {
         Debug.Log("Explode");
 
-        BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.ExplosionEffect);
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.ResetSize(UpgradableData.Range);
         effect.Play();

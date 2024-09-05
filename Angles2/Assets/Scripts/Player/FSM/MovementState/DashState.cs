@@ -11,15 +11,15 @@ namespace Player.FSM
         Action EndDash;
         Action<Vector2, float> AddForce;
 
-        float _dashSpeed;
-        float _dashDuration;
+        BuffFloat _dashSpeed;
+        BuffFloat _dashDuration;
         MoveComponent _moveComponent;
         Timer _timer;
 
         public DashState(
             FSM<Player.MovementState> fsm,
-            float dashSpeed, 
-            float dashDuration,
+            BuffFloat dashSpeed,
+            BuffFloat dashDuration,
             MoveComponent moveComponent,
             Action<bool, float> ChangeBodyScale,
             Action EndDash)
@@ -44,8 +44,8 @@ namespace Player.FSM
             Debug.Log(message);
             ChangeBodyScale?.Invoke(false, 0);
 
-            _moveComponent.AddForce(direction, _dashSpeed);
-            _timer.Start(_dashDuration);
+            _moveComponent.AddForce(direction, _dashSpeed.Value);
+            _timer.Start(_dashDuration.Value);
         }
 
         public override void OnStateExit()

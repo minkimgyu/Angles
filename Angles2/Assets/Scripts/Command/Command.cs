@@ -3,47 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Command<T1>
+abstract public class BaseCommand
 {
-    Action<T1> _action;
+    public virtual void Execute(out int value) { value = default; }
 
-    public Command(Action<T1> excuteEvent)
-    {
-        _action = excuteEvent;
-    }
 
-    public void Execute(T1 value)
-    {
-        _action?.Invoke(value);
-    }
-}
+    public virtual void Execute() { }
+    public virtual void Execute(int value) { }
+    public virtual void Execute(float value) { }
+    public virtual void Execute(bool value) { }
+    public virtual void Execute(IFollowable followable) { }
 
-public class Command<T1,T2>
-{
-    public Command(Action<T1, T2> excuteEvent)
-    {
-        _excuteEvent = excuteEvent;
-    }
-
-    Action<T1, T2> _excuteEvent;
-
-    public void Execute(T1 value1, T2 value2)
-    {
-        _excuteEvent?.Invoke(value1, value2);
-    }
-}
-
-public class Command<T1, T2, T3>
-{
-    public Command(Action<T1, T2, T3> excuteEvent)
-    {
-        _excuteEvent = excuteEvent;
-    }
-
-    Action<T1, T2, T3> _excuteEvent;
-
-    public void Execute(T1 value1, T2 value2, T3 value3)
-    {
-        _excuteEvent?.Invoke(value1, value2, value3);
-    }
+    public virtual void Execute(BaseSkill.Name value) { }
+    public virtual void Execute(BaseSkill.Name value1, BaseSkill value2) { }
+    public virtual void Execute(DropData value1, Vector3 value2) { }
+    public virtual void Execute(ISkillUser value) { }
+    public virtual void Execute(int value1, int value2) { }
 }

@@ -6,7 +6,6 @@ using System;
 public class CardTable : MonoBehaviour, IInteractable
 {
     OutlineComponent _outlineComponent;
-    Command<int, List<SkillUpgradeData>> CreateCardsCommand;
     bool _isActive;
     int _cardCount;
 
@@ -17,11 +16,6 @@ public class CardTable : MonoBehaviour, IInteractable
         _isActive = true;
         _outlineComponent = GetComponentInChildren<OutlineComponent>();
         _outlineComponent.Initialize();
-    }
-
-    public void AddCommand(Command<int, List<SkillUpgradeData>> CreateCardsCommand)
-    {
-        this.CreateCardsCommand = CreateCardsCommand;
     }
 
     public void OnInteractEnter(IInteracter interacter)
@@ -37,10 +31,7 @@ public class CardTable : MonoBehaviour, IInteractable
 
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
-
-        List<SkillUpgradeData> upgradeDatas = interacter.ReturnSkillUpgradeDatas();
-        if (upgradeDatas.Count == 0) return;
-        CreateCardsCommand.Execute(_cardCount, upgradeDatas);
+        SubEventBus.Publish(SubEventBus.State.CreateCard, _cardCount);
     }
 
     public void OnInteractExit(IInteracter interacter)

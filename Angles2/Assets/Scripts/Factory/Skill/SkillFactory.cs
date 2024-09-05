@@ -38,46 +38,50 @@ public class CooltimeSkillData : BaseSkillData
     }
 }
 
-public class SkillCreater
+abstract public class SkillCreater
 {
-    protected BaseSkillData _skillData;
-    public SkillCreater(BaseSkillData data) { _skillData = data; }
+    protected BaseSkillData _buffData;
+    public SkillCreater(BaseSkillData data) { _buffData = data; }
     // 생성자에 이팩트 생성을 받는 이벤트를 추가해준다.
 
-    public virtual BaseSkill Create() { return default; }
+    public abstract BaseSkill Create();
 }
 
-public class SkillFactory
+public class SkillFactory : BaseFactory
 {
     Dictionary<BaseSkill.Name, SkillCreater> _skillCreaters;
 
-    public SkillFactory(Dictionary<BaseSkill.Name, BaseSkillData> skillDatas, Func<BaseEffect.Name, BaseEffect> CreateEffect, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon)
+    public SkillFactory(Dictionary<BaseSkill.Name, BaseSkillData> skillDatas, BaseFactory effectFactory, BaseFactory weaponFactory, BaseFactory buffFactory)
     {
         _skillCreaters = new Dictionary<BaseSkill.Name, SkillCreater>();
 
-        _skillCreaters[BaseSkill.Name.Statikk] = new StatikkCreater(skillDatas[BaseSkill.Name.Statikk], CreateEffect);
-        _skillCreaters[BaseSkill.Name.Knockback] = new KnockbackCreater(skillDatas[BaseSkill.Name.Knockback], CreateEffect);
-        _skillCreaters[BaseSkill.Name.Impact] = new ImpactCreater(skillDatas[BaseSkill.Name.Impact], CreateEffect);
+        _skillCreaters[BaseSkill.Name.Statikk] = new StatikkCreater(skillDatas[BaseSkill.Name.Statikk], effectFactory);
+        _skillCreaters[BaseSkill.Name.Knockback] = new KnockbackCreater(skillDatas[BaseSkill.Name.Knockback], effectFactory);
+        _skillCreaters[BaseSkill.Name.Impact] = new ImpactCreater(skillDatas[BaseSkill.Name.Impact], effectFactory);
 
-        _skillCreaters[BaseSkill.Name.SpawnBlackhole] = new SpawnBlackholeCreater(skillDatas[BaseSkill.Name.SpawnBlackhole], CreateWeapon);
-        _skillCreaters[BaseSkill.Name.SpawnBlade] = new SpawnBladeCreater(skillDatas[BaseSkill.Name.SpawnBlade], CreateWeapon);
+        _skillCreaters[BaseSkill.Name.SpawnBlackhole] = new SpawnBlackholeCreater(skillDatas[BaseSkill.Name.SpawnBlackhole], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnBlade] = new SpawnBladeCreater(skillDatas[BaseSkill.Name.SpawnBlade], weaponFactory);
 
-        _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], CreateWeapon);
-        _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], CreateWeapon);
+        _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], weaponFactory);
+
+        _skillCreaters[BaseSkill.Name.SpawnStickyBomb]  = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], weaponFactory);
+
+        _skillCreaters[BaseSkill.Name.CreateTotalDamageBuff] = new CreateTotalDamageBuffCreater(skillDatas[BaseSkill.Name.CreateTotalDamageBuff], buffFactory);
+        _skillCreaters[BaseSkill.Name.CreateTotalCooltimeBuff] = new CreateTotalCooltimeBuffCreater(skillDatas[BaseSkill.Name.CreateTotalCooltimeBuff], buffFactory);
+        _skillCreaters[BaseSkill.Name.CreateDashBuff] = new CreateDashBuffCreater(skillDatas[BaseSkill.Name.CreateDashBuff], buffFactory);
+        _skillCreaters[BaseSkill.Name.CreateShootingBuff] = new CreateShootingBuffCreater(skillDatas[BaseSkill.Name.CreateShootingBuff], buffFactory);
 
 
-        _skillCreaters[BaseSkill.Name.SpawnStickyBomb] = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], CreateWeapon);
-
-
-        _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], CreateWeapon);
-        _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater(skillDatas[BaseSkill.Name.Shockwave], CreateEffect);
+        _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], weaponFactory);
+        _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater(skillDatas[BaseSkill.Name.Shockwave], effectFactory);
         _skillCreaters[BaseSkill.Name.MagneticField] = new MagneticFieldCreater(skillDatas[BaseSkill.Name.MagneticField]);
-        _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater(skillDatas[BaseSkill.Name.SelfDestruction], CreateEffect);
+        _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater(skillDatas[BaseSkill.Name.SelfDestruction], effectFactory);
 
-        _skillCreaters[BaseSkill.Name.ContactAttack] = new ContactAttackCreater(skillDatas[BaseSkill.Name.ContactAttack], CreateEffect);
+        _skillCreaters[BaseSkill.Name.ContactAttack] = new ContactAttackCreater(skillDatas[BaseSkill.Name.ContactAttack], effectFactory);
     }
 
-    public BaseSkill Create(BaseSkill.Name name)
+    public override BaseSkill Create(BaseSkill.Name name)
     {
         return _skillCreaters[name].Create();
     }

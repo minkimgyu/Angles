@@ -26,9 +26,9 @@ public class BattleStage : BaseStage
     [SerializeField] List<BattleStageLevelData> _stageDatas;
     int _enemyCount = 0;
 
-    public override void Initialize(Events stageEvents) 
+    public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection) 
     {
-        base.Initialize(stageEvents);
+        base.Initialize(baseStageController, factoryCollection);
         _difficultyRangeDictionary = new Dictionary<Vector2, Difficulty>
         {
             { new Vector2(0f, 0.3f), Difficulty.Easy},
@@ -40,10 +40,12 @@ public class BattleStage : BaseStage
     void OnEnemyDieRequested()
     {
         _enemyCount -= 1;
-        _events.ObserberEventCollection.OnEnemyDieRequested?.Invoke();
-        if (_enemyCount > 0) return;
 
-        _events.OnStageClearRequested?.Invoke();
+        GameStateEventBus.Publish(GameStateEventBus.State.ChangeEnemyDieCount, 1);
+        if (_enemyCount > 0) return;
+        Debug.Log(_enemyCount);
+
+        _baseStageController.OnStageClearRequested();
     }
 
     Difficulty ReturnDifficultyByProgress(float ratio)
@@ -58,7 +60,7 @@ public class BattleStage : BaseStage
         return Difficulty.Nomal;
     }
 
-    public override void Spawn(int totalStageCount, int currentStageCount, IFactory factory)
+    public override void Spawn(int totalStageCount, int currentStageCount)
     {
         Difficulty difficulty = ReturnDifficultyByProgress((float)totalStageCount / currentStageCount);
 
@@ -71,15 +73,14 @@ public class BattleStage : BaseStage
             possibleLevelDatas.Add(_stageDatas[i]);
         }
 
-        BattleStageLevelData levelData = possibleLevelDatas[UnityEngine.Random.Range(0, possibleLevelDatas.Count)];
+        BattleStageLevelData levelData = _stageDatas[0]; // possibleLevelDatas[UnityEngine.Random.Range(0, possibleLevelDatas.Count)];
 
         foreach (var item in levelData.LevelDictionary)
         {
-            BaseLife enemy = factory.Create(item.Value);
+            BaseLife enemy = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
             enemy.transform.position = item.Key.position;
-
-            enemy.AddObserverEvent(OnEnemyDieRequested, _events.ObserberEventCollection.OnDropRequested);
             enemy.SetTarget(Target);
+            enemy.AddObserverEvent(OnEnemyDieRequested);
 
             _enemyCount++;
         }

@@ -6,15 +6,15 @@ using UnityEngine;
 public class SpawnBlackhole : RandomSkill
 {
     List<ITarget.Type> _targetTypes;
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
     BlackholeData _blackholeData;
 
-    public SpawnBlackhole(SpawnBlackholeData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data._maxUpgradePoint, data._probability)
+    public SpawnBlackhole(SpawnBlackholeData data, BaseFactory weaponFactory) : base(data._maxUpgradePoint, data._probability)
     {
         _blackholeData = data._data;
         _targetTypes = data._targetTypes;
 
-        this.CreateWeapon = CreateWeapon;
+        _weaponFactory = weaponFactory;
     }
 
     public override void OnReflect(Collision2D collision)
@@ -25,11 +25,11 @@ public class SpawnBlackhole : RandomSkill
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
 
-        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.Blackhole);
+        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blackhole);
         if (weapon == null) return;
 
         weapon.ResetData(_blackholeData);
-        weapon.Upgrade(_upgradePoint); // 생성 후 업그레이드 적용
+        weapon.Upgrade(UpgradePoint); // 생성 후 업그레이드 적용
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(_castingData.MyTransform.position);
     }

@@ -23,12 +23,12 @@ public class HexagonData : EnemyData
 
 public class HexagonCreater : LifeCreater
 {
-    Func<BaseSkill.Name, BaseSkill> CreateSkill;
+    BaseFactory _skillFactory;
 
-    public HexagonCreater(BaseLife lifePrefab, BaseLifeData lifeData, Func<BaseEffect.Name, BaseEffect> CreateEffect,
-        Func<BaseSkill.Name, BaseSkill> CreateSkill) : base(lifePrefab, lifeData, CreateEffect)
+    public HexagonCreater(BaseLife lifePrefab, BaseLifeData lifeData, BaseFactory effectFactory,
+        BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
-        this.CreateSkill = CreateSkill;
+        _skillFactory = skillFactory;
     }
 
     public override BaseLife Create()
@@ -40,14 +40,14 @@ public class HexagonCreater : LifeCreater
 
         life.ResetData(data);
         life.Initialize();
-        life.AddCreateEvent(CreateEffect);
+        life.AddEffectFactory(_effectFactory);
 
-        ISkillUser skillUsable = life.GetComponent<ISkillUser>();
+        ISkillAddable skillUsable = life.GetComponent<ISkillAddable>();
         if (skillUsable == null) return life;
 
         for (int i = 0; i < data._skillNames.Count; i++)
         {
-            BaseSkill skill = CreateSkill?.Invoke(data._skillNames[i]);
+            BaseSkill skill = _skillFactory.Create(data._skillNames[i]);
             skillUsable.AddSkill(data._skillNames[i], skill);
         }
 

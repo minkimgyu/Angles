@@ -11,7 +11,7 @@ public class Rocket : ProjectileWeapon
     //float _explosionDamage;
     //float _explosionRange;
 
-    System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
+    BaseFactory _effectFactory;
 
     public override void ResetData(RocketData data)
     {
@@ -19,12 +19,12 @@ public class Rocket : ProjectileWeapon
         _lifeTime = data._lifeTime;
     }
 
-    public override void Initialize(System.Func<BaseEffect.Name, BaseEffect> SpawnEffect)
+    public override void Initialize(BaseFactory effectFactory)
     {
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
 
-        this.SpawnEffect = SpawnEffect;
+        _effectFactory = effectFactory;
     }
 
     protected void ApplyDamage(IDamageable damageable)
@@ -52,7 +52,7 @@ public class Rocket : ProjectileWeapon
 
     void SpawnExplosionEffect()
     {
-        BaseEffect effect = SpawnEffect?.Invoke(BaseEffect.Name.ExplosionEffect);
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
     }

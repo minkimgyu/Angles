@@ -36,7 +36,7 @@ abstract public class Shooter : BaseWeapon
 
     List<ITarget> _targetDatas;
 
-    protected System.Func<Name, BaseWeapon> SpawnWeapon;
+    protected BaseFactory _weaponFactory;
 
     public override void ResetData(ShooterData data)
     {
@@ -51,9 +51,9 @@ abstract public class Shooter : BaseWeapon
         _trackComponent.Initialize(_moveSpeed, _followOffset, _maxDistanceFromPlayer);
     }
 
-    public override void Initialize(System.Func<Name, BaseWeapon> SpawnWeapon)
+    public override void Initialize(BaseFactory weaponFactory)
     {
-        this.SpawnWeapon = SpawnWeapon;
+        _weaponFactory = weaponFactory;
         _waitFire = 0;
 
         _trackComponent = GetComponent<TrackComponent>();

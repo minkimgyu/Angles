@@ -13,15 +13,15 @@ public class SelfDestruction : BaseSkill
     List<ITarget.Type> _targetTypes;
     Timer _delayTimer;
 
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public SelfDestruction(SelfDestructionData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(Type.Basic, data._maxUpgradePoint)
+    public SelfDestruction(SelfDestructionData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
         _damage = data._damage;
         _range = data._range;
         _targetTypes = data._targetTypes;
 
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
     }
 
     public override void OnUpdate()
@@ -29,7 +29,7 @@ public class SelfDestruction : BaseSkill
         if (_delayTimer.CurrentState == Timer.State.Finish)
         {
             Debug.Log("SelfDestruction");
-            BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.ImpactEffect);
+            BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
             if (effect == null) return;
 
             effect.ResetPosition(_castingData.MyObject.transform.position);

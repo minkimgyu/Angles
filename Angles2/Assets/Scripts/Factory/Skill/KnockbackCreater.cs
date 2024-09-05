@@ -37,16 +37,16 @@ public class KnockbackData : CooltimeSkillData
 
 public class KnockbackCreater : SkillCreater
 {
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public KnockbackCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    public KnockbackCreater(BaseSkillData data, BaseFactory effectFactory) : base(data)
     {
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        KnockbackData data = _skillData as KnockbackData;
-        return new Knockback(data, CreateEffect);
+        KnockbackData data = _buffData as KnockbackData;
+        return new Knockback(data, _effectFactory);
     }
 }

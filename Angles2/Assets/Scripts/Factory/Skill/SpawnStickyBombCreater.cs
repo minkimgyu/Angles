@@ -19,16 +19,16 @@ public class SpawnStickyBombData : CooltimeSkillData
 
 public class SpawnStickyBombCreater : SkillCreater
 {
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
 
-    public SpawnStickyBombCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    public SpawnStickyBombCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
     {
-        this.CreateWeapon = CreateWeapon;
+        this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnStickyBombData data = _skillData as SpawnStickyBombData;
-        return new SpawnStickyBomb(data, CreateWeapon);
+        SpawnStickyBombData data = _buffData as SpawnStickyBombData;
+        return new SpawnStickyBomb(data, _weaponFactory);
     }
 }

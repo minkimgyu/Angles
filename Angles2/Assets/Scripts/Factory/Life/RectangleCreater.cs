@@ -18,12 +18,12 @@ public class RectangleData : EnemyData
 
 public class RectangleCreater : LifeCreater
 {
-    Func<BaseSkill.Name, BaseSkill> CreateSkill;
+    BaseFactory _skillFactory;
 
-    public RectangleCreater(BaseLife lifePrefab, BaseLifeData lifeData, Func<BaseEffect.Name, BaseEffect> SpawnEffect,
-        Func<BaseSkill.Name, BaseSkill> CreateSkill) : base(lifePrefab, lifeData, SpawnEffect)
+    public RectangleCreater(BaseLife lifePrefab, BaseLifeData lifeData, BaseFactory effectFactory,
+        BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
-        this.CreateSkill = CreateSkill;
+        _skillFactory = skillFactory;
     }
 
     public override BaseLife Create()
@@ -35,14 +35,14 @@ public class RectangleCreater : LifeCreater
 
         life.ResetData(data);
         life.Initialize();
-        life.AddCreateEvent(CreateEffect);
+        life.AddEffectFactory(_effectFactory);
 
-        ISkillUser skillUsable = life.GetComponent<ISkillUser>();
+        ISkillAddable skillUsable = life.GetComponent<ISkillAddable>();
         if (skillUsable == null) return life;
 
         for (int i = 0; i < data._skillNames.Count; i++)
         {
-            BaseSkill skill = CreateSkill?.Invoke(data._skillNames[i]);
+            BaseSkill skill = _skillFactory.Create(data._skillNames[i]);
             skillUsable.AddSkill(data._skillNames[i], skill);
         }
 

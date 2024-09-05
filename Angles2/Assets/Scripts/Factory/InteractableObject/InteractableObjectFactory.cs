@@ -17,7 +17,7 @@ abstract public class InteractableObjectCreater
     public abstract IInteractable Create();
 }
 
-public class InteractableObjectFactory
+public class InteractableObjectFactory : BaseFactory
 {
     Dictionary<IInteractable.Name, InteractableObjectCreater> _itemCreaters;
 
@@ -32,7 +32,7 @@ public class InteractableObjectFactory
         _itemCreaters.Add(IInteractable.Name.Coin, new CoinCreater(interactablePrefabs[IInteractable.Name.Coin], interactableDatas[IInteractable.Name.Coin]));
     }
 
-    public IInteractable Create(IInteractable.Name name)
+    public override IInteractable Create(IInteractable.Name name)
     {
         return _itemCreaters[name].Create();
     }

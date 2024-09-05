@@ -2,44 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IFactory
+abstract public class BaseFactory
 {
-    BaseViewer Create(BaseViewer.Name name);
-    BaseEffect Create(BaseEffect.Name name);
-    BaseWeapon Create(BaseWeapon.Name name);
-    BaseSkill Create(BaseSkill.Name name);
-    BaseLife Create(BaseLife.Name name);
-    IInteractable Create(IInteractable.Name name);
+    public virtual BaseViewer Create(BaseViewer.Name name) { return default; }
+    public virtual BaseEffect Create(BaseEffect.Name name) { return default; }
+    public virtual BaseWeapon Create(BaseWeapon.Name name) { return default; }
+    public virtual BaseSkill Create(BaseSkill.Name name) { return default; }
+    public virtual BaseLife Create(BaseLife.Name name) { return default; }
+    public virtual IInteractable Create(IInteractable.Name name) { return default; }
+    public virtual BaseBuff Create(BaseBuff.Name name) { return default; }
 }
 
-public class FactoryCollection : IFactory
+public class FactoryCollection
 {
-    ViewerFactory _viewerFactor;
-    EffectFactory _effectFactory;
-    WeaponFactory _weaponFactory;
-    LifeFactory _lifeFactory;
-    SkillFactory _skillFactory;
-    InteractableObjectFactory _interactableObjectFactory;
+    public enum Type
+    {
+        Viewer,
+        Effect,
+        Weapon,
+        Skill,
+        Life,
+        Interactable,
+        Buff
+    }
+
+    Dictionary<Type, BaseFactory> _factories = new Dictionary<Type, BaseFactory>();
 
     public FactoryCollection(AddressableHandler addressableHandler, Database database)
     {
-        _viewerFactor = new ViewerFactory(addressableHandler.ViewerPrefabs);
+        _factories.Add(Type.Buff, new BuffFactory(database.BuffDatas));
 
-        _effectFactory = new EffectFactory(addressableHandler.EffectPrefabs);
+        _factories.Add(Type.Viewer, new ViewerFactory(addressableHandler.ViewerPrefabs));
 
-        _weaponFactory = new WeaponFactory(addressableHandler.WeaponPrefabs, _effectFactory.Create);
+        _factories.Add(Type.Effect, new EffectFactory(addressableHandler.EffectPrefabs));
 
-        _skillFactory = new SkillFactory(database.SkillDatas, _effectFactory.Create, _weaponFactory.Create);
+        _factories.Add(Type.Weapon, new WeaponFactory(addressableHandler.WeaponPrefabs, _factories[Type.Effect]));
 
-        _lifeFactory = new LifeFactory(addressableHandler.LifePrefabs, database.LifeDatas, _effectFactory.Create, _skillFactory.Create);
+        _factories.Add(Type.Skill, new SkillFactory(database.SkillDatas, _factories[Type.Effect], _factories[Type.Weapon], _factories[Type.Buff]));
 
-        _interactableObjectFactory = new InteractableObjectFactory(addressableHandler.InteractableAssetDictionary, database.InteractableObjectDatas);
+        _factories.Add(Type.Life, new LifeFactory(addressableHandler.LifePrefabs, database.LifeDatas, _factories[Type.Effect], _factories[Type.Skill]));
+
+        _factories.Add(Type.Interactable, new InteractableObjectFactory(addressableHandler.InteractableAssetDictionary, database.InteractableObjectDatas));
+
     }
 
-    public BaseViewer Create(BaseViewer.Name name) { return _viewerFactor.Create(name); }
-    public BaseEffect Create(BaseEffect.Name name) { return _effectFactory.Create(name); }
-    public BaseWeapon Create(BaseWeapon.Name name) { return _weaponFactory.Create(name); }
-    public BaseSkill Create(BaseSkill.Name name) { return _skillFactory.Create(name); }
-    public BaseLife Create(BaseLife.Name name) { return _lifeFactory.Create(name); }
-    public IInteractable Create(IInteractable.Name name) { return _interactableObjectFactory.Create(name); }
+    public BaseFactory ReturnFactory(Type type) { return _factories[type]; }
 }

@@ -30,16 +30,16 @@ public class SpreadBulletsData : BaseSkillData
 
 public class SpreadBulletsCreater : SkillCreater
 {
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
 
-    public SpreadBulletsCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    public SpreadBulletsCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
     {
-        this.CreateWeapon = CreateWeapon;
+        this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpreadBulletsData data = _skillData as SpreadBulletsData;
-        return new SpreadBullets(data, CreateWeapon);
+        SpreadBulletsData data = _buffData as SpreadBulletsData;
+        return new SpreadBullets(data, _weaponFactory);
     }
 }

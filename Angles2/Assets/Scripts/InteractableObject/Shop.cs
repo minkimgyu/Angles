@@ -6,7 +6,6 @@ using System;
 public class Shop : MonoBehaviour, IInteractable
 {
     OutlineComponent _outlineComponent;
-    Command<int, int, List<SkillUpgradeData>> RecreatableCardsCommand;
     bool _isActive;
 
     int _cardCount;
@@ -22,11 +21,6 @@ public class Shop : MonoBehaviour, IInteractable
         _outlineComponent.Initialize();
     }
 
-    public void AddCommand(Command<int, int, List<SkillUpgradeData>> RecreatableCardsCommand)
-    {
-        this.RecreatableCardsCommand = RecreatableCardsCommand;
-    }
-
     public void OnInteractEnter(IInteracter interacter)
     {
         if (_isActive == false) return;
@@ -40,10 +34,7 @@ public class Shop : MonoBehaviour, IInteractable
 
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
-
-        List<SkillUpgradeData> upgradeDatas = interacter.ReturnSkillUpgradeDatas();
-        if (upgradeDatas.Count == 0) return;
-        RecreatableCardsCommand.Execute(_cardCount, _recreateCount, upgradeDatas);
+        SubEventBus.Publish(SubEventBus.State.CreateReusableCard, _cardCount, _recreateCount);
     }
 
     public void OnInteractExit(IInteracter interacter)

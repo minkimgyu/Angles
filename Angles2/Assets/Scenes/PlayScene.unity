@@ -1450,6 +1450,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -2460, y: -1340}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &705752003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 705752004}
+  - component: {fileID: 705752005}
+  m_Layer: 5
+  m_Name: GameResultUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &705752004
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705752003}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1500940526}
+  m_Father: {fileID: 1698362259}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &705752005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705752003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e4e3b3e8302f2947aa7f669a1048880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameResultViewer: {fileID: 1500940527}
 --- !u!1 &715440577
 GameObject:
   m_ObjectHideFlags: 0
@@ -2134,10 +2184,9 @@ MonoBehaviour:
   _dashUIController: {fileID: 1025715284}
   _skillUIController: {fileID: 1238283525}
   _cardUIController: {fileID: 97464362}
-  _chargeViewer: {fileID: 1870891625}
-  _coinViewer: {fileID: 824654363}
-  _enemyDieCountViewer: {fileID: 2032298111}
-  _gameEndViewer: {fileID: 1500940527}
+  _gameResultUIController: {fileID: 705752005}
+  _chargeUIController: {fileID: 8170153793135343704}
+  _dungeonGameStateController: {fileID: 1896153853}
 --- !u!4 &986343859
 Transform:
   m_ObjectHideFlags: 0
@@ -2167,8 +2216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxStageCount: 13
   _stageCount: 1
-  _stageCountViewer: {fileID: 172731639}
-  _stageResultViewer: {fileID: 1476289617}
+  _stageUIController: {fileID: 1492042883}
 --- !u!114 &986343862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4035,6 +4083,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1492042882}
+  - component: {fileID: 1492042883}
   m_Layer: 5
   m_Name: StageUI
   m_TagString: Untagged
@@ -4056,7 +4105,6 @@ RectTransform:
   m_Children:
   - {fileID: 172731638}
   - {fileID: 1476289616}
-  - {fileID: 1500940526}
   m_Father: {fileID: 1698362259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4064,6 +4112,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1492042883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492042881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ece236bfd50cb4d974d96c0d6730f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageCountViewer: {fileID: 172731639}
+  _stageResultViewer: {fileID: 1476289617}
 --- !u!1 &1500940525
 GameObject:
   m_ObjectHideFlags: 0
@@ -4075,7 +4137,7 @@ GameObject:
   - component: {fileID: 1500940526}
   - component: {fileID: 1500940527}
   m_Layer: 5
-  m_Name: GameEndViewer
+  m_Name: GameResultViewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4088,13 +4150,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1500940525}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1831474663}
-  m_Father: {fileID: 1492042882}
+  m_Father: {fileID: 705752004}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4110,7 +4172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1500940525}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1036b40a63123d74f95673b9e64f363f, type: 3}
+  m_Script: {fileID: 11500000, guid: cca45696c3127c445953aae20c9dac26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _viwerObject: {fileID: 1831474662}
@@ -5136,6 +5198,7 @@ RectTransform:
   - {fileID: 1896153850}
   - {fileID: 1492042882}
   - {fileID: 97464361}
+  - {fileID: 705752004}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5909,8 +5972,9 @@ GameObject:
   - component: {fileID: 1896153850}
   - component: {fileID: 1896153852}
   - component: {fileID: 1896153851}
+  - component: {fileID: 1896153853}
   m_Layer: 5
-  m_Name: DungeonUI
+  m_Name: GameStateUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5977,6 +6041,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!114 &1896153853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896153849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4263924b9aaf2f47ae98097612224a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coinViewer: {fileID: 824654363}
+  _enemyDieViewer: {fileID: 2032298111}
 --- !u!1 &1944366186
 GameObject:
   m_ObjectHideFlags: 0
@@ -6892,6 +6970,7 @@ GameObject:
   - component: {fileID: 8170153793135343696}
   - component: {fileID: 8170153793135343697}
   - component: {fileID: 8170153793135343703}
+  - component: {fileID: 8170153793135343704}
   m_Layer: 5
   m_Name: RightJoystick
   m_TagString: Untagged
@@ -6919,6 +6998,19 @@ MonoBehaviour:
   _doubleTabDelay: 1
   background: {fileID: 8170153792157826508}
   handle: {fileID: 8170153792908789718}
+--- !u!114 &8170153793135343704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170153793135343699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3560483e2bae395479308a6d9e0859e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _chargeViewer: {fileID: 1870891625}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

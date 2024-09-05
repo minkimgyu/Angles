@@ -39,16 +39,16 @@ public class StatikkData : CooltimeSkillData
 
 public class StatikkCreater : SkillCreater
 {
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public StatikkCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data) 
+    public StatikkCreater(BaseSkillData data, BaseFactory effectFactory) : base(data) 
     {
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        StatikkData data = _skillData as StatikkData;
-        return new Statikk(data, CreateEffect);
+        StatikkData data = _buffData as StatikkData;
+        return new Statikk(data, _effectFactory);
     }
 }

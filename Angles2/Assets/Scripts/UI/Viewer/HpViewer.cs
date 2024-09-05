@@ -21,9 +21,8 @@ public class HpViewer : BaseViewer
         _bar.color = _startColor;
     }
 
-    public override void UpdateViewer(float current, float total) 
+    public override void UpdateViewer(float ratio) 
     {
-        float ratio = current / total;
         _bar.DOFillAmount(ratio, _changeDuration);
 
         Color targetColor = Color.Lerp(_startColor, _endColor, 1f - ratio);

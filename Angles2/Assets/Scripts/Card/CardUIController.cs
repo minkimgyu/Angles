@@ -71,21 +71,18 @@ public class CardUIController : MonoBehaviour
 
     List<BaseSkill.Name> _upgradeableSkills;
 
-    Func<BaseViewer.Name, BaseViewer> SpawnViewer;
+    BaseFactory _viewerFactory;
+    BaseFactory _skillFactory;
+    ISkillUser _skillUser;
 
-    Action<int> ChangeCoin;
-    Func<int> ReturnCoin;
-
-    ISkillUser _skillUsable;
-
-    public void Initialize(Dictionary<BaseSkill.Name, CardInfoData> cardDatas,
-        List<BaseSkill.Name> upgradeableSkills, Dictionary<BaseSkill.Name, BaseSkillData> skillDatas,
-
+    public void Initialize(
+        Dictionary<BaseSkill.Name, CardInfoData> cardDatas,
+        List<BaseSkill.Name> upgradeableSkills, 
+        Dictionary<BaseSkill.Name, BaseSkillData> skillDatas,
         Dictionary<BaseSkill.Name, Sprite> skillIcons,
-        Func<BaseViewer.Name, BaseViewer> SpawnViewer,
 
-        Action<int> ChangeCoin,
-        Func<int> ReturnCoin
+        BaseFactory viewerFactory,
+        BaseFactory skillFactory
         )
     {
         _uiObject.SetActive(false);
@@ -97,10 +94,13 @@ public class CardUIController : MonoBehaviour
         _skillIcons = skillIcons;
         _cardDatas = cardDatas;
 
-        this.SpawnViewer = SpawnViewer;
 
-        this.ChangeCoin = ChangeCoin;
-        this.ReturnCoin = ReturnCoin;
+        SubEventBus.Register(SubEventBus.State.RegisterSkillUpgradeable, new RegisterSkillUpgradeableCommand((value) => _skillUser = value));
+        SubEventBus.Register(SubEventBus.State.CreateCard, new CreateCardCommand(CreateCards));
+        SubEventBus.Register(SubEventBus.State.CreateReusableCard, new CreateReusableCardCommand(CreateCards));
+
+        _viewerFactory = viewerFactory;
+        _skillFactory = skillFactory;
         _backButton.onClick.AddListener(CloseTab);
     }
 
@@ -111,9 +111,9 @@ public class CardUIController : MonoBehaviour
     }
 
     // maxUpgrade인 스킬은 포함하지 않는다.
-    public void CreateCards(int cardCount, List<SkillUpgradeData> ContainedSkillUpgradeDatas)
+    public void CreateCards(int cardCount)
     {
-        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(cardCount, ContainedSkillUpgradeDatas);
+        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(cardCount);
 
         if (upgradeDatas.Count == 0) return;
         Time.timeScale = 0;
@@ -145,9 +145,9 @@ public class CardUIController : MonoBehaviour
     }
 
     // maxUpgrade인 스킬은 포함하지 않는다.
-    public void CreateCards(int cardCount, int recreateCount, List<SkillUpgradeData> ContainedSkillUpgradeDatas)
+    public void CreateCards(int cardCount, int recreateCount)
     {
-        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(cardCount, ContainedSkillUpgradeDatas);
+        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(cardCount);
 
         if (upgradeDatas.Count == 0) return;
         Time.timeScale = 0;
@@ -185,7 +185,7 @@ public class CardUIController : MonoBehaviour
                 () =>
                 {
                     DeleteCards();
-                    ReCreateCards(cardCount, recreateCount, ContainedSkillUpgradeDatas);
+                    CreateCards(cardCount, recreateCount);
                 }
             );
         }
@@ -200,12 +200,11 @@ public class CardUIController : MonoBehaviour
         _backPanel.DOFade(0.5f, 2);
     }
 
-    void ReCreateCards(int maxCardCount, int maxRecreateCount, List<SkillUpgradeData> ContainedSkillUpgradeDatas) => CreateCards(maxCardCount, maxRecreateCount, ContainedSkillUpgradeDatas);
-
-    List<SkillUpgradeData> ReturnUpgradeDatas(int maxCardCount, List<SkillUpgradeData> ContainedSkillUpgradeDatas)
+    List<SkillUpgradeData> ReturnUpgradeDatas(int maxCardCount)
     {
         // 먼저 5 - 5 이런 끝까지 업그레이드 된 스킬들을 파악한다 --> 이 친구는 제외시킴
         // 최대 획득, 업그레이드 가능한 스킬 개수를 구한다 --> 최대 3개 그리고 없다면 카드를 줄여야함 --> 체력+ 카드나 체력 회복 카드를 넣어도 될 듯?
+        List<SkillUpgradeData> containedSkillUpgradeDatas = _skillUser.ReturnSkillUpgradeDatas();
 
         List<SkillUpgradeData> skillUpgradeDatas = new List<SkillUpgradeData>();
 
@@ -214,11 +213,11 @@ public class CardUIController : MonoBehaviour
             BaseSkill.Name skillName = _upgradeableSkills[i];
 
             bool alreadyHave = false;
-            for (int j = 0; j < ContainedSkillUpgradeDatas.Count; j++)
+            for (int j = 0; j < containedSkillUpgradeDatas.Count; j++)
             {
-                if (ContainedSkillUpgradeDatas[j].Name == skillName && ContainedSkillUpgradeDatas[j].UpgradeCount != ContainedSkillUpgradeDatas[j].MaxUpgradeCount)
+                if (containedSkillUpgradeDatas[j].Name == skillName && containedSkillUpgradeDatas[j].UpgradeCount != containedSkillUpgradeDatas[j].MaxUpgradeCount)
                 {
-                    skillUpgradeDatas.Add(ContainedSkillUpgradeDatas[j]);
+                    skillUpgradeDatas.Add(containedSkillUpgradeDatas[j]);
                     alreadyHave = true;
                     break;
                 }
@@ -250,9 +249,9 @@ public class CardUIController : MonoBehaviour
         }
     }
 
-    public void AddSkillUser(ISkillUser skillUsable)
+    public void AddSkillUser(ISkillUser skillUser)
     {
-        _skillUsable = skillUsable;
+        _skillUser = skillUser;
     }
 
     public void DeleteCards()
@@ -273,17 +272,20 @@ public class CardUIController : MonoBehaviour
 
     void PickCard(int cost, BaseSkill.Name name)
     {
-        int coin = ReturnCoin();
-        if (cost > coin) return;
+        int currentCoinCount;
+        GameStateEventBus.Publish(GameStateEventBus.State.ReturnCoin, out currentCoinCount);
+        if (cost > currentCoinCount) return;
 
-        ChangeCoin?.Invoke(-cost);
+        GameStateEventBus.Publish(GameStateEventBus.State.ChangeCoin, -cost);
         CloseTab();
-        _skillUsable.AddSkill(name);
+
+        BaseSkill skill = _skillFactory.Create(name);
+        _skillUser.AddSkill(name, skill);
     }
 
     void AddCard(SKillCardData skillCardData, BaseViewer.Name type)
     {
-        BaseViewer viewer = SpawnViewer?.Invoke(type);
+        BaseViewer viewer = _viewerFactory.Create(type);
         viewer.transform.SetParent(_cardParent);
 
         viewer.Initialize

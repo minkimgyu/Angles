@@ -22,16 +22,16 @@ public class ShockwaveData : BaseSkillData
 
 public class ShockwaveCreater : SkillCreater
 {
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public ShockwaveCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    public ShockwaveCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
     {
-        this.CreateEffect = CreateEffect;
+        this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        ShockwaveData data = _skillData as ShockwaveData;
-        return new Shockwave(data, CreateEffect);
+        ShockwaveData data = _buffData as ShockwaveData;
+        return new Shockwave(data, _effectFactory);
     }
 }

@@ -41,13 +41,10 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     protected BaseEffect.Name _destoryEffect;
 
-    // 옵져버 델리게이트
-    protected Action<float, float> OnHpChangeRequested; // 체력 변화 시 전달
-    protected Action OnDieRequested; // 사망 시 호출
-    //
+    protected Action<float> OnHpChangeRequested; // 체력 변화 시 전달
 
     // 생성 이벤트
-    protected Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    protected BaseFactory _effectFactory;
     //
 
     public abstract void Initialize();
@@ -62,19 +59,15 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     //public virtual void AddSkill(BaseSkill.Name skillName) { }
     //public virtual void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { }
 
-    // Enemy 전용
-    public virtual void AddObserverEvent(Action OnDieRequested, Action<DropData, Vector3> OnDropRequested) { }
+    public void AddObserverEvent(Action<float> OnHpChangeRequested) { this.OnHpChangeRequested = OnHpChangeRequested; }
+    public virtual void AddObserverEvent(Action OnDieRequested) { }
 
-    // Player 전용
-    public virtual void AddObserverEvent(Action OnDieRequested, Action<float> OnDachRatioChangeRequested, Action<float> OnChargeRatioChangeRequested,
-        Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested, Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested, Action<float, float> OnHpChangeRequested,
-        Action<bool> OnShowShootDirectionRequested, Action<Vector3, Vector2> OnUpdateShootDirectionRequested) { }
+    //// Player 전용
+    //public virtual void AddObserverEvent(Action OnDieRequested, Action<float> OnDachRatioChangeRequested, Action<float> OnChargeRatioChangeRequested,
+    //    Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested, Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested, Action<float, float> OnHpChangeRequested,
+    //    Action<bool> OnShowShootDirectionRequested, Action<Vector3, Vector2> OnUpdateShootDirectionRequested) { }
 
-    public virtual void AddCreateEvent(Func<BaseEffect.Name, BaseEffect> CreateEffect) { }
-
-    public virtual void AddCreateEvent(Func<BaseEffect.Name, BaseEffect> CreateEffect,
-        Func<BaseSkill.Name, BaseSkill> CreateSkill)
-    { }
+    public virtual void AddEffectFactory(BaseFactory effectFactory) { _effectFactory = effectFactory; }
 
     protected virtual void SetInvincible(bool nowInvincible)
     {
@@ -84,9 +77,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     protected virtual void OnDie()
     {
-        OnDieRequested?.Invoke();
+        //OnDieRequested?.Invoke();
 
-        BaseEffect effect = CreateEffect?.Invoke(_destoryEffect);
+        BaseEffect effect = _effectFactory.Create(_destoryEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
 
@@ -96,7 +89,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void GetHeal(float point)
     {
         _hp += point;
-        OnHpChangeRequested?.Invoke(_hp, _maxHp);
+        OnHpChangeRequested?.Invoke(_hp / _maxHp);
 
         if (_maxHp < _hp)
         {
@@ -108,7 +101,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     {
         if (damageData.ShowTxt == false) return;
 
-        BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.DamageTextEffect);
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.DamageTextEffect);
 
         effect.ResetPosition(transform.position);
         effect.ResetText(damageData.Damage);
@@ -153,7 +146,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         if (canDamage == false) return;
 
         _hp -= damageData.Damage;
-        OnHpChangeRequested?.Invoke(_hp, _maxHp);
+        OnHpChangeRequested?.Invoke(_hp / _maxHp);
 
         if (_aliveState == AliveState.Normal && damageData.GroggyDuration > 0)
         {

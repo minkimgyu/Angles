@@ -29,6 +29,7 @@ public class BaseViewer : MonoBehaviour
     public virtual void UpdateViewer(int count) { }
     public virtual void UpdateViewer(float current, float total) { }
     public virtual void UpdateViewer(string info) { }
+    public virtual void UpdateViewer(DungeonGameState model) { }
 
     public virtual void TurnOnViewer(bool show) { }
     public virtual void TurnOnViewer(bool show, float backgroundFadeRatio, float backgroundFadeDuration, string endInfo, Color labelColor, Color labelTxtColor) { }

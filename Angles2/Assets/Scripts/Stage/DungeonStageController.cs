@@ -3,48 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class StageController : MonoBehaviour
+public class DungeonStageController : BaseStageController
 {
-    public struct Datas
-    {
-        public Datas(
-            int stageCount,
-            int bonusStageGap,
-            IFactory factory)
-        {
-            _stageCount = stageCount;
-            _bonusStageGap = bonusStageGap;
-            _factory = factory;
-        }
-
-        int _stageCount;
-        public int StageCount { get { return _stageCount; } }
-
-        int _bonusStageGap;
-        public int BonusStageGap { get { return _bonusStageGap; } }
-
-        IFactory _factory;
-        public IFactory Factory { get { return _factory; } }
-    }
-
-    public struct Events
-    {
-        public Events(
-            DungeonSystem.CommandCollection commandCollection,
-            DungeonSystem.ObserverEventCollection eventCollection
-        )
-        {
-            _commandCollection = commandCollection;
-            _eventCollection = eventCollection;
-        }
-
-        DungeonSystem.CommandCollection _commandCollection;
-        public DungeonSystem.CommandCollection CommandCollection { get { return _commandCollection; } }
-
-        DungeonSystem.ObserverEventCollection _eventCollection;
-        public DungeonSystem.ObserverEventCollection EventCollection { get { return _eventCollection; } }
-    }
-
     [SerializeField] int _maxStageCount = 2;
     [SerializeField] int _stageCount = 1;
 
@@ -53,20 +13,22 @@ public class StageController : MonoBehaviour
     BaseStage _currentStage;
     BaseStage _nextStage;
 
-    Datas _datas;
-    Events _events;
-
     int _bonusStageGap = 5;
 
-    [SerializeField] BaseViewer _stageCountViewer;
-    [SerializeField] BaseViewer _stageResultViewer;
+    // 이 둘은 model에서 관리하자
+    [SerializeField] StageUIController _stageUIController;
 
-    public void Initialize(Datas data, Events events)
+    BaseGameMode _gameMode;
+    FactoryCollection _factoryCollection;
+
+    public void Initialize(int stageCount, int bonusStageGap, FactoryCollection factoryCollection)
     {
-        _datas = data;
-        _events = events;
+        _stageCount = stageCount;
+        _bonusStageGap = bonusStageGap;
+        _factoryCollection = factoryCollection;
 
-        _stageResultViewer.TurnOnViewer(false);
+        _stageUIController.Initialize();
+        _stageUIController.ShowStageResult(false);
         _stageQueue = new Queue<BaseStage>();
         _currentStage = null;
         _nextStage = null;
@@ -77,13 +39,14 @@ public class StageController : MonoBehaviour
     // 탈출 --> 출입 시 플레이어 데이터 제공해줌
     // 스테이지 간의 데이터 전달 기능 추가
 
-    void OnStageClearRequested()
+    public override void OnStageClearRequested()
     {
-        _stageResultViewer.UpdateViewer("Stage Clear");
+        _stageUIController.ShowStageResult(true);
+        _stageUIController.ChangeStageResultInfo("Stage Clear");
 
         if (_stageQueue.Count == 0)
         {
-            _events.EventCollection.OnGameClearRequested?.Invoke();
+            MainEventBus.Publish(MainEventBus.State.GameClear);
             return;
         }
 
@@ -92,18 +55,18 @@ public class StageController : MonoBehaviour
         _currentStage.ActivePortal(entryPos);
     }
 
-    void OnMoveToNextStageRequested()
+    public override void OnMoveToNextStageRequested()
     {
         _stageCount++;
-        _stageResultViewer.TurnOnViewer(false);
-        _stageCountViewer.UpdateViewer(_stageCount);
+        _stageUIController.ShowStageResult(false);
+        _stageUIController.AddStageCount(1);
         _currentStage.Exit();
 
         _nextStage.Target = _currentStage.Target;
         _currentStage = _nextStage;
         _nextStage = null;
 
-        _currentStage.Spawn(_maxStageCount, _maxStageCount - _stageQueue.Count, _datas.Factory);
+        _currentStage.Spawn(_maxStageCount, _maxStageCount - _stageQueue.Count);
     }
 
     BaseStage ReturnRandomStage(BaseStage.Type type, Dictionary<BaseStage.Type, List<BaseStage>> stageObjects)
@@ -114,20 +77,11 @@ public class StageController : MonoBehaviour
 
     public void CreateRandomStage(Dictionary<BaseStage.Type, List<BaseStage>> stageObjects)
     {
-        BaseStage.Events events = new BaseStage.Events
-        (
-            _events.CommandCollection,
-            _events.EventCollection,
-
-            OnStageClearRequested,
-            OnMoveToNextStageRequested
-        );
-
         foreach (var item in stageObjects)
         {
             for (int i = 0; i < item.Value.Count; i++)
             {
-                item.Value[i].Initialize(events);
+                item.Value[i].Initialize(this, _factoryCollection);
             }
         }
 
@@ -162,7 +116,7 @@ public class StageController : MonoBehaviour
         }
 
         _currentStage = _stageQueue.Dequeue();
-        _currentStage.Spawn(_maxStageCount, _maxStageCount - _stageQueue.Count, _datas.Factory);
-        _stageCountViewer.UpdateViewer(_stageCount);
+        _currentStage.Spawn(_maxStageCount, _maxStageCount - _stageQueue.Count);
+        _stageUIController.AddStageCount(1);
     }
 }

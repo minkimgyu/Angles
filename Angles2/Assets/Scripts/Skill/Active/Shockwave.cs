@@ -13,9 +13,9 @@ public class Shockwave : BaseSkill
     List<ITarget> _targets;
     Timer _delayTimer;
 
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public Shockwave(ShockwaveData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(Type.Basic, data._maxUpgradePoint)
+    public Shockwave(ShockwaveData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
         _delay = data._delay;
         _damage = data._damage;
@@ -25,7 +25,7 @@ public class Shockwave : BaseSkill
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
 
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
     }
 
     public override void OnUpdate()
@@ -39,7 +39,7 @@ public class Shockwave : BaseSkill
                 break;
             case Timer.State.Finish:
 
-                BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.ShockwaveEffect);
+                BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ShockwaveEffect);
                 effect.ResetPosition(_castingData.MyTransform.position);
                 effect.Play();
 

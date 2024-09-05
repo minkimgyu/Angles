@@ -21,7 +21,7 @@ public class EffectCreater
     }
 }
 
-public class EffectFactory
+public class EffectFactory : BaseFactory
 {
     Dictionary<BaseEffect.Name, EffectCreater> _effectCreaters;
 
@@ -39,7 +39,7 @@ public class EffectFactory
         }
     }
 
-    public BaseEffect Create(BaseEffect.Name name)
+    public override BaseEffect Create(BaseEffect.Name name)
     {
         return _effectCreaters[name].Create();
     }

@@ -9,7 +9,6 @@ public class Coin : MonoBehaviour, IInteractable
     int _upCount;
     float _moveSpeed;
 
-    Command<int> AddCoin;
     TrackComponent _trackComponent;
 
     public void OnInteractEnter(IInteracter interacter)
@@ -23,7 +22,7 @@ public class Coin : MonoBehaviour, IInteractable
     public void OnInteract(IInteracter interacter) 
     {
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.GetCoin);
-        AddCoin.Execute(_upCount);
+        GameStateEventBus.Publish(GameStateEventBus.State.ChangeCoin, _upCount);
         Destroy(gameObject);
     }
 
@@ -45,9 +44,4 @@ public class Coin : MonoBehaviour, IInteractable
     }
 
     GameObject IInteractable.ReturnGameObject() { return gameObject; }
-
-    public void AddCommand(Command<int> AddCoin) 
-    { 
-        this.AddCoin = AddCoin; 
-    }
 }

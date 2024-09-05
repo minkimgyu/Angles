@@ -11,7 +11,8 @@ public interface IInteractable
         SkillBubble,
         CardTable,
         Shop,
-        Portal
+        Portal,
+        Heart
     }
 
     virtual void Initialize(CardTableData data) { }
@@ -19,11 +20,10 @@ public interface IInteractable
     virtual void Initialize(SkillBubbleData data) { }
     virtual void Initialize(CoinData data) { }
 
-    virtual void AddCommand(Command<int, List<SkillUpgradeData>> CreateCardsCommand) { }
-    virtual void AddCommand(Command<int, int, List<SkillUpgradeData>> RecreatableCardsCommand) { }
-    virtual void AddCommand(Command<int> AddCoint) { }
+    virtual void AddAddCointEvent(Action<int> AddCoint) { }
+    virtual void AddCreateCardsEvent(Action<int, List<SkillUpgradeData>> CreateCards) { }
+    virtual void AddCreateCardsEvent(Action<int, int, List<SkillUpgradeData>> CreateCards) { }
 
-    // Create 함수에서 pos나 trasform을 받을 수 있게 개량해보자 --> 취소
     GameObject ReturnGameObject() { return default; }
 
     void ResetPosition(Vector3 pos);

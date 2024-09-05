@@ -21,17 +21,17 @@ public class SpawnShooterData : BaseSkillData
 
 public class SpawnShooterCreater : SkillCreater
 {
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
     public ShooterData _data;
 
-    public SpawnShooterCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    public SpawnShooterCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
     {
-        this.CreateWeapon = CreateWeapon;
+        this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnShooterData data = _skillData as SpawnShooterData;
-        return new SpawnShooter(data, CreateWeapon);
+        SpawnShooterData data = _buffData as SpawnShooterData;
+        return new SpawnShooter(data, _weaponFactory);
     }
 }

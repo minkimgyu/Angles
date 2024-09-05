@@ -6,14 +6,14 @@ using System;
 public class SpawnStickyBomb : CooltimeSkill
 {
     List<ITarget.Type> _targetTypes;
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
     StickyBombData _data;
 
-    public SpawnStickyBomb(SpawnStickyBombData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public SpawnStickyBomb(SpawnStickyBombData data, BaseFactory weaponFactory) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
     {
         _data = data._data;
         _targetTypes = data._targetTypes;
-        this.CreateWeapon = CreateWeapon;
+        _weaponFactory = weaponFactory;
     }
 
     public override void OnReflect(Collision2D collision)
@@ -27,14 +27,14 @@ public class SpawnStickyBomb : CooltimeSkill
         IFollowable followable = collision.gameObject.GetComponent<IFollowable>();
         if (followable == null) return;
 
-        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.StickyBomb);
+        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
 
         if (_stackCount <= 0) return;
         _stackCount--;
 
         weapon.ResetData(_data);
-        weapon.Upgrade(_upgradePoint);
+        weapon.Upgrade(UpgradePoint);
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetFollower(followable);
     }

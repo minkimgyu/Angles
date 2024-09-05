@@ -9,14 +9,14 @@ public class ContactAttack : BaseSkill
     public float _damage;
     public List<ITarget.Type> _targetTypes;
 
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public ContactAttack(ContactAttackData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(Type.Basic, data._maxUpgradePoint)
+    public ContactAttack(ContactAttackData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
         _damage = data._damage;
         _targetTypes = data._targetTypes;
 
-        this.CreateEffect = CreateEffect;
+        _effectFactory = effectFactory;
     }
 
 
@@ -31,7 +31,7 @@ public class ContactAttack : BaseSkill
         Debug.Log("ContactAttack");
 
         Vector3 contactPos = collision.contacts[0].point;
-        BaseEffect effect = CreateEffect?.Invoke(BaseEffect.Name.HitEffect);
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.HitEffect);
         effect.ResetPosition(contactPos);
         effect.Play();
 

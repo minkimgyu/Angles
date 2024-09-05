@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,15 +11,17 @@ public class SkillUIController : MonoBehaviour
     [SerializeField] RectTransform _skillViewerParent;
 
     List<BaseSkill.Type> _showTypes;
-    System.Func<BaseViewer.Name, BaseViewer> SpawnViewer;
+    BaseFactory _viewerFactory;
 
-
-    public void Initialize(List<BaseSkill.Type> showTypes, Dictionary<BaseSkill.Name, Sprite> skillIcons, System.Func<BaseViewer.Name, BaseViewer> SpawnViewer)
+    public void Initialize(List<BaseSkill.Type> showTypes, Dictionary<BaseSkill.Name, Sprite> skillIcons, BaseFactory viewerFactory)
     {
+        ObserverEventBus.Register(ObserverEventBus.State.OnAddSkill, new AddSkillCommand(AddViewer));
+        ObserverEventBus.Register(ObserverEventBus.State.OnRemoveSkill, new RemoveSkillCommand(RemoveViewer));
+
         _viewers = new Dictionary<BaseSkill.Name, BaseViewer>();
         _showTypes = showTypes;
         _skillIcons = skillIcons;
-        this.SpawnViewer = SpawnViewer;
+        _viewerFactory = viewerFactory;
     }
 
     public void AddViewer(BaseSkill.Name skillName, BaseSkill skill)
@@ -26,7 +29,7 @@ public class SkillUIController : MonoBehaviour
         bool isShowType = _showTypes.Contains(skill.SkillType);
         if (isShowType == false) return;
 
-        BaseViewer viewer = SpawnViewer?.Invoke(BaseViewer.Name.SkillViewer);
+        BaseViewer viewer = _viewerFactory.Create(BaseViewer.Name.SkillViewer);
         Sprite skillIcon = _skillIcons[skillName];
         viewer.Initialize(skillIcon);
 

@@ -16,8 +16,8 @@ public class AvoidBehavior : BaseBehavior
 
         Vector3 reflect = Vector2.Reflect(_myTransform.right, hit.normal);
 
-        //Debug.DrawRay(start, dir * hit.distance, Color.blue, 3);
-        //Debug.DrawRay(hit.point, reflect * 5f, Color.red, 3);
+        Debug.DrawRay(start, dir * hit.distance, Color.blue, 1);
+        Debug.DrawRay(hit.point, reflect * 5f, Color.red, 1);
         return reflect;
     }
 
@@ -25,9 +25,9 @@ public class AvoidBehavior : BaseBehavior
     {
         if (behaviorData.NearObstacles.Count == 0) return Vector3.zero;
 
-        float[] offsets = new float[2] { -behaviorData.OffsetFromCenter, behaviorData.OffsetFromCenter };
+        float[] offsets = new float[3] { -behaviorData.OffsetFromCenter, 0, behaviorData.OffsetFromCenter };
         Vector3 direction = Vector3.zero;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             direction += RaycastToWall(offsets[i]);
         }

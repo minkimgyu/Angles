@@ -6,7 +6,7 @@ using System;
 
 namespace Player
 {
-    public class Player : BaseLife, IFollowable, IInteracter, ISkillUser
+    public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsable
     {
         public enum MovementState
         {
@@ -26,22 +26,24 @@ namespace Player
         FSM<MovementState> _movementFSM;
         FSM<ActionState> _actionFSM;
 
+        BuffFloat _totalDamageRatio;
+        BuffFloat _totalCooltimeRatio;
+
+        BuffFloat _dashSpeed;
+        BuffFloat _dashDuration;
+
+        BuffFloat _shootingDuration;
+        BuffFloat _chargeDuration;
+
         float _moveSpeed;
-        float _chargeDuration;
-        float _maxChargePower;
-
-        float _dashSpeed;
-        float _dashDuration;
-
         float _shootSpeed;
-        float _shootDuration;
 
         float _minJoystickLength;
 
         int _maxDashCount;
 
         int _dashConsumeCount;
-        float _dashRestoreDuration;
+        BuffFloat _dashRestoreDuration;
 
         float _shrinkScale;
         float _normalScale;
@@ -51,32 +53,17 @@ namespace Player
 
         List<BaseSkill.Name> _skillNames;
 
-        float DashRatio { get { return _currentDashFillDuration / _dashRestoreDuration; } }
+        float DashRatio { get { return _currentDashFillDuration / _dashRestoreDuration.Value; } }
         float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
         bool CanUseDash() { return _currentDashCount >= _dashConsumeCount; }
 
         MoveComponent _moveComponent;
         OutlineComponent _outlineComponent;
         SkillController _skillController;
+        BuffController _buffController;
 
         InteractableCaptureComponent _interactableCaptureComponent;
         List<IInteractable> _interactableObjects;
-
-
-        // 옵져버 델리게이트
-        Action<float> OnDachRatioChangeRequested; // 대쉬 변수 변경 시 전달
-        Action<float> OnChargeRatioChangeRequested; // 차지 변수 변경 시 전달
-
-        Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested; // 스킬 획득 시 전달
-        Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested; // 스킬 제거 시 전달
-
-        Action<bool> OnShowShootDirectionRequested; // 슈팅 방향 지시선 온오프 시 전달
-        Action<Vector3, Vector2> OnUpdateShootDirectionRequested; // 슈팅 방향 지시선 위치 변경 시 전달
-        //
-
-        // 생성 이벤트
-        Func<BaseSkill.Name, BaseSkill> CreateSkill;
-        //
 
         void ChangeBodyScale(bool xAxis, float ratio)
         {
@@ -105,24 +92,30 @@ namespace Player
 
         public override void ResetData(PlayerData data)
         {
+            //BuffValueCommand speedModifyCommand = new BuffValueCommand();
+            // 값이 바뀌는 변수들은 BuffFloat나 BuffInt를 사용해서 최소, 최대 값을 지정해주고
+            // 참조 타입으로 설정했으므로 버프로 인해 수정되면 알아서 값이 반영되게 된다.
             _maxHp = data._maxHp;
             _targetType = data._targetType;
 
             _moveSpeed = data._moveSpeed;
-            _chargeDuration = data._chargeDuration;
-            _maxChargePower = data._maxChargePower;
 
-            _dashSpeed = data._dashSpeed;
-            _dashDuration = data._dashDuration;
+            _totalDamageRatio = new BuffFloat(data._minTotalDamageRatio, data._maxTotalDamageRatio, data._totalDamageRatio);
+            _totalCooltimeRatio = new BuffFloat(data._minTotalCooltimeRatio, data._maxTotalCooltimeRatio, data._totalCooltimeRatio);
+
+            _chargeDuration = new BuffFloat(data._minChargeDuration, data._maxChargeDuration, data._chargeDuration);
+            _dashSpeed = new BuffFloat(data._minDashSpeed, data._maxDashSpeed, data._dashSpeed);
+            _dashDuration = new BuffFloat(data._minDashDuration, data._maxDashDuration, data._dashDuration);
+            _shootingDuration = new BuffFloat(data._minShootDuration, data._maxShootDuration, data._shootDuration);
 
             _shootSpeed = data._shootSpeed;
-            _shootDuration = data._shootDuration;
 
             _minJoystickLength = data._minJoystickLength;
 
             _maxDashCount = data._maxDashCount;
             _dashConsumeCount = data._dashConsumeCount;
-            _dashRestoreDuration = data._dashRestoreDuration;
+
+            _dashRestoreDuration = new BuffFloat(data._minDashRestoreDuration, data._maxDashRestoreDuration, data._dashRestoreDuration);
 
             _shrinkScale = data._shrinkScale;
             _normalScale = data._normalScale;
@@ -130,38 +123,10 @@ namespace Player
             _skillNames = data._skillNames;
         }
 
-        public override void AddCreateEvent(Func<BaseEffect.Name, BaseEffect> CreateEffect,
-        Func<BaseSkill.Name, BaseSkill> CreateSkill)
+        public void AddSkill(BaseSkill.Name name, BaseSkill skill) 
         {
-            this.CreateEffect = CreateEffect;
-            this.CreateSkill = CreateSkill;
+            _skillController.AddSkill(name, skill);
         }
-
-        public override void AddObserverEvent(Action OnDieRequested, Action<float> OnDachRatioChangeRequested, Action<float> OnChargeRatioChangeRequested,
-            Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested, Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested, Action<float, float> OnHpChangeRequested,
-            Action<bool> OnShowShootDirectionRequested, Action<Vector3, Vector2> OnUpdateShootDirectionRequested)
-        {
-            this.OnDieRequested = OnDieRequested;
-            this.OnDachRatioChangeRequested = OnDachRatioChangeRequested;
-            this.OnChargeRatioChangeRequested = OnChargeRatioChangeRequested;
-
-            _skillController.OnAddSkillRequested = OnAddSkillRequested;
-            _skillController.OnRemoveSkillRequested = OnRemoveSkillRequested;
-
-            this.OnHpChangeRequested = OnHpChangeRequested;
-            OnHpChangeRequested?.Invoke(_hp, _maxHp);
-
-            this.OnShowShootDirectionRequested = OnShowShootDirectionRequested;
-            this.OnUpdateShootDirectionRequested = OnUpdateShootDirectionRequested;
-        }
-
-        public void AddSkill(BaseSkill.Name name) 
-        {
-            BaseSkill skill = CreateSkill?.Invoke(name);
-            _skillController.AddSkill(name, skill); 
-        } // 생성해서 넣어주기
-
-        public void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { }
 
         public List<SkillUpgradeData> ReturnSkillUpgradeDatas()
         {
@@ -188,13 +153,29 @@ namespace Player
             _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
 
             _skillController = GetComponent<SkillController>();
-            _skillController.Initialize();
+            _skillController.Initialize(_totalDamageRatio, _totalCooltimeRatio);
 
             _outlineComponent = GetComponent<OutlineComponent>();
             _outlineComponent.Initialize();
 
             _moveComponent = GetComponent<MoveComponent>();
             _moveComponent.Initialize();
+
+            _buffController = GetComponent<BuffController>();
+            _buffController.Initialize( 
+                new Dictionary<BaseBuff.Type, BuffCommand> 
+                {
+                    { BaseBuff.Type.TotalDamage, new BuffRatioCommand(_totalDamageRatio) },
+                    { BaseBuff.Type.TotalCooltime, new BuffRatioCommand(_totalCooltimeRatio) },
+
+                    { BaseBuff.Type.ShootingDuration, new BuffValueCommand(_shootingDuration) },
+                    { BaseBuff.Type.ShootingChargeDuration, new BuffValueCommand(_chargeDuration) },
+
+                    { BaseBuff.Type.DashSpeed, new BuffValueCommand(_dashSpeed) },
+                    { BaseBuff.Type.DashChargeDuration, new BuffValueCommand(_dashDuration) },
+                }
+            );
+
 
             InintializeFSM();
             AddEvent();
@@ -215,14 +196,9 @@ namespace Player
             Dictionary<ActionState, BaseState<ActionState>> actionStates = new Dictionary<ActionState, BaseState<ActionState>>
             {
                 { ActionState.Ready, new ReadyState(_actionFSM) },
+                { ActionState.Charge, new ChargeState(_actionFSM, _minJoystickLength, _chargeDuration, transform,_moveComponent, ChangeBodyScale, SetInvincible) },
                 { 
-                    ActionState.Charge, new ChargeState(_actionFSM, _minJoystickLength, _chargeDuration, transform,_moveComponent, ChangeBodyScale, SetInvincible,
-                    (chargeRatio) =>{ OnChargeRatioChangeRequested?.Invoke(chargeRatio); },
-                    (show) => { OnShowShootDirectionRequested?.Invoke(show); },
-                    (position, direction) => { OnUpdateShootDirectionRequested?.Invoke(position, direction); }) 
-                },
-                { 
-                    ActionState.Shoot, new ShootState(_actionFSM, _shootSpeed, _shootDuration, _maxChargePower, transform, _moveComponent, ChangeBodyScale, 
+                    ActionState.Shoot, new ShootState(_actionFSM, _shootSpeed, _shootingDuration, transform, _moveComponent, ChangeBodyScale, 
                     _skillController.OnReflect, SetInvincible) 
                 }
             };
@@ -232,7 +208,7 @@ namespace Player
         protected override void OnDie()
         {
             ClearEvent();
-            OnDieRequested?.Invoke();
+            MainEventBus.Publish(MainEventBus.State.GameOver);
             Destroy(gameObject);
         }
 
@@ -280,7 +256,8 @@ namespace Player
             {
                 case LifeState.Alive:
                     FillDashCount();
-                    OnDachRatioChangeRequested?.Invoke(TotalDashRatio);
+                    ObserverEventBus.Publish(ObserverEventBus.State.OnDashRatioChange, TotalDashRatio);
+                    //OnDachRatioChangeRequested?.Invoke(TotalDashRatio);
 
                     _skillController.OnUpdate();
 
@@ -380,6 +357,16 @@ namespace Player
         public Vector3 ReturnFowardDirection()
         {
             return transform.right;
+        }
+
+        public void AddBuff(BaseBuff.Name name, BaseBuff buff)
+        {
+            _buffController.AddBuff(name, buff);
+        }
+
+        public void RemoveBuff(BaseBuff.Name name)
+        {
+            _buffController.RemoveBuff(name);
         }
     }
 }

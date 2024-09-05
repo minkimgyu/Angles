@@ -41,6 +41,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - InteractableObject
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 243bed8f21adc4c42be535109e018a11
+    m_Address: Heart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InteractableObject
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

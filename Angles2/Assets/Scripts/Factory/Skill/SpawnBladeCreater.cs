@@ -20,16 +20,16 @@ public class SpawnBladeData : RandomSkillData
 
 public class SpawnBladeCreater : SkillCreater
 {
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
 
-    public SpawnBladeCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    public SpawnBladeCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
     {
-        this.CreateWeapon = CreateWeapon;
+        this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnBladeData data = _skillData as SpawnBladeData;
-        return new SpawnBlade(data, CreateWeapon);
+        SpawnBladeData data = _buffData as SpawnBladeData;
+        return new SpawnBlade(data, _weaponFactory);
     }
 }

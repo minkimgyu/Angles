@@ -71,6 +71,30 @@ MonoBehaviour:
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bec7b28bc9ed944ca73ce9a5f4a31a0
+    m_Address: CreateDashBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05ef8f0e27cc94c4585e77d29907dad9
+    m_Address: CreateShootingBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 100e1d4c4d8cea642b1b7f522bada2b2
+    m_Address: CreateTotalCooltimeBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f78dad2dacb00514196bf53e4489e90e
+    m_Address: CreateTotalDamageBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

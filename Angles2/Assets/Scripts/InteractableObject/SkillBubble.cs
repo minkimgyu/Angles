@@ -6,8 +6,6 @@ using System;
 public class SkillBubble : MonoBehaviour, IInteractable
 {
     TrackComponent _trackComponent;
-    Command<int, List<SkillUpgradeData>> CreateCardsCommand;
-
     int _cardCount;
     float _moveSpeed;
 
@@ -20,11 +18,6 @@ public class SkillBubble : MonoBehaviour, IInteractable
         _trackComponent.Initialize(_moveSpeed);
     }
 
-    public void AddCommand(Command<int, List<SkillUpgradeData>> CreateCardsCommand)
-    {
-        this.CreateCardsCommand = CreateCardsCommand;
-    }
-
     public void OnInteractEnter(IInteracter interacter)
     {
         IFollowable followable = interacter.ReturnFollower();
@@ -33,11 +26,7 @@ public class SkillBubble : MonoBehaviour, IInteractable
 
     public void OnInteract(IInteracter interacter) 
     {
-        List<SkillUpgradeData> upgradeDatas = interacter.ReturnSkillUpgradeDatas();
 
-        if (upgradeDatas.Count == 0) return;
-
-        CreateCardsCommand.Execute(_cardCount, upgradeDatas);
         Destroy(gameObject);
     }
 

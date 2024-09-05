@@ -18,16 +18,16 @@ public class SpawnBlackholeData : RandomSkillData
 
 public class SpawnBlackholeCreater : SkillCreater
 {
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
 
-    public SpawnBlackholeCreater(BaseSkillData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(data)
+    public SpawnBlackholeCreater(BaseSkillData data, BaseFactory weaponFactory) : base(data)
     {
-        this.CreateWeapon = CreateWeapon;
+        _weaponFactory = weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnBlackholeData data = _skillData as SpawnBlackholeData;
-        return new SpawnBlackhole(data, CreateWeapon);
+        SpawnBlackholeData data = _buffData as SpawnBlackholeData;
+        return new SpawnBlackhole(data, _weaponFactory);
     }
 }

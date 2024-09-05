@@ -23,6 +23,11 @@ public class Database
 
         BaseSkill.Name.SpawnRifleShooter,
         BaseSkill.Name.SpawnRocketShooter,
+
+        BaseSkill.Name.CreateShootingBuff,
+        BaseSkill.Name.CreateDashBuff,
+        BaseSkill.Name.CreateTotalDamageBuff,
+        BaseSkill.Name.CreateTotalCooltimeBuff
     };
 
     public List<BaseSkill.Name> UpgradeableSkills { get { return _upgradeableSkills; } }
@@ -183,6 +188,11 @@ public class Database
 
         { BaseSkill.Name.ContactAttack, new ContactAttackData(1, 30, new List<ITarget.Type> { ITarget.Type.Red }) },
 
+        { BaseSkill.Name.CreateTotalDamageBuff, new CreateTotalDamageBuffData(3)},
+        { BaseSkill.Name.CreateTotalCooltimeBuff, new CreateTotalCooltimeBuffData(3)},
+        { BaseSkill.Name.CreateShootingBuff, new CreateShootingBuffData(3)},
+        { BaseSkill.Name.CreateDashBuff, new CreateDashBuffData(3)},
+
         { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(1, 5f, 3f, 3f, 5, 
 
             new BulletData(
@@ -201,8 +211,6 @@ public class Database
 
             new List<ITarget.Type> { ITarget.Type.Blue })},
 
-
-
         { BaseSkill.Name.Shockwave, new ShockwaveData(1, 20f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.MagneticField, new MagneticFieldData(1, 20f, 5f, 1.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.SelfDestruction, new SelfDestructionData(1, 20f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
@@ -214,7 +222,46 @@ public class Database
     Dictionary<BaseLife.Name, BaseLifeData> _lifeDatas = new Dictionary<BaseLife.Name, BaseLifeData>
     {
         { 
-            BaseLife.Name.Player, new PlayerData(100, ITarget.Type.Blue, 10, 2, 3, 15, 0.5f, 15, 2f, 0.2f, 3, 1, 1.5f, 0.15f, 0.3f, 
+            BaseLife.Name.Player, new PlayerData(
+                1000, 
+                ITarget.Type.Blue, 
+                10, 
+
+                0.2f,
+                3,
+                0.8f,
+
+                0f,
+                10f,
+                1f,
+
+                0f,
+                10f,
+                1f,
+
+                15,
+                25,
+                15,
+
+                0.5f, 
+                1.5f, 
+                0.5f, 
+
+                2f,
+                10f,
+                2f,
+
+                20f,
+                0.2f, 
+                3, 
+                1, 
+
+                0.3f,
+                2f,
+                1f, 
+
+                0.15f, 
+                0.3f, 
             new List<BaseSkill.Name> { BaseSkill.Name.ContactAttack })
         },
 
@@ -274,6 +321,11 @@ public class Database
 
         { BaseSkill.Name.Statikk, new CardInfoData(BaseSkill.Name.Statikk, "Spawn Statikk", 20) },
         { BaseSkill.Name.SpawnStickyBomb, new CardInfoData(BaseSkill.Name.SpawnStickyBomb, "Spawn StickyBomb", 20) },
+
+        { BaseSkill.Name.CreateDashBuff, new CardInfoData(BaseSkill.Name.CreateDashBuff, "Create DashBuff", 20) },
+        { BaseSkill.Name.CreateShootingBuff, new CardInfoData(BaseSkill.Name.CreateShootingBuff, "Create ShootingBuff", 20) },
+        { BaseSkill.Name.CreateTotalDamageBuff, new CardInfoData(BaseSkill.Name.CreateTotalDamageBuff, "Create TotalDamageBuff", 20) },
+        { BaseSkill.Name.CreateTotalCooltimeBuff, new CardInfoData(BaseSkill.Name.CreateTotalCooltimeBuff, "Create TotalCooltimeBuff", 20) },
     };
     public Dictionary<BaseSkill.Name, CardInfoData> CardDatas { get { return _cardDatas; } }
 
@@ -287,4 +339,65 @@ public class Database
     };
 
     public Dictionary<IInteractable.Name, BaseInteractableObjectData> InteractableObjectDatas { get { return _interactableObjectDatas; } }
+
+    Dictionary<BaseBuff.Name, BaseBuffData> _buffDatas = new Dictionary<BaseBuff.Name, BaseBuffData>
+    {
+        { 
+            BaseBuff.Name.Shooting, 
+            new ShootingBuffData(
+                new List<ShootingBuffUpgradeable>
+                { 
+                    new ShootingBuffUpgradeable(1, -1f),
+                    new ShootingBuffUpgradeable(1, -1f),
+                    new ShootingBuffUpgradeable(1, -1f),
+                    new ShootingBuffUpgradeable(1, -1f),
+                    new ShootingBuffUpgradeable(1, -1f),
+                }
+            ) 
+        },
+
+        { 
+            BaseBuff.Name.Dash, 
+            new DashBuffData(
+                new List<DashBuffUpgradeableData>
+                {
+                    new DashBuffUpgradeableData(1, -1f),
+                    new DashBuffUpgradeableData(1, -1f),
+                    new DashBuffUpgradeableData(1, -1f),
+                    new DashBuffUpgradeableData(1, -1f),
+                    new DashBuffUpgradeableData(1, -1f)
+                }
+            ) 
+        },
+
+        { 
+            BaseBuff.Name.TotalDamage, 
+            new TotalDamageBuffData(
+                new List<TotalDamageBuffUpgradeableData>
+                {
+                    new TotalDamageBuffUpgradeableData(0.15f),
+                    new TotalDamageBuffUpgradeableData(0.15f),
+                    new TotalDamageBuffUpgradeableData(0.15f),
+                    new TotalDamageBuffUpgradeableData(0.15f),
+                    new TotalDamageBuffUpgradeableData(0.15f),
+                }
+            ) 
+        },
+
+        { 
+            BaseBuff.Name.TotalCooltime, 
+            new TotalCooltimeBuffData(
+                new List<TotalCooltimeBuffUpgradeableData>
+                {
+                    new TotalCooltimeBuffUpgradeableData(-0.15f),
+                    new TotalCooltimeBuffUpgradeableData(-0.15f),
+                    new TotalCooltimeBuffUpgradeableData(-0.15f),
+                    new TotalCooltimeBuffUpgradeableData(-0.15f),
+                    new TotalCooltimeBuffUpgradeableData(-0.15f),
+                }
+            ) 
+        }
+    };
+
+    public Dictionary<BaseBuff.Name, BaseBuffData> BuffDatas { get { return _buffDatas; } }
 }

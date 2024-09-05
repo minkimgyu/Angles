@@ -27,7 +27,7 @@ public class MagneticFieldCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        MagneticFieldData data = _skillData as MagneticFieldData;
+        MagneticFieldData data = _buffData as MagneticFieldData;
         return new MagneticField(data);
     }
 }

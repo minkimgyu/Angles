@@ -30,11 +30,11 @@ public class BulletData : BaseWeaponData
 
 public class BulletCreater : WeaponCreater
 {
-    System.Func<BaseEffect.Name, BaseEffect> SpawnEffect;
+    BaseFactory _effectFactory;
 
-    public BulletCreater(BaseWeapon weaponPrefab, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) : base(weaponPrefab)
+    public BulletCreater(BaseWeapon weaponPrefab, BaseFactory effectFactory) : base(weaponPrefab)
     {
-        this.SpawnEffect = SpawnEffect;
+        _effectFactory = effectFactory;
     }
 
     public override BaseWeapon Create()
@@ -42,7 +42,7 @@ public class BulletCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.Initialize(SpawnEffect);
+        weapon.Initialize(_effectFactory);
         return weapon;
     }
 }

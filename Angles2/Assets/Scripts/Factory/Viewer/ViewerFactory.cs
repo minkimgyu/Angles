@@ -21,7 +21,7 @@ public class ViewerCreater : BaseViewerCreater
     }
 }
 
-public class ViewerFactory
+public class ViewerFactory : BaseFactory
 {
     Dictionary<BaseViewer.Name, ViewerCreater> _viewerCreaters;
 
@@ -37,7 +37,7 @@ public class ViewerFactory
         _viewerCreaters[BaseViewer.Name.DirectionViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.DirectionViewer]);
     }
 
-    public BaseViewer Create(BaseViewer.Name name)
+    public override BaseViewer Create(BaseViewer.Name name)
     {
         return _viewerCreaters[name].Create();
     }

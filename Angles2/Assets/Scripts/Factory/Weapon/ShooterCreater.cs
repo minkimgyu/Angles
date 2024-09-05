@@ -42,11 +42,11 @@ public class ShooterData : BaseWeaponData
 
 public class ShooterCreater : WeaponCreater
 {
-    System.Func<BaseWeapon.Name, BaseWeapon> SpawnWeapon;
+    BaseFactory _weaponFactory;
 
-    public ShooterCreater(BaseWeapon weaponPrefab, System.Func<BaseWeapon.Name, BaseWeapon> SpawnWeapon) : base(weaponPrefab)
+    public ShooterCreater(BaseWeapon weaponPrefab, BaseFactory weaponFactory) : base(weaponPrefab)
     {
-        this.SpawnWeapon = SpawnWeapon;
+        _weaponFactory = weaponFactory;
     }
 
     public override BaseWeapon Create()
@@ -54,7 +54,7 @@ public class ShooterCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.Initialize(SpawnWeapon);
+        weapon.Initialize(_weaponFactory);
         return weapon;
     }
 }

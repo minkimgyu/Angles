@@ -34,16 +34,16 @@ public class ImpactData : RandomSkillData
 
 public class ImpactCreater : SkillCreater
 {
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public ImpactCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    public ImpactCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
     {
-        this.CreateEffect = CreateEffect;
+        this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        ImpactData data = _skillData as ImpactData;
-        return new Impact(data, CreateEffect);
+        ImpactData data = _buffData as ImpactData;
+        return new Impact(data, _effectFactory);
     }
 }

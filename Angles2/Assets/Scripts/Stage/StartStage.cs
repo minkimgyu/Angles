@@ -7,41 +7,36 @@ public class StartStage : BaseStage
 {
     [SerializeField] Transform _bonusPostion;
 
-    public override void Spawn(int totalStageCount, int currentStageCount, IFactory factory)
+    public override void Spawn(int totalStageCount, int currentStageCount)
     {
-        _events.OnStageClearRequested?.Invoke();
+        _baseStageController.OnStageClearRequested();
 
-        BaseLife player = factory.Create(BaseLife.Name.Player);
-        player.transform.position = _entryPoint.position;
+        BaseLife player = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(BaseLife.Name.Player);
+        Vector3 entryPos = ReturnEntryPosition();
+        player.transform.position = entryPos;
+
 
         IFollowable followable = player.GetComponent<IFollowable>();
-        if (followable == null) return;
+        if (followable != null) SubEventBus.Publish(SubEventBus.State.RegisterFollableCamera, followable);
 
         Target = followable;
 
         ISkillUser skillUser = player.GetComponent<ISkillUser>();
-        if (skillUser != null) _events.CommandCollection.AddSkillUserCommand.Execute(skillUser);
-        _events.CommandCollection.AddCameraTrackerCommand.Execute(followable);
+        if (skillUser != null) SubEventBus.Publish(SubEventBus.State.RegisterSkillUpgradeable, skillUser);
 
-        BaseViewer hpViewer = factory.Create(BaseViewer.Name.HpViewer);
-        BaseViewer directionViewer = factory.Create(BaseViewer.Name.DirectionViewer);
+        BaseFactory viewerFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
 
+        BaseViewer hpViewer = viewerFactory.Create(BaseViewer.Name.HpViewer);
+        hpViewer.Initialize();
         hpViewer.SetFollower(followable);
+        player.AddObserverEvent(hpViewer.UpdateViewer);
 
-        player.AddObserverEvent(
-            _events.ObserberEventCollection.OnGameOverRequested, 
-            _events.ObserberEventCollection.OnDachRatioChangeRequested, 
-            _events.ObserberEventCollection.OnChargeRatioChangeRequested, 
-            _events.ObserberEventCollection.OnAddSkillRequested,
-            _events.ObserberEventCollection.OnRemoveSkillRequested,
-            hpViewer.UpdateViewer,
-            directionViewer.TurnOnViewer,
-            directionViewer.UpdateViewer
-        );
+        BaseViewer directionViewer = viewerFactory.Create(BaseViewer.Name.DirectionViewer);
+        directionViewer.Initialize();
+        directionViewer.SetFollower(followable);
 
-        IInteractable interactableObject = factory.Create(IInteractable.Name.CardTable);
+        IInteractable interactableObject = _factoryCollection.ReturnFactory(FactoryCollection.Type.Interactable).Create(IInteractable.Name.CardTable);
         _spawnedObjects.Add(interactableObject.ReturnGameObject());
         interactableObject.ResetPosition(_bonusPostion.position);
-        interactableObject.AddCommand(_events.CommandCollection.CreateCardsCommand);
     }
 }

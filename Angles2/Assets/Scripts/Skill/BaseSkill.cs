@@ -5,17 +5,14 @@ using System;
 
 public struct CastingData
 {
-    public CastingData(GameObject myObject, Transform myTransform)
+    public CastingData(GameObject myObject, Transform myTransform, BuffFloat totalDamageRatio, BuffFloat totalCooltimeRatio)
     {
-        _myObject = myObject;
-        _myTransform = myTransform;
+        MyObject = myObject;
+        MyTransform = myTransform;
     }
 
-    GameObject _myObject;
-    public GameObject MyObject { get { return _myObject; } }
-
-    Transform _myTransform;
-    public Transform MyTransform { get { return _myTransform; } }
+    public GameObject MyObject { get; }
+    public Transform MyTransform { get; }
 }
 
 abstract public class BaseSkill : IUpgradable
@@ -35,6 +32,11 @@ abstract public class BaseSkill : IUpgradable
         SpawnBlackhole, // weapon
         SpawnBlade, // projectile
         SpawnStickyBomb, // projectile
+
+        CreateShootingBuff,
+        CreateDashBuff,
+        CreateTotalDamageBuff,
+        CreateTotalCooltimeBuff,
 
         SpreadBullets,
         Shockwave,
@@ -61,11 +63,11 @@ abstract public class BaseSkill : IUpgradable
 
     protected CastingData _castingData;
 
-    protected int _maxUpgradePoint;
+    int _maxUpgradePoint;
     public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
 
 
-    protected int _upgradePoint;
+    int _upgradePoint;
     public int UpgradePoint { get { return _upgradePoint; } }
 
     public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
@@ -73,11 +75,13 @@ abstract public class BaseSkill : IUpgradable
     public virtual void Upgrade(int step)
     {
         _upgradePoint = step;
+        OnUpgradeRequested();
     }
 
     public virtual void Upgrade() 
     {
         _upgradePoint++;
+        OnUpgradeRequested();
     }
 
     public virtual void Initialize(CastingData data) { _castingData = data; }
@@ -96,4 +100,6 @@ abstract public class BaseSkill : IUpgradable
 
     public virtual void OnUpdate() { }
     public virtual void OnAdd() { }
+
+    protected virtual void OnUpgradeRequested() { }
 }

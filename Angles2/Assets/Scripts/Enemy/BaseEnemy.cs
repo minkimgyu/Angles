@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
+public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillAddable
 {
     FlockCaptureComponent _flockCaptureComponent;
     ObstacleCaptureComponent _obstacleCaptureComponent;
@@ -25,6 +25,11 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
     protected float _offsetFromCenter;
     protected DropData _dropData;
 
+    Action OnDieRequested;
+
+    BuffFloat _totalDamageRatio;
+    BuffFloat _totalCooltimeRatio;
+
     public override void SetTarget(IPos follower)
     {
         _followTarget = follower;
@@ -32,6 +37,9 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
 
     public override void Initialize()
     {
+        _totalDamageRatio = new BuffFloat(1, 1, 1);
+        _totalCooltimeRatio = new BuffFloat(1, 1, 1);
+
         _groggyTimer = new Timer();
         _hp = _maxHp;
 
@@ -51,7 +59,7 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
         _moveComponent.Initialize();
 
         _skillController = GetComponent<SkillController>();
-        _skillController.Initialize();
+        _skillController.Initialize(_totalDamageRatio, _totalCooltimeRatio);
     }
 
     protected override void Update()
@@ -60,24 +68,22 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
         _skillController.OnUpdate();
     }
 
+    public override void AddObserverEvent(Action OnDieRequested)
+    {
+        this.OnDieRequested = OnDieRequested;
+    }
+
     protected override void OnDie()
     {
         // 아이템 드랍 기능 넣기
-        OnDropRequested?.Invoke(_dropData, transform.position);
+        SubEventBus.Publish(SubEventBus.State.DropItem, _dropData, transform.position);
+        OnDieRequested?.Invoke();
         base.OnDie();
     }
 
-    Action<DropData, Vector3> OnDropRequested; // 드랍 시 호출
-
-    public override void AddObserverEvent(Action OnDieRequested, Action<DropData, Vector3> OnDropRequested)
+    public override void AddEffectFactory(BaseFactory _effectFactory) 
     {
-        this.OnDieRequested = OnDieRequested;
-        this.OnDropRequested = OnDropRequested;
-    }
-
-    public override void AddCreateEvent(Func<BaseEffect.Name, BaseEffect> CreateEffect) 
-    {
-        this.CreateEffect = CreateEffect;
+        this._effectFactory = _effectFactory;
     }
 
     protected void ResetDirection()
@@ -119,4 +125,5 @@ public class BaseEnemy : BaseLife, IFlock, IFollowable, IForce, ISkillUser
 
     public void AddSkill(BaseSkill.Name name) { }
     public void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { _skillController.AddSkill(skillName, skill); }
+    public List<SkillUpgradeData> ReturnSkillUpgradeDatas() { return default; }
 }

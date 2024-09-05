@@ -4,37 +4,6 @@ using UnityEngine;
 
 public class BaseStage : MonoBehaviour
 {
-    public struct Events
-    {
-        public Events(
-            DungeonSystem.CommandCollection commandCollection,
-            DungeonSystem.ObserverEventCollection eventCollection,
-
-            Action OnStageClearRequested, 
-            Action OnMoveToNextStageRequested
-        )
-        {
-            _commandCollection = commandCollection;
-            _eventCollection = eventCollection;
-
-            _OnStageClearRequested = OnStageClearRequested;
-            _OnMoveToNextStageRequested = OnMoveToNextStageRequested;
-        }
-
-        DungeonSystem.CommandCollection _commandCollection;
-        public DungeonSystem.CommandCollection CommandCollection { get { return _commandCollection; } }
-
-        DungeonSystem.ObserverEventCollection _eventCollection;
-        public DungeonSystem.ObserverEventCollection ObserberEventCollection { get { return _eventCollection; } }
-
-
-        Action _OnStageClearRequested;
-        public Action OnStageClearRequested { get { return _OnStageClearRequested; } }
-
-        Action _OnMoveToNextStageRequested;
-        public Action OnMoveToNextStageRequested { get { return _OnMoveToNextStageRequested; } }
-    }
-
     public enum Type
     {
         Start,
@@ -47,19 +16,21 @@ public class BaseStage : MonoBehaviour
 
     protected List<GameObject> _spawnedObjects;
 
-    protected Events _events;
+    protected BaseStageController _baseStageController;
+    protected FactoryCollection _factoryCollection;
 
-    public virtual void Initialize(Events events) 
-    { 
-        _events = events;
+    public virtual void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection) 
+    {
         _spawnedObjects = new List<GameObject>();
-        _portal.Initialize(_events.OnMoveToNextStageRequested);
+        _baseStageController = baseStageController;
+        _factoryCollection = factoryCollection;
+
+        _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
     }
 
     public void ActivePortal(Vector2 movePos)
     {
         _portal.Active(movePos);
-        //Debug.Log("ActivePortal");
     }
 
     public IPos Target;
@@ -69,7 +40,7 @@ public class BaseStage : MonoBehaviour
         return _entryPoint.position;
     }
 
-    public virtual void Spawn(int totalStageCount, int currentStageCount, IFactory factory) { }
+    public virtual void Spawn(int totalStageCount, int currentStageCount) { }
 
     public virtual void Exit() 
     {

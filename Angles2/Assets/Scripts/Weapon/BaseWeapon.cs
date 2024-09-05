@@ -30,8 +30,7 @@ public class BaseWeapon : MonoBehaviour, IUpgradable
     public virtual void ResetData(ShooterData data) { }
 
     public virtual void Initialize() { }
-    public virtual void Initialize(System.Func<Name, BaseWeapon> SpawnWeapon) { }
-    public virtual void Initialize(System.Func<BaseEffect.Name, BaseEffect> SpawnEffect) { }
+    public virtual void Initialize(BaseFactory factory) { }
 
     public virtual void ResetFollower(IFollowable followable) { }
     public virtual void ResetSize(float ratio) { transform.localScale *= ratio; }

@@ -21,10 +21,14 @@ public class CardViewer : BaseViewer, IPointerClickHandler
         _iconImage.sprite = cardData.Icon;
         _infoText.text = cardData.Info;
 
-        for (int i = 0; i < cardData.MaxUpgradeCount; i++)
+        for (int i = 0; i < _upgradeIcons.Count; i++)
         {
-            if (i > cardData.UpgradeCount) _upgradeIcons[i].SetActive(false);
-            else _upgradeIcons[i].SetActive(true);
+            _upgradeIcons[i].SetActive(false);
+        }
+
+        for (int i = 0; i < cardData.UpgradeCount + 1; i++)
+        {
+            _upgradeIcons[i].SetActive(true);
         }
 
         this.OnClick = OnClick;

@@ -18,16 +18,16 @@ public class ContactAttackData : BaseSkillData
 
 public class ContactAttackCreater : SkillCreater
 {
-    Func<BaseEffect.Name, BaseEffect> CreateEffect;
+    BaseFactory _effectFactory;
 
-    public ContactAttackCreater(BaseSkillData data, Func<BaseEffect.Name, BaseEffect> CreateEffect) : base(data)
+    public ContactAttackCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
     {
-        this.CreateEffect = CreateEffect;
+        this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        ContactAttackData data = _skillData as ContactAttackData;
-        return new ContactAttack(data, CreateEffect);
+        ContactAttackData data = _buffData as ContactAttackData;
+        return new ContactAttack(data, _effectFactory);
     }
 }

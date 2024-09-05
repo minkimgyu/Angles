@@ -14,11 +14,11 @@ public class WeaponCreater
     public virtual BaseWeapon Create() { return default; }
 }
 
-public class WeaponFactory
+public class WeaponFactory : BaseFactory
 {
     Dictionary<BaseWeapon.Name, WeaponCreater> _weaponCreaters;
 
-    public WeaponFactory(Dictionary<BaseWeapon.Name, BaseWeapon> weaponPrefabs, System.Func<BaseEffect.Name, BaseEffect> SpawnEffect)
+    public WeaponFactory(Dictionary<BaseWeapon.Name, BaseWeapon> weaponPrefabs, BaseFactory effectFactory)
     {
         _weaponCreaters = new Dictionary<BaseWeapon.Name, WeaponCreater>();
 
@@ -26,16 +26,16 @@ public class WeaponFactory
         _weaponCreaters[BaseWeapon.Name.Blackhole] = new BlackholeCreater(weaponPrefabs[BaseWeapon.Name.Blackhole]);
 
 
-        _weaponCreaters[BaseWeapon.Name.Bullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.Bullet], SpawnEffect);
-        _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.Rocket], SpawnEffect);
+        _weaponCreaters[BaseWeapon.Name.Bullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.Bullet], effectFactory);
+        _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.Rocket], effectFactory);
 
-        _weaponCreaters[BaseWeapon.Name.RifleShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RifleShooter], Create);
-        _weaponCreaters[BaseWeapon.Name.RocketShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RocketShooter], Create);
+        _weaponCreaters[BaseWeapon.Name.RifleShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RifleShooter], this);
+        _weaponCreaters[BaseWeapon.Name.RocketShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RocketShooter], this);
 
-        _weaponCreaters[BaseWeapon.Name.StickyBomb] = new StickyBombCreater(weaponPrefabs[BaseWeapon.Name.StickyBomb], SpawnEffect);
+        _weaponCreaters[BaseWeapon.Name.StickyBomb] = new StickyBombCreater(weaponPrefabs[BaseWeapon.Name.StickyBomb], effectFactory);
     }
 
-    public BaseWeapon Create(BaseWeapon.Name name)
+    public override BaseWeapon Create(BaseWeapon.Name name)
     {
         return _weaponCreaters[name].Create();
     }

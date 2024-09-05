@@ -8,7 +8,7 @@ public class RocketShooter : Shooter
 
     protected override BaseWeapon ReturnProjectileWeapon()
     {
-        BaseWeapon weapon = SpawnWeapon?.Invoke(_fireWeaponName);
+        BaseWeapon weapon = _weaponFactory.Create(_fireWeaponName);
         weapon.ResetData(ProjectileData);
         weapon.ResetPosition(transform.position);
         weapon.ResetTargetTypes(_targetTypes);

@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour
 
     public void Initialize()
     {
+        SubEventBus.Register(SubEventBus.State.RegisterFollableCamera, new RegisterFollowerCommand(SetFollower));
         _mainCamera = Camera.main;
         _mainCamera.orthographicSize = _orthographicSize;
         _mainCamera.transform.position = new Vector3(_cameraArea.position.x, _cameraArea.position.y, -10);
@@ -29,7 +30,7 @@ public class CameraController : MonoBehaviour
         areaReflecter.Initialize(_mapSize.x, _mapSize.y, 3);
     }
 
-    public void SetTracker(IFollowable followTarget)
+    public void SetFollower(IFollowable followTarget)
     {
         _followTarget = followTarget;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IUpgradable
 {
-    public bool CanUpgrade();
-    public void Upgrade();
-    public void Upgrade(int step);
+    bool CanUpgrade();
+    void Upgrade();
+    void Upgrade(int step);
 }

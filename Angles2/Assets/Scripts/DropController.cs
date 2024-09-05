@@ -18,17 +18,15 @@ public struct DropData
     }
 }
 
-public class DropHandler
+public class DropController
 {
-    float _spreadOffset;
-    IFactory _factory;
-    DungeonSystem.CommandCollection _commandCollection;
+    const float _spreadOffset = 1.5f;
+    BaseFactory _interactableFactory;
 
-    public DropHandler(float spreadOffset, IFactory factory, DungeonSystem.CommandCollection commandCollection)
+    public DropController( BaseFactory interactableFactory)
     {
-        _spreadOffset = spreadOffset;
-        _factory = factory;
-        _commandCollection = commandCollection;
+        _interactableFactory = interactableFactory;
+        SubEventBus.Register(SubEventBus.State.DropItem, new DropItemCommand(OnDropRequested));
     }
 
     Vector3 ReturnSpreadOffset(Vector3 position, float spreadOffset)
@@ -43,21 +41,9 @@ public class DropHandler
             float random = UnityEngine.Random.Range(0, 1f);
             if (data.ItemDatas[i].Item2 <= random)
             {
-                IInteractable interactableObject = _factory.Create(data.ItemDatas[i].Item1);
+                IInteractable interactableObject = _interactableFactory.Create(data.ItemDatas[i].Item1);
                 Vector3 pos = ReturnSpreadOffset(position, _spreadOffset);
                 interactableObject.ResetPosition(pos);
-
-                switch (data.ItemDatas[i].Item1)
-                {
-                    case IInteractable.Name.SkillBubble:
-                        interactableObject.AddCommand(_commandCollection.CreateCardsCommand);
-                        break;
-                    case IInteractable.Name.Coin:
-                        interactableObject.AddCommand(_commandCollection.ChangeCoin);
-                        break;
-                    default:
-                        break;
-                }
             }
         }
     }

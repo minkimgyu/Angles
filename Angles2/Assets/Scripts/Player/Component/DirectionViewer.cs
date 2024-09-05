@@ -6,8 +6,16 @@ public class DirectionViewer : BaseViewer
 {
     [SerializeField] GameObject _directionSprite;
 
+    IFollowable _followTarget;
+
+    public override void SetFollower(IFollowable followTarget)
+    {
+        _followTarget = followTarget;
+    }
+
     public override void Initialize() 
     {
+        ObserverEventBus.Register(ObserverEventBus.State.OnTurnOnOffDirection, new TurnOnOffCommand(TurnOnViewer));
         TurnOnViewer(false);
     }
     public override void TurnOnViewer(bool show) 
@@ -15,9 +23,11 @@ public class DirectionViewer : BaseViewer
         _directionSprite.SetActive(show);
     }
 
-    public override void UpdateViewer(Vector3 pos, Vector2 direction) 
+    private void Update()
     {
-        transform.position = pos;
-        transform.right = direction;
+        if ((_followTarget as UnityEngine.Object) == null) return;
+
+        transform.position = _followTarget.ReturnPosition();
+        transform.right = _followTarget.ReturnFowardDirection();
     }
 }

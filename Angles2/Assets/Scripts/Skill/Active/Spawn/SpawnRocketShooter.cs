@@ -8,13 +8,13 @@ public class SpawnRocketShooter : BaseSkill
     BaseWeapon _shooter;
 
     List<ITarget.Type> _targetTypes;
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
     ShooterData _data;
 
-    public SpawnRocketShooter(SpawnShooterData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(Type.Passive, data._maxUpgradePoint)
+    public SpawnRocketShooter(SpawnShooterData data, BaseFactory weaponFactory) : base(Type.Passive, data._maxUpgradePoint)
     {
         _targetTypes = data._targetTypes;
-        this.CreateWeapon = CreateWeapon;
+        _weaponFactory = weaponFactory;
     }
 
     public override void Upgrade(int step)
@@ -27,7 +27,7 @@ public class SpawnRocketShooter : BaseSkill
 
     public override void OnAdd()
     {
-        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.RocketShooter);
+        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.RocketShooter);
         if (weapon == null) return;
 
         IFollowable followable = _castingData.MyObject.GetComponent<IFollowable>();

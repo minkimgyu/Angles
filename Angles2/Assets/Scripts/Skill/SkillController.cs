@@ -29,12 +29,15 @@ public class SkillController : MonoBehaviour
     Dictionary<BaseSkill.Name, BaseSkill> _skillDictionary;
     CastingData _castingData;
 
+    BuffFloat _totalDamageRatio;
+    BuffFloat _totalCooltimeRatio;
+
     public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested;
     public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested;
 
-    public void Initialize()
+    public void Initialize(BuffFloat totalDamageRatio, BuffFloat totalCooltimeRatio)
     {
-        _castingData = new CastingData(gameObject, transform);
+        _castingData = new CastingData(gameObject, transform, totalDamageRatio, totalCooltimeRatio);
         _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
     }
 

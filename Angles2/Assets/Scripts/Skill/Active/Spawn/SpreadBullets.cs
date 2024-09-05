@@ -18,10 +18,10 @@ public class SpreadBullets : BaseSkill
 
     Timer _delayTimer;
 
-    Func<BaseWeapon.Name, BaseWeapon> CreateWeapon;
+    BaseFactory _weaponFactory;
 
 
-    public SpreadBullets(SpreadBulletsData data, Func<BaseWeapon.Name, BaseWeapon> CreateWeapon) : base(Type.Basic, data._maxUpgradePoint)
+    public SpreadBullets(SpreadBulletsData data, BaseFactory weaponFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
         _bulletData = data._bulletData;
 
@@ -35,7 +35,7 @@ public class SpreadBullets : BaseSkill
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
 
-        this.CreateWeapon = CreateWeapon;
+        _weaponFactory = weaponFactory;
     }
 
     void ShootBullet(float angle)
@@ -45,12 +45,12 @@ public class SpreadBullets : BaseSkill
         Vector3 direction = new Vector3(x, y, 0);
         Vector3 spawnPosition = _castingData.MyTransform.position + direction * _distanceFromCaster;
 
-        BaseWeapon weapon = CreateWeapon?.Invoke(BaseWeapon.Name.Bullet);
+        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Bullet);
         if (weapon == null) return;
 
         weapon.ResetData(_bulletData);
 
-        weapon.Upgrade(_upgradePoint);
+        weapon.Upgrade(UpgradePoint);
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(spawnPosition, direction);
 
