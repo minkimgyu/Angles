@@ -54,7 +54,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void ResetData(PentagonData data) { }
     public virtual void ResetData(HexagonData data) { }
 
-    public virtual void SetTarget(IPos target) { }
+    //public virtual void SetTarget(IPos target) { }
 
     //public virtual void AddSkill(BaseSkill.Name skillName) { }
     //public virtual void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ abstract public class BaseFSM<T>
     protected BaseState<T> _currentState;
     protected BaseState<T> _previousState;
 
-    public void Inintialize(Dictionary<T, BaseState<T>> states, T startState)
+    public void Initialize(Dictionary<T, BaseState<T>> states, T startState)
     {
         _currentState = null;
         _previousState = null;
@@ -21,6 +22,11 @@ abstract public class BaseFSM<T>
     public bool SetState(T stateName)
     {
         return ChangeState(_states[stateName]);
+    }
+
+    public bool SetState(T stateName, ITarget target)
+    {
+        return ChangeState(_states[stateName], target);
     }
 
     public bool SetState(T stateName, Vector2 direction, string message)
@@ -46,6 +52,31 @@ abstract public class BaseFSM<T>
     public bool RevertToPreviousState(Vector2 vec2, float ratio, string message)
     {
         return ChangeState(_previousState, vec2, ratio, message);
+    }
+
+    private bool ChangeState(BaseState<T> state, ITarget target)
+    {
+        if (_states.ContainsValue(state) == false) return false;
+
+        if (_currentState == state) // 같은 State로 전환하지 못하게 막기
+        {
+            return false;
+        }
+
+        if (_currentState != null) //상태가 바뀌기 전에, 이전 상태의 Exit를 호출
+            _currentState.OnStateExit(target);
+
+        _previousState = _currentState;
+
+        _currentState = state;
+
+
+        if (_currentState != null) //새 상태의 Enter를 호출한다.
+        {
+            _currentState.OnStateEnter(target);
+        }
+
+        return true;
     }
 
     bool ChangeState(BaseState<T> state)
@@ -140,4 +171,7 @@ public class FSM<T> : BaseFSM<T>
     public void OnDash() => _currentState.OnDash();
 
     public void OnCollisionEnter(Collision2D collision) => _currentState.OnCollisionEnter(collision);
+
+    public void OnTargetEnter(ITarget target) { _currentState.OnTargetEnter(target); }
+    public void OnTargetExit() { _currentState.OnTargetExit(); }
 }

@@ -50,6 +50,16 @@ public class MoveComponent : MonoBehaviour
         _rigid.MoveRotation(angle);
     }
 
+    public void FaceDirection(Vector2 direction, float speed)
+    {
+        Vector2 foward = transform.forward;
+        foward = Vector2.Lerp(foward, direction, Time.fixedDeltaTime * speed);
+
+        // 벡터에서 각도 구하기
+        float angle = Mathf.Atan2(foward.y, foward.x) * Mathf.Rad2Deg;
+        _rigid.MoveRotation(angle);
+    }
+
     public void AddForce(Vector2 direction, float speed)
     {
         _rigid.AddForce(direction * speed, ForceMode2D.Impulse);

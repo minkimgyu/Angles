@@ -8,6 +8,7 @@ abstract public class BaseState<T>
     public BaseState(FSM<T> fsm) { _baseFSM = fsm; }
 
     public abstract void OnStateEnter();
+    public abstract void OnStateEnter(ITarget target);
     public abstract void OnStateEnter(Vector2 vec2, string message);
     public abstract void OnStateEnter(Vector2 vec2, float ratio, string message);
     public abstract void OnStateEnter(Collision2D collision, string message);
@@ -16,6 +17,7 @@ abstract public class BaseState<T>
     public abstract void OnFixedUpdate();
 
     public abstract void OnStateExit();
+    public abstract void OnStateExit(ITarget target);
 
     public abstract void OnCollisionEnter(Collision2D collision);
 
@@ -27,7 +29,10 @@ abstract public class BaseState<T>
     public abstract void OnCharge(Vector2 vec2);
     public abstract void OnChargeEnd();
 
-    public abstract void OnDash(); 
+    public abstract void OnDash();
+
+    public abstract void OnTargetEnter(ITarget target);
+    public abstract void OnTargetExit();
 }
 
 public class State<T> : BaseState<T>
@@ -35,12 +40,15 @@ public class State<T> : BaseState<T>
     public State(FSM<T> baseFSM) : base(baseFSM) {}
 
     public override void OnStateEnter() { }
+    public override void OnStateEnter(ITarget target) { }
     public override void OnStateEnter(Vector2 vec2, string message) { }
     public override void OnStateEnter(Vector2 vec2, float ratio, string message) { }
     public override void OnStateEnter(Collision2D collision, string message) { }
 
 
     public override void OnStateExit() { }
+
+
     public override void OnStateUpdate() { }
     public override void OnFixedUpdate() { }
 
@@ -55,4 +63,7 @@ public class State<T> : BaseState<T>
     public override void OnChargeEnd() { }
 
     public override void OnDash() { }
+
+    public override void OnTargetEnter(ITarget target) { }
+    public override void OnTargetExit(ITarget target) { }
 }

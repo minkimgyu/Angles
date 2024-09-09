@@ -190,7 +190,7 @@ namespace Player
                 { MovementState.Move, new MoveState(_movementFSM, _moveSpeed, CanUseDash, OnUseDash, _moveComponent)},
                 { MovementState.Dash, new DashState(_movementFSM, _dashSpeed, _dashDuration, _moveComponent, ChangeBodyScale, OnEndDash) }
             };
-            _movementFSM.Inintialize(movementStates, MovementState.Stop);
+            _movementFSM.Initialize(movementStates, MovementState.Stop);
 
             _actionFSM = new FSM<ActionState>();
             Dictionary<ActionState, BaseState<ActionState>> actionStates = new Dictionary<ActionState, BaseState<ActionState>>
@@ -202,7 +202,7 @@ namespace Player
                     _skillController.OnReflect, SetInvincible) 
                 }
             };
-            _actionFSM.Inintialize(actionStates, ActionState.Ready);
+            _actionFSM.Initialize(actionStates, ActionState.Ready);
         }
 
         protected override void OnDie()
