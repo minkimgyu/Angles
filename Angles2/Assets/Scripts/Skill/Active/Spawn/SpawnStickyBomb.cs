@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class SpawnStickyBomb : CooltimeSkill
+public class SpawnStickyBomb : BaseSkill
 {
     List<ITarget.Type> _targetTypes;
     BaseFactory _weaponFactory;
     StickyBombData _data;
+    SpawnStickyBombUpgrader _upgrader;
 
-    public SpawnStickyBomb(SpawnStickyBombData data, BaseFactory weaponFactory) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public SpawnStickyBomb(SpawnStickyBombData data, SpawnStickyBombUpgrader upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
     {
+        _upgrader = upgrader;
         _data = data._data;
         _targetTypes = data._targetTypes;
         _weaponFactory = weaponFactory;
+        _useConstraint = new CooltimeConstraint(data.maxStackCount, data._coolTime);
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -30,11 +39,10 @@ public class SpawnStickyBomb : CooltimeSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
 
-        if (_stackCount <= 0) return;
-        _stackCount--;
+        if (_useConstraint.CanUse() == false) return;
+        _useConstraint.Use();
 
         weapon.ResetData(_data);
-        weapon.Upgrade(UpgradePoint);
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetFollower(followable);
     }

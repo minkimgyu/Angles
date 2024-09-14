@@ -2,32 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class MagneticFieldData : BaseSkillData
+public struct MagneticFieldUpgradableData
 {
-    public float _delay;
-    public float _damage;
-    public float _range;
+    public MagneticFieldUpgradableData(float damage, float delay)
+    {
+        _damage = damage;
+        _delay = delay;
+    }
+
+    private float _damage;
+    private float _delay;
+
+    public float Damage { get => _damage; }
+    public float Delay { get => _delay; }
+}
+
+[System.Serializable]
+public class MagneticFieldData : SkillData
+{
+    public List<MagneticFieldUpgradableData> _upgradableDatas;
     public List<ITarget.Type> _targetTypes;
 
-    public MagneticFieldData(int maxUpgradePoint, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public MagneticFieldData(int maxUpgradePoint, List<MagneticFieldUpgradableData> upgradableDatas, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
-        _delay = delay;
-        _damage = damage;
-        _range = range;
+        _upgradableDatas = upgradableDatas;
         _targetTypes = targetTypes;
     }
 }
 
 public class MagneticFieldCreater : SkillCreater
 {
-    public MagneticFieldCreater(BaseSkillData data) : base(data)
+    public MagneticFieldCreater(SkillData data) : base(data)
     {
     }
 
     public override BaseSkill Create()
     {
-        MagneticFieldData data = _buffData as MagneticFieldData;
+        MagneticFieldData data = _skillData as MagneticFieldData;
         return new MagneticField(data);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -7,7 +8,51 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
 using System;
 
-public class AddressableHandler
+//public interface IAddressableHandler
+//{
+//    Dictionary<BaseSkill.Name, Sprite> SkillIcons { get; }
+//    Dictionary<BaseWeapon.Name, BaseWeapon> WeaponPrefabs { get; }
+//    Dictionary<BaseEffect.Name, BaseEffect> EffectPrefabs { get; }
+//    Dictionary<BaseLife.Name, BaseLife> LifePrefabs { get; }
+//    Dictionary<BaseViewer.Name, BaseViewer> ViewerPrefabs { get; }
+//    Dictionary<IInteractable.Name, IInteractable> InteractableAssetDictionary { get; }
+//    Dictionary<ISoundPlayable.SoundName, AudioClip> AudioAssetDictionary { get; }
+
+//    List<BaseStage> StartStageAssetDictionary { get; }
+//    List<BaseStage> BonusStageAssetDictionary { get; }
+//    List<BaseStage> BattleStageAssetDictionary { get; }
+
+//    void Load(Action OnCompleted);
+//    public void Release();
+//}
+
+//public class NullAddressableHandler : IAddressableHandler
+//{
+//    public Dictionary<BaseSkill.Name, Sprite> SkillIcons { get { return new Dictionary<BaseSkill.Name, Sprite>(); } }
+//    public Dictionary<ISoundPlayable.SoundName, AudioClip> AudioAssetDictionary { get { return new Dictionary<ISoundPlayable.SoundName, AudioClip>(); } }
+
+//    public Dictionary<BaseWeapon.Name, BaseWeapon> WeaponPrefabs { get { return new Dictionary<BaseWeapon.Name, BaseWeapon>(); } }
+
+//    public Dictionary<BaseEffect.Name, BaseEffect> EffectPrefabs { get { return new Dictionary<BaseEffect.Name, BaseEffect>(); } }
+
+//    public Dictionary<BaseLife.Name, BaseLife> LifePrefabs { get { return new Dictionary<BaseLife.Name, BaseLife>(); } }
+
+//    public Dictionary<BaseViewer.Name, BaseViewer> ViewerPrefabs { get { return new Dictionary<BaseViewer.Name, BaseViewer>(); } }
+
+//    public Dictionary<IInteractable.Name, IInteractable> InteractableAssetDictionary { get { return new Dictionary<IInteractable.Name, IInteractable>(); } }
+
+
+//    public List<BaseStage> StartStageAssetDictionary { get { return new List<BaseStage>(); } }
+
+//    public List<BaseStage> BonusStageAssetDictionary { get { return new List<BaseStage>(); } }
+
+//    public List<BaseStage> BattleStageAssetDictionary { get { return new List<BaseStage>(); } }
+
+//    public void Load(Action OnCompleted) { }
+//    public void Release() { }
+//}
+
+public class AddressableHandler : MonoBehaviour
 {
     public enum Labels
     {

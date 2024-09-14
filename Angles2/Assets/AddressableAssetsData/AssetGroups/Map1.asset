@@ -17,50 +17,50 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 25c75a84daf201e4180068139bdb7f0f
   m_SerializeEntries:
-  - m_GUID: 60f05ce0be54b2f44ac4852ceaf95ed4
-    m_Address: BattleStage5
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BattleStage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aa8f422e93d171641a4aa3e6b9b51fc6
-    m_Address: BattleStage4
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BattleStage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9835b6a0c9eac24418d906b53aba69ca
-    m_Address: BattleStage3
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BattleStage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e668ca3e0f1699d4291dafb8a37e74f3
-    m_Address: BattleStage2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BattleStage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: af0ff672479be764c91dfe43561325d5
-    m_Address: BattleStage1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BattleStage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 68dfe7591df2b4842ac105df8c3ba704
-    m_Address: BonusStage
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BonusStage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b2c22ad13483b464ab5c8b368f4d748a
+  - m_GUID: e9ee5df9427c8d148a26214adc16b357
     m_Address: StartStage
     m_ReadOnly: 0
     m_SerializedLabels:
     - StartStage
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7044abd5bbd401b49bbb8194abe6cfb1
-    m_Address: BattleStage6
+  - m_GUID: a041a40e03d510b4d8bed80075ea1404
+    m_Address: BossStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BossStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec4c79f56eb0b3d4b97164034ba391d4
+    m_Address: BonusStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BonusStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 295f2e8a57295b84cacb5991f22531e2
+    m_Address: BattleStage5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BattleStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49e2b740c81ee7e42a62463afdf4e653
+    m_Address: BattleStage4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BattleStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2325506e60cb76e4e81e899a2ea44893
+    m_Address: BattleStage3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BattleStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6cb42f2932dd7ec48afa484aff292cef
+    m_Address: BattleStage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BattleStage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95a7b57a284f53a44a5a861f0149decf
+    m_Address: BattleStage1
     m_ReadOnly: 0
     m_SerializedLabels:
     - BattleStage

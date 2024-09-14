@@ -10,8 +10,8 @@ public class PentagonData : EnemyData
     public float _stopDistance;
     public float _gap;
 
-    public PentagonData(float maxHp, ITarget.Type targetType, List<BaseSkill.Name> skillNames,
-        DropData dropData, float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, skillNames, dropData)
+    public PentagonData(float maxHp, ITarget.Type targetType, BaseEnemy.Size size, List<BaseSkill.Name> skillNames,
+        DropData dropData, float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillNames, dropData)
     {
         _moveSpeed = moveSpeed;
         _stopDistance = stopDistance;

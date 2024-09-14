@@ -31,7 +31,7 @@ public class DashUIController : MonoBehaviour
 
     public void Initialize(BaseFactory viewerFactory)
     {
-        ObserverEventBus.Register(ObserverEventBus.State.OnDashRatioChange, new ChangeRatioCommand(UpdateViewer));
+        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnDashRatioChange, new ChangeRatioCommand(UpdateViewer));
         _dashModels = new List<DashModel>();
 
         for (int i = 0; i < _maxDashCount; i++)

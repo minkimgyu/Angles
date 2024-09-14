@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexagonEnemy : RangedEnemy
+public class HexagonEnemy : TrackableEnemy
 {
-    TargetCaptureComponent _targetCaptureComponent;
+    [SerializeField] TargetCaptureComponent _skillTargetCaptureComponent;
 
     public override void ResetData(HexagonData data)
     {
+        _size = data._size;
         _maxHp = data._maxHp;
         _targetType = data._targetType;
         _moveSpeed = data._moveSpeed;
         _skillNames = data._skillNames;
         _dropData = data._dropData;
-
-        _offsetFromCenter = 1.0f;
 
         _stopDistance = data._stopDistance;
         _gap = data._gap;
@@ -24,8 +23,7 @@ public class HexagonEnemy : RangedEnemy
     public override void Initialize()
     {
         base.Initialize();
-        _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
-        _targetCaptureComponent.Initialize(OnEnter, OnExit);
+        _skillTargetCaptureComponent.Initialize(OnEnter, OnExit);
     }
 
     void OnEnter(ITarget target)

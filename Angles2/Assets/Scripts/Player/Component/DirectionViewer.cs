@@ -15,7 +15,7 @@ public class DirectionViewer : BaseViewer
 
     public override void Initialize() 
     {
-        ObserverEventBus.Register(ObserverEventBus.State.OnTurnOnOffDirection, new TurnOnOffCommand(TurnOnViewer));
+        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnTurnOnOffDirection, new TurnOnOffCommand(TurnOnViewer));
         TurnOnViewer(false);
     }
     public override void TurnOnViewer(bool show) 

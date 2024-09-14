@@ -16,6 +16,7 @@ public class WanderingState : State<TrackableEnemy.State>
     State _state;
     Timer _timer;
 
+    List<ITarget.Type> _targetTypes;
     float _stateChangeTime;
     float _moveSpeed;
     float _rotationSpeed;
@@ -26,8 +27,9 @@ public class WanderingState : State<TrackableEnemy.State>
     Vector3 _randomDirection;
 
     public WanderingState(FSM<TrackableEnemy.State> baseFSM, MoveComponent moveComponent, Transform myTransform,
-        float stateChangeTime, float moveSpeed, float rotationSpeed) : base(baseFSM)
+        List<ITarget.Type> targetTypes, float stateChangeTime, float moveSpeed, float rotationSpeed) : base(baseFSM)
     {
+        _targetTypes = targetTypes;
         _stateChangeTime = stateChangeTime;
         _moveSpeed = moveSpeed;
         _rotationSpeed = rotationSpeed;
@@ -42,7 +44,11 @@ public class WanderingState : State<TrackableEnemy.State>
 
     public override void OnTargetEnter(ITarget target)
     {
-        _baseFSM.SetState(TrackableEnemy.State.Tracking, target);
+        bool isTarget = target.IsTarget(_targetTypes);
+        if (isTarget == false) return;
+
+        Debug.Log("Tracking");
+        _baseFSM.SetState(TrackableEnemy.State.Tracking, target, "Find Target");
     }
 
     void ChangeToRandomState()

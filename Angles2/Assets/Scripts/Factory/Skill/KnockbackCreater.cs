@@ -3,32 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public struct KnockbackUpgradableData
-{
-    public KnockbackUpgradableData(float damage, float sizeMultiplier)
-    {
-        _damage = damage;
-        _size = sizeMultiplier;
-    }
-
-    private float _damage;
-    private float _size;
-
-    public float Damage { get => _damage; }
-    public float Size { get => _size; }
-}
-
 [Serializable]
 public class KnockbackData : CooltimeSkillData
 {
-    public List<KnockbackUpgradableData> _upgradableDatas;
+    public float _damage;
+    public float _sizeMultiplier;
     public SerializableVector2 _size;
     public SerializableVector2 _offset;
     public List<ITarget.Type> _targetTypes;
 
-    public KnockbackData(int maxUpgradePoint, float coolTime, int maxStackCount, List<KnockbackUpgradableData> upgradableDatas, SerializableVector2 size, SerializableVector2 offset, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
+    // + 연산자 오버로딩
+    public static KnockbackData operator +(KnockbackData a, KnockbackUpgrader.UpgradableData b)
     {
-        _upgradableDatas = upgradableDatas;
+        return new KnockbackData(
+            a._maxUpgradePoint,
+            a._coolTime,
+            a._maxStackCount,
+            a._damage + b.Damage,
+            a._sizeMultiplier + b.SizeMultiplier,
+            a._size,
+            a._offset,
+            a._targetTypes
+        );
+    }
+
+    public KnockbackData(
+        int maxUpgradePoint,
+        float coolTime,
+        int maxStackCount,
+        float damage,
+        float sizeMultiplier,
+        SerializableVector2 size,
+        SerializableVector2 offset,
+        List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
+    {
+        _damage = damage;
+        _sizeMultiplier = sizeMultiplier;
         _size = size;
         _offset = offset;
         _targetTypes = targetTypes;
@@ -39,14 +49,14 @@ public class KnockbackCreater : SkillCreater
 {
     BaseFactory _effectFactory;
 
-    public KnockbackCreater(BaseSkillData data, BaseFactory effectFactory) : base(data)
+    public KnockbackCreater(SkillData data, BaseFactory effectFactory) : base(data)
     {
         _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        KnockbackData data = _buffData as KnockbackData;
+        KnockbackData data = _skillData as KnockbackData;
         return new Knockback(data, _effectFactory);
     }
 }

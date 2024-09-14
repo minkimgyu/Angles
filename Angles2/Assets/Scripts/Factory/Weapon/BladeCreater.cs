@@ -2,33 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct BladeUpgradableData
+[System.Serializable]
+public class BladeData : WeaponData
 {
-    public BladeUpgradableData(float damage, float attackDelay, float range)
+    public float _damage;
+    public float _attackDelay;
+    public float _range;
+    public float _lifeTime;
+
+    public static BladeData operator +(BladeData a, SpawnBladeUpgrader.UpgradableData b)
+    {
+        return new BladeData(
+            a._damage + b._damage,
+            a._attackDelay + b._attackDelay,
+            a._range + b._range,
+            a._lifeTime
+        );
+    }
+
+    public BladeData(float damage, float attackDelay, float range, float lifeTime)
     {
         _damage = damage;
         _attackDelay = attackDelay;
         _range = range;
-    }
-
-    private float _damage;
-    private float _attackDelay;
-    private float _range;
-
-    public float Damage { get => _damage; }
-    public float AttackDelay { get => _attackDelay; }
-    public float Range { get => _range; }
-}
-
-[System.Serializable]
-public class BladeData : BaseWeaponData
-{
-    public float _lifeTime;
-    public List<BladeUpgradableData> _upgradableDatas;
-
-    public BladeData(List<BladeUpgradableData> upgradableDatas, float lifeTime)
-    {
-        _upgradableDatas = upgradableDatas;
         _lifeTime = lifeTime;
     }
 }

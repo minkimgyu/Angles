@@ -3,55 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace Player.FSM
+public class MoveState : State<Player.MovementState>
 {
-    public class MoveState : State<Player.MovementState>
+    Func<bool> CanUseDash;
+    Action UseDash;
+
+    MoveComponent _moveComponent;
+    Vector2 _storedInput;
+    float _moveSpeed;
+
+    public MoveState(
+        FSM<Player.MovementState> fsm,
+        float moveSpeed,
+
+        Func<bool> CanUseDash,
+        Action UseDash,
+
+        MoveComponent moveComponent) : base(fsm)
     {
-        Func<bool> CanUseDash;
-        Action UseDash;
+        _moveSpeed = moveSpeed;
+        _moveComponent = moveComponent;
 
-        MoveComponent _moveComponent;
-        Vector2 _storedInput;
-        float _moveSpeed;
+        this.CanUseDash = CanUseDash;
+        this.UseDash = UseDash;
+    }
 
-        public MoveState(
-            FSM<Player.MovementState> fsm,
-            float moveSpeed,
+    public override void OnMove(Vector2 input)
+    {
+        _storedInput = input;
+    }
 
-            Func<bool> CanUseDash,
-            Action UseDash,
+    public override void OnFixedUpdate()
+    {
+        _moveComponent.Move(_storedInput, _moveSpeed);
+    }
 
-            MoveComponent moveComponent) : base(fsm)
-        {
-            _moveSpeed = moveSpeed;
-            _moveComponent = moveComponent;
+    public override void OnMoveEnd()
+    {
+        _baseFSM.SetState(Player.MovementState.Stop);
+    }
 
-            this.CanUseDash = CanUseDash;
-            this.UseDash = UseDash;
-        }
+    public override void OnDash()
+    {
+        bool canUseDash = CanUseDash();
+        if (canUseDash == false) return;
 
-        public override void OnMove(Vector2 input)
-        {
-            _storedInput = input;
-        }
-
-        public override void OnFixedUpdate()
-        {
-            _moveComponent.Move(_storedInput, _moveSpeed);
-        }
-
-        public override void OnMoveEnd()
-        {
-            _baseFSM.SetState(Player.MovementState.Stop);
-        }
-
-        public override void OnDash()
-        {
-            bool canUseDash = CanUseDash();
-            if (canUseDash == false) return;
-
-            UseDash?.Invoke();
-            _baseFSM.SetState(Player.MovementState.Dash, _storedInput, "GoToDashState");
-        }
+        UseDash?.Invoke();
+        _baseFSM.SetState(Player.MovementState.Dash, _storedInput, "GoToDashState");
     }
 }

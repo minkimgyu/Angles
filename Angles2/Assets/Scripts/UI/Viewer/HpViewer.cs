@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using TMPro;
 
 public class HpViewer : BaseViewer
 {
-    [SerializeField] Image _bar;
-    [SerializeField] float _changeDuration;
-    [SerializeField] float _topOffset;
+    [SerializeField] protected Image _bar;
+    [SerializeField] protected float _changeDuration;
 
-    [SerializeField] Color _startColor;
-    [SerializeField] Color _endColor;
-
-    IFollowable _followTarget;
+    [SerializeField] protected Color _startColor;
+    [SerializeField] protected Color _endColor;
 
     public override void Initialize()
     {
@@ -27,19 +23,6 @@ public class HpViewer : BaseViewer
 
         Color targetColor = Color.Lerp(_startColor, _endColor, 1f - ratio);
         _bar.DOColor(targetColor, _changeDuration);
-    }
-
-    public override void SetFollower(IFollowable followTarget)
-    {
-        _followTarget = followTarget;
-    }
-
-    private void Update()
-    {
-        if ((_followTarget as UnityEngine.Object) == null) return;
-
-        Vector3 offset = Vector2.down * _topOffset;
-        transform.position = _followTarget.ReturnPosition() + offset;
     }
 
     private void OnDestroy()

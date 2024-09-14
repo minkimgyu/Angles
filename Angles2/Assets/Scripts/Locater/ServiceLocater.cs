@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServiceLocater
+public static class ServiceLocater
 {
     static ISoundPlayable _soundPlayer;
     static NullSoundPlayer _nullSoundPlayer;
@@ -10,14 +10,14 @@ public class ServiceLocater
     static ISceneControllable _sceneController;
     static NullSceneController _nullSceneController;
 
-    static IInputable _inputController;
-    static NullInputController _nullInputController;
+    static ITimeController _timeController;
+    static NullTimeController _nullTimeController;
 
-    public static void Initialize()
+    static ServiceLocater()
     {
         _nullSoundPlayer = new NullSoundPlayer();
         _nullSceneController = new NullSceneController();
-        _nullInputController = new NullInputController();
+        _nullTimeController = new NullTimeController();
     }
 
     public static void Provide(ISoundPlayable soundPlayer)
@@ -30,9 +30,9 @@ public class ServiceLocater
         _sceneController = sceneController;
     }
 
-    public static void Provide(IInputable inputController)
+    public static void Provide(ITimeController timeController)
     {
-        _inputController = inputController;
+        _timeController = timeController;
     }
 
     public static ISoundPlayable ReturnSoundPlayer()
@@ -47,9 +47,9 @@ public class ServiceLocater
         return _sceneController;
     }
 
-    public static IInputable ReturnInputController()
+    public static ITimeController ReturnTimeController()
     {
-        if (_inputController == null) return _nullInputController;
-        return _inputController;
+        if (_timeController == null) return _timeController;
+        return _timeController;
     }
 }

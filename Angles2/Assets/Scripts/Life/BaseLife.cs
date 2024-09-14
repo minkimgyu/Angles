@@ -11,14 +11,31 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     //protected Action<float> OnHpChange;
 
     //protected Action OnDieRequested;
+    public enum Size
+    {
+        Small, // 1 x 1
+        Middle, // 2 x 2
+        Large // 3 x 3
+    }
+
+    protected Size _size;
 
     public enum Name
     {
         Player,
-        Triangle,
-        Rectangle,
-        Pentagon,
-        Hexagon
+
+        YellowTriangle,
+        YellowRectangle,
+        YellowPentagon,
+        YellowHexagon,
+
+        RedTriangle,
+        RedRectangle,
+        RedPentagon,
+        RedHexagon,
+
+
+        Lombard
     }
 
     public enum AliveState
@@ -46,6 +63,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     // 생성 이벤트
     protected BaseFactory _effectFactory;
     //
+
+    // pathfind 이벤트 추가
+    public virtual void AddPathfindEvent(Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) { }
 
     public abstract void Initialize();
     public virtual void ResetData(PlayerData data) { }

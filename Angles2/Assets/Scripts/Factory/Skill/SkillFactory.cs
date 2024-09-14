@@ -4,21 +4,23 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class BaseSkillData 
+public class SkillData 
 {
     public int _maxUpgradePoint;
 
-    public BaseSkillData(int maxUpgradePoint)
+    public SkillData() { _maxUpgradePoint = 0; }
+    public SkillData(int maxUpgradePoint)
     {
         _maxUpgradePoint = maxUpgradePoint;
     }
 }
 
 [Serializable] 
-public class RandomSkillData : BaseSkillData
+public class RandomSkillData : SkillData
 {
     public float _probability;
 
+    public RandomSkillData() { _maxUpgradePoint = 0; _probability = 0; }
     public RandomSkillData(int maxUpgradePoint, float probability) : base(maxUpgradePoint)
     {
         _probability = probability;
@@ -26,11 +28,12 @@ public class RandomSkillData : BaseSkillData
 }
 
 [Serializable] 
-public class CooltimeSkillData : BaseSkillData
+public class CooltimeSkillData : SkillData
 {
     public int _maxStackCount;
     public float _coolTime;
 
+    public CooltimeSkillData() { _maxUpgradePoint = 0; _maxStackCount = 0; _coolTime = 0; }
     public CooltimeSkillData(int maxUpgradePoint, float coolTime, int maxStackCount) : base(maxUpgradePoint)
     {
         _coolTime = coolTime;
@@ -40,8 +43,8 @@ public class CooltimeSkillData : BaseSkillData
 
 abstract public class SkillCreater
 {
-    protected BaseSkillData _buffData;
-    public SkillCreater(BaseSkillData data) { _buffData = data; }
+    protected SkillData _skillData;
+    public SkillCreater(SkillData data) { _skillData = data; }
     // 생성자에 이팩트 생성을 받는 이벤트를 추가해준다.
 
     public abstract BaseSkill Create();
@@ -51,7 +54,7 @@ public class SkillFactory : BaseFactory
 {
     Dictionary<BaseSkill.Name, SkillCreater> _skillCreaters;
 
-    public SkillFactory(Dictionary<BaseSkill.Name, BaseSkillData> skillDatas, BaseFactory effectFactory, BaseFactory weaponFactory, BaseFactory buffFactory)
+    public SkillFactory(Dictionary<BaseSkill.Name, SkillData> skillDatas, BaseFactory effectFactory, BaseFactory weaponFactory, BaseFactory buffFactory)
     {
         _skillCreaters = new Dictionary<BaseSkill.Name, SkillCreater>();
 

@@ -22,14 +22,14 @@ public class SpawnBladeCreater : SkillCreater
 {
     BaseFactory _weaponFactory;
 
-    public SpawnBladeCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
+    public SpawnBladeCreater(SkillData data, BaseFactory _weaponFactory) : base(data)
     {
         this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnBladeData data = _buffData as SpawnBladeData;
+        SpawnBladeData data = _skillData as SpawnBladeData;
         return new SpawnBlade(data, _weaponFactory);
     }
 }

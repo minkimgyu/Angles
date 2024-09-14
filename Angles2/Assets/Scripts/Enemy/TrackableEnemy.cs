@@ -12,41 +12,52 @@ public class TrackableEnemy : BaseEnemy
     }
 
     FSM<State> _fsm;
-    List<ITarget.Type> _followableType;
+    List<ITarget.Type> _followableTypes;
 
     ITarget _followTarget;
-    TargetCaptureComponent _targetCaptureComponent;
+    [SerializeField] TargetCaptureComponent _followTargetCaptureComponent;
+    protected float _stopDistance;
+    protected float _gap;
 
     public override void Initialize()
     {
         base.Initialize();
-        _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
-        _targetCaptureComponent.Initialize(OnEnter, OnExit);
-
+        _followableTypes = new List<ITarget.Type> { ITarget.Type.Blue };
+        _followTargetCaptureComponent.Initialize(OnTargetEnter, OnTargetExit);
         _fsm = new FSM<State>();
-        _fsm.Initialize
-        (
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        _fsm.OnUpdate();
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        _fsm.OnFixedUpdate();
+    }
+
+    public override void AddPathfindEvent(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _fsm.Initialize(
            new Dictionary<State, BaseState<State>>
            {
-               { State.Wandering, new WanderingState(_fsm) },
-               { State.Tracking, new TrackingState(_fsm) }
-           }
+               { State.Wandering, new WanderingState(_fsm, _moveComponent, transform, _followableTypes, 3, _moveSpeed, _moveSpeed) },
+               { State.Tracking, new TrackingState(_fsm, _moveComponent, transform, _size, _moveSpeed, _stopDistance, _gap, FindPath) }
+           },
+           State.Wandering
         );
     }
 
-    private void OnExit(ITarget target)
+    protected virtual void OnTargetEnter(ITarget target)
     {
-        bool isTarget = target.IsTarget(_followableType);
-        if (isTarget == false) return;
-
         _fsm.OnTargetEnter(target);
     }
 
-    private void OnEnter(ITarget target)
+    protected virtual void OnTargetExit(ITarget target)
     {
-        bool isTarget = target.IsTarget(_followableType);
-        if (isTarget == false) return;
-
-        _fsm.OnTargetExit();
+        _fsm.OnTargetExit(target);
     }
 }

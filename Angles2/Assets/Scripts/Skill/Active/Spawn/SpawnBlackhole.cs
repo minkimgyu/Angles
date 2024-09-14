@@ -3,18 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBlackhole : RandomSkill
+public class SpawnBlackhole : BaseSkill
 {
     List<ITarget.Type> _targetTypes;
     BaseFactory _weaponFactory;
-    BlackholeData _blackholeData;
 
-    public SpawnBlackhole(SpawnBlackholeData data, BaseFactory weaponFactory) : base(data._maxUpgradePoint, data._probability)
+    BlackholeData _data;
+
+    public SpawnBlackhole(SpawnBlackholeData data, SpawnBlackholeUpgrader upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
     {
-        _blackholeData = data._data;
+        _data = data._data;
         _targetTypes = data._targetTypes;
 
+        _upgradeVisitor = upgrader;
         _weaponFactory = weaponFactory;
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgradeVisitor.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -28,7 +36,7 @@ public class SpawnBlackhole : RandomSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blackhole);
         if (weapon == null) return;
 
-        weapon.ResetData(_blackholeData);
+        weapon.ResetData(_data);
         weapon.Upgrade(UpgradePoint); // 생성 후 업그레이드 적용
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(_castingData.MyTransform.position);

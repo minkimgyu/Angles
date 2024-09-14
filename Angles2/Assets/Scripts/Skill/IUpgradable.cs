@@ -4,7 +4,9 @@ using UnityEngine;
 
 public interface IUpgradable
 {
+    public int UpgradePoint { get; }
+    public int MaxUpgradePoint { get; }
+
     bool CanUpgrade();
     void Upgrade();
-    void Upgrade(int step);
 }

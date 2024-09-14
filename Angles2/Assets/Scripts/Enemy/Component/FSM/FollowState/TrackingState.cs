@@ -6,25 +6,31 @@ using System.Reflection;
 
 public class TrackingState : State<TrackableEnemy.State>
 {
+    BaseEnemy.Size _size;
     float _moveSpeed;
 
     Timer _pathfinderTimer;
-    float _pathfindGap = 1f;
+    float _pathfindGap = 0.5f;
 
     Transform _myTransform;
     MoveComponent _moveComponent;
-    Func<Vector2, Vector2, List<Vector2>> FindPath;
+    Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath;
 
-    public TrackingState(FSM<TrackableEnemy.State> baseFSM, MoveComponent moveComponent, Transform myTransform, float moveSpeed, Func<Vector2, Vector2, List<Vector2>> FindPath) : base(baseFSM)
+    public TrackingState(FSM<TrackableEnemy.State> baseFSM, MoveComponent moveComponent, Transform myTransform, BaseEnemy.Size size, float moveSpeed, float stopDistance, float gap,
+        Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) : base(baseFSM)
     {
+        _size = size;
         _moveSpeed = moveSpeed;
+        _stopDistance = stopDistance;
+        _gap = gap;
 
         _myTransform = myTransform;
         _moveComponent = moveComponent;
 
-        this.FindPath = FindPath;
+        _state = State.Follow;
         _movePoints = new List<Vector2>();
         _pathfinderTimer = new Timer();
+        this.FindPath = FindPath;
     }
 
     public enum State
@@ -34,20 +40,22 @@ public class TrackingState : State<TrackableEnemy.State>
     }
 
     State _state;
-
     ITarget _target;
+
     float _stopDistance;
     float _gap;
 
-
-    public override void OnStateEnter(ITarget target)
+    public override void OnStateEnter(ITarget target, string message)
     {
+        Debug.Log(target);
         _target = target;
         _pathfinderTimer.Start(_pathfindGap);
     }
 
-    public override void OnTargetExit()
+    public override void OnTargetExit(ITarget target)
     {
+        if (_target != target) return;
+
         _target = null;
         _pathfinderTimer.Reset();
         _baseFSM.SetState(TrackableEnemy.State.Wandering);
@@ -55,14 +63,25 @@ public class TrackingState : State<TrackableEnemy.State>
 
     float ReturnDistanceBetweenTarget()
     {
+        if (_target as UnityEngine.Object == null)
+        {
+            _baseFSM.SetState(TrackableEnemy.State.Wandering);
+            return 0;
+        }
+
         Vector3 targetPos = _target.ReturnPosition();
-        return Vector2.Distance(_target.ReturnPosition(), targetPos);
+        return Vector2.Distance(_myTransform.position, targetPos);
     }
 
     public override void OnStateUpdate()
     {
+        if (_target as UnityEngine.Object == null)
+        {
+            _baseFSM.SetState(TrackableEnemy.State.Wandering);
+        }
         float diatance;
 
+        Debug.Log(_state);
         switch (_state)
         {
             case State.Stop:
@@ -81,9 +100,14 @@ public class TrackingState : State<TrackableEnemy.State>
                     break;
                 }
 
-                if(_pathfinderTimer.CurrentState == Timer.State.Finish)
+                if (_target as UnityEngine.Object == null)
                 {
-                    _movePoints = FindPath(_myTransform.position, _target.ReturnPosition());
+                    _baseFSM.SetState(TrackableEnemy.State.Wandering);
+                }
+
+                if (_pathfinderTimer.CurrentState == Timer.State.Finish)
+                {
+                    _movePoints = FindPath(_myTransform.position, _target.ReturnPosition(), _size);
                     _index = 0;
 
                     _pathfinderTimer.Reset();
@@ -99,20 +123,33 @@ public class TrackingState : State<TrackableEnemy.State>
 
     List<Vector2> _movePoints;
     int _index = 0;
-    Vector2 dir;
-
-
+    float _closeDistance = 0.5f;
+    Vector2 _dir;
 
     void ChangeDirection()
     {
         if (_movePoints == null) return;
+        if (_index >= _movePoints.Count)
+        {
+            _dir = Vector2.zero;
+            return;
+        }
 
-        Vector2.Distance()
+        DrawMovePoints();
 
         Vector2 nextMovePos = _movePoints[_index];
-        Vector2 dir = (nextMovePos - (Vector2)_myTransform.position).normalized;
+        _dir = (nextMovePos - (Vector2)_myTransform.position).normalized;
 
-        _moveComponent.Move(dir, _moveSpeed);
+        bool nowCloseToNextPoint = Vector2.Distance(_myTransform.position, nextMovePos) < _closeDistance;
+        if (nowCloseToNextPoint) _index++;
+    }
+
+    void DrawMovePoints()
+    {
+        for (int i = 1; i < _movePoints.Count; i++)
+        {
+            Debug.DrawLine(_movePoints[i - 1], _movePoints[i], Color.cyan);
+        }
     }
 
     public override void OnFixedUpdate()
@@ -123,7 +160,7 @@ public class TrackingState : State<TrackableEnemy.State>
                 _moveComponent.Stop();
                 break;
             case State.Follow:
-                _moveComponent.Move(dir, _moveSpeed);
+                _moveComponent.Move(_dir, _moveSpeed);
                 break;
             default:
                 break;

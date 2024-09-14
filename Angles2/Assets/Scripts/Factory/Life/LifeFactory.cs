@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Drawing;
 
 [System.Serializable]
 public class BaseLifeData
@@ -19,11 +20,13 @@ public class BaseLifeData
 [Serializable]
 public class EnemyData : BaseLifeData
 {
+    public BaseEnemy.Size _size;
     public List<BaseSkill.Name> _skillNames;
     public DropData _dropData;
 
-    public EnemyData(float maxHp, ITarget.Type targetType, List<BaseSkill.Name> skillNames, DropData dropData) : base(maxHp, targetType)
+    public EnemyData(float maxHp, ITarget.Type targetType, BaseEnemy.Size size, List<BaseSkill.Name> skillNames, DropData dropData) : base(maxHp, targetType)
     {
+        _size = size;
         _skillNames = skillNames;
         _dropData = dropData;
     }
@@ -51,10 +54,16 @@ public class LifeFactory : BaseFactory
         _lifeCreaters = new Dictionary<BaseLife.Name, LifeCreater>();
 
         _lifeCreaters[BaseLife.Name.Player] = new PlayerCreater(lifePrefabs[BaseLife.Name.Player], lifeDatas[BaseLife.Name.Player], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.Triangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.Triangle], lifeDatas[BaseLife.Name.Triangle], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.Rectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.Rectangle], lifeDatas[BaseLife.Name.Rectangle], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.Pentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.Pentagon], lifeDatas[BaseLife.Name.Pentagon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.Hexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.Hexagon], lifeDatas[BaseLife.Name.Hexagon], effectFactory, skillFactory);
+
+        _lifeCreaters[BaseLife.Name.YellowTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.YellowTriangle], lifeDatas[BaseLife.Name.YellowTriangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.YellowRectangle], lifeDatas[BaseLife.Name.YellowRectangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.YellowPentagon], lifeDatas[BaseLife.Name.YellowPentagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.YellowHexagon], lifeDatas[BaseLife.Name.YellowHexagon], effectFactory, skillFactory);
+
+        _lifeCreaters[BaseLife.Name.RedTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.RedTriangle], lifeDatas[BaseLife.Name.RedTriangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.RedRectangle], lifeDatas[BaseLife.Name.RedRectangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.RedPentagon], lifeDatas[BaseLife.Name.RedPentagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.RedHexagon], lifeDatas[BaseLife.Name.RedHexagon], effectFactory, skillFactory);
     }
 
     public override BaseLife Create(BaseLife.Name name)

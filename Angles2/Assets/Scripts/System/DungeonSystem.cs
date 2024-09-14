@@ -5,16 +5,12 @@ using System;
 
 public class DungeonSystem : BaseGameMode
 {
-    AddressableHandler _addressableHandler;
     FactoryCollection _factoryCollection;
 
     Database _database;
     DungeonStageController _stageController;
 
     MapGenerator _mapGenerator;
-    [SerializeField] SoundPlayer _soundPlayer;
-
-    [SerializeField] InputController _inputController;
     [SerializeField] CameraController _cameraController;
     [SerializeField] DashUIController _dashUIController;
     [SerializeField] SkillUIController _skillUIController;
@@ -22,16 +18,16 @@ public class DungeonSystem : BaseGameMode
 
     [SerializeField] GameResultUIController _gameResultUIController;
     [SerializeField] ChargeUIController _chargeUIController;
-    [SerializeField] DungeonGameStateController _dungeonGameStateController; // 인 게임 데이터 컨트롤러
+
+    [SerializeField] BaseViewer _coinViewer;
+    [SerializeField] BaseViewer _enemyDieCountViewer;
 
     DropController _dropController;
 
     // Start is called before the first frame update
     void Start()
     {
-        _database = new Database();
-        _addressableHandler = new AddressableHandler();
-        _addressableHandler.Load(Initialize);
+        Initialize();
     }
 
     public override void OnGameClearRequested()
@@ -44,47 +40,33 @@ public class DungeonSystem : BaseGameMode
         _gameResultUIController.OnFailRequested();
     }
 
-    private void OnDestroy()
+    protected override void Initialize()
     {
-        MainEventBus.Clear();
-        SubEventBus.Clear();
-        ObserverEventBus.Clear();
-        GameStateEventBus.Clear();
+        AddressableHandler addressableHandler = FindObjectOfType<AddressableHandler>();
+        if (addressableHandler == null)
+        {
+            Debug.Log("AddressableHandler 존재하지 않음");
+            return;
+        }
 
-        _addressableHandler.Release();
-        _soundPlayer = null;
-        ServiceLocater.Provide(_soundPlayer);
-    }
 
-    private void InitializeFactory()
-    {
-        _factoryCollection = new FactoryCollection(_addressableHandler, _database);
-    }
+        _database = new Database();
+        EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameClear, new GameEndCommand(OnGameClearRequested));
+        EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameOver, new GameEndCommand(OnGameOverRequested));
 
-    private void InitializeUI()
-    {
+        GameState gameState = new GameState(_coinViewer, _enemyDieCountViewer);
+        GameStateManager.Instance.Initialize(gameState);
+
+        _factoryCollection = new FactoryCollection(addressableHandler, _database);
+
         BaseFactory viewerFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
         BaseFactory skillFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Skill);
 
         _chargeUIController.Initialize();
-        _dungeonGameStateController.Initialize();
         _dashUIController.Initialize(_factoryCollection.ReturnFactory(FactoryCollection.Type.Viewer));
-        _skillUIController.Initialize(new List<BaseSkill.Type> { BaseSkill.Type.Active }, _addressableHandler.SkillIcons, viewerFactory); // --> 아이콘을 Factory에서 초기화하게끔 만들기
-        _cardUIController.Initialize(_database.CardDatas, _database.UpgradeableSkills, _database.SkillDatas, _addressableHandler.SkillIcons, viewerFactory, skillFactory); // --> 커멘드 패턴을 사용해서 리팩토링 해보기
+        _skillUIController.Initialize(new List<BaseSkill.Type> { BaseSkill.Type.Active }, addressableHandler.SkillIcons, viewerFactory); // --> 아이콘을 Factory에서 초기화하게끔 만들기
+        _cardUIController.Initialize(_database.CardDatas, _database.UpgradeableSkills, _database.SkillDatas, addressableHandler.SkillIcons, viewerFactory, skillFactory); // --> 커멘드 패턴을 사용해서 리팩토링 해보기
         _gameResultUIController.Initialize(() => { ServiceLocater.ReturnSceneController().ChangeScene("MenuScene"); });
-    }
-
-    protected override void Initialize()
-    {
-        MainEventBus.Register(MainEventBus.State.GameClear, new GameEndCommand(OnGameClearRequested));
-        MainEventBus.Register(MainEventBus.State.GameOver, new GameEndCommand(OnGameOverRequested));
-
-        InitializeFactory();
-        InitializeUI();
-
-        _soundPlayer.Initialize(_addressableHandler.AudioAssetDictionary);
-        ServiceLocater.Provide(_soundPlayer);
-        ServiceLocater.Provide(_inputController);
 
         BaseFactory interactableFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Interactable);
 
@@ -95,7 +77,7 @@ public class DungeonSystem : BaseGameMode
         _cameraController.Initialize();
 
         _mapGenerator = GetComponent<MapGenerator>();
-        _mapGenerator.Initialize(_addressableHandler.StartStageAssetDictionary, _addressableHandler.BonusStageAssetDictionary, _addressableHandler.BattleStageAssetDictionary);
+        _mapGenerator.Initialize(addressableHandler.StartStageAssetDictionary, addressableHandler.BonusStageAssetDictionary, addressableHandler.BattleStageAssetDictionary);
         _mapGenerator.CreateMap();
 
         _stageController = GetComponent<DungeonStageController>();

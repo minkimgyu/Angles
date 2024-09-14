@@ -23,14 +23,13 @@ public class Blade : ProjectileWeapon
     DamageableCaptureComponent _captureComponent;
     List<TargetData> _targetDatas;
     Timer _lifeTimer;
-    //float _attackDelay;
 
-    List<BladeUpgradableData> _upgradableDatas;
-    BladeUpgradableData CurrentUpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
+    BladeData _data;
+
 
     protected void ApplyDamage(IDamageable damageable)
     {
-        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
+        DamageData damageData = new DamageData(_data._damage, _targetTypes);
         damageable.GetDamage(damageData);
     }
 
@@ -45,10 +44,9 @@ public class Blade : ProjectileWeapon
 
     public override void ResetData(BladeData data)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _lifeTime = data._lifeTime;
-        _lifeTimer.Start(_lifeTime);
-        ResetSize(CurrentUpgradableData.Range);
+        _data = data;
+        _lifeTimer.Start(_data._lifeTime);
+        ResetSize(_data._range);
     }
 
     public override void Initialize()
@@ -85,7 +83,7 @@ public class Blade : ProjectileWeapon
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
-            if (duration > CurrentUpgradableData.AttackDelay)
+            if (duration > _data._attackDelay)
             {
                 ApplyDamage(_targetDatas[i].Damageable);
 

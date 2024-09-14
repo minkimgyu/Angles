@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour
 
     public void Initialize()
     {
-        SubEventBus.Register(SubEventBus.State.RegisterFollableCamera, new RegisterFollowerCommand(SetFollower));
+        EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.AddFollableCamera, new RegisterFollowerCommand(SetFollower));
         _mainCamera = Camera.main;
         _mainCamera.orthographicSize = _orthographicSize;
         _mainCamera.transform.position = new Vector3(_cameraArea.position.x, _cameraArea.position.y, -10);

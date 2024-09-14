@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class ContactAttackData : BaseSkillData
+public class ContactAttackData : SkillData
 {
     public float _damage;
     public List<ITarget.Type> _targetTypes;
@@ -20,14 +20,14 @@ public class ContactAttackCreater : SkillCreater
 {
     BaseFactory _effectFactory;
 
-    public ContactAttackCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
+    public ContactAttackCreater(SkillData data, BaseFactory _effectFactory) : base(data)
     {
         this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        ContactAttackData data = _buffData as ContactAttackData;
+        ContactAttackData data = _skillData as ContactAttackData;
         return new ContactAttack(data, _effectFactory);
     }
 }

@@ -4,20 +4,23 @@ using UnityEngine;
 using DamageUtility;
 using System;
 
-public class Statikk : CooltimeSkill
+public class Statikk : BaseSkill
 {
-    List<ITarget.Type> _targetTypes;
-
-    List<StatikkUpgradableData> _upgradableDatas;
-    StatikkUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
-
+    int _stackCount;
     BaseFactory _effectFactory;
+    StatikkData _data;
 
-    public Statikk(StatikkData data, BaseFactory effectFactory) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public Statikk(StatikkData data, StatikkUpgrader upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _targetTypes = data._targetTypes;
-        _effectFactory = effectFactory;
+        _data = data;
+        _useConstraint = new CooltimeConstraint(_data._maxStackCount, _data._coolTime);
+        _upgradeVisitor = upgrader; // 이건 생성자에서 받아서 쓰기
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgradeVisitor.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -25,18 +28,17 @@ public class Statikk : CooltimeSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
-        if (_stackCount <= 0) return;
-        _stackCount--;
-
+        if (_useConstraint.CanUse() == false) return;
+        _useConstraint.Use();
         Debug.Log("Statikk");
 
         List<Vector2> hitPoints;
-        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
+        DamageData damageData = new DamageData(_data._damage, _data._targetTypes);
 
-        Damage.HitRaycast(damageData, CurrentUpgradableData.MaxTargetCount, collision.transform.position, CurrentUpgradableData.Range, out hitPoints, true, Color.red, 3);
+        Damage.HitRaycast(damageData, _data._maxTargetCount, collision.transform.position, _data._range, out hitPoints, true, Color.red, 3);
 
         for (int i = 0; i < hitPoints.Count; i++)
         {

@@ -63,7 +63,7 @@ public class ChangeRatioCommand : BaseCommand
     }
 }
 
-public static class ObserverEventBus
+public class ObserverEventBus : BaseEventBus<ObserverEventBus.State>
 {
     public enum State
     {
@@ -72,55 +72,5 @@ public static class ObserverEventBus
         OnAddSkill,
         OnRemoveSkill,
         OnTurnOnOffDirection,
-    }
-
-    private static Dictionary<State, BaseCommand> commands = new Dictionary<State, BaseCommand>();
-
-    public static void Register(State state, BaseCommand command)
-    {
-        commands.Add(state, command);
-    }
-
-    //이벤트 해제
-    public static void Unregister(State state, BaseCommand command)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands.Remove(state);
-    }
-
-    //이벤트 실행
-    public static void Publish(State state)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands[state].Execute();
-    }
-
-    public static void Publish(State state, bool item)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(item);
-    }
-
-    public static void Publish(State state, float item)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(item);
-    }
-
-    public static void Publish(State state, BaseSkill.Name name, BaseSkill skill)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(name, skill);
-    }
-
-    public static void Publish(State state, BaseSkill.Name name)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(name);
-    }
-
-    public static void Clear()
-    {
-        commands.Clear();
     }
 }

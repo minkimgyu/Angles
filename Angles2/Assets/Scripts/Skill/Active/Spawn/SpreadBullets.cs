@@ -7,11 +7,8 @@ public class SpreadBullets : BaseSkill
 {
     BulletData _bulletData;
 
-    float _delay;
     float _force;
     float _distanceFromCaster;
-
-    int _bulletCount;
 
     List<ITarget.Type> _targetTypes;
     List<ITarget> _targets;
@@ -20,16 +17,17 @@ public class SpreadBullets : BaseSkill
 
     BaseFactory _weaponFactory;
 
+    List<SpreadBulletUpgradableData> _upgradableDatas;
+    SpreadBulletUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
+
 
     public SpreadBullets(SpreadBulletsData data, BaseFactory weaponFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _bulletData = data._bulletData;
+        _upgradableDatas = data._upgradableDatas;
 
-        _delay = data._delay;
+        _bulletData = data._bulletData;
         _force = data._force;
         _distanceFromCaster = data._distanceFromCaster;
-
-        _bulletCount = data._bulletCount;
         _targetTypes = data._targetTypes;
 
         _delayTimer = new Timer();
@@ -68,14 +66,18 @@ public class SpreadBullets : BaseSkill
             case Timer.State.Ready:
                 if (_targets.Count == 0) return;
 
-                _delayTimer.Start(_delay);
+                CastingComponent castingComponent = _castingData.MyObject.GetComponent<CastingComponent>();
+                if (castingComponent == null) break;
+
+                castingComponent.CastSkill(CurrentUpgradableData.Delay);
+                _delayTimer.Start(CurrentUpgradableData.Delay);
                 break;
             case Timer.State.Finish:
                 Debug.Log("Shockwave");
 
-                for (int i = 1; i <= _bulletCount; i++)
+                for (int i = 1; i <= CurrentUpgradableData.BulletCount; i++)
                 {
-                    float angle = 360f / _bulletCount * i; 
+                    float angle = 360f / CurrentUpgradableData.BulletCount * i; 
                     ShootBullet(angle);
                 }
                 _delayTimer.Reset();

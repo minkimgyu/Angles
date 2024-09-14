@@ -26,7 +26,7 @@ public class DropController
     public DropController( BaseFactory interactableFactory)
     {
         _interactableFactory = interactableFactory;
-        SubEventBus.Register(SubEventBus.State.DropItem, new DropItemCommand(OnDropRequested));
+        EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.DropItem, new DropItemCommand(OnDropRequested));
     }
 
     Vector3 ReturnSpreadOffset(Vector3 position, float spreadOffset)

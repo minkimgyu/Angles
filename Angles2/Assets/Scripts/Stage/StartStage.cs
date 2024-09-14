@@ -11,18 +11,29 @@ public class StartStage : BaseStage
     {
         _baseStageController.OnStageClearRequested();
 
-        BaseLife player = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(BaseLife.Name.Player);
+        Player player = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(BaseLife.Name.Player) as Player;
         Vector3 entryPos = ReturnEntryPosition();
         player.transform.position = entryPos;
 
 
+        InputController inputManager = FindObjectOfType<InputController>();
+        if(inputManager != null)
+        {
+            inputManager.AddEvent(InputController.Side.Left, InputController.Type.OnInputStart, player.OnLeftInputStart);
+            inputManager.AddEvent(InputController.Side.Left, InputController.Type.OnInput, player.OnLeftInput);
+            inputManager.AddEvent(InputController.Side.Left, InputController.Type.OnInputEnd, player.OnLeftInputEnd);
+
+            inputManager.AddEvent(InputController.Side.Right, InputController.Type.OnInputStart, player.OnRightInputStart);
+            inputManager.AddEvent(InputController.Side.Right, InputController.Type.OnInput, player.OnRightInput);
+            inputManager.AddEvent(InputController.Side.Right, InputController.Type.OnInputEnd, player.OnRightInputEnd);
+
+            inputManager.AddEvent(InputController.Side.Right, InputController.Type.OnDoubleTab, player.OnRightDoubleTab);
+        }
+
         IFollowable followable = player.GetComponent<IFollowable>();
-        if (followable != null) SubEventBus.Publish(SubEventBus.State.RegisterFollableCamera, followable);
+        if (followable != null) EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.AddFollableCamera, followable);
 
         Target = followable;
-
-        ISkillUser skillUser = player.GetComponent<ISkillUser>();
-        if (skillUser != null) SubEventBus.Publish(SubEventBus.State.RegisterSkillUpgradeable, skillUser);
 
         BaseFactory viewerFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
 

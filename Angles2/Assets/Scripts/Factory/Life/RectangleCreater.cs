@@ -8,8 +8,8 @@ public class RectangleData : EnemyData
 {
     public float _moveSpeed;
 
-    public RectangleData(float maxHp, ITarget.Type targetType, List<BaseSkill.Name> skillNames,
-        DropData dropData, float moveSpeed) : base(maxHp, targetType, skillNames, dropData)
+    public RectangleData(float maxHp, ITarget.Type targetType, BaseEnemy.Size size, List<BaseSkill.Name> skillNames,
+        DropData dropData, float moveSpeed) : base(maxHp, targetType, size, skillNames, dropData)
     {
         _moveSpeed = moveSpeed;
         _skillNames = skillNames;

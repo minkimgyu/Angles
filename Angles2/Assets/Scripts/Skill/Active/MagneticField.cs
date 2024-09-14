@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class MagneticField : BaseSkill
 {
-    float _delay;
-    float _damage;
     List<ITarget.Type> _targetTypes;
     List<IDamageable> _damageableTargets;
     Timer _delayTimer;
 
+    List<MagneticFieldUpgradableData> _upgradableDatas;
+    MagneticFieldUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
+
     public MagneticField(MagneticFieldData data) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _delay = data._delay;
-        _damage = data._damage;
+        _upgradableDatas = data._upgradableDatas;
         _targetTypes = data._targetTypes;
 
         _damageableTargets = new List<IDamageable>();
@@ -27,10 +27,10 @@ public class MagneticField : BaseSkill
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:
-                _delayTimer.Start(_delay);
+                _delayTimer.Start(CurrentUpgradableData.Delay);
                 break;
             case Timer.State.Finish:
-                DamageData damageData = new DamageData(_damage, _targetTypes, 0, false, Color.red);
+                DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes, 0, false, Color.red);
                 for (int i = 0; i < _damageableTargets.Count; i++)
                 {
                     _damageableTargets[i].GetDamage(damageData);

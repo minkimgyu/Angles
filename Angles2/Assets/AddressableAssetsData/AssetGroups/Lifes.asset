@@ -18,13 +18,13 @@ MonoBehaviour:
   m_GUID: 00fe82094d093fb4d8ccd43db00be14a
   m_SerializeEntries:
   - m_GUID: d7289f882fc83f946be6050bd74c14ef
-    m_Address: Hexagon
+    m_Address: YellowHexagon
     m_ReadOnly: 0
     m_SerializedLabels:
     - Life
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91fa891cad381e64c9e124974272bb14
-    m_Address: Pentagon
+    m_Address: YellowPentagon
     m_ReadOnly: 0
     m_SerializedLabels:
     - Life
@@ -36,13 +36,37 @@ MonoBehaviour:
     - Life
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 64c4a42177d7053479744aae0be7024c
-    m_Address: Rectangle
+    m_Address: YellowRectangle
     m_ReadOnly: 0
     m_SerializedLabels:
     - Life
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ff553da843831f488f7e19cfe10eb50
-    m_Address: Triangle
+    m_Address: YellowTriangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41ef8837e7663a84a816866fa10712da
+    m_Address: RedHexagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebc4e8ae91c2e494a9f660bae665a569
+    m_Address: RedPentagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f123eb899eea08141984acd7296a770d
+    m_Address: RedRectangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6efae61b61e78b442a3d09662ef20fb6
+    m_Address: RedTriangle
     m_ReadOnly: 0
     m_SerializedLabels:
     - Life

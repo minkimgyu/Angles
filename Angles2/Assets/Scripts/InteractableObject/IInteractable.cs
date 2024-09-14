@@ -20,10 +20,6 @@ public interface IInteractable
     virtual void Initialize(SkillBubbleData data) { }
     virtual void Initialize(CoinData data) { }
 
-    virtual void AddAddCointEvent(Action<int> AddCoint) { }
-    virtual void AddCreateCardsEvent(Action<int, List<SkillUpgradeData>> CreateCards) { }
-    virtual void AddCreateCardsEvent(Action<int, int, List<SkillUpgradeData>> CreateCards) { }
-
     GameObject ReturnGameObject() { return default; }
 
     void ResetPosition(Vector3 pos);

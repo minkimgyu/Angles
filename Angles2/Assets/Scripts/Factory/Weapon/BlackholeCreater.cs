@@ -2,36 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct BlackholeUpgradableData
+[System.Serializable]
+public class BlackholeData : WeaponData
 {
-    public BlackholeUpgradableData(float lifeTime, float absorbForce, int maxTargetCount, float range)
+    public float _lifeTime;
+    public float _absorbForce;
+    public int _maxTargetCount;
+    public float _range;
+    public float _forceDelay;
+
+    // + 연산자 오버로딩
+    public static BlackholeData operator +(BlackholeData a, SpawnBlackholeUpgrader.UpgradableData b)
+    {
+        return new BlackholeData(
+            a._lifeTime + b.LifeTime, // 수정될 없음
+            a._absorbForce + b.AbsorbForce, // 수정될 없음
+            a._maxTargetCount + b.MaxTargetCount,
+            a._range + b.Range,
+            a._forceDelay
+        );
+    }
+
+    public BlackholeData(float lifeTime, float absorbForce, int maxTargetCount, float range, float forceDelay)
     {
         _lifeTime = lifeTime;
         _absorbForce = absorbForce;
         _maxTargetCount = maxTargetCount;
         _range = range;
-    }
-
-    private float _lifeTime;
-    private float _absorbForce;
-    private int _maxTargetCount;
-    private float _range;
-
-    public float LifeTime { get => _lifeTime; }
-    public float AbsorbForce { get => _absorbForce; }
-    public int MaxTargetCount { get => _maxTargetCount; }
-    public float Range { get => _range; }
-}
-
-[System.Serializable]
-public class BlackholeData : BaseWeaponData
-{
-    public List<BlackholeUpgradableData> _upgradableDatas;
-    public float _forceDelay;
-
-    public BlackholeData(List<BlackholeUpgradableData> upgradableDatas, float forceDelay)
-    {
-        _upgradableDatas = upgradableDatas;
         _forceDelay = forceDelay;
     }
 }

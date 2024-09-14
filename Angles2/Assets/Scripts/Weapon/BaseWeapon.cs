@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseWeapon : MonoBehaviour, IUpgradable
+public class BaseWeapon : MonoBehaviour
 {
     public enum Name
     {
@@ -18,7 +18,7 @@ public class BaseWeapon : MonoBehaviour, IUpgradable
         RocketShooter,
     }
 
-    protected float _damage;
+    //protected float _damage;
     protected List<ITarget.Type> _targetTypes;
 
     // 이하 5개는 스킬에서 데이터를 받아서 사용할 수 있게 만들기
@@ -39,24 +39,4 @@ public class BaseWeapon : MonoBehaviour, IUpgradable
 
     //public void ResetDamage(float damage) { _damage = damage; } --> 이거 대신 위의 ResetData를 사용한다.
     public void ResetTargetTypes(List<ITarget.Type> types) { _targetTypes = types; }
-
-
-    protected int _maxUpgradePoint;
-    public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
-
-
-    protected int _upgradePoint = 1;
-    public int UpgradePoint { get { return _upgradePoint; } }
-
-    public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
-
-    public virtual void Upgrade(int step)
-    {
-        _upgradePoint = step;
-    }
-
-    public virtual void Upgrade()
-    {
-        _upgradePoint++;
-    }
 }

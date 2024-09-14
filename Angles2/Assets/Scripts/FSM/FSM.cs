@@ -24,9 +24,9 @@ abstract public class BaseFSM<T>
         return ChangeState(_states[stateName]);
     }
 
-    public bool SetState(T stateName, ITarget target)
+    public bool SetState(T stateName, ITarget target, string message)
     {
-        return ChangeState(_states[stateName], target);
+        return ChangeState(_states[stateName], target, message);
     }
 
     public bool SetState(T stateName, Vector2 direction, string message)
@@ -54,7 +54,7 @@ abstract public class BaseFSM<T>
         return ChangeState(_previousState, vec2, ratio, message);
     }
 
-    private bool ChangeState(BaseState<T> state, ITarget target)
+    private bool ChangeState(BaseState<T> state, ITarget target, string message)
     {
         if (_states.ContainsValue(state) == false) return false;
 
@@ -64,7 +64,7 @@ abstract public class BaseFSM<T>
         }
 
         if (_currentState != null) //상태가 바뀌기 전에, 이전 상태의 Exit를 호출
-            _currentState.OnStateExit(target);
+            _currentState.OnStateExit();
 
         _previousState = _currentState;
 
@@ -73,7 +73,7 @@ abstract public class BaseFSM<T>
 
         if (_currentState != null) //새 상태의 Enter를 호출한다.
         {
-            _currentState.OnStateEnter(target);
+            _currentState.OnStateEnter(target, message);
         }
 
         return true;
@@ -173,5 +173,5 @@ public class FSM<T> : BaseFSM<T>
     public void OnCollisionEnter(Collision2D collision) => _currentState.OnCollisionEnter(collision);
 
     public void OnTargetEnter(ITarget target) { _currentState.OnTargetEnter(target); }
-    public void OnTargetExit() { _currentState.OnTargetExit(); }
+    public void OnTargetExit(ITarget target) { _currentState.OnTargetExit(target); }
 }

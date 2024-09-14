@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BaseEnemy : BaseLife, ISkillAddable //, IFlock, IFollowable, IForce
+public class BaseEnemy : BaseLife, ISkillAddable, IFollowable //, IFlock, , IForce
 {
     //FlockCaptureComponent _flockCaptureComponent;
     //ObstacleCaptureComponent _obstacleCaptureComponent;
 
     protected SkillController _skillController;
-    //protected List<BaseSkill.Name> _skillNames;
+    protected List<BaseSkill.Name> _skillNames;
     protected float _moveSpeed;
 
     //FlockComponent _flockComponent;
@@ -76,7 +76,7 @@ public class BaseEnemy : BaseLife, ISkillAddable //, IFlock, IFollowable, IForce
     protected override void OnDie()
     {
         // 아이템 드랍 기능 넣기
-        SubEventBus.Publish(SubEventBus.State.DropItem, _dropData, transform.position);
+        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.DropItem, _dropData, transform.position);
         OnDieRequested?.Invoke();
         base.OnDie();
     }
@@ -126,4 +126,7 @@ public class BaseEnemy : BaseLife, ISkillAddable //, IFlock, IFollowable, IForce
     public void AddSkill(BaseSkill.Name name) { }
     public void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { _skillController.AddSkill(skillName, skill); }
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas() { return default; }
+
+    public bool CanFollow() { return true; }
+    public Vector3 ReturnFowardDirection() { return transform.forward; }
 }

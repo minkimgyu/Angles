@@ -84,6 +84,26 @@ public interface ITarget : IPos
     bool IsTarget(List<Type> types);
 }
 
+public class DefaultTarget : ITarget
+{
+    ITarget.Type _type;
+
+    public DefaultTarget(ITarget.Type types)
+    {
+        _type = types;
+    }
+
+    public bool IsTarget(List<ITarget.Type> types)
+    {
+        return types.Contains(_type);
+    }
+
+    public Vector3 ReturnPosition()
+    {
+        return Vector3.zero;
+    }
+}
+
 public interface IDamageable
 {
     void GetDamage(DamageData damageData);

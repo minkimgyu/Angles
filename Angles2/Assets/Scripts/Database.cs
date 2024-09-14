@@ -33,7 +33,7 @@ public class Database
     public List<BaseSkill.Name> UpgradeableSkills { get { return _upgradeableSkills; } }
 
 
-    Dictionary<BaseSkill.Name, BaseSkillData> _skillDatas = new Dictionary<BaseSkill.Name, BaseSkillData>
+    Dictionary<BaseSkill.Name, SkillData> _skillDatas = new Dictionary<BaseSkill.Name, SkillData>
     {
         { BaseSkill.Name.Statikk, new StatikkData(5, 1, 1,
             
@@ -193,7 +193,7 @@ public class Database
         { BaseSkill.Name.CreateShootingBuff, new CreateShootingBuffData(3)},
         { BaseSkill.Name.CreateDashBuff, new CreateDashBuffData(3)},
 
-        { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(1, 5f, 3f, 3f, 5, 
+        { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(5, 5f, 3f, 3f, 5, 
 
             new BulletData(
                 
@@ -211,12 +211,13 @@ public class Database
 
             new List<ITarget.Type> { ITarget.Type.Blue })},
 
+        { BaseSkill.Name.MultipleShockwave, new MultipleShockwaveData(1, 1.8f, 0.7f, 3, 20f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.Shockwave, new ShockwaveData(1, 20f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.MagneticField, new MagneticFieldData(1, 20f, 5f, 1.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.SelfDestruction, new SelfDestructionData(1, 20f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
     };
 
-    public Dictionary<BaseSkill.Name, BaseSkillData> SkillDatas { get { return _skillDatas; } }
+    public Dictionary<BaseSkill.Name, SkillData> SkillDatas { get { return _skillDatas; } }
 
 
     Dictionary<BaseLife.Name, BaseLifeData> _lifeDatas = new Dictionary<BaseLife.Name, BaseLifeData>
@@ -266,7 +267,7 @@ public class Database
         },
 
         { 
-            BaseLife.Name.Triangle, new TriangleData(5, ITarget.Type.Red, new List<BaseSkill.Name> { BaseSkill.Name.MagneticField }, 
+            BaseLife.Name.YellowTriangle, new TriangleData(5, ITarget.Type.Red, BaseEnemy.Size.Small, new List<BaseSkill.Name> { BaseSkill.Name.MagneticField }, 
             new DropData(3, 
                 new List<Tuple<IInteractable.Name, float>>
                 { 
@@ -276,7 +277,7 @@ public class Database
         },
 
         { 
-            BaseLife.Name.Rectangle, new RectangleData(10, ITarget.Type.Red, new List<BaseSkill.Name> { BaseSkill.Name.MagneticField },
+            BaseLife.Name.YellowRectangle, new RectangleData(10, ITarget.Type.Red, BaseEnemy.Size.Small, new List<BaseSkill.Name> { BaseSkill.Name.MagneticField },
             new DropData(3,
                 new List<Tuple<IInteractable.Name, float>>
                 {
@@ -286,23 +287,66 @@ public class Database
         },
 
         { 
-            BaseLife.Name.Pentagon, new PentagonData(20, ITarget.Type.Red, new List<BaseSkill.Name> { BaseSkill.Name.SpreadBullets },
+            BaseLife.Name.YellowPentagon, new PentagonData(20, ITarget.Type.Red, BaseEnemy.Size.Middle, new List<BaseSkill.Name> { BaseSkill.Name.SpreadBullets },
             new DropData(3,
                 new List<Tuple<IInteractable.Name, float>>
                 {
                     new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
                 }
-            ), 5f, 4f, 2f)
+            ), 5f, 3f, 1f)
         },
 
         { 
-            BaseLife.Name.Hexagon, new HexagonData(40, ITarget.Type.Red, new List<BaseSkill.Name> { BaseSkill.Name.Shockwave },
+            BaseLife.Name.YellowHexagon, new HexagonData(40, ITarget.Type.Red, BaseEnemy.Size.Middle, new List<BaseSkill.Name> { BaseSkill.Name.Shockwave },
             new DropData(3,
                 new List<Tuple<IInteractable.Name, float>>
                 {
                     new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
                 }
-            ), 5f, 4f, 2f)
+            ), 5f, 3f, 1f)
+        },
+
+
+
+        // 스킬 업그레이드 수정
+        {
+            BaseLife.Name.RedTriangle, new TriangleData(5, ITarget.Type.Red, BaseEnemy.Size.Small, new List<BaseSkill.Name> { BaseSkill.Name.MagneticField },
+            new DropData(3,
+                new List<Tuple<IInteractable.Name, float>>
+                {
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                }
+            ), 5)
+        },
+
+        {
+            BaseLife.Name.RedRectangle, new RectangleData(10, ITarget.Type.Red, BaseEnemy.Size.Small, new List<BaseSkill.Name> { BaseSkill.Name.MagneticField },
+            new DropData(3,
+                new List<Tuple<IInteractable.Name, float>>
+                {
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                }
+            ), 5)
+        },
+
+        {
+            BaseLife.Name.RedPentagon, new PentagonData(20, ITarget.Type.Red, BaseEnemy.Size.Middle, new List<BaseSkill.Name> { BaseSkill.Name.SpreadBullets },
+            new DropData(3,
+                new List<Tuple<IInteractable.Name, float>>
+                {
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                }
+            ), 5f, 3f, 1f)
+        },
+
+        {
+            BaseLife.Name.RedHexagon, new HexagonData(40, ITarget.Type.Red, BaseEnemy.Size.Middle, new List<BaseSkill.Name> { BaseSkill.Name.Shockwave },
+            new DropData(3,
+                new List<Tuple<IInteractable.Name, float>>
+                {
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                }
+            ), 5f, 3f, 1f)
         },
 
     };

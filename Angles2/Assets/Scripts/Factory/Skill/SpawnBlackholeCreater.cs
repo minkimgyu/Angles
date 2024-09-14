@@ -20,14 +20,14 @@ public class SpawnBlackholeCreater : SkillCreater
 {
     BaseFactory _weaponFactory;
 
-    public SpawnBlackholeCreater(BaseSkillData data, BaseFactory weaponFactory) : base(data)
+    public SpawnBlackholeCreater(SkillData data, BaseFactory weaponFactory) : base(data)
     {
         _weaponFactory = weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnBlackholeData data = _buffData as SpawnBlackholeData;
+        SpawnBlackholeData data = _skillData as SpawnBlackholeData;
         return new SpawnBlackhole(data, _weaponFactory);
     }
 }

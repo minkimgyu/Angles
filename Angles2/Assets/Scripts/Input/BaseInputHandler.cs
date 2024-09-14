@@ -11,17 +11,17 @@ public class BaseInputHandler : MonoBehaviour
 
     protected Action OnDoubleTabRequested;
 
-    public void AddEvent(IInputable.Type type, Action InputEvent)
+    public void AddEvent(InputController.Type type, Action InputEvent)
     {
         switch (type)
         {
-            case IInputable.Type.OnInputStart:
+            case InputController.Type.OnInputStart:
                 OnInputStartRequested += InputEvent;
                 break;
-            case IInputable.Type.OnInputEnd:
+            case InputController.Type.OnInputEnd:
                 OnInputEndRequested += InputEvent;
                 break;
-            case IInputable.Type.OnDoubleTab:
+            case InputController.Type.OnDoubleTab:
                 OnDoubleTabRequested += InputEvent;
                 break;
             default:
@@ -29,11 +29,11 @@ public class BaseInputHandler : MonoBehaviour
         }
     }
 
-    public void AddEvent(IInputable.Type type, Action<Vector2> InputEvent)
+    public void AddEvent(InputController.Type type, Action<Vector2> InputEvent)
     {
         switch (type)
         {
-            case IInputable.Type.OnInput:
+            case InputController.Type.OnInput:
                 OnInputRequested += InputEvent;
                 break;
             default:
@@ -49,17 +49,17 @@ public class BaseInputHandler : MonoBehaviour
         OnDoubleTabRequested = null;
     }
 
-    public void RemoveEvent(IInputable.Type type, Action InputEvent)
+    public void RemoveEvent(InputController.Type type, Action InputEvent)
     {
         switch (type)
         {
-            case IInputable.Type.OnInputStart:
+            case InputController.Type.OnInputStart:
                 OnInputStartRequested -= InputEvent;
                 break;
-            case IInputable.Type.OnInputEnd:
+            case InputController.Type.OnInputEnd:
                 OnInputEndRequested -= InputEvent;
                 break;
-            case IInputable.Type.OnDoubleTab:
+            case InputController.Type.OnDoubleTab:
                 OnDoubleTabRequested -= InputEvent;
                 break;
             default:
@@ -67,11 +67,11 @@ public class BaseInputHandler : MonoBehaviour
         }
     }
 
-    public void RemoveEvent(IInputable.Type type, Action<Vector2> InputEvent)
+    public void RemoveEvent(InputController.Type type, Action<Vector2> InputEvent)
     {
         switch (type)
         {
-            case IInputable.Type.OnInput:
+            case InputController.Type.OnInput:
                 OnInputRequested -= InputEvent;
                 break;
             default:

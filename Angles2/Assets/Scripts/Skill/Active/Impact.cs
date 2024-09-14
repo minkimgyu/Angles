@@ -4,7 +4,7 @@ using UnityEngine;
 using DamageUtility;
 using System;
 
-public class Impact : RandomSkill
+public class Impact : BaseSkill
 {
     public List<ITarget.Type> _targetTypes;
     BaseFactory _effectFactory;
@@ -12,7 +12,7 @@ public class Impact : RandomSkill
     List<ImpactUpgradableData> _upgradableDatas;
     ImpactUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
 
-    public Impact(ImpactData data, BaseFactory effectFactory) : base(data._maxUpgradePoint, data._probability)
+    public Impact(ImpactData data,  BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
     {
         _upgradableDatas = data._upgradableDatas;
         _targetTypes = data._targetTypes;

@@ -15,6 +15,9 @@ public struct CastingData
     public Transform MyTransform { get; }
 }
 
+// 무기는 Visitor 제거해주기
+// PlayerData를 FSM 내부에서 캐싱해서 사용
+// 
 abstract public class BaseSkill : IUpgradable
 {
     public enum Name
@@ -23,8 +26,6 @@ abstract public class BaseSkill : IUpgradable
         Knockback,
         Impact,
         ContactAttack,
-
-        SpawnOrb,
 
         SpawnRifleShooter, // weapon
         SpawnRocketShooter, // weapon
@@ -39,6 +40,7 @@ abstract public class BaseSkill : IUpgradable
         CreateTotalCooltimeBuff,
 
         SpreadBullets,
+        MultipleShockwave,
         Shockwave,
         MagneticField,
         SelfDestruction
@@ -55,8 +57,11 @@ abstract public class BaseSkill : IUpgradable
     {
         _skillType = skillType;
         _maxUpgradePoint = maxUpgradePoint;
-        _upgradePoint = 1;
+        _upgradePoint = 0;
     }
+
+    protected IUpgradeVisitor _upgradeVisitor;
+    protected UseConstraintComponent _useConstraint;
 
     protected Type _skillType;
     public Type SkillType { get { return _skillType; } }
@@ -66,27 +71,20 @@ abstract public class BaseSkill : IUpgradable
     int _maxUpgradePoint;
     public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
 
-
     int _upgradePoint;
     public int UpgradePoint { get { return _upgradePoint; } }
 
     public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
 
-    public virtual void Upgrade(int step)
-    {
-        _upgradePoint = step;
-        OnUpgradeRequested();
-    }
-
     public virtual void Upgrade() 
     {
         _upgradePoint++;
-        OnUpgradeRequested();
     }
 
     public virtual void Initialize(CastingData data) { _castingData = data; }
 
-    public Action<float, int, bool> ResetViewerValue;
+    public void AddViewEvent(Action<float, int, bool> viewEvent) { _useConstraint.AddViewEvent(viewEvent); }
+    public void RemoveViewEvent(Action<float, int, bool> viewEvent) { _useConstraint.RemoveViewEvent(viewEvent); }
 
     public virtual bool CanUse() { return true; }
 
@@ -98,8 +96,10 @@ abstract public class BaseSkill : IUpgradable
     public virtual void OnCaptureEnter(ITarget target, IDamageable damageable) { }
     public virtual void OnCaptureExit(ITarget target, IDamageable damageable) { }
 
-    public virtual void OnUpdate() { }
-    public virtual void OnAdd() { }
+    public virtual void OnUpdate() 
+    {
+        _useConstraint.OnUpdate();
+    }
 
-    protected virtual void OnUpgradeRequested() { }
+    public virtual void OnAdd() { }
 }

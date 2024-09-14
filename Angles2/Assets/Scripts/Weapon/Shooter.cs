@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 여기서 IUpgradable를 재정의
+// _weaponData를 증가시키는 방향으로 개발 진행
+
 abstract public class Shooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
     TrackComponent _trackComponent;
 
-    List<ShooterUpgradableData> _upgradableDatas;
-    ShooterUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint]; } }
-
-    protected BaseWeaponData _weaponData;
-
+    protected WeaponData _weaponData;
     protected abstract BaseWeapon ReturnProjectileWeapon();
 
     void FireProjectile(Vector2 direction)
     {
         _waitFire += Time.deltaTime;
-        if (UpgradableData.FireDelay > _waitFire) return;
+        if (_shooterData._fireDelay > _waitFire) return;
 
         _waitFire = 0;
 
@@ -25,30 +24,19 @@ abstract public class Shooter : BaseWeapon
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
-        projectile.Shoot(direction, UpgradableData.ShootForce);
+        projectile.Shoot(direction, _shooterData._shootForce);
     }
 
-    protected float _moveSpeed;
-    protected float _followOffset;
     protected float _waitFire;
-    protected float _maxDistanceFromPlayer;
-    protected Name _fireWeaponName;
-
     List<ITarget> _targetDatas;
 
+    protected ShooterData _shooterData;
     protected BaseFactory _weaponFactory;
 
-    public override void ResetData(ShooterData data)
+    public override void ResetData(ShooterData shooterData)
     {
-        _upgradableDatas = data._upgradableDatas;
-
-        _weaponData = data._fireWeaponData;
-        _moveSpeed = data._moveSpeed;
-        _followOffset = data._followOffset;
-        _maxDistanceFromPlayer = data._maxDistanceFromPlayer;
-        _fireWeaponName = data._fireWeaponName;
-
-        _trackComponent.Initialize(_moveSpeed, _followOffset, _maxDistanceFromPlayer);
+        _shooterData = shooterData;
+        _trackComponent.Initialize(_shooterData._moveSpeed, _shooterData._followOffset, _shooterData._maxDistanceFromPlayer);
     }
 
     public override void Initialize(BaseFactory weaponFactory)

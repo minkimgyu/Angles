@@ -30,16 +30,21 @@ public class Shockwave : BaseSkill
 
     public override void OnUpdate()
     {
+        BaseEffect effect;
+
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:
                 if (_targets.Count == 0) return;
 
+                CastingComponent castingComponent = _castingData.MyObject.GetComponent<CastingComponent>();
+                if (castingComponent != null) castingComponent.CastSkill(_delay);
+
                 _delayTimer.Start(_delay);
                 break;
             case Timer.State.Finish:
 
-                BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ShockwaveEffect);
+                effect = _effectFactory.Create(BaseEffect.Name.ShockwaveEffect);
                 effect.ResetPosition(_castingData.MyTransform.position);
                 effect.Play();
 

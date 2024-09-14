@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour, IInteractable
 {
-    OutlineComponent _outlineComponent;
+    //OutlineComponent _outlineComponent;
     Vector2 _movePos;
     bool _isActive;
 
@@ -13,8 +13,8 @@ public class Portal : MonoBehaviour, IInteractable
     public void Initialize(System.Action OnInteractRequested)
     {
         this.OnInteractRequested = OnInteractRequested;
-        _outlineComponent = GetComponentInChildren<OutlineComponent>();
-        _outlineComponent.Initialize();
+        //_outlineComponent = GetComponentInChildren<OutlineComponent>();
+        //_outlineComponent.Initialize();
 
         Disable();
     }
@@ -23,13 +23,13 @@ public class Portal : MonoBehaviour, IInteractable
     {
         _movePos = movePos;
         _isActive = true;
-        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnEnabled);
+        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnEnabled);
     }
 
     public void Disable()
     {
         _isActive = false;
-        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
+        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
     }
 
     public void OnInteractEnter(IInteracter interacter) { }

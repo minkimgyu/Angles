@@ -12,7 +12,7 @@ public class BaseStage : MonoBehaviour
     }
 
     [SerializeField] protected Transform _entryPoint;
-    [SerializeField] protected Portal _portal;
+    protected Portal _portal;
 
     protected List<GameObject> _spawnedObjects;
 
@@ -25,6 +25,7 @@ public class BaseStage : MonoBehaviour
         _baseStageController = baseStageController;
         _factoryCollection = factoryCollection;
 
+        Portal portal = GetComponentInChildren<Portal>();
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
     }
 

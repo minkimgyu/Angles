@@ -21,11 +21,6 @@ public class CreateShootingBuff : BaseSkill
         buffUsable.AddBuff(BaseBuff.Name.TotalDamage, totalDamageBuff);
     }
 
-    protected override void OnUpgradeRequested()
-    {
-        AddBuff();
-    }
-
     public override void OnAdd()
     {
         AddBuff();

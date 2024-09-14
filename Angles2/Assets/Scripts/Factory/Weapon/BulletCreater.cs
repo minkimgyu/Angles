@@ -16,7 +16,7 @@ public struct BulletUpgradableData
 }
 
 [System.Serializable]
-public class BulletData : BaseWeaponData
+public class BulletData : WeaponData
 {
     public float _lifeTime;
     public List<BulletUpgradableData> _upgradableDatas;

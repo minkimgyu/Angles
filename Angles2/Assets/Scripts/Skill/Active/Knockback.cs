@@ -4,7 +4,7 @@ using UnityEngine;
 using DamageUtility;
 using System;
 
-public class Knockback : CooltimeSkill
+public class Knockback : BaseSkill
 {
     Vector2 _size;
     Vector2 _offset;

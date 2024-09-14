@@ -22,7 +22,8 @@ public interface ISoundPlayable
         Impact,
     }
 
-    //void Initialize(Dictionary<SoundName, AudioClip> clipDictionary);
+    void Initialize(Dictionary<SoundName, AudioClip> clipDictionary);
+
     void PlayBGM(SoundName name);
     void PlaySFX(SoundName name);
 

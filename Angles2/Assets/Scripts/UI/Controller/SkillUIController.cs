@@ -15,8 +15,8 @@ public class SkillUIController : MonoBehaviour
 
     public void Initialize(List<BaseSkill.Type> showTypes, Dictionary<BaseSkill.Name, Sprite> skillIcons, BaseFactory viewerFactory)
     {
-        ObserverEventBus.Register(ObserverEventBus.State.OnAddSkill, new AddSkillCommand(AddViewer));
-        ObserverEventBus.Register(ObserverEventBus.State.OnRemoveSkill, new RemoveSkillCommand(RemoveViewer));
+        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnAddSkill, new AddSkillCommand(AddViewer));
+        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnRemoveSkill, new RemoveSkillCommand(RemoveViewer));
 
         _viewers = new Dictionary<BaseSkill.Name, BaseViewer>();
         _showTypes = showTypes;
@@ -33,7 +33,7 @@ public class SkillUIController : MonoBehaviour
         Sprite skillIcon = _skillIcons[skillName];
         viewer.Initialize(skillIcon);
 
-        skill.ResetViewerValue += viewer.UpdateViewer;
+        skill.AddViewEvent(viewer.UpdateViewer);
 
         _viewers.Add(skillName, viewer);
         viewer.transform.SetParent(_skillViewerParent);
@@ -43,7 +43,7 @@ public class SkillUIController : MonoBehaviour
     {
         BaseViewer viewer = _viewers[skillName];
 
-        skill.ResetViewerValue -= viewer.UpdateViewer;
+        skill.RemoveViewEvent(viewer.UpdateViewer);
         _viewers.Remove(skillName);
         Destroy(viewer.gameObject);
     }

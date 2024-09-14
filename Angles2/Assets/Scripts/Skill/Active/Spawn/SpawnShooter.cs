@@ -8,24 +8,26 @@ public class SpawnShooter : BaseSkill
     BaseWeapon _shooter;
 
     List<ITarget.Type> _targetTypes;
-
     BaseFactory _weaponFactory;
-    ShooterData _data;
     BaseWeapon.Name _shooterType;
 
+    SpawnShooterData _data;
+    ShooterData _shooterData;
+
+    // 여기서 슈터 데이터와 무기 데이터를 같이 받아오기
     public SpawnShooter(SpawnShooterData data, BaseFactory weaponFactory) : base(Type.Passive, data._maxUpgradePoint)
     {
-        _shooterType = data._shooterType;
-        _data = data._data;
-        _targetTypes = data._targetTypes;
+        _data = data;
+        _shooterData = data._shooterData;
         _weaponFactory = weaponFactory;
     }
 
-    protected override void OnUpgradeRequested()
+    public override void Upgrade()
     {
-        if (_shooter == null) return;
-        _shooter.Upgrade(UpgradePoint);
+        base.Upgrade();
+        _upgradeVisitor.Visit(this, _shooterData);
     }
+
 
     public override void OnAdd()
     {
@@ -36,8 +38,7 @@ public class SpawnShooter : BaseSkill
         if (followable == null) return;
 
         weapon.ResetFollower(followable);
-
-        weapon.ResetData(_data);
+        weapon.ResetData(_shooterData);
         weapon.ResetTargetTypes(_targetTypes);
         weapon.ResetPosition(_castingData.MyTransform.position);
         _shooter = weapon;

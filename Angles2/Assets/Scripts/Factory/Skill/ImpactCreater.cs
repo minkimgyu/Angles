@@ -22,12 +22,28 @@ public struct ImpactUpgradableData
 [System.Serializable]
 public class ImpactData : RandomSkillData
 {
+    public float _damage;
+    public float _range;
+
     public List<ImpactUpgradableData> _upgradableDatas;
     public List<ITarget.Type> _targetTypes;
 
-    public ImpactData(int maxUpgradePoint, float probability, List<ImpactUpgradableData> upgradableDatas, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    // + 연산자 오버로딩
+    public static ImpactData operator +(ImpactData a, ImpactUpgrader.UpgradableData b)
     {
-        _upgradableDatas = upgradableDatas;
+        return new ImpactData(
+            a._maxUpgradePoint,
+            a._probability,
+            a._damage + b.Damage,
+            a._range + b.Range,
+            a._targetTypes
+        );
+    }
+
+    public ImpactData(int maxUpgradePoint, float probability, float damage, float range, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    {
+        _damage = damage;
+        _range = range;
         _targetTypes = targetTypes;
     }
 }
@@ -36,14 +52,14 @@ public class ImpactCreater : SkillCreater
 {
     BaseFactory _effectFactory;
 
-    public ImpactCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
+    public ImpactCreater(SkillData data, BaseFactory _effectFactory) : base(data)
     {
         this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        ImpactData data = _buffData as ImpactData;
+        ImpactData data = _skillData as ImpactData;
         return new Impact(data, _effectFactory);
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class ProjectileWeapon : BaseWeapon, IProjectable
 {
     protected float _force;
-    protected float _lifeTime;
     protected MoveComponent _moveComponent;
 
     //protected bool IsTarget(ITarget target)

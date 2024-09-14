@@ -17,6 +17,7 @@ public class SoundPlayer : MonoBehaviour, ISoundPlayable
         _clipDictionary = clipDictionary;
         _bgmPlayer = _bgmPlayerObject.GetComponent<AudioSource>();
         _sfxPlayer = _bgmPlayerObject.GetComponents<AudioSource>();
+        DontDestroyOnLoad(gameObject);
     }
 
     public void PlayBGM(ISoundPlayable.SoundName name)

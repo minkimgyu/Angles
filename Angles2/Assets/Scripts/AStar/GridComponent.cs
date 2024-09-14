@@ -1,13 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.AddressableAssets.Build;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Diagnostics;
 using Debug = UnityEngine.Debug;
-using System.Linq;
 
 [Serializable]
 public struct Grid2D
@@ -28,19 +23,18 @@ public struct Grid2D
 public class GridComponent : MonoBehaviour
 {
     [SerializeField] Tilemap _wallTile;
+    [SerializeField] Tilemap _groundTile;
 
     Node[,] _nodes; // r, c
-    [SerializeField] Transform _topLeftPoint;
-    Vector2Int TopLeftLocalPos { get { return new Vector2Int(Mathf.RoundToInt(_topLeftPoint.localPosition.x), Mathf.RoundToInt(_topLeftPoint.localPosition.y)); } }
-    Vector2 TopLeftWorldPos { get { return new Vector2(_topLeftPoint.position.x, _topLeftPoint.position.y); } }
+    Vector2 _topLeftWorldPoint;
+    Vector2Int _topLeftLocalPoint;
 
-    [SerializeField] Grid2D _gridSize;
+    Grid2D _gridSize;
+    Pathfinder _pathfinder;
 
+    List<Vector2> _points;
     const int _nodeSize = 1;
-
-    [SerializeField] Transform _startPoint;
-    [SerializeField] Transform _endPoint;
-    [SerializeField] Pathfinder _pathfinder;
+    bool _canCrossCorner = false;
 
     public Node ReturnNode(Grid2D grid) { return _nodes[grid.Row, grid.Column]; }
     public Node ReturnNode(int r, int c) { return _nodes[r, c]; }
@@ -68,9 +62,20 @@ public class GridComponent : MonoBehaviour
         return new Grid2D(r, c);
     }
 
-    public bool HaveBlockNodeInNearPosition(Grid2D grid, int count)
+    public bool HaveBlockNodeInNearPosition(Grid2D grid, BaseEnemy.Size size)
     {
-        if (count == 0) return false;
+        int loopCount = 0;
+        switch (size)
+        {
+            case BaseEnemy.Size.Small:
+                return false;
+            case BaseEnemy.Size.Middle:
+                loopCount = 1;
+                break;
+            case BaseEnemy.Size.Large:
+                loopCount = 1;
+                break;
+        }
 
         Node node = _nodes[grid.Row, grid.Column];
         if (node.Block == true) return true;
@@ -79,25 +84,28 @@ public class GridComponent : MonoBehaviour
         Queue<Node> nodeQueue = new Queue<Node>();
         nodeQueue.Enqueue(node);
 
-        int queueCnt = nodeQueue.Count;
-        for (int i = 0; i < queueCnt; i++)
+        for (int i = 0; i < loopCount; i++)
         {
-            Node frontNode = nodeQueue.Dequeue();
-
-            if (frontNode.Block == true) return true;
-            Grid2D frontGrid = frontNode.Index;
-
-            List<Grid2D> nodeIndexes = ReturnNearNodeIndexes(frontGrid);
-            for (int k = 0; k < nodeIndexes.Count; k++)
+            int queueCnt = nodeQueue.Count;
+            for (int j = 0; j < queueCnt; j++)
             {
-                Node nearNode = _nodes[nodeIndexes[k].Row, nodeIndexes[k].Column];
-                if (nearNode.Block == true) return true;
+                Node frontNode = nodeQueue.Dequeue();
 
-                bool nowHave = closeHash.Contains(nearNode);
-                if (nowHave == true) continue;
+                if (frontNode.Block == true) return true;
+                Grid2D frontGrid = frontNode.Index;
 
-                closeHash.Add(nearNode);
-                nodeQueue.Enqueue(nearNode); // 가지고 있지 않다면 넣는다.
+                List<Grid2D> nodeIndexes = ReturnNearNodeIndexes(frontGrid);
+                for (int k = 0; k < nodeIndexes.Count; k++)
+                {
+                    Node nearNode = _nodes[nodeIndexes[k].Row, nodeIndexes[k].Column];
+                    if (nearNode.Block == true) return true;
+
+                    bool nowHave = closeHash.Contains(nearNode);
+                    if (nowHave == true) continue;
+
+                    closeHash.Add(nearNode);
+                    nodeQueue.Enqueue(nearNode); // 가지고 있지 않다면 넣는다.
+                }
             }
         }
 
@@ -107,15 +115,16 @@ public class GridComponent : MonoBehaviour
     public List<Grid2D> ReturnNearNodeIndexes(Grid2D index)
     {
         List<Grid2D> closeNodeIndexes = new List<Grid2D>();
+        Grid2D[] closeIndexes;
 
         // 주변 그리드
-        Grid2D[] closeIndexes = new Grid2D[]  // r, c
+        closeIndexes = new Grid2D[]  // r, c
         {
-            new Grid2D(index.Row - 1, index.Column - 1), new Grid2D(index.Row - 1, index.Column), new Grid2D(index.Row - 1, index.Column + 1),
+            new Grid2D(index.Row - 1, index.Column),
 
             new Grid2D(index.Row, index.Column - 1), new Grid2D(index.Row, index.Column + 1),
 
-            new Grid2D(index.Row + 1, index.Column - 1), new Grid2D(index.Row + 1, index.Column), new Grid2D(index.Row + 1, index.Column + 1)
+            new Grid2D(index.Row + 1, index.Column)
         };
 
         for (int i = 0; i < closeIndexes.Length; i++)
@@ -131,40 +140,24 @@ public class GridComponent : MonoBehaviour
         return closeNodeIndexes;
     }
 
-    //public List<Grid2D> ReturnPosibleNodes(Grid2D index)
-    //{
-    //    List<Grid2D> closeNodeIndexes = ReturnNearNodeIndexes(index);
-    //    List<Grid2D> result = new List<Grid2D>();
-
-    //    for (int i = 0; i < closeNodeIndexes.Count; i++)
-    //    {
-    //        bool haveNearBlockNode = HaveNearBlockNode(closeNodeIndexes[i], 1);
-    //        if (haveNearBlockNode == true) continue;
-
-    //        result.Add(closeNodeIndexes[i]);
-    //    }
-
-    //    return result;
-    //}
-
     void CreateNode()
     {
         for (int i = 0; i < _gridSize.Row; i++)
         {
             for (int j = 0; j < _gridSize.Column; j++)
             {
-                Vector2Int localPos = TopLeftLocalPos + new Vector2Int(j, -i);
-                Vector2 worldPos = TopLeftWorldPos + new Vector2Int(j, -i);
+                Vector2Int localPos = _topLeftLocalPoint + new Vector2Int(j, -i);
+                Vector2 worldPos = _topLeftWorldPoint + new Vector2Int(j, -i);
 
                 TileBase tile = _wallTile.GetTile(new Vector3Int(localPos.x, localPos.y, 0));
                 if (tile == null)
                 {
-                    Debug.Log("Pass " + localPos.x + " " + localPos.y);
+                    //Debug.Log("Pass " + localPos.x + " " + localPos.y);
                     _nodes[i, j] = new Node(worldPos, new Grid2D(i, j), false);
                 }
                 else
                 {
-                    Debug.Log("NonPass " + localPos.x + " " + localPos.y);
+                    //Debug.Log("NonPass " + localPos.x + " " + localPos.y);
                     _nodes[i, j] = new Node(worldPos, new Grid2D(i, j), true);
                 }
                 // 타일이 없다면 바닥
@@ -205,31 +198,40 @@ public class GridComponent : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Initialize();
-    }
-
-    List<Vector2> _points;
-
     public void Initialize()
     {
+        _groundTile.CompressBounds(); // 타일의 바운더리를 맞춰준다.
+        BoundsInt bounds = _groundTile.cellBounds;
+        Debug.Log(bounds.min);
+        Debug.Log(bounds.max);
+
+        int rowSize = bounds.yMax - bounds.yMin;
+        int columnSize = bounds.xMax - bounds.xMin;
+
+        _topLeftLocalPoint = new Vector2Int(bounds.xMin, bounds.yMax - 1);
+        _topLeftWorldPoint = new Vector2(transform.position.x + bounds.xMin + _groundTile.tileAnchor.x, transform.position.y + bounds.yMax - _groundTile.tileAnchor.y);
+
+        Debug.Log(_topLeftLocalPoint);
+        Debug.Log(_topLeftWorldPoint);
+
+        _gridSize = new Grid2D(rowSize, columnSize);
         _points = new List<Vector2>();
         _nodes = new Node[_gridSize.Row, _gridSize.Column];
         CreateNode();
 
+        _pathfinder = GetComponent<Pathfinder>();
         _pathfinder.Initialize(this);
 
-        // Stopwatch 객체 생성
-        Stopwatch stopwatch = new Stopwatch();
+        //// Stopwatch 객체 생성
+        //Stopwatch stopwatch = new Stopwatch();
 
-        // 타이머 시작
-        stopwatch.Start();
-        _points = _pathfinder.FindPath(_startPoint.position, _endPoint.position);
-        // 타이머 멈춤
-        stopwatch.Stop();
+        //// 타이머 시작
+        //stopwatch.Start();
+        //_points = _pathfinder.FindPath(_startPoint.position, _endPoint.position);
+        //// 타이머 멈춤
+        //stopwatch.Stop();
 
-        // 경과 시간 출력 (밀리초 단위)
-        UnityEngine.Debug.Log("Time taken: " + stopwatch.ElapsedMilliseconds + " ms");
+        //// 경과 시간 출력 (밀리초 단위)
+        //UnityEngine.Debug.Log("Time taken: " + stopwatch.ElapsedMilliseconds + " ms");
     }
 }

@@ -22,7 +22,7 @@ public struct RocketUpgradableData
 }
 
 [System.Serializable]
-public class RocketData : BaseWeaponData
+public class RocketData : WeaponData
 {
     public float _lifeTime;
     public List<RocketUpgradableData> _upgradableDatas;

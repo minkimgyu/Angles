@@ -30,7 +30,7 @@ public class ChargeUIController : MonoBehaviour
 
     public void Initialize()
     {
-        ObserverEventBus.Register(ObserverEventBus.State.OnChargeRatioChange, new ChangeRatioCommand(UpdateViewer));
+        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnChargeRatioChange, new ChangeRatioCommand(UpdateViewer));
         _chargeModel = new ChargeModel(_chargeViewer);
     }
 

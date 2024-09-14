@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class SpawnBlade : RandomSkill
+public class SpawnBlade : BaseSkill
 {
-    List<ITarget.Type> _targetTypes;
-    public float _force;
+    SpawnBladeData _data;
+    BladeData _bladeData;
     BaseFactory _weaponFactory;
 
-    BladeData _bladeData;
-
-    public SpawnBlade(SpawnBladeData data, BaseFactory weaponFactory) :base(data._maxUpgradePoint, data._probability)
+    public SpawnBlade(SpawnBladeData data, SpawnBladeUpgrader upgrader, BaseFactory weaponFactory) :base(Type.Active, data._maxUpgradePoint)
     {
-        _bladeData = data._data;
-        _targetTypes = data._targetTypes;
-        _force = data._force;
-
+        _data = data;
+        _upgradeVisitor = upgrader;
         _weaponFactory = weaponFactory;
     }
 
@@ -25,22 +21,20 @@ public class SpawnBlade : RandomSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blade);
         if (weapon == null) return;
 
-
         weapon.ResetData(_bladeData);    
-        weapon.Upgrade(UpgradePoint); // 생성 후 업그레이드 적용
-        weapon.ResetTargetTypes(_targetTypes);
+        weapon.ResetTargetTypes(_data._targetTypes);
         weapon.ResetPosition(_castingData.MyTransform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
         Vector2 direction = _castingData.MyTransform.right;
-        projectile.Shoot(direction, _force);
+        projectile.Shoot(direction, _data._force);
     }
 }

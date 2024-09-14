@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8372241205867174458}
   - component: {fileID: 667591849435667882}
   - component: {fileID: 8440388585054344230}
-  - component: {fileID: 8425711038277316396}
+  - component: {fileID: 8660502183200083088}
   m_Layer: 5
-  m_Name: HpViewer
+  m_Name: HPViewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8425711038277316396
+--- !u!114 &8660502183200083088
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,15 +113,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3282522881505772885}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ab6a78d48fd4f48aeab142ad909884, type: 3}
+  m_Script: {fileID: 11500000, guid: bf6c403198cc45b4187140b151c9ee57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _bar: {fileID: 393712593113248611}
-  _hpTxt: {fileID: 0}
   _changeDuration: 0.3
-  _topOffset: 0.7
   _startColor: {r: 1, g: 1, b: 1, a: 1}
-  _endColor: {r: 1, g: 0.17647058, b: 0.19109787, a: 1}
+  _endColor: {r: 1, g: 0.1764706, b: 0.19215687, a: 1}
+  _topOffset: 0.7
 --- !u!1 &7323856745640080315
 GameObject:
   m_ObjectHideFlags: 0

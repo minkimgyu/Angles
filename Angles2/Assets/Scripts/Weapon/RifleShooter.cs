@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class RifleShooter : Shooter
 {
-    BulletData ProjectileData { get { return _weaponData as BulletData; } }
-
     protected override BaseWeapon ReturnProjectileWeapon()
     {
-        BaseWeapon weapon = _weaponFactory.Create(_fireWeaponName);
-        weapon.ResetData(ProjectileData);
+        BaseWeapon weapon = _weaponFactory.Create(_shooterData._fireWeaponName);
+        weapon.ResetData(_shooterData._fireWeaponData as BulletData);
         weapon.ResetPosition(transform.position);
         weapon.ResetTargetTypes(_targetTypes);
 

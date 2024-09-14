@@ -13,11 +13,6 @@ public class MenuController : MonoBehaviour
     {
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
-
-        ServiceLocater.Initialize();
-
-        SceneController controller = new SceneController();
-        ServiceLocater.Provide(controller);
     }
 
     public void OnStartRequested()

@@ -18,20 +18,34 @@ public struct ShooterUpgradableData
 }
 
 [System.Serializable]
-public class ShooterData : BaseWeaponData
+public class ShooterData : WeaponData
 {
-    public List<ShooterUpgradableData> _upgradableDatas;
-    public BaseWeaponData _fireWeaponData;
+    public float _damageRatio; // --> 이걸로 데미지 변경
+    public float _shootForce;
+    public float _fireDelay;
+    public WeaponData _fireWeaponData;
     public BaseWeapon.Name _fireWeaponName;
 
     public float _moveSpeed;
     public float _followOffset;
     public float _maxDistanceFromPlayer;
 
-    public ShooterData(List<ShooterUpgradableData> upgradableDatas, BaseWeaponData weaponData, float moveSpeed, float followOffset, float maxDistanceFromPlayer, BaseWeapon.Name fireWeaponName)
+    public static ShooterData operator +(ShooterData a, SpawnShooterUpgrader.UpgradableData b)
     {
-        _upgradableDatas = upgradableDatas;
-        _fireWeaponData = weaponData;
+        return new ShooterData(
+            a.fireWeaponData, // 수정될 없음
+            a._coolTime,
+            a._maxStackCount,
+            a._damage + b.Damage,
+            a._range + b.Range,
+            a._maxTargetCount + b.MaxTargetCount,
+            a._targetTypes
+        );
+    }
+
+    public ShooterData(WeaponData fireWeaponData, float moveSpeed, float followOffset, float maxDistanceFromPlayer, BaseWeapon.Name fireWeaponName)
+    {
+        _fireWeaponData = fireWeaponData;
 
         _moveSpeed = moveSpeed;
         _followOffset = followOffset;

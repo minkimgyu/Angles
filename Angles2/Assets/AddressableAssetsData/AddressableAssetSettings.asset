@@ -103,6 +103,7 @@ MonoBehaviour:
     - StartStage
     - BonusStage
     - BattleStage
+    - BossStage
     - InteractableObject
     - Sound
   m_SchemaTemplates: []

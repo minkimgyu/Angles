@@ -35,7 +35,7 @@ public class MoveComponent : MonoBehaviour
     public void Move(Vector2 direction, float speed)
     {
         _rigid.velocity = direction * speed;
-        if(_applyDirection == true) FaceDirection(direction);
+        if(_applyDirection == true) FaceDirection(direction, speed);
     }
 
     public void Move(Vector2 pos)

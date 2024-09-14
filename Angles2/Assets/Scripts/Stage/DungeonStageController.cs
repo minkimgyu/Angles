@@ -46,7 +46,7 @@ public class DungeonStageController : BaseStageController
 
         if (_stageQueue.Count == 0)
         {
-            MainEventBus.Publish(MainEventBus.State.GameClear);
+            EventBusManager.Instance.MainEventBus.Publish(MainEventBus.State.GameClear);
             return;
         }
 

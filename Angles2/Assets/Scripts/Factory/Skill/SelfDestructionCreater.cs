@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SelfDestructionData : BaseSkillData
+public class SelfDestructionData : SkillData
 {
     public float _delay;
     public float _damage;
@@ -24,14 +24,14 @@ public class SelfDestructionCreater : SkillCreater
 {
     BaseFactory _effectFactory;
 
-    public SelfDestructionCreater(BaseSkillData data, BaseFactory _effectFactory) : base(data)
+    public SelfDestructionCreater(SkillData data, BaseFactory _effectFactory) : base(data)
     {
         this._effectFactory = _effectFactory;
     }
 
     public override BaseSkill Create()
     {
-        SelfDestructionData data = _buffData as SelfDestructionData;
+        SelfDestructionData data = _skillData as SelfDestructionData;
         return new SelfDestruction(data, _effectFactory);
     }
 }

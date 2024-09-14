@@ -32,7 +32,7 @@ public class StringStringDictionary : SerializableDictionary<string, string> {}
 public class FlockBehaviorDictionary : SerializableDictionary<FlockComponent.BehaviorType, float> { }
 
 [Serializable]
-public class HandlerDictionary : SerializableDictionary<IInputable.Side, BaseInputHandler> {}
+public class HandlerDictionary : SerializableDictionary<InputController.Side, BaseInputHandler> {}
 
 [Serializable]
 public class ObjectColorDictionary : SerializableDictionary<UnityEngine.Object, Color> {}

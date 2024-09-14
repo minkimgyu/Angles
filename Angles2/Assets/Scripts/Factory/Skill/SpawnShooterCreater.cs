@@ -4,17 +4,17 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SpawnShooterData : BaseSkillData
+public class SpawnShooterData : SkillData
 {
     public BaseWeapon.Name _shooterType;
     public List<ITarget.Type> _targetTypes;
-    public ShooterData _data;
+    public ShooterData _shooterData;
 
-    public SpawnShooterData(int maxUpgradePoint, BaseWeapon.Name shooterType, ShooterData data, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public SpawnShooterData(int maxUpgradePoint, BaseWeapon.Name shooterType, ShooterData shooterData, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _shooterType = shooterType;
         _targetTypes = targetTypes;
-        _data = data;
+        _shooterData = shooterData;
     }
 }
 
@@ -24,14 +24,14 @@ public class SpawnShooterCreater : SkillCreater
     BaseFactory _weaponFactory;
     public ShooterData _data;
 
-    public SpawnShooterCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
+    public SpawnShooterCreater(SkillData data, BaseFactory _weaponFactory) : base(data)
     {
         this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnShooterData data = _buffData as SpawnShooterData;
+        SpawnShooterData data = _skillData as SpawnShooterData;
         return new SpawnShooter(data, _weaponFactory);
     }
 }

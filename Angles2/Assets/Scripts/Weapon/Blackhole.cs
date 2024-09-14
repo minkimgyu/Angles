@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Blackhole : BaseWeapon
 {
-    List<BlackholeUpgradableData> _upgradableDatas;
-    BlackholeUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
-
     public class TargetData
     {
         public TargetData(float captureTime, IForce absorbableTarget, IDamageable damageableTarget)
@@ -28,18 +25,12 @@ public class Blackhole : BaseWeapon
     AbsorbableCaptureComponent _absorbCaptureComponent;
     List<TargetData> _targetDatas;
     Timer _lifeTimer;
-
-    //float _lifeTime;
-    float _forceDelay;
-    //float _absorbForce;
-    //float _maxTargetCount;
+    BlackholeData _data;
 
     public override void ResetData(BlackholeData data)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _forceDelay = data._forceDelay;
-        _lifeTimer.Start(UpgradableData.LifeTime);
-        ResetSize(UpgradableData.Range);
+        _data = data;
+        ResetSize(_data._range);
     }
 
     public override void Initialize() 
@@ -53,7 +44,7 @@ public class Blackhole : BaseWeapon
 
     void OnEnter(IForce absorbable, IDamageable damageable)
     {
-        if (_targetDatas.Count >= UpgradableData.MaxTargetCount) return;
+        if (_targetDatas.Count >= _data._maxTargetCount) return;
         _targetDatas.Add(new TargetData(Time.time, absorbable, damageable));
     }
 
@@ -74,11 +65,11 @@ public class Blackhole : BaseWeapon
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
-            if(duration > _forceDelay)
+            if(duration > _data._forceDelay)
             {
-                _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, UpgradableData.AbsorbForce, ForceMode2D.Force);
+                _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, _data._absorbForce, ForceMode2D.Force);
 
-                DamageData damageData = new DamageData(_damage, _targetTypes, 1f, false);
+                DamageData damageData = new DamageData(0, _targetTypes, 1f, false);
                 _targetDatas[i].DamageableTarget.GetDamage(damageData);
 
                 if (i < 0 || _targetDatas.Count - 1 < i) continue;

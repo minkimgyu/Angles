@@ -21,14 +21,14 @@ public class SpawnStickyBombCreater : SkillCreater
 {
     BaseFactory _weaponFactory;
 
-    public SpawnStickyBombCreater(BaseSkillData data, BaseFactory _weaponFactory) : base(data)
+    public SpawnStickyBombCreater(SkillData data, BaseFactory _weaponFactory) : base(data)
     {
         this._weaponFactory = _weaponFactory;
     }
 
     public override BaseSkill Create()
     {
-        SpawnStickyBombData data = _buffData as SpawnStickyBombData;
+        SpawnStickyBombData data = _skillData as SpawnStickyBombData;
         return new SpawnStickyBomb(data, _weaponFactory);
     }
 }
