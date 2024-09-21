@@ -39,31 +39,31 @@ MonoBehaviour:
     m_Address: BattleStage5
     m_ReadOnly: 0
     m_SerializedLabels:
-    - BattleStage
+    - MobStage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 49e2b740c81ee7e42a62463afdf4e653
     m_Address: BattleStage4
     m_ReadOnly: 0
     m_SerializedLabels:
-    - BattleStage
+    - MobStage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2325506e60cb76e4e81e899a2ea44893
     m_Address: BattleStage3
     m_ReadOnly: 0
     m_SerializedLabels:
-    - BattleStage
+    - MobStage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6cb42f2932dd7ec48afa484aff292cef
     m_Address: BattleStage2
     m_ReadOnly: 0
     m_SerializedLabels:
-    - BattleStage
+    - MobStage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 95a7b57a284f53a44a5a861f0149decf
     m_Address: BattleStage1
     m_ReadOnly: 0
     m_SerializedLabels:
-    - BattleStage
+    - MobStage
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}

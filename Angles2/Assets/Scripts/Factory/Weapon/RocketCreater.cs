@@ -3,34 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct RocketUpgradableData
-{
-    public RocketUpgradableData(float damage, float explosionDamage, int explosionRange)
-    {
-        _damage = damage;
-        _explosionDamage = explosionDamage;
-        _explosionRange = explosionRange;
-    }
-
-    private float _damage;
-    private float _explosionDamage;
-    private int _explosionRange;
-
-    public float Damage { get => _damage; }
-    public float ExplosionDamage { get => _explosionDamage; }
-    public int ExplosionRange { get => _explosionRange; }
-}
-
 [System.Serializable]
 public class RocketData : WeaponData
 {
+    public float _explosionDamage;
+    public int _explosionRange;
     public float _lifeTime;
-    public List<RocketUpgradableData> _upgradableDatas;
 
-    public RocketData(List<RocketUpgradableData> upgradableDatas, float lifeTime)
+    public RocketData(float explosionDamage, int explosionRange, float lifeTime)
     {
-        _upgradableDatas = upgradableDatas;
+        _explosionDamage = explosionDamage;
+        _explosionRange = explosionRange;
         _lifeTime = lifeTime;
+    }
+
+    public override void ChangeDamage(float damage) => _explosionDamage = damage;
+    public override void ChangeRange(float range) => _explosionDamage = range;
+
+    public override WeaponData Copy()
+    {
+        return new RocketData(
+            _explosionDamage,
+            _explosionRange,
+            _lifeTime
+        );
     }
 }
 
@@ -38,7 +34,7 @@ public class RocketCreater : WeaponCreater
 {
     BaseFactory _effectFactory;
 
-    public RocketCreater(BaseWeapon weaponPrefab, BaseFactory effectFactory) : base(weaponPrefab)
+    public RocketCreater(BaseWeapon weaponPrefab, WeaponData data, BaseFactory effectFactory) : base(weaponPrefab, data)
     {
         _effectFactory = effectFactory;
     }
@@ -49,6 +45,7 @@ public class RocketCreater : WeaponCreater
         if (weapon == null) return null;
 
         weapon.Initialize(_effectFactory);
+        weapon.ResetData(_weaponData as RocketData);
         return weapon;
     }
 }

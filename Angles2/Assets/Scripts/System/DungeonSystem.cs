@@ -77,11 +77,16 @@ public class DungeonSystem : BaseGameMode
         _cameraController.Initialize();
 
         _mapGenerator = GetComponent<MapGenerator>();
-        _mapGenerator.Initialize(addressableHandler.StartStageAssetDictionary, addressableHandler.BonusStageAssetDictionary, addressableHandler.BattleStageAssetDictionary);
+        _mapGenerator.Initialize(
+            addressableHandler.StartStageAssetList,
+            addressableHandler.BonusStageAssetList,
+            addressableHandler.MobStageAssetList,
+            addressableHandler.BossStageAssetList);
+
         _mapGenerator.CreateMap();
 
         _stageController = GetComponent<DungeonStageController>();
-        _stageController.Initialize(30, 5, _factoryCollection);
+        _stageController.Initialize(13, 2, _factoryCollection);
         _stageController.CreateRandomStage(_mapGenerator.StageObjects);
     }
 }

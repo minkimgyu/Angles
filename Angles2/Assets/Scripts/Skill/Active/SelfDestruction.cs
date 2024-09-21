@@ -6,22 +6,21 @@ using System;
 
 public class SelfDestruction : BaseSkill
 {
-    float _delay;
-    float _damage;
-    float _range;
-
-    List<ITarget.Type> _targetTypes;
     Timer _delayTimer;
 
+    SelfDestructionData _data;
     BaseFactory _effectFactory;
 
-    public SelfDestruction(SelfDestructionData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public SelfDestruction(SelfDestructionData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _damage = data._damage;
-        _range = data._range;
-        _targetTypes = data._targetTypes;
-
+        _data = data;
+        _upgrader = upgrader;
         _effectFactory = effectFactory;
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new NoConstraintComponent();
     }
 
     public override void OnUpdate()
@@ -38,10 +37,14 @@ public class SelfDestruction : BaseSkill
             IDamageable damageable = _castingData.MyObject.GetComponent<IDamageable>();
             if (damageable == null) return;
 
-            damageable.GetDamage(new DamageData(Damage.InstantDeathDamage));
+            DamageableData damageData =
 
-            DamageData damageData = new DamageData(_damage);
-            Damage.HitCircleRange(damageData, _castingData.MyObject.transform.position, _range, true, Color.red, 3);
+            new DamageableData.DamageableDataBuilder().
+            SetDamage(new DamageData(Damage.InstantDeathDamage, _upgradeableRatio.TotalDamageRatio))
+            .SetTargets(_data._targetTypes)
+            .Build();
+
+            Damage.HitCircleRange(damageData, _castingData.MyObject.transform.position, _data._range, true, Color.red, 3);
 
             _delayTimer.Reset();
         }
@@ -49,10 +52,10 @@ public class SelfDestruction : BaseSkill
 
     public override void OnCaptureEnter(ITarget target)
     {
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         if (_delayTimer.CurrentState != Timer.State.Ready) return;
-        _delayTimer.Start(_delay);
+        _delayTimer.Start(_data._delay);
     }
 }

@@ -5,38 +5,48 @@ using UnityEngine;
 // 여기서 IUpgradable를 재정의
 // _weaponData를 증가시키는 방향으로 개발 진행
 
-abstract public class Shooter : BaseWeapon
+public class Shooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
     TrackComponent _trackComponent;
 
-    protected WeaponData _weaponData;
-    protected abstract BaseWeapon ReturnProjectileWeapon();
-
     void FireProjectile(Vector2 direction)
     {
         _waitFire += Time.deltaTime;
-        if (_shooterData._fireDelay > _waitFire) return;
+        if (_data._fireDelay > _waitFire) return;
 
         _waitFire = 0;
 
-        BaseWeapon weapon = ReturnProjectileWeapon();
+        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponDamageModifier(_data._damage));
+
+        BaseWeapon weapon = _weaponFactory.Create(_data._fireWeaponName);
+        weapon.ModifyData(modifiers);
+
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
-        projectile.Shoot(direction, _shooterData._shootForce);
+        projectile.Shoot(direction, _data._shootForce);
     }
 
     protected float _waitFire;
     List<ITarget> _targetDatas;
 
-    protected ShooterData _shooterData;
+    protected ShooterData _data;
     protected BaseFactory _weaponFactory;
+
+    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    {
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            _data = modifiers[i].Visit(_data);
+        }
+    }
 
     public override void ResetData(ShooterData shooterData)
     {
-        _shooterData = shooterData;
-        _trackComponent.Initialize(_shooterData._moveSpeed, _shooterData._followOffset, _shooterData._maxDistanceFromPlayer);
+        _data = shooterData;
+        _trackComponent.Initialize(_data._moveSpeed, _data._followOffset, _data._maxDistanceFromPlayer);
     }
 
     public override void Initialize(BaseFactory weaponFactory)
@@ -74,7 +84,7 @@ abstract public class Shooter : BaseWeapon
         {
             if ((_targetDatas[i] as UnityEngine.Object) == null) continue;
 
-            bool isTarget = _targetDatas[i].IsTarget(_targetTypes);
+            bool isTarget = _targetDatas[i].IsTarget(_data._targetTypes);
             if (isTarget == false) continue;
 
             capturedTarget = _targetDatas[i];

@@ -10,28 +10,29 @@ public class BladeData : WeaponData
     public float _range;
     public float _lifeTime;
 
-    public static BladeData operator +(BladeData a, SpawnBladeUpgrader.UpgradableData b)
+    public BladeData(float attackDelay)
     {
-        return new BladeData(
-            a._damage + b._damage,
-            a._attackDelay + b._attackDelay,
-            a._range + b._range,
-            a._lifeTime
-        );
+        _damage = 0;
+        _attackDelay = attackDelay;
+        _range = 1;
+        _lifeTime = 3;
     }
 
-    public BladeData(float damage, float attackDelay, float range, float lifeTime)
+    public override void ChangeDamage(float damage) => _damage = damage;
+    public override void ChangeRange(float range) => _range = range;
+    public override void ChangeLifetime(float lifeTime) => _lifeTime = lifeTime;
+
+    public override WeaponData Copy()
     {
-        _damage = damage;
-        _attackDelay = attackDelay;
-        _range = range;
-        _lifeTime = lifeTime;
+        return new BladeData(
+            _attackDelay
+        );
     }
 }
 
 public class BladeCreater : WeaponCreater
 {
-    public BladeCreater(BaseWeapon weaponPrefab) : base(weaponPrefab)
+    public BladeCreater(BaseWeapon weaponPrefab, WeaponData data) : base(weaponPrefab, data)
     {
     }
 
@@ -41,6 +42,7 @@ public class BladeCreater : WeaponCreater
         if (weapon == null) return null;
 
         weapon.Initialize();
+        weapon.ResetData(_weaponData as BladeData);
         return weapon;
     }
 }

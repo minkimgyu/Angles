@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2962999736807205868}
   - component: {fileID: 8327213263423132141}
+  - component: {fileID: 586004410050425348}
   - component: {fileID: 3136648575354430613}
   m_Layer: 0
   m_Name: BattleStage4
@@ -86,6 +87,20 @@ MonoBehaviour:
       - {fileID: 2012190564858966958}
       - {fileID: 6948459856371936780}
       m_values: 0500000005000000070000000700000006000000060000000300000003000000
+--- !u!114 &586004410050425348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996547062866779878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79aa04bca376abe4eb8faf911df25c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallTile: {fileID: 4716359316725306670}
+  _groundTile: {fileID: 6393826661306845285}
 --- !u!114 &3136648575354430613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11154,7 +11169,7 @@ GameObject:
   - component: {fileID: 8787118933721569640}
   - component: {fileID: 6570373070218600850}
   - component: {fileID: 1569446181191323445}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}

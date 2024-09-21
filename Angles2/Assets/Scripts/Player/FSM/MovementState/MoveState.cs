@@ -10,18 +10,19 @@ public class MoveState : State<Player.MovementState>
 
     MoveComponent _moveComponent;
     Vector2 _storedInput;
-    float _moveSpeed;
+
+    PlayerData _playerData;
 
     public MoveState(
         FSM<Player.MovementState> fsm,
-        float moveSpeed,
+        PlayerData playerData,
 
         Func<bool> CanUseDash,
         Action UseDash,
 
         MoveComponent moveComponent) : base(fsm)
     {
-        _moveSpeed = moveSpeed;
+        _playerData = playerData;
         _moveComponent = moveComponent;
 
         this.CanUseDash = CanUseDash;
@@ -35,7 +36,7 @@ public class MoveState : State<Player.MovementState>
 
     public override void OnFixedUpdate()
     {
-        _moveComponent.Move(_storedInput, _moveSpeed);
+        _moveComponent.Move(_storedInput, _playerData._moveSpeed);
     }
 
     public override void OnMoveEnd()

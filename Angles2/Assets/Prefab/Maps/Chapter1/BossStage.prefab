@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 3917504926834910183}
   - component: {fileID: 5141660663728747123}
   - component: {fileID: 1264619391985075246}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4587,6 +4587,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4931189990269405537}
   - component: {fileID: 8067460916275562572}
+  - component: {fileID: 7613425430534972146}
+  - component: {fileID: 6063896747808160092}
   m_Layer: 0
   m_Name: BossStage
   m_TagString: Untagged
@@ -4637,6 +4639,32 @@ MonoBehaviour:
       - {fileID: 7776375782889510311}
       - {fileID: 2481144151650208754}
       m_values: 060000000600000003000000030000000100000001000000
+--- !u!114 &7613425430534972146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942053113113216466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79aa04bca376abe4eb8faf911df25c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallTile: {fileID: 5553359111661286505}
+  _groundTile: {fileID: 5879259299310917399}
+--- !u!114 &6063896747808160092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942053113113216466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c3af45d449a4ea4cb18f17c3dcce1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3035199396709333114
 GameObject:
   m_ObjectHideFlags: 0

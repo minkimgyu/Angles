@@ -102,7 +102,7 @@ MonoBehaviour:
     - Viewer
     - StartStage
     - BonusStage
-    - BattleStage
+    - MobStage
     - BossStage
     - InteractableObject
     - Sound

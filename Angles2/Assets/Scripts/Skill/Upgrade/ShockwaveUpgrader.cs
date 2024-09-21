@@ -12,11 +12,8 @@ public class ShockwaveUpgrader : IUpgradeVisitor
             _range = range;
         }
 
-        private float _damage;
-        private float _range;
-
-        public float Damage { get => _damage; }
-        public float Range { get => _range; }
+        public float _damage;
+        public float _range;
     }
 
     List<UpgradableData> _upgradeDatas;
@@ -26,9 +23,10 @@ public class ShockwaveUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
-    public void Visit(IUpgradable upgradable, ShockwaveData data)
+    public void Visit(ISkillUpgradable upgradable, ShockwaveData data)
     {
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
-        data += upgradeData;
+        data._damage += upgradeData._damage;
+        data._range += upgradeData._range;
     }
 }

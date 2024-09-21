@@ -6,14 +6,24 @@ using System;
 public class SpawnBlade : BaseSkill
 {
     SpawnBladeData _data;
-    BladeData _bladeData;
     BaseFactory _weaponFactory;
 
-    public SpawnBlade(SpawnBladeData data, SpawnBladeUpgrader upgrader, BaseFactory weaponFactory) :base(Type.Active, data._maxUpgradePoint)
+    public SpawnBlade(SpawnBladeData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) :base(Type.Active, data._maxUpgradePoint)
     {
         _data = data;
-        _upgradeVisitor = upgrader;
+        _upgrader = upgrader;
         _weaponFactory = weaponFactory;
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new RandomConstraintComponent(_data, _upgradeableRatio);
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -27,8 +37,16 @@ public class SpawnBlade : BaseSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blade);
         if (weapon == null) return;
 
-        weapon.ResetData(_bladeData);    
-        weapon.ResetTargetTypes(_data._targetTypes);
+        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponSizeModifier(_data._sizeMultiplier));
+        modifiers.Add(new WeaponLifetimeModifier(_data._lifetime));
+
+        // 아래 두 개는 필수!
+        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+        modifiers.Add(new WeaponTotalDamageRatioModifier(_upgradeableRatio.TotalDamageRatio));
+
+        weapon.ModifyData(modifiers);
         weapon.ResetPosition(_castingData.MyTransform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();

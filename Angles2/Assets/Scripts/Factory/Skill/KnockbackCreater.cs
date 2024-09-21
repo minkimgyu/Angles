@@ -7,56 +7,55 @@ using System;
 public class KnockbackData : CooltimeSkillData
 {
     public float _damage;
-    public float _sizeMultiplier;
+    public float _rangeMultiplier;
     public SerializableVector2 _size;
     public SerializableVector2 _offset;
     public List<ITarget.Type> _targetTypes;
-
-    // + 연산자 오버로딩
-    public static KnockbackData operator +(KnockbackData a, KnockbackUpgrader.UpgradableData b)
-    {
-        return new KnockbackData(
-            a._maxUpgradePoint,
-            a._coolTime,
-            a._maxStackCount,
-            a._damage + b.Damage,
-            a._sizeMultiplier + b.SizeMultiplier,
-            a._size,
-            a._offset,
-            a._targetTypes
-        );
-    }
 
     public KnockbackData(
         int maxUpgradePoint,
         float coolTime,
         int maxStackCount,
         float damage,
-        float sizeMultiplier,
         SerializableVector2 size,
         SerializableVector2 offset,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
-        _sizeMultiplier = sizeMultiplier;
+        _rangeMultiplier = 1;
         _size = size;
         _offset = offset;
         _targetTypes = targetTypes;
+    }
+
+    public override SkillData Copy()
+    {
+        return new KnockbackData(
+            _maxUpgradePoint, // CooltimeSkillData에서 상속된 값
+            _coolTime, // CooltimeSkillData에서 상속된 값
+            _maxStackCount, // CooltimeSkillData에서 상속된 값
+            _damage,
+            new SerializableVector2(_size.x, _size.y), // SerializableVector2 깊은 복사
+            new SerializableVector2(_offset.x, _offset.y), // SerializableVector2 깊은 복사
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
     }
 }
 
 public class KnockbackCreater : SkillCreater
 {
     BaseFactory _effectFactory;
+    IUpgradeVisitor _upgrader;
 
-    public KnockbackCreater(SkillData data, BaseFactory effectFactory) : base(data)
+    public KnockbackCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(data)
     {
+        _upgrader = upgrader;
         _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
         KnockbackData data = _skillData as KnockbackData;
-        return new Knockback(data, _effectFactory);
+        return new Knockback(data, _upgrader, _effectFactory);
     }
 }

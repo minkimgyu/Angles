@@ -25,9 +25,11 @@ public class SpawnStickyBombUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
-    public void Visit(IUpgradable upgradable, StickyBombData data)
+    public void Visit(ISkillUpgradable upgradable, SpawnStickyBombData data)
     {
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
-        data += upgradeData;
+
+        data._damage += upgradeData._damage;
+        data._delay += upgradeData._explosionDelay;
     }
 }

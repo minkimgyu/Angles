@@ -10,19 +10,18 @@ public class ShootState : State<Player.ActionState>
     Action<bool> SetInvincible;
     Action<Collision2D> OnReflect;
 
-    float _shootSpeed;
-    BuffFloat _shootDuration;
-
     float _ratio;
 
     Timer _timer;
     Transform _myTransform;
     MoveComponent _moveComponent;
 
+    PlayerData _playerData;
+
     public ShootState(
         FSM<Player.ActionState> fsm,
-        float shootSpeed,
-        BuffFloat shootDuration,
+
+        PlayerData playerData,
 
         Transform myTransform,
         MoveComponent moveComponent,
@@ -32,8 +31,7 @@ public class ShootState : State<Player.ActionState>
 
         Action<bool> SetInvincible) : base(fsm)
     {
-        _shootSpeed = shootSpeed;
-        _shootDuration = shootDuration;
+        _playerData = playerData;
         _myTransform = myTransform;
         _moveComponent = moveComponent;
 
@@ -64,7 +62,7 @@ public class ShootState : State<Player.ActionState>
         _ratio = ratio;
 
         _timer.Reset();
-        _timer.Start(_shootDuration.Value);
+        _timer.Start(_playerData._shootDuration);
 
         ChangeBodyScale?.Invoke(false, 0);
         Shoot(direction);
@@ -88,7 +86,7 @@ public class ShootState : State<Player.ActionState>
     void Shoot(Vector2 direction)
     {
         _moveComponent.Stop();
-        _moveComponent.AddForce(direction, _shootSpeed * _ratio);
+        _moveComponent.AddForce(direction, _playerData._shootSpeed * _ratio);
     }
 
     void GoToReadyState()

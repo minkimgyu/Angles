@@ -2,55 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct ShooterUpgradableData
-{
-    public ShooterUpgradableData(float shootForce, float fireDelay)
-    {
-        _shootForce = shootForce; // 날리는 속도
-        _fireDelay = fireDelay; // 연사 속도
-    }
-
-    private float _shootForce;
-    private float _fireDelay;
-
-    public float ShootForce { get => _shootForce; }
-    public float FireDelay { get => _fireDelay; }
-}
-
 [System.Serializable]
 public class ShooterData : WeaponData
 {
-    public float _damageRatio; // --> 이걸로 데미지 변경
+    public float _damage; // --> 이걸로 데미지 변경
     public float _shootForce;
     public float _fireDelay;
-    public WeaponData _fireWeaponData;
-    public BaseWeapon.Name _fireWeaponName;
+    public BaseWeapon.Name _fireWeaponName; // --> 생성자가 아닌 스킬에서 설정해준다.
 
     public float _moveSpeed;
     public float _followOffset;
     public float _maxDistanceFromPlayer;
 
-    public static ShooterData operator +(ShooterData a, SpawnShooterUpgrader.UpgradableData b)
+    public ShooterData(float damage, float shootForce, float fireDelay, float moveSpeed, float followOffset, float maxDistanceFromPlayer)
     {
-        return new ShooterData(
-            a.fireWeaponData, // 수정될 없음
-            a._coolTime,
-            a._maxStackCount,
-            a._damage + b.Damage,
-            a._range + b.Range,
-            a._maxTargetCount + b.MaxTargetCount,
-            a._targetTypes
-        );
-    }
+        _damage = damage;
+        _shootForce = shootForce;
+        _fireDelay = fireDelay;
 
-    public ShooterData(WeaponData fireWeaponData, float moveSpeed, float followOffset, float maxDistanceFromPlayer, BaseWeapon.Name fireWeaponName)
-    {
-        _fireWeaponData = fireWeaponData;
+        _fireWeaponName = BaseWeapon.Name.Bullet;
 
         _moveSpeed = moveSpeed;
         _followOffset = followOffset;
         _maxDistanceFromPlayer = maxDistanceFromPlayer;
-        _fireWeaponName = fireWeaponName;
+    }
+
+    public override void ChangeDamage(float damage) { _damage = damage; }
+    public override void ChangeDelay(float delay) { _fireDelay = delay; }
+    public override void ChangeProjectile(BaseWeapon.Name name) { _fireWeaponName = name; }
+
+    public override WeaponData Copy()
+    {
+        return new ShooterData(
+            _damage,
+            _shootForce,
+            _fireDelay,
+            _moveSpeed,
+            _followOffset,
+            _maxDistanceFromPlayer
+        );
     }
 }
 
@@ -58,7 +48,7 @@ public class ShooterCreater : WeaponCreater
 {
     BaseFactory _weaponFactory;
 
-    public ShooterCreater(BaseWeapon weaponPrefab, BaseFactory weaponFactory) : base(weaponPrefab)
+    public ShooterCreater(BaseWeapon weaponPrefab, WeaponData data, BaseFactory weaponFactory) : base(weaponPrefab, data)
     {
         _weaponFactory = weaponFactory;
     }
@@ -69,6 +59,8 @@ public class ShooterCreater : WeaponCreater
         if (weapon == null) return null;
 
         weapon.Initialize(_weaponFactory);
+        weapon.ResetData(_weaponData as ShooterData);
+
         return weapon;
     }
 }

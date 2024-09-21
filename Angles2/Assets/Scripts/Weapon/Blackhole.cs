@@ -27,9 +27,22 @@ public class Blackhole : BaseWeapon
     Timer _lifeTimer;
     BlackholeData _data;
 
+    public override void Activate()
+    {
+        DestroyAfter(_data._lifeTime);
+    }
+
     public override void ResetData(BlackholeData data)
     {
         _data = data;
+    }
+
+    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    {
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            _data = modifiers[i].Visit(_data);
+        }
         ResetSize(_data._range);
     }
 
@@ -69,7 +82,14 @@ public class Blackhole : BaseWeapon
             {
                 _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, _data._absorbForce, ForceMode2D.Force);
 
-                DamageData damageData = new DamageData(0, _targetTypes, 1f, false);
+                DamageableData damageData =
+
+                new DamageableData.DamageableDataBuilder().
+                SetDamage(new DamageData(0, _data._totalDamageRatio))
+                .SetTargets(_data._targetTypes)
+                .SetGroggyDuration(2f)
+                .Build();
+
                 _targetDatas[i].DamageableTarget.GetDamage(damageData);
 
                 if (i < 0 || _targetDatas.Count - 1 < i) continue;

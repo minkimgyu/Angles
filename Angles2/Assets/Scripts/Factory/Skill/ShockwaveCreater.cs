@@ -11,17 +11,6 @@ public class ShockwaveData : SkillData
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public static ShockwaveData operator +(ShockwaveData a, ShockwaveUpgrader.UpgradableData b)
-    {
-        return new ShockwaveData(
-            a._maxUpgradePoint, // 수정될 없음
-            a._damage + b.Damage,
-            a._range + b.Range,
-            a._delay,
-            a._targetTypes
-        );
-    }
-
     public ShockwaveData(int maxUpgradePoint, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
@@ -29,15 +18,28 @@ public class ShockwaveData : SkillData
         _range = range;
         _targetTypes = targetTypes;
     }
+
+    public override SkillData Copy()
+    {
+        return new ShockwaveData(
+            _maxUpgradePoint, // SkillData에서 상속된 값
+            _damage,
+            _range,
+            _delay,
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
+    }
 }
 
 public class ShockwaveCreater : SkillCreater
 {
+    IUpgradeVisitor _upgrader;
     BaseFactory _effectFactory;
 
-    public ShockwaveCreater(SkillData data, BaseFactory _effectFactory) : base(data)
+    public ShockwaveCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(data)
     {
-        this._effectFactory = _effectFactory;
+        _upgrader = upgrader;
+        _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()

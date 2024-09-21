@@ -15,20 +15,6 @@ public class StatikkData : CooltimeSkillData
     public int _maxTargetCount;
     public List<ITarget.Type> _targetTypes;
 
-    // + 연산자 오버로딩
-    public static StatikkData operator +(StatikkData a, StatikkUpgrader.UpgradableData b)
-    {
-        return new StatikkData(
-            a._maxUpgradePoint, // 수정될 없음
-            a._coolTime,
-            a._maxStackCount,
-            a._damage + b.Damage,
-            a._range + b.Range,
-            a._maxTargetCount + b.MaxTargetCount,
-            a._targetTypes
-        );
-    }
-
     public StatikkData(
         int maxUpgradePoint,
         float coolTime,
@@ -43,20 +29,35 @@ public class StatikkData : CooltimeSkillData
         _maxTargetCount = maxTargetCount;
         _targetTypes = targetTypes;
     }
+
+    public override SkillData Copy()
+    {
+        return new StatikkData(
+            _maxUpgradePoint, // CooltimeSkillData에서 상속된 값
+            _coolTime, // CooltimeSkillData에서 상속된 값
+            _maxStackCount, // CooltimeSkillData에서 상속된 값
+            _damage,
+            _range,
+            _maxTargetCount,
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
+    }
 }
 
 public class StatikkCreater : SkillCreater
 {
+    IUpgradeVisitor _upgrader;
     BaseFactory _effectFactory;
 
-    public StatikkCreater(SkillData data, StatikkUpgrader upgrader, BaseFactory effectFactory) : base(data) 
+    public StatikkCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(data) 
     {
+        _upgrader = upgrader;
         _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
         StatikkData data = _skillData as StatikkData;
-        return new Statikk(data, _effectFactory);
+        return new Statikk(data, _upgrader, _effectFactory);
     }
 }

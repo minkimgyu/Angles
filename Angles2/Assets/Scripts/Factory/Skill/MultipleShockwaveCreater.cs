@@ -25,14 +25,28 @@ public class MultipleShockwaveData : SkillData
         _range = range;
         _targetTypes = targetTypes;
     }
+
+    public override SkillData Copy()
+    {
+        return new MultipleShockwaveData(
+            _maxUpgradePoint, // SkillData에서 상속된 값
+            _waveSizeMultiply,
+            _waveDelay,
+            _maxWaveCount,
+            _damage,
+            _range,
+            _delay,
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
+    }
 }
 
 
 public class MultipleShockwaveCreater : SkillCreater
 {
-    EffectFactory _effectFactory;
+    BaseFactory _effectFactory;
 
-    public MultipleShockwaveCreater(SkillData data, EffectFactory effectFactory) : base(data)
+    public MultipleShockwaveCreater(SkillData data, BaseFactory effectFactory) : base(data)
     {
         _effectFactory = effectFactory;
     }

@@ -30,7 +30,6 @@ public class GridComponent : MonoBehaviour
     Vector2Int _topLeftLocalPoint;
 
     Grid2D _gridSize;
-    Pathfinder _pathfinder;
 
     List<Vector2> _points;
     const int _nodeSize = 1;
@@ -198,7 +197,7 @@ public class GridComponent : MonoBehaviour
         }
     }
 
-    public void Initialize()
+    public void Initialize(Pathfinder pathfinder)
     {
         _groundTile.CompressBounds(); // 타일의 바운더리를 맞춰준다.
         BoundsInt bounds = _groundTile.cellBounds;
@@ -219,19 +218,6 @@ public class GridComponent : MonoBehaviour
         _nodes = new Node[_gridSize.Row, _gridSize.Column];
         CreateNode();
 
-        _pathfinder = GetComponent<Pathfinder>();
-        _pathfinder.Initialize(this);
-
-        //// Stopwatch 객체 생성
-        //Stopwatch stopwatch = new Stopwatch();
-
-        //// 타이머 시작
-        //stopwatch.Start();
-        //_points = _pathfinder.FindPath(_startPoint.position, _endPoint.position);
-        //// 타이머 멈춤
-        //stopwatch.Stop();
-
-        //// 경과 시간 출력 (밀리초 단위)
-        //UnityEngine.Debug.Log("Time taken: " + stopwatch.ElapsedMilliseconds + " ms");
+        pathfinder.Initialize(this);
     }
 }

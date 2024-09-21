@@ -8,16 +8,16 @@ public class SpawnBlackholeUpgrader : IUpgradeVisitor
     {
         public UpgradableData(float lifeTime, float absorbForce, int maxTargetCount, float range)
         {
-            LifeTime = lifeTime;
-            AbsorbForce = absorbForce;
-            MaxTargetCount = maxTargetCount;
-            Range = range;
+            _lifeTime = lifeTime;
+            _absorbForce = absorbForce;
+            _maxTargetCount = maxTargetCount;
+            _range = range;
         }
 
-        public float LifeTime { get; private set; }
-        public float AbsorbForce { get; private set; }
-        public int MaxTargetCount { get; private set; }
-        public float Range { get; private set; }
+        public float _lifeTime;
+        public float _absorbForce;
+        public int _maxTargetCount;
+        public float _range;
     }
 
     List<UpgradableData> _upgradeDatas;
@@ -27,9 +27,12 @@ public class SpawnBlackholeUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
-    public void Visit(IUpgradable upgradable, BlackholeData data) 
+    public void Visit(ISkillUpgradable upgradable, SpawnBlackholeData data) 
     {
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
-        data += upgradeData;
+        data._lifetime += upgradeData._lifeTime;
+        data._force += upgradeData._absorbForce;
+        data._targetCount += upgradeData._maxTargetCount;
+        data._sizeMultiplier += upgradeData._range;
     }
 }

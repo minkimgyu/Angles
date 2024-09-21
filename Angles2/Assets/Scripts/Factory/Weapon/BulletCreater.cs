@@ -3,28 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct BulletUpgradableData
-{
-    public BulletUpgradableData(float damage)
-    {
-        _damage = damage;
-    }
-
-    private float _damage;
-
-    public float Damage { get => _damage; }
-}
-
 [System.Serializable]
 public class BulletData : WeaponData
 {
+    public float _damage;
     public float _lifeTime;
-    public List<BulletUpgradableData> _upgradableDatas;
 
-    public BulletData(List<BulletUpgradableData> upgradableDatas, float lifeTime)
+    public BulletData(float damage, float lifeTime)
     {
-        _upgradableDatas = upgradableDatas;
+        _damage = damage;
         _lifeTime = lifeTime;
+    }
+
+    public override void ChangeDamage(float damage) => _damage = damage;
+
+    public override WeaponData Copy()
+    {
+        return new BulletData(
+            _damage,
+            _lifeTime
+        );
     }
 }
 
@@ -32,7 +30,7 @@ public class BulletCreater : WeaponCreater
 {
     BaseFactory _effectFactory;
 
-    public BulletCreater(BaseWeapon weaponPrefab, BaseFactory effectFactory) : base(weaponPrefab)
+    public BulletCreater(BaseWeapon weaponPrefab, WeaponData weaponData, BaseFactory effectFactory) : base(weaponPrefab, weaponData)
     {
         _effectFactory = effectFactory;
     }
@@ -43,6 +41,7 @@ public class BulletCreater : WeaponCreater
         if (weapon == null) return null;
 
         weapon.Initialize(_effectFactory);
+        weapon.ResetData(_weaponData as BulletData);
         return weapon;
     }
 }

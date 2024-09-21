@@ -10,14 +10,28 @@ public class HexagonData : EnemyData
     public float _stopDistance;
     public float _gap;
 
-    public HexagonData(float maxHp, ITarget.Type targetType, BaseEnemy.Size size, List<BaseSkill.Name> skillNames,
-        DropData dropData, float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillNames, dropData)
+    public HexagonData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+        DropData dropData, float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillDataToAdd, dropData)
     {
         _moveSpeed = moveSpeed;
-        _skillNames = skillNames;
+        _skillDataToAdd = skillDataToAdd;
 
         _stopDistance = stopDistance;
         _gap = gap;
+    }
+
+    public override LifeData Copy()
+    {
+        return new HexagonData(
+            _maxHp, // EnemyData에서 상속된 값
+            _targetType, // EnemyData에서 상속된 값
+            _size, // EnemyData에서 상속된 값
+            new Dictionary<BaseSkill.Name, int>(_skillDataToAdd), // 딕셔너리 깊은 복사
+            _dropData, // EnemyData에서 상속된 값
+            _moveSpeed, // TriangleData 고유 값
+            _stopDistance,
+            _gap
+        );
     }
 }
 
@@ -25,7 +39,7 @@ public class HexagonCreater : LifeCreater
 {
     BaseFactory _skillFactory;
 
-    public HexagonCreater(BaseLife lifePrefab, BaseLifeData lifeData, BaseFactory effectFactory,
+    public HexagonCreater(BaseLife lifePrefab, LifeData lifeData, BaseFactory effectFactory,
         BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
         _skillFactory = skillFactory;
@@ -39,16 +53,18 @@ public class HexagonCreater : LifeCreater
         HexagonData data = _lifeData as HexagonData;
 
         life.ResetData(data);
-        life.Initialize();
         life.AddEffectFactory(_effectFactory);
+
+        life.Initialize();
 
         ISkillAddable skillUsable = life.GetComponent<ISkillAddable>();
         if (skillUsable == null) return life;
 
-        for (int i = 0; i < data._skillNames.Count; i++)
+        foreach (var item in data._skillDataToAdd)
         {
-            BaseSkill skill = _skillFactory.Create(data._skillNames[i]);
-            skillUsable.AddSkill(data._skillNames[i], skill);
+            BaseSkill skill = _skillFactory.Create(item.Key);
+            skill.Upgrade(item.Value);
+            skillUsable.AddSkill(item.Key, skill);
         }
 
         return life;

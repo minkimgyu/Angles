@@ -18,20 +18,33 @@ public class SelfDestructionData : SkillData
         _range = range;
         _targetTypes = targetTypes;
     }
+
+    public override SkillData Copy()
+    {
+        return new SelfDestructionData(
+            _maxUpgradePoint, // SkillData에서 상속된 값
+            _damage,
+            _range,
+            _delay,
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
+    }
 }
 
 public class SelfDestructionCreater : SkillCreater
 {
+    IUpgradeVisitor _upgrader;
     BaseFactory _effectFactory;
 
-    public SelfDestructionCreater(SkillData data, BaseFactory _effectFactory) : base(data)
+    public SelfDestructionCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(data)
     {
-        this._effectFactory = _effectFactory;
+        _upgrader = upgrader;
+        _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
         SelfDestructionData data = _skillData as SelfDestructionData;
-        return new SelfDestruction(data, _effectFactory);
+        return new SelfDestruction(data, _upgrader, _effectFactory);
     }
 }

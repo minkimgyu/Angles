@@ -17,6 +17,7 @@ public class LaserEffect : BaseEffect
 
     public override void Initialize()
     {
+        base.Initialize();
         _line = GetComponent<LineRenderer>();
     }
 
@@ -34,7 +35,7 @@ public class LaserEffect : BaseEffect
         _line.DOColor(new Color2(startColor, startColor), new Color2(endColor, endColor), duration);
 
         Tweener tweener = DOTween.To(() => _line.startWidth, x => _line.startWidth = x, width, duration);
-        tweener.OnComplete(() => { Debug.Log(_line.startWidth); WhenCompleted?.Invoke(); });
+        tweener.OnComplete(() => { WhenCompleted?.Invoke(); });
     }
 
     public override void Play()

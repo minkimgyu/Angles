@@ -11,7 +11,7 @@ namespace DamageUtility
         const float _instantDeathDamage = 100000000;
         public static float InstantDeathDamage { get { return _instantDeathDamage; } }
 
-        public static void HitContact(DamageData damageData, GameObject target)
+        public static void HitContact(DamageableData damageData, GameObject target)
         {
             if (target == null) return;
 
@@ -21,7 +21,7 @@ namespace DamageUtility
             damageable.GetDamage(damageData);
         }
 
-        public static void HitBoxRange(DamageData damageData, Vector2 pos, Vector2 offset, Vector2 direction, Vector2 size,
+        public static void HitBoxRange(DamageableData damageData, Vector2 pos, Vector2 offset, Vector2 direction, Vector2 size,
             bool drawDebug = false, Color color = default(Color), float duration = 3)
         {
             // Calculate the angle between the direction vector and the positive x-axis
@@ -39,7 +39,7 @@ namespace DamageUtility
             }
         }
 
-        public static void HitCircleRange(DamageData damageData, Vector2 pos, float range,
+        public static void HitCircleRange(DamageableData damageData, Vector2 pos, float range,
             bool drawDebug = false, Color color = default(Color), float duration = 3)
         {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, range);
@@ -54,7 +54,7 @@ namespace DamageUtility
             }
         }
 
-        public static void HitRaycast(DamageData damageData, int maxTargetCount, Vector2 pos, float range, out List<Vector2> hitPoints,
+        public static void HitRaycast(DamageableData damageData, int maxTargetCount, Vector2 pos, float range, out List<Vector2> hitPoints,
             bool drawDebug = false, Color color = default(Color), float duration = 3)
         {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, range);
@@ -66,11 +66,11 @@ namespace DamageUtility
 
             for (int i = 0; i < colliders.Length; i++)
             {
-                if (targetCount > maxTargetCount) break;
+                if (targetCount >= maxTargetCount) break;
 
                 ITarget target = colliders[i].GetComponent<ITarget>();
                 if (target == null) continue;
-                if (target.IsTarget(damageData.DamageableTypes) == false) continue;
+                if (target.IsTarget(damageData._targetType) == false) continue;
 
                 IDamageable damageable = colliders[i].GetComponent<IDamageable>();
                 if (damageable == null) continue;

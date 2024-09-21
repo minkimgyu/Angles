@@ -16,6 +16,8 @@ public class BossStage : BattleStage
 
     [SerializeField] Transform _bossSpawnPoint;
     [SerializeField] List<LevelData> _stageDatas;
+
+    bool _isActive = false;
     Timer _timer;
     float _spawnDelay = 0;
 
@@ -39,6 +41,7 @@ public class BossStage : BattleStage
 
     private void Update()
     {
+        if(_isActive == false) return;
         if (_timer.CurrentState == Timer.State.Finish)
         {
             SpawnMob();
@@ -67,7 +70,14 @@ public class BossStage : BattleStage
     // 여기에 보스 생성
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
+        _isActive = true;
         BaseLife enemy = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(BaseLife.Name.Lombard);
+        
+        BaseFactory viewerFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
+
+        BaseViewer hpViewer = viewerFactory.Create(BaseViewer.Name.BossHPViewer);
+        hpViewer.Initialize();
+        enemy.AddObserverEvent(hpViewer.UpdateViewer);
 
         enemy.transform.position = _bossSpawnPoint.position;
         enemy.AddObserverEvent(OnEnemyDieRequested);

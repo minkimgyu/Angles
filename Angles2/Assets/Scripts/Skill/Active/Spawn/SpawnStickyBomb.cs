@@ -5,18 +5,19 @@ using System;
 
 public class SpawnStickyBomb : BaseSkill
 {
-    List<ITarget.Type> _targetTypes;
     BaseFactory _weaponFactory;
-    StickyBombData _data;
-    SpawnStickyBombUpgrader _upgrader;
+    SpawnStickyBombData _data;
 
-    public SpawnStickyBomb(SpawnStickyBombData data, SpawnStickyBombUpgrader upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
+    public SpawnStickyBomb(SpawnStickyBombData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
     {
         _upgrader = upgrader;
-        _data = data._data;
-        _targetTypes = data._targetTypes;
+        _data = data;
         _weaponFactory = weaponFactory;
-        _useConstraint = new CooltimeConstraint(data.maxStackCount, data._coolTime);
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new CooltimeConstraint(_data, _upgradeableRatio);
     }
 
     public override void Upgrade()
@@ -30,7 +31,7 @@ public class SpawnStickyBomb : BaseSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         IFollowable followable = collision.gameObject.GetComponent<IFollowable>();
@@ -42,8 +43,12 @@ public class SpawnStickyBomb : BaseSkill
         if (_useConstraint.CanUse() == false) return;
         _useConstraint.Use();
 
-        weapon.ResetData(_data);
-        weapon.ResetTargetTypes(_targetTypes);
+        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDelayModifier(_data._delay));
+        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+
+        weapon.ModifyData(modifiers);
         weapon.ResetFollower(followable);
     }
 }

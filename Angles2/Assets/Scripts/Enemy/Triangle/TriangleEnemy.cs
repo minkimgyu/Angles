@@ -12,7 +12,6 @@ public class TriangleEnemy : TrackableEnemy
         _maxHp = data._maxHp;
         _targetType = data._targetType;
         _moveSpeed = data._moveSpeed;
-        _skillNames = data._skillNames;
         _dropData = data._dropData;
 
         _gap = 0.5f;

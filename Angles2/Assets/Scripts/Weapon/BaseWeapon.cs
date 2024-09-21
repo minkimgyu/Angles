@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseWeapon : MonoBehaviour
+abstract public class BaseWeapon : MonoBehaviour
 {
     public enum Name
     {
@@ -13,13 +13,12 @@ public class BaseWeapon : MonoBehaviour
         Blackhole,
         StickyBomb,
 
-        ShotgunShooter,
         RifleShooter,
         RocketShooter,
     }
 
     //protected float _damage;
-    protected List<ITarget.Type> _targetTypes;
+    //protected List<ITarget.Type> _targetTypes;
 
     // 이하 5개는 스킬에서 데이터를 받아서 사용할 수 있게 만들기
     public virtual void ResetData(RocketData data) { }
@@ -28,6 +27,19 @@ public class BaseWeapon : MonoBehaviour
     public virtual void ResetData(BladeData data) { }
     public virtual void ResetData(BlackholeData data) { }
     public virtual void ResetData(ShooterData data) { }
+    public virtual void Activate() { }
+
+    protected void DestroyAfter(float time)
+    {
+        Invoke("DestoryMe", time);
+    }
+
+    void DestoryMe()
+    {
+        Destroy(gameObject);
+    }
+
+    public abstract void ModifyData(List<WeaponDataModifier> modifiers);
 
     public virtual void Initialize() { }
     public virtual void Initialize(BaseFactory factory) { }
@@ -38,5 +50,5 @@ public class BaseWeapon : MonoBehaviour
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { transform.position = pos; transform.right = direction; }
 
     //public void ResetDamage(float damage) { _damage = damage; } --> 이거 대신 위의 ResetData를 사용한다.
-    public void ResetTargetTypes(List<ITarget.Type> types) { _targetTypes = types; }
+    //public void ResetTargetTypes(List<ITarget.Type> types) { _targetTypes = types; }
 }

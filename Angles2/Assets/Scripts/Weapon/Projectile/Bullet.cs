@@ -5,15 +5,6 @@ using DamageUtility;
 
 public class Bullet : ProjectileWeapon
 {
-    List<BulletUpgradableData> _upgradableDatas;
-    BulletUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
-
-    protected void ApplyDamage(IDamageable damageable)
-    {
-        DamageData damageData = new DamageData(UpgradableData.Damage, _targetTypes);
-        damageable.GetDamage(damageData);
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IObstacle obstacle = collision.GetComponent<IObstacle>();
@@ -26,15 +17,32 @@ public class Bullet : ProjectileWeapon
 
         ITarget target = collision.GetComponent<ITarget>();
         if (target == null) return;
-        if (target.IsTarget(_targetTypes) == false) return;
+        if (target.IsTarget(_data._targetTypes) == false) return;
 
         IDamageable damageable = collision.GetComponent<IDamageable>();
-        if (damageable != null) ApplyDamage(damageable);
+        if (damageable != null)
+        {
+            DamageableData damageData =
+
+           new DamageableData.DamageableDataBuilder().
+           SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
+           .SetTargets(_data._targetTypes)
+           .Build();
+
+            damageable.GetDamage(damageData);
+        }
 
         Destroy(gameObject);
     }
 
     BaseFactory _effectFactory;
+    BulletData _data;
+    Timer _lifeTimer;
+
+    public override void Activate()
+    {
+        DestroyAfter(_data._lifeTime);
+    }
 
     void SpawnHitEffect()
     {
@@ -43,10 +51,17 @@ public class Bullet : ProjectileWeapon
         effect.Play();
     }
 
+    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    {
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            _data = modifiers[i].Visit(_data);
+        }
+    }
+
     public override void ResetData(BulletData data)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _lifeTime = data._lifeTime;
+        _data = data;
     }
 
     public override void Initialize(BaseFactory effectFactory)

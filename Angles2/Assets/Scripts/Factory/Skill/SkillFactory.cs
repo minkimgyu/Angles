@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SkillData 
+abstract public class SkillData 
 {
     public int _maxUpgradePoint;
 
@@ -13,10 +13,12 @@ public class SkillData
     {
         _maxUpgradePoint = maxUpgradePoint;
     }
+
+    public abstract SkillData Copy();
 }
 
-[Serializable] 
-public class RandomSkillData : SkillData
+[Serializable]
+abstract public class RandomSkillData : SkillData
 {
     public float _probability;
 
@@ -27,8 +29,8 @@ public class RandomSkillData : SkillData
     }
 }
 
-[Serializable] 
-public class CooltimeSkillData : SkillData
+[Serializable]
+abstract public class CooltimeSkillData : SkillData
 {
     public int _maxStackCount;
     public float _coolTime;
@@ -54,34 +56,39 @@ public class SkillFactory : BaseFactory
 {
     Dictionary<BaseSkill.Name, SkillCreater> _skillCreaters;
 
-    public SkillFactory(Dictionary<BaseSkill.Name, SkillData> skillDatas, BaseFactory effectFactory, BaseFactory weaponFactory, BaseFactory buffFactory)
+    public SkillFactory(Dictionary<BaseSkill.Name, SkillData> skillDatas, Dictionary<BaseSkill.Name, IUpgradeVisitor> upgraders, BaseFactory effectFactory, BaseFactory weaponFactory)
     {
         _skillCreaters = new Dictionary<BaseSkill.Name, SkillCreater>();
 
-        _skillCreaters[BaseSkill.Name.Statikk] = new StatikkCreater(skillDatas[BaseSkill.Name.Statikk], effectFactory);
-        _skillCreaters[BaseSkill.Name.Knockback] = new KnockbackCreater(skillDatas[BaseSkill.Name.Knockback], effectFactory);
-        _skillCreaters[BaseSkill.Name.Impact] = new ImpactCreater(skillDatas[BaseSkill.Name.Impact], effectFactory);
+        _skillCreaters[BaseSkill.Name.Statikk] = new StatikkCreater(skillDatas[BaseSkill.Name.Statikk], upgraders[BaseSkill.Name.Statikk], effectFactory);
+        _skillCreaters[BaseSkill.Name.Knockback] = new KnockbackCreater(skillDatas[BaseSkill.Name.Knockback], upgraders[BaseSkill.Name.Knockback], effectFactory);
+        _skillCreaters[BaseSkill.Name.Impact] = new ImpactCreater(skillDatas[BaseSkill.Name.Impact], upgraders[BaseSkill.Name.Impact], effectFactory);
 
-        _skillCreaters[BaseSkill.Name.SpawnBlackhole] = new SpawnBlackholeCreater(skillDatas[BaseSkill.Name.SpawnBlackhole], weaponFactory);
-        _skillCreaters[BaseSkill.Name.SpawnBlade] = new SpawnBladeCreater(skillDatas[BaseSkill.Name.SpawnBlade], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnBlackhole] = new SpawnBlackholeCreater(skillDatas[BaseSkill.Name.SpawnBlackhole], upgraders[BaseSkill.Name.SpawnBlackhole], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnBlade] = new SpawnBladeCreater(skillDatas[BaseSkill.Name.SpawnBlade], upgraders[BaseSkill.Name.SpawnBlade], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], weaponFactory);
         _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], weaponFactory);
 
-        _skillCreaters[BaseSkill.Name.SpawnStickyBomb]  = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], weaponFactory);
-
-        _skillCreaters[BaseSkill.Name.CreateTotalDamageBuff] = new CreateTotalDamageBuffCreater(skillDatas[BaseSkill.Name.CreateTotalDamageBuff], buffFactory);
-        _skillCreaters[BaseSkill.Name.CreateTotalCooltimeBuff] = new CreateTotalCooltimeBuffCreater(skillDatas[BaseSkill.Name.CreateTotalCooltimeBuff], buffFactory);
-        _skillCreaters[BaseSkill.Name.CreateDashBuff] = new CreateDashBuffCreater(skillDatas[BaseSkill.Name.CreateDashBuff], buffFactory);
-        _skillCreaters[BaseSkill.Name.CreateShootingBuff] = new CreateShootingBuffCreater(skillDatas[BaseSkill.Name.CreateShootingBuff], buffFactory);
-
-
-        _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], weaponFactory);
-        _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater(skillDatas[BaseSkill.Name.Shockwave], effectFactory);
-        _skillCreaters[BaseSkill.Name.MagneticField] = new MagneticFieldCreater(skillDatas[BaseSkill.Name.MagneticField]);
-        _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater(skillDatas[BaseSkill.Name.SelfDestruction], effectFactory);
+        _skillCreaters[BaseSkill.Name.SpawnStickyBomb]  = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], upgraders[BaseSkill.Name.SpawnStickyBomb], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.ContactAttack] = new ContactAttackCreater(skillDatas[BaseSkill.Name.ContactAttack], effectFactory);
+
+        //_skillCreaters[BaseSkill.Name.CreateTotalDamageBuff] = new CreateTotalDamageBuffCreater(skillDatas[BaseSkill.Name.CreateTotalDamageBuff], buffFactory);
+        //_skillCreaters[BaseSkill.Name.CreateTotalCooltimeBuff] = new CreateTotalCooltimeBuffCreater(skillDatas[BaseSkill.Name.CreateTotalCooltimeBuff], buffFactory);
+        //_skillCreaters[BaseSkill.Name.CreateDashBuff] = new CreateDashBuffCreater(skillDatas[BaseSkill.Name.CreateDashBuff], buffFactory);
+        //_skillCreaters[BaseSkill.Name.CreateShootingBuff] = new CreateShootingBuffCreater(skillDatas[BaseSkill.Name.CreateShootingBuff], buffFactory);
+
+
+        _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], upgraders[BaseSkill.Name.SpreadBullets], weaponFactory);
+
+        _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater(skillDatas[BaseSkill.Name.Shockwave], upgraders[BaseSkill.Name.Shockwave], effectFactory);
+
+        _skillCreaters[BaseSkill.Name.MagneticField] = new MagneticFieldCreater(skillDatas[BaseSkill.Name.MagneticField], upgraders[BaseSkill.Name.MagneticField]);
+
+        _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater(skillDatas[BaseSkill.Name.SelfDestruction], upgraders[BaseSkill.Name.SelfDestruction], effectFactory);
+
+        _skillCreaters[BaseSkill.Name.MultipleShockwave] = new MultipleShockwaveCreater(skillDatas[BaseSkill.Name.MultipleShockwave], effectFactory);
     }
 
     public override BaseSkill Create(BaseSkill.Name name)

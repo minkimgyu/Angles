@@ -10,7 +10,6 @@ abstract public class BaseFactory
     public virtual BaseSkill Create(BaseSkill.Name name) { return default; }
     public virtual BaseLife Create(BaseLife.Name name) { return default; }
     public virtual IInteractable Create(IInteractable.Name name) { return default; }
-    public virtual BaseBuff Create(BaseBuff.Name name) { return default; }
 }
 
 public class FactoryCollection
@@ -23,22 +22,19 @@ public class FactoryCollection
         Skill,
         Life,
         Interactable,
-        Buff
     }
 
     Dictionary<Type, BaseFactory> _factories = new Dictionary<Type, BaseFactory>();
 
     public FactoryCollection(AddressableHandler addressableHandler, Database database)
     {
-        _factories.Add(Type.Buff, new BuffFactory(database.BuffDatas));
-
         _factories.Add(Type.Viewer, new ViewerFactory(addressableHandler.ViewerPrefabs));
 
         _factories.Add(Type.Effect, new EffectFactory(addressableHandler.EffectPrefabs));
 
-        _factories.Add(Type.Weapon, new WeaponFactory(addressableHandler.WeaponPrefabs, _factories[Type.Effect]));
+        _factories.Add(Type.Weapon, new WeaponFactory(addressableHandler.WeaponPrefabs, database.WeaponDatas, _factories[Type.Effect]));
 
-        _factories.Add(Type.Skill, new SkillFactory(database.SkillDatas, _factories[Type.Effect], _factories[Type.Weapon], _factories[Type.Buff]));
+        _factories.Add(Type.Skill, new SkillFactory(database.SkillDatas, database.Upgraders, _factories[Type.Effect], _factories[Type.Weapon]));
 
         _factories.Add(Type.Life, new LifeFactory(addressableHandler.LifePrefabs, database.LifeDatas, _factories[Type.Effect], _factories[Type.Skill]));
 

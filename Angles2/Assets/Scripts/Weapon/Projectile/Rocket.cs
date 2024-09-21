@@ -5,18 +5,17 @@ using DamageUtility;
 
 public class Rocket : ProjectileWeapon
 {
-    List<RocketUpgradableData> _upgradableDatas;
-    RocketUpgradableData UpgradableData { get { return _upgradableDatas[_upgradePoint - 1]; } }
-
-    //float _explosionDamage;
-    //float _explosionRange;
-
     BaseFactory _effectFactory;
+    RocketData _data;
+
+    public override void Activate()
+    {
+        DestroyAfter(_data._lifeTime);
+    }
 
     public override void ResetData(RocketData data)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _lifeTime = data._lifeTime;
+        _data = data;
     }
 
     public override void Initialize(BaseFactory effectFactory)
@@ -29,24 +28,30 @@ public class Rocket : ProjectileWeapon
 
     protected void ApplyDamage(IDamageable damageable)
     {
-        DamageData damageData = new DamageData(UpgradableData.Damage, _targetTypes);
+        DamageableData damageData = 
+            
+        new DamageableData.DamageableDataBuilder().
+       SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
+       .SetTargets(_data._targetTypes)
+       .Build();
+
         damageable.GetDamage(damageData);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 폭팔을 우선 적용하고 이후에 접촉한 적에 대해 데미지를 가한다.
+        // 폭발을 우선 적용하고 이후에 접촉한 적에 대해 데미지를 가한다.
         SpawnExplosionEffect();
-        DamageData damageData = new DamageData(UpgradableData.ExplosionDamage, _targetTypes);
-        Damage.HitCircleRange(damageData, transform.position, UpgradableData.ExplosionRange, true, Color.red, 3);
 
-        ITarget target = collision.GetComponent<ITarget>();
-        if (target != null && target.IsTarget(_targetTypes) == true)
-        {
-            IDamageable damageable = collision.GetComponent<IDamageable>();
-            if (damageable != null) ApplyDamage(damageable);
-        }
+        DamageableData damageData =
 
+        new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .Build();
+
+
+        Damage.HitCircleRange(damageData, transform.position, _data._explosionRange, true, Color.red, 3);
         Destroy(gameObject);
     }
 
@@ -55,5 +60,13 @@ public class Rocket : ProjectileWeapon
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
+    }
+
+    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    {
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            _data = modifiers[i].Visit(_data);
+        }
     }
 }

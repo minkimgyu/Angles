@@ -12,31 +12,34 @@ public class ChargeState : State<Player.ActionState>
 
     //Action<bool> ShowShootDirection;
 
-    float _minShootValue;
     Transform _myTransform;
     Vector2 _storedInput;
     MoveComponent _moveComponent;
 
     Timer _chargeTimer;
-    BuffFloat _chargeDuration;
-    float _maxChargePower;
+    PlayerData _playerData;
 
     public ChargeState(
-        FSM<Player.ActionState> fsm, 
-        float minShootValue, 
-        BuffFloat chargeDuration,
+        FSM<Player.ActionState> fsm,
+
+        PlayerData playerData,
+        //float minShootValue, 
+        //BuffFloat chargeDuration,
+
+
         Transform myTransform,
         MoveComponent moveComponent,
 
         Action<bool, float> ChangeBodyScale,
         Action<bool> SetInvincible) : base(fsm)
     {
-        _minShootValue = minShootValue;
+
+        _playerData = playerData;
+
         _myTransform = myTransform;
         _moveComponent = moveComponent;
 
         _chargeTimer = new Timer();
-        _chargeDuration = chargeDuration;
 
         this.ChangeBodyScale = ChangeBodyScale;
         this.SetInvincible = SetInvincible;
@@ -48,12 +51,12 @@ public class ChargeState : State<Player.ActionState>
 
     bool CanShoot(Vector2 input)
     {
-        return input.magnitude >= _minShootValue;
+        return input.magnitude >= _playerData._minJoystickLength;
     }
 
     public override void OnStateEnter()
     {
-        _chargeTimer.Start(_chargeDuration.Value);
+        _chargeTimer.Start(_playerData._chargeDuration);
 
         EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnTurnOnOffDirection, true);
         //ShowShootDirection?.Invoke(true);

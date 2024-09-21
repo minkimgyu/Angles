@@ -8,11 +8,23 @@ public class RectangleData : EnemyData
 {
     public float _moveSpeed;
 
-    public RectangleData(float maxHp, ITarget.Type targetType, BaseEnemy.Size size, List<BaseSkill.Name> skillNames,
-        DropData dropData, float moveSpeed) : base(maxHp, targetType, size, skillNames, dropData)
+    public RectangleData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+        DropData dropData, float moveSpeed) : base(maxHp, targetType, size, skillDataToAdd, dropData)
     {
         _moveSpeed = moveSpeed;
-        _skillNames = skillNames;
+        _skillDataToAdd = skillDataToAdd;
+    }
+
+    public override LifeData Copy()
+    {
+        return new RectangleData(
+            _maxHp, // EnemyData에서 상속된 값
+            _targetType, // EnemyData에서 상속된 값
+            _size, // EnemyData에서 상속된 값
+            new Dictionary<BaseSkill.Name, int>(_skillDataToAdd), // 딕셔너리 깊은 복사
+            _dropData, // EnemyData에서 상속된 값
+            _moveSpeed // TriangleData 고유 값
+        );
     }
 }
 
@@ -20,7 +32,7 @@ public class RectangleCreater : LifeCreater
 {
     BaseFactory _skillFactory;
 
-    public RectangleCreater(BaseLife lifePrefab, BaseLifeData lifeData, BaseFactory effectFactory,
+    public RectangleCreater(BaseLife lifePrefab, LifeData lifeData, BaseFactory effectFactory,
         BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
         _skillFactory = skillFactory;
@@ -34,16 +46,18 @@ public class RectangleCreater : LifeCreater
         RectangleData data = _lifeData as RectangleData;
 
         life.ResetData(data);
-        life.Initialize();
         life.AddEffectFactory(_effectFactory);
+
+        life.Initialize();
 
         ISkillAddable skillUsable = life.GetComponent<ISkillAddable>();
         if (skillUsable == null) return life;
 
-        for (int i = 0; i < data._skillNames.Count; i++)
+        foreach (var item in data._skillDataToAdd)
         {
-            BaseSkill skill = _skillFactory.Create(data._skillNames[i]);
-            skillUsable.AddSkill(data._skillNames[i], skill);
+            BaseSkill skill = _skillFactory.Create(item.Key);
+            skill.Upgrade(item.Value);
+            skillUsable.AddSkill(item.Key, skill);
         }
 
         return life;

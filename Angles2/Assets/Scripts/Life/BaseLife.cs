@@ -62,13 +62,20 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     // 생성 이벤트
     protected BaseFactory _effectFactory;
-    //
+    protected DisplayDamageComponent _displayDamageComponent;
 
     // pathfind 이벤트 추가
     public virtual void AddPathfindEvent(Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) { }
 
-    public abstract void Initialize();
+    public virtual void Initialize()
+    {
+        _displayDamageComponent = new DisplayDamageComponent(_targetType, _effectFactory);
+    }
+
     public virtual void ResetData(PlayerData data) { }
+
+    public virtual void ResetData(LombardData data) { }
+
     public virtual void ResetData(TriangleData data) { }
     public virtual void ResetData(RectangleData data) { }
     public virtual void ResetData(PentagonData data) { }
@@ -117,19 +124,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         }
     }
 
-    void SpawnDamageTxt(DamageData damageData)
-    {
-        if (damageData.ShowTxt == false) return;
-
-        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.DamageTextEffect);
-
-        effect.ResetPosition(transform.position);
-        effect.ResetText(damageData.Damage);
-        effect.ResetColor(damageData.DamageTxtColor);
-
-        effect.Play();
-    }
-
     protected virtual void FixedUpdate()
     {
         if (_lifeState == LifeState.Die) return;
@@ -157,24 +151,24 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         }
     }
 
-    public virtual void GetDamage(DamageData damageData)
+    public virtual void GetDamage(DamageableData damageableData)
     {
         if (_lifeState == LifeState.Alive && _aliveState == AliveState.Invincible) return;
         if (_lifeState == LifeState.Die) return;
 
-        bool canDamage = damageData.DamageableTypes.Contains(_targetType);
+        bool canDamage = damageableData._targetType.Contains(_targetType);
         if (canDamage == false) return;
 
-        _hp -= damageData.Damage;
+        _hp -= damageableData._damageData.Damage;
         OnHpChangeRequested?.Invoke(_hp / _maxHp);
 
-        if (_aliveState == AliveState.Normal && damageData.GroggyDuration > 0)
+        if (_aliveState == AliveState.Normal && damageableData._groggyDuration > 0)
         {
             _aliveState = AliveState.Groggy; // 일정 시간 후 복귀
-            _groggyTimer.Start(damageData.GroggyDuration);
+            _groggyTimer.Start(damageableData._groggyDuration);
         }
 
-        SpawnDamageTxt(damageData);
+        _displayDamageComponent.SpawnDamageTxt(damageableData, transform.position);
 
         if (_hp <= 0)
         {

@@ -46,8 +46,6 @@ public class WanderingState : State<TrackableEnemy.State>
     {
         bool isTarget = target.IsTarget(_targetTypes);
         if (isTarget == false) return;
-
-        Debug.Log("Tracking");
         _baseFSM.SetState(TrackableEnemy.State.Tracking, target, "Find Target");
     }
 

@@ -13,11 +13,6 @@ abstract public class UseConstraintComponent
 
     public virtual void AddViewEvent(Action<float, int, bool> viewEvent) { }
     public virtual void RemoveViewEvent(Action<float, int, bool> viewEvent) { }
-
-    public virtual int GetStackCount() { return default; }
-    public virtual float GetProbability() { return default; }
-    public virtual void SetMaxStackCount(int stackCount) { }
-    public virtual void SetCoolTime(float coolTime) { }
 }
 
 public class NoConstraintComponent : UseConstraintComponent
@@ -27,24 +22,23 @@ public class NoConstraintComponent : UseConstraintComponent
 
 public class CooltimeConstraint : UseConstraintComponent
 {
-    public override int GetStackCount() { return _stackCount; }
-    public override void SetMaxStackCount(int maxStackCount) { _maxStackCount = maxStackCount; }
-    public override void SetCoolTime(float coolTime) { _coolTime = coolTime; }
-
-    protected int _maxStackCount;
     protected int _stackCount;
     protected Timer _cooltimer;
-    protected float _coolTime;
+
+    //protected float _cooltime;
 
     protected bool _showStackCount;
     Action<float, int, bool> ViewerEvent;
 
-    public CooltimeConstraint(int maxStackCount, float coolTime)
+    CooltimeSkillData _cooltimeSkillData;
+    IUpgradeableRatio _upgradeableRatio;
+
+    public CooltimeConstraint(CooltimeSkillData cooltimeSkillData, IUpgradeableRatio upgradeableRatio)
     {
         _showStackCount = true;
-        _coolTime = coolTime;
-        _maxStackCount = maxStackCount;
-        if (_maxStackCount == 1) _showStackCount = false;
+        _cooltimeSkillData = cooltimeSkillData;
+        _upgradeableRatio = upgradeableRatio;
+        //if (_maxStackCount == 1) _showStackCount = false;
 
         _stackCount = 1;
         _cooltimer = new Timer();
@@ -58,27 +52,30 @@ public class CooltimeConstraint : UseConstraintComponent
 
     public override void OnUpdate()
     {
+        bool showStack = true;
         switch (_cooltimer.CurrentState)
         {
             case Timer.State.Ready:
-                if (_stackCount >= _maxStackCount) return;
+                if (_stackCount >= _cooltimeSkillData._maxStackCount) return;
 
-                _cooltimer.Start(_coolTime);
+                _cooltimer.Start(_cooltimeSkillData._coolTime * _upgradeableRatio.TotalCooltimeRatio);
                 break;
             case Timer.State.Running:
-                ViewerEvent?.Invoke(1 - _cooltimer.Ratio, _stackCount, _showStackCount);
+                //showStack = _cooltimeSkillData._maxStackCount > 1;
+                ViewerEvent?.Invoke(1 - _cooltimer.Ratio, _stackCount, showStack);
                 break;
             case Timer.State.Finish:
                 _cooltimer.Reset();
                 _stackCount++;
 
-                if (_stackCount >= _maxStackCount)
+                if (_stackCount >= _cooltimeSkillData._maxStackCount)
                 {
-                    ViewerEvent?.Invoke(0, _stackCount, _showStackCount);
+                    //showStack = _cooltimeSkillData._maxStackCount > 1;
+                    ViewerEvent?.Invoke(0, _stackCount, showStack);
                     return;
                 }
 
-                _cooltimer.Start(_coolTime);
+                _cooltimer.Start(_cooltimeSkillData._coolTime * _upgradeableRatio.TotalCooltimeRatio);
                 break;
             default:
                 break;
@@ -88,17 +85,21 @@ public class CooltimeConstraint : UseConstraintComponent
 
 public class RandomConstraintComponent : UseConstraintComponent
 {
-    float _probability;
-    public override float GetProbability() { return _probability; }
+    RandomSkillData _randomSkillData;
+    IUpgradeableRatio _upgradeableRatio;
 
-    public RandomConstraintComponent(float probability)
+    public RandomConstraintComponent(RandomSkillData randomSkillData, IUpgradeableRatio upgradeableRatio)
     {
-        _probability = probability;
+        _randomSkillData = randomSkillData;
+        _upgradeableRatio = upgradeableRatio;
     }
 
     public override bool CanUse()
     {
         float random = Random.Range(0.0f, 1.0f);
-        return random <= _probability;
+        return random <= _randomSkillData._probability * _upgradeableRatio.TotalRandomRatio;
+
+        // 0.7 * 1.2
+        // 0.7 * 0.8
     }
 }

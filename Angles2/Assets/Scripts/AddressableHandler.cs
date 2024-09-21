@@ -66,7 +66,8 @@ public class AddressableHandler : MonoBehaviour
 
         StartStage,
         BonusStage,
-        BattleStage
+        MobStage,
+        BossStage,
     }
 
     List<Tuple<Labels, Type>> _assetLabels;
@@ -94,13 +95,16 @@ public class AddressableHandler : MonoBehaviour
 
 
     List<BaseStage> _startStageAssetList;
-    public List<BaseStage> StartStageAssetDictionary { get { return _startStageAssetList; } }
+    public List<BaseStage> StartStageAssetList { get { return _startStageAssetList; } }
 
     List<BaseStage> _bonusStageAssetList;
-    public List<BaseStage> BonusStageAssetDictionary { get { return _bonusStageAssetList; } }
+    public List<BaseStage> BonusStageAssetList { get { return _bonusStageAssetList; } }
 
-    List<BaseStage> _battleStageAssetList;
-    public List<BaseStage> BattleStageAssetDictionary { get { return _battleStageAssetList; } }
+    List<BaseStage> _mobStageAssetList;
+    public List<BaseStage> MobStageAssetList { get { return _mobStageAssetList; } }
+
+    List<BaseStage> _bossStageAssetList;
+    public List<BaseStage> BossStageAssetList { get { return _bossStageAssetList; } }
 
     int labelCount = 0;
 
@@ -117,7 +121,8 @@ public class AddressableHandler : MonoBehaviour
 
         _startStageAssetList = new List<BaseStage>();
         _bonusStageAssetList = new List<BaseStage>();
-        _battleStageAssetList = new List<BaseStage>();
+        _mobStageAssetList = new List<BaseStage>();
+        _bossStageAssetList = new List<BaseStage>();
 
         _assetLabels.Add(new Tuple<Labels, Type> (Labels.SkillIcon, typeof(Sprite)));
         _assetLabels.Add(new Tuple<Labels, Type> (Labels.Weapon, typeof(GameObject)));
@@ -129,7 +134,8 @@ public class AddressableHandler : MonoBehaviour
 
         _assetLabels.Add(new Tuple<Labels, Type> (Labels.StartStage, typeof(GameObject)));
         _assetLabels.Add(new Tuple<Labels, Type> (Labels.BonusStage, typeof(GameObject)));
-        _assetLabels.Add(new Tuple<Labels, Type> (Labels.BattleStage, typeof(GameObject)));
+        _assetLabels.Add(new Tuple<Labels, Type> (Labels.MobStage, typeof(GameObject)));
+        _assetLabels.Add(new Tuple<Labels, Type> (Labels.BossStage, typeof(GameObject)));
 
         for (int i = 0; i < _assetLabels.Count; i++)
         {
@@ -155,7 +161,7 @@ public class AddressableHandler : MonoBehaviour
     void LoadAssetAsLabel(Labels label, Type assetType, Action OnComplete)
     {
         // 빌드타겟의 경로를 가져온다.
-        Debug.Log(assetType);
+        //Debug.Log(assetType);
 
         Addressables.LoadResourceLocationsAsync(label.ToString(), assetType).Completed +=
         (handle) =>
@@ -195,8 +201,11 @@ public class AddressableHandler : MonoBehaviour
                     case Labels.BonusStage:
                         LoadPrefab(locationList[i], _bonusStageAssetList, () => { if (locationCount == _bonusStageAssetList.Count) OnComplete?.Invoke(); });
                         break;
-                    case Labels.BattleStage:
-                        LoadPrefab(locationList[i], _battleStageAssetList, () => { if (locationCount == _battleStageAssetList.Count) OnComplete?.Invoke(); });
+                    case Labels.MobStage:
+                        LoadPrefab(locationList[i], _mobStageAssetList, () => { if (locationCount == _mobStageAssetList.Count) OnComplete?.Invoke(); });
+                        break;
+                    case Labels.BossStage:
+                        LoadPrefab(locationList[i], _bossStageAssetList, () => { if (locationCount == _bossStageAssetList.Count) OnComplete?.Invoke(); });
                         break;
                     default:
                         break;

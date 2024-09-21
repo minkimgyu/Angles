@@ -13,7 +13,7 @@ public class GameState
         _coinViewer = coinViewer;
         _enemyDieViewer = enemyDieViewer;
 
-        CoinCount = 0;
+        CoinCount = 1000000;
         EnemyDieCount = 0;
     }
 

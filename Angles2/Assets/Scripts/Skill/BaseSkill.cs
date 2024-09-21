@@ -3,22 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public struct CastingData
-{
-    public CastingData(GameObject myObject, Transform myTransform, BuffFloat totalDamageRatio, BuffFloat totalCooltimeRatio)
-    {
-        MyObject = myObject;
-        MyTransform = myTransform;
-    }
-
-    public GameObject MyObject { get; }
-    public Transform MyTransform { get; }
-}
-
 // 무기는 Visitor 제거해주기
 // PlayerData를 FSM 내부에서 캐싱해서 사용
 // 
-abstract public class BaseSkill : IUpgradable
+abstract public class BaseSkill : ISkillUpgradable
 {
     public enum Name
     {
@@ -34,10 +22,10 @@ abstract public class BaseSkill : IUpgradable
         SpawnBlade, // projectile
         SpawnStickyBomb, // projectile
 
-        CreateShootingBuff,
-        CreateDashBuff,
-        CreateTotalDamageBuff,
-        CreateTotalCooltimeBuff,
+        UpgradeShooting,
+        UpgradeDash,
+        UpgradeDamage,
+        UpgradeCooltime,
 
         SpreadBullets,
         MultipleShockwave,
@@ -60,13 +48,14 @@ abstract public class BaseSkill : IUpgradable
         _upgradePoint = 0;
     }
 
-    protected IUpgradeVisitor _upgradeVisitor;
-    protected UseConstraintComponent _useConstraint;
+    protected IUpgradeVisitor _upgrader;
+    protected UseConstraintComponent _useConstraint = new NoConstraintComponent();
 
     protected Type _skillType;
     public Type SkillType { get { return _skillType; } }
 
-    protected CastingData _castingData;
+    protected SkillController.CastingData _castingData;
+    protected IUpgradeableRatio _upgradeableRatio;
 
     int _maxUpgradePoint;
     public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
@@ -76,15 +65,28 @@ abstract public class BaseSkill : IUpgradable
 
     public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
 
+    public virtual void Upgrade(int step)
+    {
+        for (int i = 0; i < step; i++) Upgrade();
+    }
+
     public virtual void Upgrade() 
     {
         _upgradePoint++;
     }
 
-    public virtual void Initialize(CastingData data) { _castingData = data; }
+    public void Initialize(SkillController.CastingData castingData, IUpgradeableRatio upgradeableRatio ) 
+    { _castingData = castingData; _upgradeableRatio = upgradeableRatio; }
 
-    public void AddViewEvent(Action<float, int, bool> viewEvent) { _useConstraint.AddViewEvent(viewEvent); }
-    public void RemoveViewEvent(Action<float, int, bool> viewEvent) { _useConstraint.RemoveViewEvent(viewEvent); }
+    public void AddViewEvent(Action<float, int, bool> viewEvent) 
+    { 
+        _useConstraint.AddViewEvent(viewEvent); 
+    }
+
+    public void RemoveViewEvent(Action<float, int, bool> viewEvent) 
+    { 
+        _useConstraint.RemoveViewEvent(viewEvent); 
+    }
 
     public virtual bool CanUse() { return true; }
 
@@ -101,5 +103,5 @@ abstract public class BaseSkill : IUpgradable
         _useConstraint.OnUpdate();
     }
 
-    public virtual void OnAdd() { }
+    public abstract void OnAdd();
 }

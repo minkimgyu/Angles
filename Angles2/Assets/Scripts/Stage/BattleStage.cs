@@ -10,9 +10,10 @@ abstract public class BattleStage : BaseStage
     public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection)
     {
         base.Initialize(baseStageController, factoryCollection);
-        GridComponent gridComponent = GetComponent<GridComponent>();
-        gridComponent.Initialize();
         _pathfinder = GetComponent<Pathfinder>();
+
+        GridComponent gridComponent = GetComponent<GridComponent>();
+        gridComponent.Initialize(_pathfinder);
     }
 
     protected abstract void OnEnemyDieRequested();

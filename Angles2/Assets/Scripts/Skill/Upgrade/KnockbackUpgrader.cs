@@ -12,11 +12,8 @@ public class KnockbackUpgrader : IUpgradeVisitor
             _sizeMultiplier = sizeMultiplier;
         }
 
-        private float _damage;
-        private float _sizeMultiplier;
-
-        public float Damage { get => _damage; }
-        public float SizeMultiplier { get => _sizeMultiplier; }
+        public float _damage;
+        public float _sizeMultiplier;
     }
 
     List<UpgradableData> _upgradeDatas;
@@ -26,9 +23,13 @@ public class KnockbackUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
-    public void Visit(IUpgradable upgradable, KnockbackData data)
+    public void Visit(ISkillUpgradable upgradable, KnockbackData data)
     {
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
-        data += upgradeData;
+        data._damage += upgradeData._damage;
+        data._rangeMultiplier += upgradeData._sizeMultiplier;
+
+        Debug.Log("_damage: " + data._damage);
+        Debug.Log("_rangeMultiplier: " + data._rangeMultiplier);
     }
 }

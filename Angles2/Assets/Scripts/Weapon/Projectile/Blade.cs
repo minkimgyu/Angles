@@ -26,10 +26,20 @@ public class Blade : ProjectileWeapon
 
     BladeData _data;
 
+    public override void Activate()
+    {
+        DestroyAfter(_data._lifeTime);
+    }
 
     protected void ApplyDamage(IDamageable damageable)
     {
-        DamageData damageData = new DamageData(_data._damage, _targetTypes);
+        DamageableData damageData =
+
+        new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .Build();
+
         damageable.GetDamage(damageData);
     }
 
@@ -42,11 +52,18 @@ public class Blade : ProjectileWeapon
         Shoot(direction, _force);
     }
 
+    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    {
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            _data = modifiers[i].Visit(_data);
+        }
+        ResetSize(_data._range);
+    }
+
     public override void ResetData(BladeData data)
     {
         _data = data;
-        _lifeTimer.Start(_data._lifeTime);
-        ResetSize(_data._range);
     }
 
     public override void Initialize()
@@ -74,12 +91,6 @@ public class Blade : ProjectileWeapon
 
     private void Update()
     {
-        if (_lifeTimer.CurrentState == Timer.State.Finish)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;

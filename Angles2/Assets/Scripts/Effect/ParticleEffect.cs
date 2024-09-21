@@ -9,6 +9,7 @@ public class ParticleEffect : BaseEffect
 
     public override void Initialize()
     {
+        base.Initialize();
         _effects = new List<ParticleSystem>();
 
         ParticleSystem[] particles = GetComponentsInChildren<ParticleSystem>();

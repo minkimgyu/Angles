@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsable
+public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgradable
 {
     public enum MovementState
     {
@@ -23,49 +23,27 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
     FSM<MovementState> _movementFSM;
     FSM<ActionState> _actionFSM;
 
-    BuffFloat _totalDamageRatio;
-    BuffFloat _totalCooltimeRatio;
-
-    BuffFloat _dashSpeed;
-    BuffFloat _dashDuration;
-
-    BuffFloat _shootingDuration;
-    BuffFloat _chargeDuration;
-
-    float _moveSpeed;
-    float _shootSpeed;
-
-    float _minJoystickLength;
-
-    int _maxDashCount;
-
-    int _dashConsumeCount;
-    BuffFloat _dashRestoreDuration;
-
-    float _shrinkScale;
-    float _normalScale;
-
     float _currentDashFillDuration = 0;
     int _currentDashCount;
 
-    List<BaseSkill.Name> _skillNames;
+    StatUpgrader _playerUpgrader;
+    PlayerData _playerData;
 
-    float DashRatio { get { return _currentDashFillDuration / _dashRestoreDuration.Value; } }
+    float DashRatio { get { return _currentDashFillDuration / _playerData._dashRestoreDuration; } }
     float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
-    bool CanUseDash() { return _currentDashCount >= _dashConsumeCount; }
+    bool CanUseDash() { return _currentDashCount >= _playerData._dashConsumeCount; }
 
     MoveComponent _moveComponent;
     OutlineComponent _outlineComponent;
     SkillController _skillController;
-    BuffController _buffController;
 
     InteractableCaptureComponent _interactableCaptureComponent;
     List<IInteractable> _interactableObjects;
 
     void ChangeBodyScale(bool xAxis, float ratio)
     {
-        float minScale = _shrinkScale;
-        float maxScale = _normalScale;
+        float minScale = _playerData._shrinkScale;
+        float maxScale = _playerData._normalScale;
 
         if(xAxis) transform.localScale = 
                 Vector3.Lerp(
@@ -94,30 +72,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
         // 참조 타입으로 설정했으므로 버프로 인해 수정되면 알아서 값이 반영되게 된다.
         _maxHp = data._maxHp;
         _targetType = data._targetType;
-
-        _moveSpeed = data._moveSpeed;
-
-        _totalDamageRatio = new BuffFloat(data._minTotalDamageRatio, data._maxTotalDamageRatio, data._totalDamageRatio);
-        _totalCooltimeRatio = new BuffFloat(data._minTotalCooltimeRatio, data._maxTotalCooltimeRatio, data._totalCooltimeRatio);
-
-        _chargeDuration = new BuffFloat(data._minChargeDuration, data._maxChargeDuration, data._chargeDuration);
-        _dashSpeed = new BuffFloat(data._minDashSpeed, data._maxDashSpeed, data._dashSpeed);
-        _dashDuration = new BuffFloat(data._minDashDuration, data._maxDashDuration, data._dashDuration);
-        _shootingDuration = new BuffFloat(data._minShootDuration, data._maxShootDuration, data._shootDuration);
-
-        _shootSpeed = data._shootSpeed;
-
-        _minJoystickLength = data._minJoystickLength;
-
-        _maxDashCount = data._maxDashCount;
-        _dashConsumeCount = data._dashConsumeCount;
-
-        _dashRestoreDuration = new BuffFloat(data._minDashRestoreDuration, data._maxDashRestoreDuration, data._dashRestoreDuration);
-
-        _shrinkScale = data._shrinkScale;
-        _normalScale = data._normalScale;
-
-        _skillNames = data._skillNames;
+        _playerData = data;
     }
 
     public void AddSkill(BaseSkill.Name name, BaseSkill skill) 
@@ -135,17 +90,17 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
 
     public override void Initialize()
     {
+        base.Initialize();
         _interactableObjects = new List<IInteractable>();
         _groggyTimer = new Timer();
         _hp = _maxHp;
 
-        _targetType = ITarget.Type.Blue;
-
+        _displayDamageComponent = new DisplayDamageComponent(_targetType, _effectFactory);
         _interactableCaptureComponent = GetComponentInChildren<InteractableCaptureComponent>();
         _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
 
         _skillController = GetComponent<SkillController>();
-        _skillController.Initialize(_totalDamageRatio, _totalCooltimeRatio);
+        _skillController.Initialize(_playerData);
 
         _outlineComponent = GetComponent<OutlineComponent>();
         _outlineComponent.Initialize();
@@ -153,20 +108,20 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
 
-        _buffController = GetComponent<BuffController>();
-        _buffController.Initialize( 
-            new Dictionary<BaseBuff.Type, BuffCommand> 
-            {
-                { BaseBuff.Type.TotalDamage, new BuffRatioCommand(_totalDamageRatio) },
-                { BaseBuff.Type.TotalCooltime, new BuffRatioCommand(_totalCooltimeRatio) },
+        //_buffController = GetComponent<BuffController>();
+        //_buffController.Initialize( 
+        //    new Dictionary<BaseBuff.Type, BuffCommand> 
+        //    {
+        //        { BaseBuff.Type.TotalDamage, new BuffRatioCommand(_totalDamageRatio) },
+        //        { BaseBuff.Type.TotalCooltime, new BuffRatioCommand(_totalCooltimeRatio) },
 
-                { BaseBuff.Type.ShootingDuration, new BuffValueCommand(_shootingDuration) },
-                { BaseBuff.Type.ShootingChargeDuration, new BuffValueCommand(_chargeDuration) },
+        //        { BaseBuff.Type.ShootingDuration, new BuffValueCommand(_shootingDuration) },
+        //        { BaseBuff.Type.ShootingChargeDuration, new BuffValueCommand(_chargeDuration) },
 
-                { BaseBuff.Type.DashSpeed, new BuffValueCommand(_dashSpeed) },
-                { BaseBuff.Type.DashChargeDuration, new BuffValueCommand(_dashDuration) },
-            }
-        );
+        //        { BaseBuff.Type.DashSpeed, new BuffValueCommand(_dashSpeed) },
+        //        { BaseBuff.Type.DashChargeDuration, new BuffValueCommand(_dashDuration) },
+        //    }
+        //);
 
         InintializeFSM();
     }
@@ -177,8 +132,8 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
         Dictionary<MovementState, BaseState<MovementState>> movementStates = new Dictionary<MovementState, BaseState<MovementState>>
         {
             { MovementState.Stop, new StopState(_movementFSM, _moveComponent) },
-            { MovementState.Move, new MoveState(_movementFSM, _moveSpeed, CanUseDash, OnUseDash, _moveComponent)},
-            { MovementState.Dash, new DashState(_movementFSM, _dashSpeed, _dashDuration, _moveComponent, ChangeBodyScale, OnEndDash) }
+            { MovementState.Move, new MoveState(_movementFSM, _playerData, CanUseDash, OnUseDash, _moveComponent)},
+            { MovementState.Dash, new DashState(_movementFSM, _playerData, _moveComponent, ChangeBodyScale, OnEndDash) }
         };
         _movementFSM.Initialize(movementStates, MovementState.Stop);
 
@@ -186,9 +141,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
         Dictionary<ActionState, BaseState<ActionState>> actionStates = new Dictionary<ActionState, BaseState<ActionState>>
         {
             { ActionState.Ready, new ReadyState(_actionFSM) },
-            { ActionState.Charge, new ChargeState(_actionFSM, _minJoystickLength, _chargeDuration, transform,_moveComponent, ChangeBodyScale, SetInvincible) },
+            { ActionState.Charge, new ChargeState(_actionFSM, _playerData, transform,_moveComponent, ChangeBodyScale, SetInvincible) },
             { 
-                ActionState.Shoot, new ShootState(_actionFSM, _shootSpeed, _shootingDuration, transform, _moveComponent, ChangeBodyScale, 
+                ActionState.Shoot, new ShootState(_actionFSM, _playerData, transform, _moveComponent, ChangeBodyScale, 
                 _skillController.OnReflect, SetInvincible) 
             }
         };
@@ -203,7 +158,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
 
     void OnUseDash() 
     { 
-        _currentDashCount -= _dashConsumeCount;
+        _currentDashCount -= _playerData._dashConsumeCount;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDash);
     }
 
@@ -214,7 +169,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
 
     void FillDashCount()
     {
-        if (_maxDashCount == _currentDashCount) return;
+        if (_playerData._maxDashCount == _currentDashCount) return;
 
         _currentDashFillDuration += Time.deltaTime;
         if (DashRatio >= 1)
@@ -304,16 +259,6 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
         return transform.right;
     }
 
-    public void AddBuff(BaseBuff.Name name, BaseBuff buff)
-    {
-        _buffController.AddBuff(name, buff);
-    }
-
-    public void RemoveBuff(BaseBuff.Name name)
-    {
-        _buffController.RemoveBuff(name);
-    }
-
     public ISkillUser ReturnSkillUser()
     {
         return this;
@@ -322,5 +267,26 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IBuffUsabl
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas()
     {
         return _skillController.ReturnSkillUpgradeDatas();
+    }
+
+
+    public void Upgrade(StatUpgrader.CooltimeData cooltimeData)
+    {
+        _playerUpgrader.Visit(_playerData, cooltimeData);
+    }
+
+    public void Upgrade(StatUpgrader.DamageData damageData)
+    {
+        _playerUpgrader.Visit(_playerData, damageData);
+    }
+
+    public void Upgrade(StatUpgrader.DashData dashData)
+    {
+        _playerUpgrader.Visit(_playerData, dashData);
+    }
+
+    public void Upgrade(StatUpgrader.ShootingData shootingData)
+    {
+        _playerUpgrader.Visit(_playerData, shootingData);
     }
 }

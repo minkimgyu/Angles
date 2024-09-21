@@ -80,8 +80,6 @@ public class TrackingState : State<TrackableEnemy.State>
             _baseFSM.SetState(TrackableEnemy.State.Wandering);
         }
         float diatance;
-
-        Debug.Log(_state);
         switch (_state)
         {
             case State.Stop:

@@ -5,24 +5,25 @@ using UnityEngine;
 
 public class SpawnBlackhole : BaseSkill
 {
-    List<ITarget.Type> _targetTypes;
     BaseFactory _weaponFactory;
+    SpawnBlackholeData _data;
 
-    BlackholeData _data;
-
-    public SpawnBlackhole(SpawnBlackholeData data, SpawnBlackholeUpgrader upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
+    public SpawnBlackhole(SpawnBlackholeData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
     {
-        _data = data._data;
-        _targetTypes = data._targetTypes;
-
-        _upgradeVisitor = upgrader;
+        _data = data;
+        _upgrader = upgrader;
         _weaponFactory = weaponFactory;
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new RandomConstraintComponent(_data, _upgradeableRatio);
     }
 
     public override void Upgrade()
     {
         base.Upgrade();
-        _upgradeVisitor.Visit(this, _data);
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -30,15 +31,20 @@ public class SpawnBlackhole : BaseSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blackhole);
         if (weapon == null) return;
 
-        weapon.ResetData(_data);
-        weapon.Upgrade(UpgradePoint); // 생성 후 업그레이드 적용
-        weapon.ResetTargetTypes(_targetTypes);
+        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponTargetCountModifier(_data._targetCount));
+        modifiers.Add(new WeaponForceModifier(_data._force));
+        modifiers.Add(new WeaponSizeModifier(_data._sizeMultiplier));
+        modifiers.Add(new WeaponLifetimeModifier(_data._lifetime));
+        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+
+        weapon.ModifyData(modifiers);
         weapon.ResetPosition(_castingData.MyTransform.position);
     }
 }

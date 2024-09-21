@@ -4,20 +4,29 @@ using UnityEngine;
 
 public class MagneticField : BaseSkill
 {
-    List<ITarget.Type> _targetTypes;
     List<IDamageable> _damageableTargets;
     Timer _delayTimer;
 
-    List<MagneticFieldUpgradableData> _upgradableDatas;
-    MagneticFieldUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
+    MagneticFieldData _data;
 
-    public MagneticField(MagneticFieldData data) : base(Type.Basic, data._maxUpgradePoint)
+    public MagneticField(MagneticFieldData data, IUpgradeVisitor upgrader) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _targetTypes = data._targetTypes;
+        _data = data;
+        _upgrader = upgrader;
 
         _damageableTargets = new List<IDamageable>();
         _delayTimer = new Timer();
+    }
+
+    public override void OnAdd() 
+    {
+        _useConstraint = new NoConstraintComponent();
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnUpdate()
@@ -27,10 +36,16 @@ public class MagneticField : BaseSkill
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:
-                _delayTimer.Start(CurrentUpgradableData.Delay);
+                _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:
-                DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes, 0, false, Color.red);
+
+                DamageableData damageData =
+                new DamageableData.DamageableDataBuilder().
+                SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+                .SetTargets(_data._targetTypes)
+                .Build();
+
                 for (int i = 0; i < _damageableTargets.Count; i++)
                 {
                     _damageableTargets[i].GetDamage(damageData);
@@ -44,7 +59,7 @@ public class MagneticField : BaseSkill
 
     public override void OnCaptureEnter(ITarget target, IDamageable damageable)
     {
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         _damageableTargets.Add(damageable);
@@ -52,7 +67,7 @@ public class MagneticField : BaseSkill
 
     public override void OnCaptureExit(ITarget target, IDamageable damageable)
     {
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         _damageableTargets.Remove(damageable);

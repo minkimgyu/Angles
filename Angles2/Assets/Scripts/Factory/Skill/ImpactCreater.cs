@@ -3,63 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public struct ImpactUpgradableData
-{
-    public ImpactUpgradableData(float damage, float range)
-    {
-        _damage = damage;
-        _range = range;
-    }
-
-    private float _damage;
-    private float _range;
-
-    public float Damage { get => _damage; }
-    public float Range { get => _range; }
-}
-
-
 [System.Serializable]
 public class ImpactData : RandomSkillData
 {
     public float _damage;
+    public float _rangeMultiplier;
     public float _range;
-
-    public List<ImpactUpgradableData> _upgradableDatas;
     public List<ITarget.Type> _targetTypes;
 
-    // + 연산자 오버로딩
-    public static ImpactData operator +(ImpactData a, ImpactUpgrader.UpgradableData b)
-    {
-        return new ImpactData(
-            a._maxUpgradePoint,
-            a._probability,
-            a._damage + b.Damage,
-            a._range + b.Range,
-            a._targetTypes
-        );
-    }
-
-    public ImpactData(int maxUpgradePoint, float probability, float damage, float range, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    public ImpactData(
+        int maxUpgradePoint,
+        float probability,
+        float damage,
+        float range,
+        List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
         _damage = damage;
         _range = range;
+        _rangeMultiplier = 1;
         _targetTypes = targetTypes;
+    }
+
+    public override SkillData Copy()
+    {
+        return new ImpactData(
+            _maxUpgradePoint, // RandomSkillData에서 상속된 값
+            _probability, // RandomSkillData에서 상속된 값
+            _damage,
+            _range,
+            new List<ITarget.Type>(_targetTypes) // 리스트의 깊은 복사
+        );
     }
 }
 
 public class ImpactCreater : SkillCreater
 {
+    IUpgradeVisitor _upgrader;
     BaseFactory _effectFactory;
 
-    public ImpactCreater(SkillData data, BaseFactory _effectFactory) : base(data)
+    public ImpactCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(data)
     {
-        this._effectFactory = _effectFactory;
+        _upgrader = upgrader;
+        _effectFactory = effectFactory;
     }
 
     public override BaseSkill Create()
     {
         ImpactData data = _skillData as ImpactData;
-        return new Impact(data, _effectFactory);
+        return new Impact(data, _upgrader, _effectFactory);
     }
 }

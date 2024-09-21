@@ -63,8 +63,6 @@ public class Pathfinder : MonoBehaviour
 
             if (targetNode == endNode) // 목적지와 타겟이 같으면 끝
             {
-                Debug.Log("Path Find!");
-
                 Stack<Node> finalList = new Stack<Node>();
 
                 Node TargetCurNode = targetNode;

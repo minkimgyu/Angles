@@ -6,15 +6,15 @@ public class SpawnBladeUpgrader : IUpgradeVisitor
 {
     public struct UpgradableData
     {
-        public UpgradableData(float damage, float attackDelay, float range)
+        public UpgradableData(float damage, float lifetime, float range)
         {
             _damage = damage;
-            _attackDelay = attackDelay;
+            _lifetime = lifetime;
             _range = range;
         }
 
         public float _damage;
-        public float _attackDelay;
+        public float _lifetime;
         public float _range;
     }
 
@@ -25,9 +25,12 @@ public class SpawnBladeUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
-    public void Visit(IUpgradable upgradable, BladeData data)
+    public void Visit(ISkillUpgradable upgradable, SpawnBladeData data)
     {
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
-        data += upgradeData;
+
+        data._damage += upgradeData._damage;
+        data._sizeMultiplier += upgradeData._range;
+        data._lifetime += upgradeData._lifetime;
     }
 }

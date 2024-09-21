@@ -8,7 +8,8 @@ public class BaseStage : MonoBehaviour
     {
         Start,
         Bonus,
-        Battle
+        Mob,
+        Boss,
     }
 
     [SerializeField] protected Transform _entryPoint;
@@ -25,7 +26,7 @@ public class BaseStage : MonoBehaviour
         _baseStageController = baseStageController;
         _factoryCollection = factoryCollection;
 
-        Portal portal = GetComponentInChildren<Portal>();
+        _portal = GetComponentInChildren<Portal>();
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
     }
 

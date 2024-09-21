@@ -29,12 +29,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dde237ca0b5bd9e4a8e304d355864e0c
-    m_Address: SpawnOrb
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillIcon
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 660548547c5a5ac46be7586384305357
     m_Address: SpawnBlade
     m_ReadOnly: 0
@@ -72,25 +66,25 @@ MonoBehaviour:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9bec7b28bc9ed944ca73ce9a5f4a31a0
-    m_Address: CreateDashBuff
+    m_Address: UpgradeDash
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 05ef8f0e27cc94c4585e77d29907dad9
-    m_Address: CreateShootingBuff
+    m_Address: UpgradeShooting
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 100e1d4c4d8cea642b1b7f522bada2b2
-    m_Address: CreateTotalCooltimeBuff
+    m_Address: UpgradeCooltime
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f78dad2dacb00514196bf53e4489e90e
-    m_Address: CreateTotalDamageBuff
+    m_Address: UpgradeDamage
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillIcon

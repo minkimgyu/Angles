@@ -14,6 +14,11 @@ public class ContactAttackData : SkillData
         _damage = damage;
         _targetTypes = targetTypes;
     }
+
+    public override SkillData Copy()
+    {
+       return new ContactAttackData(_maxUpgradePoint, _damage, _targetTypes);
+    }
 }
 
 public class ContactAttackCreater : SkillCreater

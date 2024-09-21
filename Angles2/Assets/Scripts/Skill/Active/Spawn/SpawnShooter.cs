@@ -5,42 +5,47 @@ using System;
 
 public class SpawnShooter : BaseSkill
 {
-    BaseWeapon _shooter;
-
-    List<ITarget.Type> _targetTypes;
+    BaseWeapon _weapon;
     BaseFactory _weaponFactory;
-    BaseWeapon.Name _shooterType;
-
     SpawnShooterData _data;
-    ShooterData _shooterData;
 
     // 여기서 슈터 데이터와 무기 데이터를 같이 받아오기
     public SpawnShooter(SpawnShooterData data, BaseFactory weaponFactory) : base(Type.Passive, data._maxUpgradePoint)
     {
         _data = data;
-        _shooterData = data._shooterData;
         _weaponFactory = weaponFactory;
     }
 
     public override void Upgrade()
     {
         base.Upgrade();
-        _upgradeVisitor.Visit(this, _shooterData);
-    }
+        _upgrader.Visit(this, _data);
 
+        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDelayModifier(_data._delay));
+        _weapon.ModifyData(modifiers);
+    }
 
     public override void OnAdd()
     {
-        BaseWeapon weapon = _weaponFactory.Create(_shooterType);
+        BaseWeapon weapon = _weaponFactory.Create(_data._shooterName);
         if (weapon == null) return;
 
         IFollowable followable = _castingData.MyObject.GetComponent<IFollowable>();
         if (followable == null) return;
 
-        weapon.ResetFollower(followable);
-        weapon.ResetData(_shooterData);
-        weapon.ResetTargetTypes(_targetTypes);
-        weapon.ResetPosition(_castingData.MyTransform.position);
-        _shooter = weapon;
+        _weapon = weapon;
+
+        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDamageModifier(_data._delay));
+        modifiers.Add(new WeaponProjectileModifier(_data._projectileName));
+        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+
+        _weapon.ModifyData(modifiers);
+
+        _weapon.ResetFollower(followable);
+        _weapon.ResetPosition(_castingData.MyTransform.position);
     }
 }

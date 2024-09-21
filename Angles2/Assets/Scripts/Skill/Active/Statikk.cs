@@ -6,21 +6,25 @@ using System;
 
 public class Statikk : BaseSkill
 {
-    int _stackCount;
     BaseFactory _effectFactory;
     StatikkData _data;
 
-    public Statikk(StatikkData data, StatikkUpgrader upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
+    public Statikk(StatikkData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
     {
         _data = data;
-        _useConstraint = new CooltimeConstraint(_data._maxStackCount, _data._coolTime);
-        _upgradeVisitor = upgrader; // 이건 생성자에서 받아서 쓰기
+        _upgrader = upgrader; // 이건 생성자에서 받아서 쓰기
+        _effectFactory = effectFactory; // 이건 생성자에서 받아서 쓰기
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new CooltimeConstraint(_data, _upgradeableRatio);
     }
 
     public override void Upgrade()
     {
         base.Upgrade();
-        _upgradeVisitor.Visit(this, _data);
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -33,10 +37,14 @@ public class Statikk : BaseSkill
 
         if (_useConstraint.CanUse() == false) return;
         _useConstraint.Use();
-        Debug.Log("Statikk");
 
         List<Vector2> hitPoints;
-        DamageData damageData = new DamageData(_data._damage, _data._targetTypes);
+
+        DamageableData damageData =
+        new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .Build();
 
         Damage.HitRaycast(damageData, _data._maxTargetCount, collision.transform.position, _data._range, out hitPoints, true, Color.red, 3);
 

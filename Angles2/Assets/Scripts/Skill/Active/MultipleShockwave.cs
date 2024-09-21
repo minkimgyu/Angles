@@ -6,35 +6,24 @@ using UnityEngine.UIElements;
 
 public class MultipleShockwave : BaseSkill
 {
-    float _waveSizeMultiply;
-    float _waveDelay;
-
     int _waveCount;
+
+    const float _originWaveSize = 1;
     float _waveSize;
 
-    int _maxWaveCount;
     Timer _waveTimer;
 
-    float _delay;
-    float _damage;
-    float _range;
     List<ITarget.Type> _targetTypes;
     List<ITarget> _targets;
     Timer _delayTimer;
 
+    MultipleShockwaveData _data;
     BaseFactory _effectFactory;
 
     public MultipleShockwave(MultipleShockwaveData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _waveSizeMultiply = data._waveDelay;
-        _maxWaveCount = data._maxWaveCount;
-        _waveDelay = data._waveDelay;
+        _data = data;
         _waveCount = 0;
-        _waveSize = 1;
-
-        _delay = data._delay;
-        _damage = data._damage;
-        _range = data._range;
         _targetTypes = data._targetTypes;
 
         _delayTimer = new Timer();
@@ -44,6 +33,11 @@ public class MultipleShockwave : BaseSkill
         _effectFactory = effectFactory;
     }
 
+    public override void OnAdd()
+    {
+        _useConstraint = new NoConstraintComponent();
+    }
+
     public override void OnUpdate()
     {
         switch (_delayTimer.CurrentState)
@@ -51,7 +45,8 @@ public class MultipleShockwave : BaseSkill
             case Timer.State.Ready:
                 if (_targets.Count == 0) return;
 
-                _delayTimer.Start(_delay);
+                _waveSize = _originWaveSize;
+                _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:
 
@@ -62,13 +57,24 @@ public class MultipleShockwave : BaseSkill
                     effect.Play();
                     effect.ResetSize(_waveSize);
 
-                    DamageData damageData = new DamageData(_damage, _targetTypes, 0, false, Color.red);
-                    Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _range * _waveSize, true, Color.red, 3);
+                    Debug.Log("MultipleShockwave " + _waveSize);
+                    Debug.Log("MultipleShockwave " + _data._range);
 
-                    _waveTimer.Start(_waveDelay);
+                    DamageableData damageData =
+                    new DamageableData.DamageableDataBuilder().
+                    SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+                    .SetTargets(_data._targetTypes)
+                    .Build();
+
+                    Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _data._range * _waveSize, true, Color.red, 3);
+
+                    _waveTimer.Reset();
+                    _waveTimer.Start(_data._waveDelay);
+                    _waveSize += _data._waveSizeMultiply;
                     _waveCount++;
-                    _waveSize += _waveSizeMultiply;
-                    if (_waveCount == _maxWaveCount)
+
+                    Debug.Log(_waveCount);
+                    if (_waveCount == _data._maxWaveCount)
                     {
                         _waveCount = 0;
                         _waveTimer.Reset();

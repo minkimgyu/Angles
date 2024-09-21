@@ -6,17 +6,14 @@ public class SpawnShooterUpgrader : IUpgradeVisitor
 {
     public struct UpgradableData
     {
-        public UpgradableData(float shootForce, float fireDelay)
+        public UpgradableData(float damage, float delay)
         {
-            _shootForce = shootForce; // 날리는 속도
-            _fireDelay = fireDelay; // 연사 속도
+            _damage = damage; // 데미지 비율
+            _delay = delay; // 데미지 비율
         }
 
-        private float _shootForce;
-        private float _fireDelay;
-
-        public float ShootForce { get => _shootForce; }
-        public float FireDelay { get => _fireDelay; }
+        public float _damage;
+        public float _delay;
     }
 
     List<UpgradableData> _upgradeDatas;
@@ -26,9 +23,11 @@ public class SpawnShooterUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
-    public void Visit(IUpgradable upgradable, ShooterData data)
+    public void Visit(ISkillUpgradable upgradable, SpawnShooterData data)
     {
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
-        data += upgradeData;
+
+        data._damage += upgradeData._damage;
+        data._delay += upgradeData._delay;
     }
 }

@@ -26,20 +26,59 @@ public struct SkillUpgradeData
 
 public class SkillController : MonoBehaviour
 {
+    public class CastingData
+    {
+        public CastingData(GameObject myObject, Transform myTransform)
+        {
+            MyObject = myObject;
+            MyTransform = myTransform;
+        }
+
+        public GameObject MyObject { get; }
+        public Transform MyTransform { get; }
+    }
+
+    public class UpgradeableData
+    {
+        public UpgradeableData(float totalDamageRatio, float totalCooltimeRatio, float totalRandomRatio)
+        {
+            _totalDamageRatio = totalDamageRatio;
+            _totalCooltimeRatio = totalCooltimeRatio;
+            _totalRandomRatio = totalRandomRatio;
+        }
+
+        float _totalDamageRatio;
+        public float TotalDamageRatio { get { return _totalDamageRatio; } set { _totalDamageRatio = value; } }
+
+        float _totalCooltimeRatio;
+        public float TotalCooltimeRatio { get { return _totalCooltimeRatio; } set { _totalCooltimeRatio = value; } }
+
+        float _totalRandomRatio;
+        public float TotalRandomRatio { get { return _totalRandomRatio; } set { _totalRandomRatio = value; } }
+    }
+
+
     Dictionary<BaseSkill.Name, BaseSkill> _skillDictionary;
     CastingData _castingData;
-
-    BuffFloat _totalDamageRatio;
-    BuffFloat _totalCooltimeRatio;
+    IUpgradeableRatio _upgradeableRatio;
 
     public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested;
     public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested;
 
-    public void Initialize(BuffFloat totalDamageRatio, BuffFloat totalCooltimeRatio)
+    public void Initialize()
     {
-        _castingData = new CastingData(gameObject, transform, totalDamageRatio, totalCooltimeRatio);
+        _castingData = new CastingData(gameObject, transform);
+        _upgradeableRatio = new NoUpgradeableRatio();
         _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
     }
+
+    public void Initialize(IUpgradeableRatio upgradeableRatio)
+    {
+        _castingData = new CastingData(gameObject, transform);
+        _upgradeableRatio = upgradeableRatio;
+        _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
+    }
+    
 
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas()
     {
@@ -62,8 +101,9 @@ public class SkillController : MonoBehaviour
             return;
         }
 
-        skill.Initialize(_castingData);
+        skill.Initialize(_castingData, _upgradeableRatio);
         skill.OnAdd();
+        EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnAddSkill, name, skill);
 
         _skillDictionary.Add(name, skill);
         OnAddSkillRequested?.Invoke(name, skill);

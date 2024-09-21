@@ -6,26 +6,26 @@ using System;
 
 public class ContactAttack : BaseSkill
 {
-    public float _damage;
-    public List<ITarget.Type> _targetTypes;
-
+    ContactAttackData _data;
     BaseFactory _effectFactory;
 
     public ContactAttack(ContactAttackData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _damage = data._damage;
-        _targetTypes = data._targetTypes;
-
+        _data = data;
         _effectFactory = effectFactory;
     }
 
+    public override void OnAdd()
+    {
+        _useConstraint = new NoConstraintComponent();
+    }
 
     public override void OnReflect(Collision2D collision)
     {
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         Debug.Log("ContactAttack");
@@ -35,7 +35,11 @@ public class ContactAttack : BaseSkill
         effect.ResetPosition(contactPos);
         effect.Play();
 
-        DamageData damageData = new DamageData(_damage, _targetTypes);
+        DamageableData damageData = new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .Build();
+
         Damage.HitContact(damageData, collision.gameObject);
     }
 }

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BaseEnemy : BaseLife, ISkillAddable, IFollowable //, IFlock, , IForce
+public class BaseEnemy : BaseLife, ISkillAddable, IFollowable
 {
     //FlockCaptureComponent _flockCaptureComponent;
     //ObstacleCaptureComponent _obstacleCaptureComponent;
 
     protected SkillController _skillController;
-    protected List<BaseSkill.Name> _skillNames;
     protected float _moveSpeed;
 
     //FlockComponent _flockComponent;
@@ -27,19 +26,9 @@ public class BaseEnemy : BaseLife, ISkillAddable, IFollowable //, IFlock, , IFor
 
     Action OnDieRequested;
 
-    BuffFloat _totalDamageRatio;
-    BuffFloat _totalCooltimeRatio;
-
-    //public override void SetTarget(IPos follower)
-    //{
-    //    _followTarget = follower;
-    //}
-
     public override void Initialize()
     {
-        _totalDamageRatio = new BuffFloat(1, 1, 1);
-        _totalCooltimeRatio = new BuffFloat(1, 1, 1);
-
+        base.Initialize();
         _groggyTimer = new Timer();
         _hp = _maxHp;
 
@@ -59,7 +48,7 @@ public class BaseEnemy : BaseLife, ISkillAddable, IFollowable //, IFlock, , IFor
         _moveComponent.Initialize();
 
         _skillController = GetComponent<SkillController>();
-        _skillController.Initialize(_totalDamageRatio, _totalCooltimeRatio);
+        _skillController.Initialize(); // 
     }
 
     protected override void Update()

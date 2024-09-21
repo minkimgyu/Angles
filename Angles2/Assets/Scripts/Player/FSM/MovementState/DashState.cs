@@ -9,23 +9,27 @@ public class DashState : State<Player.MovementState>
     Action EndDash;
     Action<Vector2, float> AddForce;
 
-    BuffFloat _dashSpeed;
-    BuffFloat _dashDuration;
+    //BuffFloat _dashSpeed;
+    //BuffFloat _dashDuration;
+
+    PlayerData _playerData;
     MoveComponent _moveComponent;
     Timer _timer;
 
     public DashState(
         FSM<Player.MovementState> fsm,
-        BuffFloat dashSpeed,
-        BuffFloat dashDuration,
+        PlayerData playerData,
+
+        //BuffFloat dashSpeed,
+        //BuffFloat dashDuration,
         MoveComponent moveComponent,
         Action<bool, float> ChangeBodyScale,
         Action EndDash)
     : base(fsm)
     {
-        _dashSpeed = dashSpeed;
-        _dashDuration = dashDuration;
-
+        //_dashSpeed = dashSpeed;
+        //_dashDuration = dashDuration;
+        _playerData = playerData;
         _timer = new Timer();
 
         this.ChangeBodyScale = ChangeBodyScale;
@@ -42,8 +46,8 @@ public class DashState : State<Player.MovementState>
         Debug.Log(message);
         ChangeBodyScale?.Invoke(false, 0);
 
-        _moveComponent.AddForce(direction, _dashSpeed.Value);
-        _timer.Start(_dashDuration.Value);
+        _moveComponent.AddForce(direction, _playerData._dashSpeed);
+        _timer.Start(_playerData._dashDuration);
     }
 
     public override void OnStateExit()

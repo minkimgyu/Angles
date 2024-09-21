@@ -6,22 +6,25 @@ using System;
 
 public class Knockback : BaseSkill
 {
-    Vector2 _size;
-    Vector2 _offset;
-    List<ITarget.Type> _targetTypes;
     BaseFactory _effectFactory;
+    KnockbackData _data;
 
-    List<KnockbackUpgradableData> _upgradableDatas;
-    KnockbackUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
-
-    public Knockback(KnockbackData data, BaseFactory effectFactory) : base(data._maxUpgradePoint, data._coolTime, data._maxStackCount)
+    public Knockback(KnockbackData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _size = new Vector2(data._size.x, data._size.y);
-        _offset = new Vector2(data._offset.x, data._offset.y);
-        _targetTypes = data._targetTypes;
-
+        _data = data;
         _effectFactory = effectFactory;
+        _upgrader = upgrader;
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new CooltimeConstraint(_data, _upgradeableRatio);
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision) 
@@ -29,19 +32,27 @@ public class Knockback : BaseSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
-        _stackCount--;
+        if (_useConstraint.CanUse() == false) return;
+        _useConstraint.Use();
 
         Debug.Log("Knockback");
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.KnockbackEffect);
-        effect.ResetSize(CurrentUpgradableData.Size);
+        effect.ResetSize(_data._rangeMultiplier);
         effect.ResetPosition(_castingData.MyTransform.position, _castingData.MyTransform.right);
         effect.Play();
 
-        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
-        Damage.HitBoxRange(damageData, _castingData.MyTransform.position, _offset, _castingData.MyTransform.right, _size * CurrentUpgradableData.Size, true, Color.red);
+        DamageableData damageData =
+        new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .SetGroggyDuration(1f)
+        .Build();
+
+        Damage.HitBoxRange(damageData, _castingData.MyTransform.position, _data._offset.V2, _castingData.MyTransform.right,
+            _data._size.V2 * _data._rangeMultiplier, true, Color.red);
     }
 }

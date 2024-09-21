@@ -6,26 +6,23 @@ using System;
 
 public class Shockwave : BaseSkill
 {
-    float _delay;
-    float _damage;
-    float _range;
-    List<ITarget.Type> _targetTypes;
-    List<ITarget> _targets;
-    Timer _delayTimer;
-
+    ShockwaveData _data;
     BaseFactory _effectFactory;
+    Timer _delayTimer;
+    List<ITarget> _targets;
 
     public Shockwave(ShockwaveData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
-        _delay = data._delay;
-        _damage = data._damage;
-        _range = data._range;
-        _targetTypes = data._targetTypes;
-
+        _data = data;
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
 
         _effectFactory = effectFactory;
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new NoConstraintComponent();
     }
 
     public override void OnUpdate()
@@ -38,9 +35,9 @@ public class Shockwave : BaseSkill
                 if (_targets.Count == 0) return;
 
                 CastingComponent castingComponent = _castingData.MyObject.GetComponent<CastingComponent>();
-                if (castingComponent != null) castingComponent.CastSkill(_delay);
+                if (castingComponent != null) castingComponent.CastSkill(_data._delay);
 
-                _delayTimer.Start(_delay);
+                _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:
 
@@ -48,8 +45,13 @@ public class Shockwave : BaseSkill
                 effect.ResetPosition(_castingData.MyTransform.position);
                 effect.Play();
 
-                DamageData damageData = new DamageData(_damage, _targetTypes, 0, false, Color.red);
-                Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _range, true, Color.red, 3);
+                DamageableData damageData =
+                new DamageableData.DamageableDataBuilder().
+                SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+                .SetTargets(_data._targetTypes)
+                .Build();
+
+                Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _data._range, true, Color.red, 3);
 
                 _delayTimer.Reset();
                 break;
@@ -60,7 +62,7 @@ public class Shockwave : BaseSkill
 
     public override void OnCaptureEnter(ITarget target)
     {
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         _targets.Add(target);
@@ -68,7 +70,7 @@ public class Shockwave : BaseSkill
 
     public override void OnCaptureExit(ITarget target)
     {
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         _targets.Remove(target);

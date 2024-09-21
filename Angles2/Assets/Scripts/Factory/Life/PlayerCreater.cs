@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[System.Serializable]
-public class PlayerData : BaseLifeData
+public class NoUpgradeableRatio : IUpgradeableRatio
 {
-    public float _minTotalDamageRatio;
-    public float _maxTotalDamageRatio;
-    public float _totalDamageRatio;
+    public float TotalDamageRatio { get; set; } = 1;
+    public float TotalCooltimeRatio { get; set; } = 1;
+    public float TotalRandomRatio { get; set; } = 1;
+}
 
-    public float _minTotalCooltimeRatio;
-    public float _maxTotalCooltimeRatio;
-    public float _totalCooltimeRatio;
+public interface IUpgradeableRatio
+{
+    public float TotalDamageRatio { get; set; }
+    public float TotalCooltimeRatio { get; set; }
+    public float TotalRandomRatio { get; set; }
+}
 
+[System.Serializable]
+public class PlayerData : LifeData, IUpgradeableRatio
+{
     public float _moveSpeed;
 
     public float _minChargeDuration;
@@ -49,6 +55,41 @@ public class PlayerData : BaseLifeData
 
     public List<BaseSkill.Name> _skillNames;
 
+    public float TotalDamageRatio { get; set; }
+    public float TotalCooltimeRatio { get; set; }
+    public float TotalRandomRatio { get; set; }
+
+    public override LifeData Copy()
+    {
+        return new PlayerData(
+            _maxHp, // LifeData에서 상속된 값
+            _targetType, // LifeData에서 상속된 값
+            _moveSpeed,
+            _minChargeDuration,
+            _maxChargeDuration,
+            _chargeDuration,
+            _minDashSpeed,
+            _maxDashSpeed,
+            _dashSpeed,
+            _minDashDuration,
+            _maxDashDuration,
+            _dashDuration,
+            _minShootDuration,
+            _maxShootDuration,
+            _shootDuration,
+            _shootSpeed,
+            _minJoystickLength,
+            _maxDashCount,
+            _dashConsumeCount,
+            _minDashRestoreDuration,
+            _maxDashRestoreDuration,
+            _dashRestoreDuration,
+            _shrinkScale,
+            _normalScale,
+            new List<BaseSkill.Name>(_skillNames) // 리스트의 경우 참조를 복사하는 대신 새 리스트로 복사
+        );
+    }
+
     public PlayerData(
         float maxHp, 
         ITarget.Type targetType,
@@ -57,14 +98,6 @@ public class PlayerData : BaseLifeData
         float minChargeDuration,
         float maxChargeDuration,
         float chargeDuration,
-
-        float minTotalDamageRatio,
-        float maxTotalDamageRatio,
-        float totalDamageRatio,
-
-        float minTotalCooltimeRatio,
-        float maxTotalCooltimeRatio,
-        float totalCooltimeRatio,
 
         float minDashSpeed,
         float maxDashSpeed,
@@ -91,19 +124,15 @@ public class PlayerData : BaseLifeData
         float normalScale, 
         List<BaseSkill.Name> skillNames) : base(maxHp, targetType)
     {
+        TotalDamageRatio = 1;
+        TotalCooltimeRatio = 1;
+        TotalRandomRatio = 1;
+
         _moveSpeed = moveSpeed;
 
         _minChargeDuration = minChargeDuration;
         _maxChargeDuration = maxChargeDuration;
         _chargeDuration = chargeDuration;
-
-        _minTotalDamageRatio = minTotalDamageRatio;
-        _maxTotalDamageRatio = maxTotalDamageRatio;
-        _totalDamageRatio = totalDamageRatio;
-
-        _minTotalCooltimeRatio = minTotalCooltimeRatio;
-        _maxTotalCooltimeRatio = maxTotalCooltimeRatio;
-        _totalCooltimeRatio = totalCooltimeRatio;
 
         _minDashSpeed = minDashSpeed;
         _maxDashSpeed = maxDashSpeed;
@@ -139,7 +168,7 @@ public class PlayerCreater : LifeCreater
 {
     BaseFactory _skillFactory;
 
-    public PlayerCreater(BaseLife lifePrefab, BaseLifeData lifeData, 
+    public PlayerCreater(BaseLife lifePrefab, LifeData lifeData, 
         BaseFactory effectFactory, BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
         _skillFactory = skillFactory;
@@ -153,8 +182,9 @@ public class PlayerCreater : LifeCreater
         PlayerData data = _lifeData as PlayerData;
 
         life.ResetData(data);
-        life.Initialize();
         life.AddEffectFactory(_effectFactory);
+
+        life.Initialize();
 
         ISkillAddable skillUser = life.GetComponent<ISkillAddable>();
         if (skillUser == null) return life;

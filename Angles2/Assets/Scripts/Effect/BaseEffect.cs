@@ -27,6 +27,7 @@ abstract public class BaseEffect : MonoBehaviour
     [SerializeField] protected float _destoryDelay = 0;
 
     public virtual void Initialize() { }
+
     public virtual void Play() { }
     public virtual void ResetDestoryDelay(float delay) { _destoryDelay = delay; }
 

@@ -2,75 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DamageUtility;
+
+public struct DamageableData
+{
+    public DamageData _damageData;
+    public List<ITarget.Type> _targetType;
+    public float _groggyDuration;
+
+    public class DamageableDataBuilder
+    {
+        private DamageData _damage = new DamageData();
+        private List<ITarget.Type> _targetType = new List<ITarget.Type> { ITarget.Type.Blue, ITarget.Type.Red };
+        private float _groggyDuration = 0f;
+
+        // Damage 설정
+        public DamageableDataBuilder SetDamage(DamageData damage)
+        {
+            _damage = damage;
+            return this;
+        }
+
+        // Damageable 대상 설정
+        public DamageableDataBuilder SetTargets(List<ITarget.Type> targetTypes)
+        {
+            _targetType = targetTypes;
+            return this;
+        }
+
+        // Groggy 시간 설정
+        public DamageableDataBuilder SetGroggyDuration(float groggyDuration)
+        {
+            _groggyDuration = groggyDuration;
+            return this;
+        }
+
+        // DamageableData 생성
+        public DamageableData Build()
+        {
+            DamageableData data;
+            data._damageData = _damage;
+            data._targetType = _targetType;
+            data._groggyDuration = _groggyDuration;
+
+            return data;
+        }
+    }
+}
 
 public struct DamageData
 {
-    public DamageData(float damage)
-    {
-        _damage = damage;
+    public float Damage { get { return _originDamage * _totalMultiplier; } }
 
-        // 모든 타겟을 다 넣어준다.
-        _targetType = new List<ITarget.Type>();
-        foreach (ITarget.Type type in Enum.GetValues(typeof(ITarget.Type)))
-        {
-            _targetType.Add(type);
-        }
+    float _originDamage;
+    float _totalMultiplier;
 
-        _groggyDuration = 0;
-        _damageTxtColor = Color.white;
-        _showTxt = true;
+    public DamageData(float originDamage, float totalMultiplier) 
+    { 
+        _originDamage = originDamage;
+        _totalMultiplier = totalMultiplier;
     }
-
-    public DamageData(float damage, List<ITarget.Type> damageableTypes)
-    {
-        _damage = damage;
-        _targetType = damageableTypes;
-        _groggyDuration = 0;
-        _damageTxtColor = Color.white;
-        _showTxt = true;
-    }
-
-    public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration)
-    {
-        _damage = damage;
-        _targetType = damageableTypes;
-        _groggyDuration = groggyDuration;
-        _damageTxtColor = Color.white;
-        _showTxt = true;
-    }
-
-    public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration, bool showTxt)
-    {
-        _damage = damage;
-        _targetType = damageableTypes;
-        _groggyDuration = groggyDuration;
-        _damageTxtColor = Color.white;
-        _showTxt = showTxt;
-    }
-
-    public DamageData(float damage, List<ITarget.Type> damageableTypes, float groggyDuration, bool showTxt, Color damageTxtColor)
-    {
-        _damage = damage;
-        _targetType = damageableTypes;
-        _groggyDuration = groggyDuration;
-        _showTxt = showTxt;
-        _damageTxtColor = damageTxtColor;
-    }
-
-    float _damage;
-    public float Damage { get { return _damage; } }
-
-    bool _showTxt;
-    public bool ShowTxt { get { return _showTxt; } }
-
-    List<ITarget.Type> _targetType;
-    public List<ITarget.Type> DamageableTypes { get { return _targetType; } }
-
-    float _groggyDuration;
-    public float GroggyDuration { get { return _groggyDuration; } }
-
-    Color _damageTxtColor;
-    public Color DamageTxtColor { get { return _damageTxtColor; } }
 }
 
 public interface ITarget : IPos
@@ -106,5 +97,5 @@ public class DefaultTarget : ITarget
 
 public interface IDamageable
 {
-    void GetDamage(DamageData damageData);
+    void GetDamage(DamageableData damageData);
 }

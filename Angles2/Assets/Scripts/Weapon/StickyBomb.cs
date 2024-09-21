@@ -17,6 +17,14 @@ public class StickyBomb : BaseWeapon
         _data = data;
     }
 
+    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    {
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            _data = modifiers[i].Visit(_data);
+        }
+    }
+
     public override void Initialize(BaseFactory effectFactory) 
     {
         _effectFactory = effectFactory;
@@ -37,7 +45,13 @@ public class StickyBomb : BaseWeapon
         effect.ResetSize(_data._range);
         effect.Play();
 
-        DamageData damageData = new DamageData(_data._damage, _targetTypes);
+        DamageableData damageData =
+
+        new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .Build();
+
         Damage.HitCircleRange(damageData, transform.position, _data._range, true, Color.red, 3);
     }
 

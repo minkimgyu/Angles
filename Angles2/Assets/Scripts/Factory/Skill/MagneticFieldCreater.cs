@@ -2,43 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct MagneticFieldUpgradableData
-{
-    public MagneticFieldUpgradableData(float damage, float delay)
-    {
-        _damage = damage;
-        _delay = delay;
-    }
-
-    private float _damage;
-    private float _delay;
-
-    public float Damage { get => _damage; }
-    public float Delay { get => _delay; }
-}
-
 [System.Serializable]
 public class MagneticFieldData : SkillData
 {
-    public List<MagneticFieldUpgradableData> _upgradableDatas;
+    public float _damage;
+    public float _delay;
     public List<ITarget.Type> _targetTypes;
 
-    public MagneticFieldData(int maxUpgradePoint, List<MagneticFieldUpgradableData> upgradableDatas, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public MagneticFieldData(int maxUpgradePoint, float damage, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
-        _upgradableDatas = upgradableDatas;
+        _damage = damage;
+        _delay = delay;
         _targetTypes = targetTypes;
+    }
+
+    public override SkillData Copy()
+    {
+        return new MagneticFieldData(
+            _maxUpgradePoint, // SkillData에서 상속된 값
+            _damage,
+            _delay,
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
     }
 }
 
 public class MagneticFieldCreater : SkillCreater
 {
-    public MagneticFieldCreater(SkillData data) : base(data)
+    IUpgradeVisitor _upgrader;
+
+    public MagneticFieldCreater(SkillData data, IUpgradeVisitor upgrader) : base(data)
     {
+        _upgrader = upgrader;
     }
 
     public override BaseSkill Create()
     {
         MagneticFieldData data = _skillData as MagneticFieldData;
-        return new MagneticField(data);
+        return new MagneticField(data, _upgrader);
     }
 }

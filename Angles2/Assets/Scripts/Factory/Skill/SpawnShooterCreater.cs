@@ -6,15 +6,31 @@ using System;
 [Serializable]
 public class SpawnShooterData : SkillData
 {
-    public BaseWeapon.Name _shooterType;
+    public float _damage;
+    public float _delay;
+    public BaseWeapon.Name _shooterName;
+    public BaseWeapon.Name _projectileName;
     public List<ITarget.Type> _targetTypes;
-    public ShooterData _shooterData;
 
-    public SpawnShooterData(int maxUpgradePoint, BaseWeapon.Name shooterType, ShooterData shooterData, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public SpawnShooterData(int maxUpgradePoint, BaseWeapon.Name shooterName, float damage, float delay, BaseWeapon.Name projectileName, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
-        _shooterType = shooterType;
+        _shooterName = shooterName;
+        _damage = damage;
+        _delay = delay;
+        _projectileName = projectileName;
         _targetTypes = targetTypes;
-        _shooterData = shooterData;
+    }
+
+    public override SkillData Copy()
+    {
+        return new SpawnShooterData(
+            _maxUpgradePoint, // SkillData에서 상속된 값
+            _shooterName,
+            _damage,
+            _delay,
+            _projectileName,
+            new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
+        );
     }
 }
 

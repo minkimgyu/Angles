@@ -35,6 +35,7 @@ public class ViewerFactory : BaseFactory
         _viewerCreaters[BaseViewer.Name.HpViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.HpViewer]);
         _viewerCreaters[BaseViewer.Name.DashViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.DashViewer]);
         _viewerCreaters[BaseViewer.Name.DirectionViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.DirectionViewer]);
+        _viewerCreaters[BaseViewer.Name.BossHPViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.BossHPViewer]);
     }
 
     public override BaseViewer Create(BaseViewer.Name name)

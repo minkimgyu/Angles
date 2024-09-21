@@ -6,18 +6,25 @@ using System;
 
 public class Impact : BaseSkill
 {
-    public List<ITarget.Type> _targetTypes;
+    ImpactData _data;
     BaseFactory _effectFactory;
 
-    List<ImpactUpgradableData> _upgradableDatas;
-    ImpactUpgradableData CurrentUpgradableData { get { return _upgradableDatas[UpgradePoint]; } }
-
-    public Impact(ImpactData data,  BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
+    public Impact(ImpactData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
     {
-        _upgradableDatas = data._upgradableDatas;
-        _targetTypes = data._targetTypes;
-
+        _data = data;
+        _upgrader = upgrader;
         _effectFactory = effectFactory;
+    }
+
+    public override void OnAdd()
+    {
+        _useConstraint = new RandomConstraintComponent(_data, _upgradeableRatio);
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnReflect(Collision2D collision)
@@ -25,7 +32,7 @@ public class Impact : BaseSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_targetTypes);
+        bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
         Debug.Log("Impact");
@@ -35,10 +42,15 @@ public class Impact : BaseSkill
         if (effect == null) return;
 
         effect.ResetPosition(contactPos);
-        effect.ResetSize(CurrentUpgradableData.Range);
+        effect.ResetSize(_data._rangeMultiplier);
         effect.Play();
 
-        DamageData damageData = new DamageData(CurrentUpgradableData.Damage, _targetTypes);
-        Damage.HitCircleRange(damageData, contactPos, CurrentUpgradableData.Range, true, Color.red, 3);
+        DamageableData damageData = 
+        new DamageableData.DamageableDataBuilder().
+        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
+        .SetTargets(_data._targetTypes)
+        .Build();
+
+        Damage.HitCircleRange(damageData, contactPos, _data._range * _data._rangeMultiplier, true, Color.red, 3);
     }
 }
