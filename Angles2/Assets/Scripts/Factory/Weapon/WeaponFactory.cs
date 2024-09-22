@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +12,15 @@ abstract public class WeaponData
     public void ChangeTarget(List<ITarget.Type> targetTypes) { _targetTypes = targetTypes; }
     public void ChangeTotalDamageRatio(float totalDamageRatio) { _totalDamageRatio = totalDamageRatio; }
 
-    public virtual void ChangeDamage(float damage) { }
-    public virtual void ChangeDelay(float delay) { }
     public virtual void ChangeRange(float range) { }
+    public virtual void ChangeDamage(float damage) { }
+    public virtual void ChangeSizeMultiplier(float sizeMultiplier) { }
     public virtual void ChangeLifetime(float lifetime) { }
 
     public virtual void ChangeTargetCount(int targetCount) { }
     public virtual void ChangeForce(float force) { }
     public virtual void ChangeProjectile(BaseWeapon.Name name) { }
+    public virtual void ChangeDelay(float delayModifier) { }
 
     public abstract WeaponData Copy();
 }

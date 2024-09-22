@@ -17,8 +17,17 @@ abstract public class BaseWeapon : MonoBehaviour
         RocketShooter,
     }
 
-    //protected float _damage;
-    //protected List<ITarget.Type> _targetTypes;
+    protected BaseLifetimeComponent _lifetimeComponent;
+    protected BaseSizeModifyComponent _sizeModifyComponent;
+
+    protected virtual void Update()
+    {
+        if (_lifetimeComponent.IsFinish() == true)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     // 이하 5개는 스킬에서 데이터를 받아서 사용할 수 있게 만들기
     public virtual void ResetData(RocketData data) { }
@@ -27,16 +36,11 @@ abstract public class BaseWeapon : MonoBehaviour
     public virtual void ResetData(BladeData data) { }
     public virtual void ResetData(BlackholeData data) { }
     public virtual void ResetData(ShooterData data) { }
-    public virtual void Activate() { }
 
-    protected void DestroyAfter(float time)
+    public virtual void Activate() 
     {
-        Invoke("DestoryMe", time);
-    }
-
-    void DestoryMe()
-    {
-        Destroy(gameObject);
+        _lifetimeComponent.Activate();
+        _sizeModifyComponent.ResetSize();
     }
 
     public abstract void ModifyData(List<WeaponDataModifier> modifiers);
@@ -45,10 +49,6 @@ abstract public class BaseWeapon : MonoBehaviour
     public virtual void Initialize(BaseFactory factory) { }
 
     public virtual void ResetFollower(IFollowable followable) { }
-    public virtual void ResetSize(float ratio) { transform.localScale *= ratio; }
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { transform.position = pos; transform.right = direction; }
-
-    //public void ResetDamage(float damage) { _damage = damage; } --> 이거 대신 위의 ResetData를 사용한다.
-    //public void ResetTargetTypes(List<ITarget.Type> types) { _targetTypes = types; }
 }

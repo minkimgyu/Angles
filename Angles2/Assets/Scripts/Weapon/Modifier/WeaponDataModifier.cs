@@ -50,7 +50,6 @@ public class WeaponTargetModifier : WeaponDataModifier
     }
 }
 
-
 public class WeaponDelayModifier : WeaponDataModifier
 {
     float _delayModifier;
@@ -78,7 +77,7 @@ public class WeaponSizeModifier : WeaponDataModifier
 
     public override T Visit<T>(T weaponData)
     {
-        weaponData.ChangeRange(_rangeModifier);
+        weaponData.ChangeSizeMultiplier(_rangeModifier);
         return weaponData;
     }
 }

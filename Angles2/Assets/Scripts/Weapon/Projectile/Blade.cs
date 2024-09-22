@@ -22,14 +22,8 @@ public class Blade : ProjectileWeapon
 
     DamageableCaptureComponent _captureComponent;
     List<TargetData> _targetDatas;
-    Timer _lifeTimer;
 
     BladeData _data;
-
-    public override void Activate()
-    {
-        DestroyAfter(_data._lifeTime);
-    }
 
     protected void ApplyDamage(IDamageable damageable)
     {
@@ -58,7 +52,6 @@ public class Blade : ProjectileWeapon
         {
             _data = modifiers[i].Visit(_data);
         }
-        ResetSize(_data._range);
     }
 
     public override void ResetData(BladeData data)
@@ -71,7 +64,8 @@ public class Blade : ProjectileWeapon
         _targetDatas = new List<TargetData>();
         _captureComponent = GetComponentInChildren<DamageableCaptureComponent>();
         _captureComponent.Initialize(OnEnter, OnExit);
-        _lifeTimer = new Timer();
+
+        _lifetimeComponent = new LifetimeComponent(_data);
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
@@ -89,8 +83,9 @@ public class Blade : ProjectileWeapon
         _targetDatas.Remove(targetData);
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;

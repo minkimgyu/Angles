@@ -4,24 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class BulletData : WeaponData
+public class BulletData : WeaponData, ILifetimeStat
 {
     public float _damage;
-    public float _lifeTime;
-
-    public BulletData(float damage, float lifeTime)
+    public float Lifetime { get; set; }
+    public BulletData(float lifeTime)
     {
-        _damage = damage;
-        _lifeTime = lifeTime;
+        _damage = 0;
+        Lifetime = lifeTime;
     }
 
     public override void ChangeDamage(float damage) => _damage = damage;
+    public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
 
     public override WeaponData Copy()
     {
         return new BulletData(
-            _damage,
-            _lifeTime
+            Lifetime
         );
     }
 }
@@ -40,8 +39,8 @@ public class BulletCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.Initialize(_effectFactory);
         weapon.ResetData(_weaponData as BulletData);
+        weapon.Initialize(_effectFactory);
         return weapon;
     }
 }

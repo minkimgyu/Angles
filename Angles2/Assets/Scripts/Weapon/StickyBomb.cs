@@ -5,11 +5,9 @@ using DamageUtility;
 
 public class StickyBomb : BaseWeapon
 {
-    Timer _lifeTimer = null;
     IFollowable _followable;
 
     BaseFactory _effectFactory;
-
     StickyBombData _data;
 
     public override void ResetData(StickyBombData data)
@@ -28,7 +26,7 @@ public class StickyBomb : BaseWeapon
     public override void Initialize(BaseFactory effectFactory) 
     {
         _effectFactory = effectFactory;
-        _lifeTimer = new Timer();
+        _lifetimeComponent = new LifetimeComponent(_data);
     }
 
     public override void ResetFollower(IFollowable followable) 
@@ -42,7 +40,7 @@ public class StickyBomb : BaseWeapon
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
-        effect.ResetSize(_data._range);
+        effect.ResetSize(_data._range); // 
         effect.Play();
 
         DamageableData damageData =
@@ -55,8 +53,9 @@ public class StickyBomb : BaseWeapon
         Damage.HitCircleRange(damageData, transform.position, _data._range, true, Color.red, 3);
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         if (_followable as UnityEngine.Object == null) return;
 
         bool canAttach = _followable.CanFollow();
@@ -66,7 +65,7 @@ public class StickyBomb : BaseWeapon
             transform.position = pos;
         }
 
-        if (_lifeTimer.CurrentState == Timer.State.Running) return;
+        if(_lifetimeComponent.IsFinish() == false) return;
 
         Explode();
         Destroy(gameObject);

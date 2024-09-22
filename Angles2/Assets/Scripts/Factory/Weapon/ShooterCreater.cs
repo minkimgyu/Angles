@@ -14,9 +14,9 @@ public class ShooterData : WeaponData
     public float _followOffset;
     public float _maxDistanceFromPlayer;
 
-    public ShooterData(float damage, float shootForce, float fireDelay, float moveSpeed, float followOffset, float maxDistanceFromPlayer)
+    public ShooterData(float shootForce, float fireDelay, float moveSpeed, float followOffset, float maxDistanceFromPlayer)
     {
-        _damage = damage;
+        _damage = 0;
         _shootForce = shootForce;
         _fireDelay = fireDelay;
 
@@ -34,7 +34,6 @@ public class ShooterData : WeaponData
     public override WeaponData Copy()
     {
         return new ShooterData(
-            _damage,
             _shootForce,
             _fireDelay,
             _moveSpeed,
@@ -58,8 +57,8 @@ public class ShooterCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.Initialize(_weaponFactory);
         weapon.ResetData(_weaponData as ShooterData);
+        weapon.Initialize(_weaponFactory);
 
         return weapon;
     }

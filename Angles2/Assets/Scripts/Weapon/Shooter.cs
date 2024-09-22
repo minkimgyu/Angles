@@ -20,6 +20,9 @@ public class Shooter : BaseWeapon
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(_data._damage));
 
+        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+        modifiers.Add(new WeaponTotalDamageRatioModifier(_data._totalDamageRatio));
+
         BaseWeapon weapon = _weaponFactory.Create(_data._fireWeaponName);
         weapon.ModifyData(modifiers);
 
@@ -55,6 +58,7 @@ public class Shooter : BaseWeapon
         _waitFire = 0;
 
         _trackComponent = GetComponent<TrackComponent>();
+        _lifetimeComponent = new NoLifetimeComponent();
 
         _targetDatas = new List<ITarget>();
         _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
@@ -94,8 +98,9 @@ public class Shooter : BaseWeapon
         return capturedTarget;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ITarget target = ReturnCapturedTarget();
         if (target == null) return;
 

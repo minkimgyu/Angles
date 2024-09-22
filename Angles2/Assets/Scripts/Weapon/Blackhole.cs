@@ -24,13 +24,7 @@ public class Blackhole : BaseWeapon
 
     AbsorbableCaptureComponent _absorbCaptureComponent;
     List<TargetData> _targetDatas;
-    Timer _lifeTimer;
     BlackholeData _data;
-
-    public override void Activate()
-    {
-        DestroyAfter(_data._lifeTime);
-    }
 
     public override void ResetData(BlackholeData data)
     {
@@ -43,13 +37,12 @@ public class Blackhole : BaseWeapon
         {
             _data = modifiers[i].Visit(_data);
         }
-        ResetSize(_data._range);
     }
 
     public override void Initialize() 
     {
         _targetDatas = new List<TargetData>();
-        _lifeTimer = new Timer();
+        _lifetimeComponent = new LifetimeComponent(_data);
 
         _absorbCaptureComponent = GetComponentInChildren<AbsorbableCaptureComponent>();
         _absorbCaptureComponent.Initialize(OnEnter, OnExit);
@@ -67,9 +60,10 @@ public class Blackhole : BaseWeapon
         _targetDatas.Remove(data);
     }
 
-    private void Update()
+    protected override void Update()
     {
-        if(_lifeTimer.CurrentState == Timer.State.Finish)
+        base.Update();
+        if(_lifetimeComponent.IsFinish() == true)
         {
             Destroy(gameObject);
             return;

@@ -8,11 +8,6 @@ public class Rocket : ProjectileWeapon
     BaseFactory _effectFactory;
     RocketData _data;
 
-    public override void Activate()
-    {
-        DestroyAfter(_data._lifeTime);
-    }
-
     public override void ResetData(RocketData data)
     {
         _data = data;
@@ -22,6 +17,8 @@ public class Rocket : ProjectileWeapon
     {
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
+
+        _lifetimeComponent = new LifetimeComponent(_data);
 
         _effectFactory = effectFactory;
     }
@@ -51,7 +48,7 @@ public class Rocket : ProjectileWeapon
         .Build();
 
 
-        Damage.HitCircleRange(damageData, transform.position, _data._explosionRange, true, Color.red, 3);
+        Damage.HitCircleRange(damageData, transform.position, _data._range, true, Color.red, 3);
         Destroy(gameObject);
     }
 

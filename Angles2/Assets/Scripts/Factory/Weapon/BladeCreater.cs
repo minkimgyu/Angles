@@ -3,24 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class BladeData : WeaponData
+public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
 {
     public float _damage;
     public float _attackDelay;
-    public float _range;
-    public float _lifeTime;
+    public float Lifetime { get; set; }
+    public float SizeMultiplier { get; set; }
 
     public BladeData(float attackDelay)
     {
         _damage = 0;
         _attackDelay = attackDelay;
-        _range = 1;
-        _lifeTime = 3;
+        Lifetime = 3;
     }
 
     public override void ChangeDamage(float damage) => _damage = damage;
-    public override void ChangeRange(float range) => _range = range;
-    public override void ChangeLifetime(float lifeTime) => _lifeTime = lifeTime;
+    public override void ChangeLifetime(float lifeTime) => Lifetime = lifeTime;
 
     public override WeaponData Copy()
     {
@@ -41,8 +39,8 @@ public class BladeCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.Initialize();
         weapon.ResetData(_weaponData as BladeData);
+        weapon.Initialize();
         return weapon;
     }
 }

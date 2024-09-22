@@ -289,14 +289,14 @@ public class Database
     {
         { BaseWeapon.Name.Blade, new BladeData(1)},
 
-        { BaseWeapon.Name.Bullet, new BulletData(0, 5)},
-        { BaseWeapon.Name.Rocket, new RocketData(0, 20, 5, 5)},
+        { BaseWeapon.Name.Bullet, new BulletData(5)},
+        { BaseWeapon.Name.Rocket, new RocketData(3, 5)},
 
-        { BaseWeapon.Name.Blackhole, new BlackholeData(3, 50, 4, 1, 0.1f)},
-        { BaseWeapon.Name.StickyBomb, new StickyBombData(0, 1, 3)},
+        { BaseWeapon.Name.Blackhole, new BlackholeData(3, 50, 4, 0.1f)},
+        { BaseWeapon.Name.StickyBomb, new StickyBombData(3)},
 
-        { BaseWeapon.Name.RifleShooter, new ShooterData(0, 10, 1, 10, 4.0f, 10.0f)},
-        { BaseWeapon.Name.RocketShooter, new ShooterData(0, 10, 1, 10, 4.0f, 10.0f)},
+        { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 10, 4.0f, 10.0f)},
+        { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 10, 4.0f, 10.0f)},
 
     };
     public Dictionary<BaseWeapon.Name, WeaponData> WeaponDatas { get { return _weaponDatas; } }

@@ -3,28 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class StickyBombData : WeaponData
+public class StickyBombData : WeaponData, ILifetimeStat
 {
     public float _damage;
     public float _range;
-    public float _explosionDelay;
+    public float Lifetime { get; set; }
 
-    public StickyBombData(float damage, float range, float explosionDelay)
+    public StickyBombData(float range, float lifetime)
     {
-        _damage = damage;
+        _damage = 0;
         _range = range;
-        _explosionDelay = explosionDelay;
+        Lifetime = lifetime;
     }
 
     public override void ChangeDamage(float damage) { _damage = damage; }
-    public override void ChangeDelay(float delay) { _explosionDelay = delay; }
+    public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
 
     public override WeaponData Copy()
     {
         return new StickyBombData(
-            _damage,
             _range,
-            _explosionDelay
+            Lifetime
         );
     }
 }
@@ -43,8 +42,8 @@ public class StickyBombCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.Initialize(_effectFactory);
         weapon.ResetData(_weaponData as StickyBombData);
+        weapon.Initialize(_effectFactory);
         return weapon;
     }
 }
