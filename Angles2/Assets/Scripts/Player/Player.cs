@@ -26,7 +26,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
     float _currentDashFillDuration = 0;
     int _currentDashCount;
 
-    StatUpgrader _playerUpgrader;
+    StatUpgrader _statUpgrader;
     PlayerData _playerData;
 
     float DashRatio { get { return _currentDashFillDuration / _playerData._dashRestoreDuration; } }
@@ -95,7 +95,8 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
         _groggyTimer = new Timer();
         _hp = _maxHp;
 
-        _displayDamageComponent = new DisplayDamageComponent(_targetType, _effectFactory);
+        _statUpgrader = new StatUpgrader();
+        _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
         _interactableCaptureComponent = GetComponentInChildren<InteractableCaptureComponent>();
         _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
 
@@ -107,21 +108,6 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
-
-        //_buffController = GetComponent<BuffController>();
-        //_buffController.Initialize( 
-        //    new Dictionary<BaseBuff.Type, BuffCommand> 
-        //    {
-        //        { BaseBuff.Type.TotalDamage, new BuffRatioCommand(_totalDamageRatio) },
-        //        { BaseBuff.Type.TotalCooltime, new BuffRatioCommand(_totalCooltimeRatio) },
-
-        //        { BaseBuff.Type.ShootingDuration, new BuffValueCommand(_shootingDuration) },
-        //        { BaseBuff.Type.ShootingChargeDuration, new BuffValueCommand(_chargeDuration) },
-
-        //        { BaseBuff.Type.DashSpeed, new BuffValueCommand(_dashSpeed) },
-        //        { BaseBuff.Type.DashChargeDuration, new BuffValueCommand(_dashDuration) },
-        //    }
-        //);
 
         InintializeFSM();
     }
@@ -231,12 +217,14 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
     private void OnCollisionEnter2D(Collision2D collision)
     {
         IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
-        if(interactable != null &&  _interactableObjects.Contains(interactable) == true)
+        if (interactable != null && _interactableObjects.Contains(interactable) == true)
         {
             OnInteract(interactable);
         }
-
-        _actionFSM.OnCollisionEnter(collision);
+        else
+        {
+            _actionFSM.OnCollisionEnter(collision); // 위와 같은 경우가 아닌 경우 OnCollisionEnter2D 이벤트 진행
+        }
     }
 
     public void OnLeftInputStart() => _movementFSM.OnMoveStart();
@@ -272,21 +260,21 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
 
     public void Upgrade(StatUpgrader.CooltimeData cooltimeData)
     {
-        _playerUpgrader.Visit(_playerData, cooltimeData);
+        _statUpgrader.Visit(_playerData, cooltimeData);
     }
 
     public void Upgrade(StatUpgrader.DamageData damageData)
     {
-        _playerUpgrader.Visit(_playerData, damageData);
+        _statUpgrader.Visit(_playerData, damageData);
     }
 
     public void Upgrade(StatUpgrader.DashData dashData)
     {
-        _playerUpgrader.Visit(_playerData, dashData);
+        _statUpgrader.Visit(_playerData, dashData);
     }
 
     public void Upgrade(StatUpgrader.ShootingData shootingData)
     {
-        _playerUpgrader.Visit(_playerData, shootingData);
+        _statUpgrader.Visit(_playerData, shootingData);
     }
 }

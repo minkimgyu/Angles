@@ -14,10 +14,10 @@ public class Database
 
     List<BaseSkill.Name> _upgradeableSkills = new List<BaseSkill.Name>
     {
-        //BaseSkill.Name.Statikk,
+        BaseSkill.Name.Statikk,
         //BaseSkill.Name.Knockback,
         //BaseSkill.Name.Impact,
-        BaseSkill.Name.SpawnBlackhole,
+        //BaseSkill.Name.SpawnBlackhole,
         //BaseSkill.Name.SpawnStickyBomb,
         //BaseSkill.Name.SpawnBlade,
 
@@ -26,7 +26,7 @@ public class Database
 
         //BaseSkill.Name.CreateShootingBuff,
         //BaseSkill.Name.CreateDashBuff,
-        //BaseSkill.Name.CreateTotalDamageBuff,
+        BaseSkill.Name.UpgradeDamage,
         //BaseSkill.Name.CreateTotalCooltimeBuff
     };
 
@@ -79,11 +79,10 @@ public class Database
             (
                 new List<SpawnBlackholeUpgrader.UpgradableData>
                 {
-                    new SpawnBlackholeUpgrader.UpgradableData(3, 50, 4, 1),
-                    new SpawnBlackholeUpgrader.UpgradableData(4, 50, 5, 1),
-                    new SpawnBlackholeUpgrader.UpgradableData(4, 60, 5, 1.2f),
-                    new SpawnBlackholeUpgrader.UpgradableData(5, 60, 6, 1.2f),
-                    new SpawnBlackholeUpgrader.UpgradableData(6, 80, 7, 1.5f),
+                    new SpawnBlackholeUpgrader.UpgradableData(1, 0.1f),
+                    new SpawnBlackholeUpgrader.UpgradableData(0, 0.1f),
+                    new SpawnBlackholeUpgrader.UpgradableData(1, 0.1f),
+                    new SpawnBlackholeUpgrader.UpgradableData(1, 0.2f),
                 }
             )
         },
@@ -106,11 +105,10 @@ public class Database
             (
                 new List<SpawnStickyBombUpgrader.UpgradableData>
                 {
-                    new SpawnStickyBombUpgrader.UpgradableData(3, 1, 30),
-                    new SpawnStickyBombUpgrader.UpgradableData(3, 1, 40),
-                    new SpawnStickyBombUpgrader.UpgradableData(3, 1.2f, 50),
-                    new SpawnStickyBombUpgrader.UpgradableData(3, 1.2f, 60),
-                    new SpawnStickyBombUpgrader.UpgradableData(3, 1.5f, 70),
+                    new SpawnStickyBombUpgrader.UpgradableData(10, 1),
+                    new SpawnStickyBombUpgrader.UpgradableData(0, 1),
+                    new SpawnStickyBombUpgrader.UpgradableData(10, 0),
+                    new SpawnStickyBombUpgrader.UpgradableData(10, 1),
                 }
             )
         },
@@ -120,7 +118,6 @@ public class Database
             (
                 new List<SpawnShooterUpgrader.UpgradableData>
                 {
-                    new SpawnShooterUpgrader.UpgradableData(10, 0),
                     new SpawnShooterUpgrader.UpgradableData(10, 0),
                     new SpawnShooterUpgrader.UpgradableData(10, -0.5f),
                     new SpawnShooterUpgrader.UpgradableData(10, 0),
@@ -135,14 +132,12 @@ public class Database
                 new List<SpawnShooterUpgrader.UpgradableData>
                 {
                     new SpawnShooterUpgrader.UpgradableData(10, 0),
+                    new SpawnShooterUpgrader.UpgradableData(0, -0.2f),
                     new SpawnShooterUpgrader.UpgradableData(10, 0),
-                    new SpawnShooterUpgrader.UpgradableData(10, -0.5f),
-                    new SpawnShooterUpgrader.UpgradableData(10, 0),
-                    new SpawnShooterUpgrader.UpgradableData(10, -0.2f),
+                    new SpawnShooterUpgrader.UpgradableData(0, -0.3f),
                 }
             )
         },
-
 
          {
             BaseSkill.Name.SpreadBullets,
@@ -212,17 +207,17 @@ public class Database
 
         { BaseSkill.Name.Impact, new ImpactData(5, 0.2f, 20, 2, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 1, 4, 5, 1, 5, new List<ITarget.Type> { ITarget.Type.Red })},
+        { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 1, 3, new List<ITarget.Type> { ITarget.Type.Red })},
 
-        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 10, 1, BaseWeapon.Name.Bullet, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 10, 1, BaseWeapon.Name.ShooterBullet, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 10, 3, BaseWeapon.Name.Rocket, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 20, 3, BaseWeapon.Name.Rocket, new List<ITarget.Type> { ITarget.Type.Red }) },
 
         { BaseSkill.Name.SpawnBlade, new SpawnBladeData(5, 1, 10, 3f, 8f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnStickyBomb, new SpawnStickyBombData(5, 5f, 3, 20, 3, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnStickyBomb, new SpawnStickyBombData(5, 5f, 1, 30, 3, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.ContactAttack, new ContactAttackData(1, 0, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.ContactAttack, new ContactAttackData(1, 20, new List<ITarget.Type> { ITarget.Type.Red }) },
 
         {
             BaseSkill.Name.UpgradeDamage,
@@ -277,6 +272,10 @@ public class Database
         },
 
         { BaseSkill.Name.MultipleShockwave, new MultipleShockwaveData(1, 0.5f, 0.7f, 3, 20f, 1.7f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+
+
+
+
         { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(10, 5f, 3f, 3f, 5, new List<ITarget.Type> { ITarget.Type.Blue })},
         { BaseSkill.Name.Shockwave, new ShockwaveData(1, 20f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.MagneticField, new MagneticFieldData(1, 20f, 1.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
@@ -289,14 +288,14 @@ public class Database
     {
         { BaseWeapon.Name.Blade, new BladeData(1)},
 
-        { BaseWeapon.Name.Bullet, new BulletData(5)},
+        { BaseWeapon.Name.ShooterBullet, new BulletData(5)},
         { BaseWeapon.Name.Rocket, new RocketData(3, 5)},
 
-        { BaseWeapon.Name.Blackhole, new BlackholeData(3, 50, 4, 0.1f)},
-        { BaseWeapon.Name.StickyBomb, new StickyBombData(3)},
+        { BaseWeapon.Name.Blackhole, new BlackholeData(100, 0.1f)},
+        { BaseWeapon.Name.StickyBomb, new StickyBombData(3, 3)},
 
-        { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 10, 4.0f, 10.0f)},
-        { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 10, 4.0f, 10.0f)},
+        { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 18, 4.0f, 10.0f)},
+        { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 18, 4.0f, 10.0f)},
 
     };
     public Dictionary<BaseWeapon.Name, WeaponData> WeaponDatas { get { return _weaponDatas; } }
@@ -350,7 +349,9 @@ public class Database
             new DropData(3, 
                 new List<Tuple<IInteractable.Name, float>>
                 { 
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.SkillBubble, 0.1f)
                 }
             ), 5) 
         },
@@ -366,7 +367,9 @@ public class Database
             new DropData(3,
                 new List<Tuple<IInteractable.Name, float>>
                 {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.SkillBubble, 0.1f)
                 }
             ), 5)
         },
@@ -382,7 +385,9 @@ public class Database
             new DropData(3,
                 new List<Tuple<IInteractable.Name, float>>
                 {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.SkillBubble, 0.1f)
                 }
             ), 5f, 3f, 1f)
         },
@@ -398,7 +403,9 @@ public class Database
             new DropData(3,
                 new List<Tuple<IInteractable.Name, float>>
                 {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
+                    new Tuple<IInteractable.Name, float>( IInteractable.Name.SkillBubble, 0.1f)
                 }
             ), 5f, 3f, 1f)
         },
@@ -516,6 +523,7 @@ public class Database
     {
         { IInteractable.Name.CardTable, new CardTableData(3) },
         { IInteractable.Name.Coin, new CoinData(5, 25) },
+        { IInteractable.Name.Heart, new HeartData(20, 25) },
         { IInteractable.Name.SkillBubble, new SkillBubbleData(1, 25) },
         { IInteractable.Name.Shop, new ShopData(3, 3) }
     };

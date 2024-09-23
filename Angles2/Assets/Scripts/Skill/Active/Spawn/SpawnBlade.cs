@@ -47,6 +47,7 @@ public class SpawnBlade : BaseSkill
         modifiers.Add(new WeaponTotalDamageRatioModifier(_upgradeableRatio.TotalDamageRatio));
 
         weapon.ModifyData(modifiers);
+        weapon.Activate();
         weapon.ResetPosition(_castingData.MyTransform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();

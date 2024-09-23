@@ -30,6 +30,7 @@ public class InteractableObjectFactory : BaseFactory
         _itemCreaters.Add(IInteractable.Name.Shop, new ShopCreater(interactablePrefabs[IInteractable.Name.Shop], interactableDatas[IInteractable.Name.Shop]));
         _itemCreaters.Add(IInteractable.Name.SkillBubble, new SkillBubbleCreater(interactablePrefabs[IInteractable.Name.SkillBubble], interactableDatas[IInteractable.Name.SkillBubble]));
         _itemCreaters.Add(IInteractable.Name.Coin, new CoinCreater(interactablePrefabs[IInteractable.Name.Coin], interactableDatas[IInteractable.Name.Coin]));
+        _itemCreaters.Add(IInteractable.Name.Heart, new HeartCreater(interactablePrefabs[IInteractable.Name.Heart], interactableDatas[IInteractable.Name.Heart]));
     }
 
     public override IInteractable Create(IInteractable.Name name)

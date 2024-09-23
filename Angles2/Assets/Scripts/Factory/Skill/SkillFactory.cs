@@ -67,17 +67,17 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.SpawnBlackhole] = new SpawnBlackholeCreater(skillDatas[BaseSkill.Name.SpawnBlackhole], upgraders[BaseSkill.Name.SpawnBlackhole], weaponFactory);
         _skillCreaters[BaseSkill.Name.SpawnBlade] = new SpawnBladeCreater(skillDatas[BaseSkill.Name.SpawnBlade], upgraders[BaseSkill.Name.SpawnBlade], weaponFactory);
 
-        _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], weaponFactory);
-        _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], upgraders[BaseSkill.Name.SpawnRifleShooter], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], upgraders[BaseSkill.Name.SpawnRocketShooter], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.SpawnStickyBomb]  = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], upgraders[BaseSkill.Name.SpawnStickyBomb], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.ContactAttack] = new ContactAttackCreater(skillDatas[BaseSkill.Name.ContactAttack], effectFactory);
 
-        //_skillCreaters[BaseSkill.Name.CreateTotalDamageBuff] = new CreateTotalDamageBuffCreater(skillDatas[BaseSkill.Name.CreateTotalDamageBuff], buffFactory);
-        //_skillCreaters[BaseSkill.Name.CreateTotalCooltimeBuff] = new CreateTotalCooltimeBuffCreater(skillDatas[BaseSkill.Name.CreateTotalCooltimeBuff], buffFactory);
-        //_skillCreaters[BaseSkill.Name.CreateDashBuff] = new CreateDashBuffCreater(skillDatas[BaseSkill.Name.CreateDashBuff], buffFactory);
-        //_skillCreaters[BaseSkill.Name.CreateShootingBuff] = new CreateShootingBuffCreater(skillDatas[BaseSkill.Name.CreateShootingBuff], buffFactory);
+        _skillCreaters[BaseSkill.Name.UpgradeDamage] = new UpgradeDamageCreater(skillDatas[BaseSkill.Name.UpgradeDamage]);
+        _skillCreaters[BaseSkill.Name.UpgradeCooltime] = new UpgradeCooltimeCreater(skillDatas[BaseSkill.Name.UpgradeCooltime]);
+        _skillCreaters[BaseSkill.Name.UpgradeDash] = new UpgradeDashCreater(skillDatas[BaseSkill.Name.UpgradeDash]);
+        _skillCreaters[BaseSkill.Name.UpgradeShooting] = new UpgradeShootingCreater(skillDatas[BaseSkill.Name.UpgradeShooting]);
 
 
         _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], upgraders[BaseSkill.Name.SpreadBullets], weaponFactory);

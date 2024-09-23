@@ -42,7 +42,8 @@ public class Blackhole : BaseWeapon
     public override void Initialize() 
     {
         _targetDatas = new List<TargetData>();
-        _lifetimeComponent = new LifetimeComponent(_data);
+        _lifetimeComponent = new LifetimeComponent(_data, () => { Destroy(gameObject); });
+        _sizeModifyComponent = new SizeModifyComponent(transform, _data);
 
         _absorbCaptureComponent = GetComponentInChildren<AbsorbableCaptureComponent>();
         _absorbCaptureComponent.Initialize(OnEnter, OnExit);
@@ -50,7 +51,7 @@ public class Blackhole : BaseWeapon
 
     void OnEnter(IForce absorbable, IDamageable damageable)
     {
-        if (_targetDatas.Count >= _data._maxTargetCount) return;
+        //if (_targetDatas.Count >= _data._maxTargetCount) return;
         _targetDatas.Add(new TargetData(Time.time, absorbable, damageable));
     }
 
@@ -63,12 +64,6 @@ public class Blackhole : BaseWeapon
     protected override void Update()
     {
         base.Update();
-        if(_lifetimeComponent.IsFinish() == true)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
@@ -81,7 +76,7 @@ public class Blackhole : BaseWeapon
                 new DamageableData.DamageableDataBuilder().
                 SetDamage(new DamageData(0, _data._totalDamageRatio))
                 .SetTargets(_data._targetTypes)
-                .SetGroggyDuration(2f)
+                .SetGroggyDuration(_data._forceDelay)
                 .Build();
 
                 _targetDatas[i].DamageableTarget.GetDamage(damageData);

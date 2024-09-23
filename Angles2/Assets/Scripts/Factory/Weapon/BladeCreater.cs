@@ -15,10 +15,12 @@ public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
         _damage = 0;
         _attackDelay = attackDelay;
         Lifetime = 3;
+        SizeMultiplier = 1f;
     }
 
     public override void ChangeDamage(float damage) => _damage = damage;
     public override void ChangeLifetime(float lifeTime) => Lifetime = lifeTime;
+    public override void ChangeSizeMultiplier(float sizeMultiplier) => SizeMultiplier = sizeMultiplier;
 
     public override WeaponData Copy()
     {

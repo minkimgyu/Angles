@@ -103,7 +103,7 @@ public class CardUIController : MonoBehaviour
 
     void CloseTab()
     {
-        Time.timeScale = 1; 
+        ServiceLocater.ReturnTimeController().Restart();
         DeleteCards();
     }
 
@@ -113,7 +113,7 @@ public class CardUIController : MonoBehaviour
         List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(skillUser, cardCount);
 
         if (upgradeDatas.Count == 0) return;
-        Time.timeScale = 0;
+        ServiceLocater.ReturnTimeController().Stop();
 
         for (int i = 0; i < upgradeDatas.Count; i++)
         {
@@ -147,7 +147,7 @@ public class CardUIController : MonoBehaviour
         List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(skillUser, cardCount);
 
         if (upgradeDatas.Count == 0) return;
-        Time.timeScale = 0;
+        ServiceLocater.ReturnTimeController().Stop();
 
         for (int i = 0; i < upgradeDatas.Count; i++)
         {

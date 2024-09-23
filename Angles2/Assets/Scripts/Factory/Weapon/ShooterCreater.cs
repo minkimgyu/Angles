@@ -20,7 +20,7 @@ public class ShooterData : WeaponData
         _shootForce = shootForce;
         _fireDelay = fireDelay;
 
-        _fireWeaponName = BaseWeapon.Name.Bullet;
+        _fireWeaponName = BaseWeapon.Name.ShooterBullet;
 
         _moveSpeed = moveSpeed;
         _followOffset = followOffset;

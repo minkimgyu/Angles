@@ -29,12 +29,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - InteractableObject
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ae24ac52410987a4f895e399e385ca5a
-    m_Address: SkillBubble
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - InteractableObject
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27f22facdccc36646a4921990d8af6f2
     m_Address: Shop
     m_ReadOnly: 0
@@ -43,6 +37,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 243bed8f21adc4c42be535109e018a11
     m_Address: Heart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InteractableObject
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f3c7e622b59c2046a6a62138830d967
+    m_Address: SkillBubble
     m_ReadOnly: 0
     m_SerializedLabels:
     - InteractableObject

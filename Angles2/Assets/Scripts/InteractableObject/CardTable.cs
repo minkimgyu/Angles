@@ -31,9 +31,7 @@ public class CardTable : MonoBehaviour, IInteractable
 
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
-        EventBusManager.Instance.
-
-        SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.ReturnSkillUser(), _cardCount);
+        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.ReturnSkillUser(), _cardCount);
     }
 
     public void OnInteractExit(IInteracter interacter)

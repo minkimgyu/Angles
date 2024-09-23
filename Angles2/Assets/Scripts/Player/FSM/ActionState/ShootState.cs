@@ -44,6 +44,8 @@ public class ShootState : State<Player.ActionState>
 
     public override void OnCollisionEnter(Collision2D collision)
     {
+
+
         OnReflect?.Invoke(collision);
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce);
 

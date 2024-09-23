@@ -30,12 +30,16 @@ public class TrackableEnemy : BaseEnemy
     protected override void Update()
     {
         base.Update();
+
+        if (_aliveState == AliveState.Groggy) return;
         _fsm.OnUpdate();
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (_aliveState == AliveState.Groggy) return;
         _fsm.OnFixedUpdate();
     }
 

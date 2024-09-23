@@ -6,8 +6,6 @@ using System;
 [Serializable]
 public class SpawnBlackholeData : RandomSkillData
 {
-    public int _targetCount;
-    public float _force;
     public float _sizeMultiplier;
     public float _lifetime;
 
@@ -16,19 +14,11 @@ public class SpawnBlackholeData : RandomSkillData
     public SpawnBlackholeData(
         int maxUpgradePoint,
         float probability,
-
-        int targetCount,
-        float force,
-        float sizeMultiplier,
         float lifetime,
-
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
-        _targetCount = targetCount;
-        _force = force;
-        _sizeMultiplier = sizeMultiplier;
+        _sizeMultiplier = 1;
         _lifetime = lifetime;
-
         _targetTypes = targetTypes;
     }
 
@@ -37,9 +27,6 @@ public class SpawnBlackholeData : RandomSkillData
         return new SpawnBlackholeData(
             _maxUpgradePoint, // RandomSkillData에서 상속된 값
             _probability, // RandomSkillData에서 상속된 값
-            _targetCount,
-            _force,
-            _sizeMultiplier,
             _lifetime,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );

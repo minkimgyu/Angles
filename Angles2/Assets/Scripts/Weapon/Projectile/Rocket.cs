@@ -18,7 +18,8 @@ public class Rocket : ProjectileWeapon
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
 
-        _lifetimeComponent = new LifetimeComponent(_data);
+        _lifetimeComponent = new LifetimeComponent(_data, () => { Destroy(gameObject); });
+        _sizeModifyComponent = new NoSizeModifyComponent();
 
         _effectFactory = effectFactory;
     }

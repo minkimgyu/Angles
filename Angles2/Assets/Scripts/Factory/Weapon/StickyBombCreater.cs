@@ -5,7 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class StickyBombData : WeaponData, ILifetimeStat
 {
+    /// <summary>
+    /// 적용되는 데미지
+    /// </summary>
     public float _damage;
+
+    /// <summary>
+    /// 시전 범위
+    /// </summary>
     public float _range;
     public float Lifetime { get; set; }
 

@@ -49,6 +49,7 @@ public class SpawnStickyBomb : BaseSkill
         modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
 
         weapon.ModifyData(modifiers);
+        weapon.Activate();
         weapon.ResetFollower(followable);
     }
 }

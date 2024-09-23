@@ -83,7 +83,7 @@ public class ChargeState : State<Player.ActionState>
 
     public override void OnChargeEnd()
     {
-        Debug.Log("OnChargeEnd");
+        //Debug.Log("OnChargeEnd");
 
         EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnTurnOnOffDirection, false);
         //ShowShootDirection?.Invoke(false);

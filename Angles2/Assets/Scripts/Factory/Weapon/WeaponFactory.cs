@@ -51,7 +51,7 @@ public class WeaponFactory : BaseFactory
         _weaponCreaters[BaseWeapon.Name.Blackhole] = new BlackholeCreater(weaponPrefabs[BaseWeapon.Name.Blackhole], weaponData[BaseWeapon.Name.Blackhole]);
 
 
-        _weaponCreaters[BaseWeapon.Name.Bullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.Bullet], weaponData[BaseWeapon.Name.Bullet], effectFactory);
+        _weaponCreaters[BaseWeapon.Name.ShooterBullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.ShooterBullet], weaponData[BaseWeapon.Name.ShooterBullet], effectFactory);
         _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.Rocket], weaponData[BaseWeapon.Name.Rocket], effectFactory);
 
         _weaponCreaters[BaseWeapon.Name.RifleShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RifleShooter], weaponData[BaseWeapon.Name.RifleShooter], this);

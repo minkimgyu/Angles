@@ -37,17 +37,19 @@ public class SpawnShooterData : SkillData
 
 public class SpawnShooterCreater : SkillCreater
 {
+    IUpgradeVisitor _upgrader;
     BaseFactory _weaponFactory;
-    public ShooterData _data;
+    ShooterData _data;
 
-    public SpawnShooterCreater(SkillData data, BaseFactory _weaponFactory) : base(data)
+    public SpawnShooterCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(data)
     {
-        this._weaponFactory = _weaponFactory;
+        _upgrader = upgrader;
+        _weaponFactory = weaponFactory;
     }
 
     public override BaseSkill Create()
     {
         SpawnShooterData data = _skillData as SpawnShooterData;
-        return new SpawnShooter(data, _weaponFactory);
+        return new SpawnShooter(data, _upgrader, _weaponFactory);
     }
 }

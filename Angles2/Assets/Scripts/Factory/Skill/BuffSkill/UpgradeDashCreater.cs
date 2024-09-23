@@ -18,7 +18,7 @@ public class UpgradeDashData : SkillData
 
 public class UpgradeDashCreater : SkillCreater
 {
-    public UpgradeDashCreater(SkillData data, BaseFactory buffFactory) : base(data)
+    public UpgradeDashCreater(SkillData data) : base(data)
     {
     }
 

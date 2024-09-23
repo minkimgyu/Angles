@@ -37,7 +37,6 @@ public class Bullet : ProjectileWeapon
 
     BaseFactory _effectFactory;
     BulletData _data;
-    Timer _lifeTimer;
 
     void SpawnHitEffect()
     {
@@ -62,7 +61,8 @@ public class Bullet : ProjectileWeapon
     public override void Initialize(BaseFactory effectFactory)
     {
         _effectFactory = effectFactory;
-        _lifetimeComponent = new LifetimeComponent(_data);
+        _lifetimeComponent = new LifetimeComponent(_data, () => { Destroy(gameObject); });
+        _sizeModifyComponent = new NoSizeModifyComponent();
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();

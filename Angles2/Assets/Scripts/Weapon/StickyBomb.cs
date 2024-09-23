@@ -26,7 +26,8 @@ public class StickyBomb : BaseWeapon
     public override void Initialize(BaseFactory effectFactory) 
     {
         _effectFactory = effectFactory;
-        _lifetimeComponent = new LifetimeComponent(_data);
+        _lifetimeComponent = new LifetimeComponent(_data, () => { Explode(); Destroy(gameObject); });
+        _sizeModifyComponent = new NoSizeModifyComponent();
     }
 
     public override void ResetFollower(IFollowable followable) 
@@ -40,7 +41,7 @@ public class StickyBomb : BaseWeapon
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
-        effect.ResetSize(_data._range); // 
+        //effect.ResetSize(_data._range); 
         effect.Play();
 
         DamageableData damageData =
@@ -64,11 +65,5 @@ public class StickyBomb : BaseWeapon
             Vector3 pos = _followable.ReturnPosition();
             transform.position = pos;
         }
-
-        if(_lifetimeComponent.IsFinish() == false) return;
-
-        Explode();
-        Destroy(gameObject);
-        return;
     }
 }

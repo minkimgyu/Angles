@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DisplayDamageComponent
+public class DisplayPointComponent
 {
     ITarget.Type _targetType;
     BaseFactory _effectFactory;
@@ -11,10 +11,20 @@ public class DisplayDamageComponent
 
     Color _redDamageColor = Color.white; // --> 적이 데미지를 받을 떄 나오는 색
 
-    public DisplayDamageComponent(ITarget.Type targetType, BaseFactory effectFactory)
+    public DisplayPointComponent(ITarget.Type targetType, BaseFactory effectFactory)
     {
         _targetType = targetType;
         _effectFactory = effectFactory;
+    }
+
+    public void SpawnDamageTxt(float healPoint, Vector3 pos)
+    {
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.DamageTextEffect);
+
+        effect.ResetPosition(pos);
+        effect.ResetText(healPoint);
+        effect.ResetColor(Color.green);
+        effect.Play();
     }
 
     public void SpawnDamageTxt(DamageableData damageableData, Vector3 pos)

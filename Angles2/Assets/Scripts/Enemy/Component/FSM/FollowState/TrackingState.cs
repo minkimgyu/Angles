@@ -47,7 +47,7 @@ public class TrackingState : State<TrackableEnemy.State>
 
     public override void OnStateEnter(ITarget target, string message)
     {
-        Debug.Log(target);
+        //Debug.Log(target);
         _target = target;
         _pathfinderTimer.Start(_pathfindGap);
     }

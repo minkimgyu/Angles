@@ -26,7 +26,7 @@ public class SkillBubble : MonoBehaviour, IInteractable
 
     public void OnInteract(IInteracter interacter) 
     {
-
+        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.ReturnSkillUser(), _cardCount);
         Destroy(gameObject);
     }
 

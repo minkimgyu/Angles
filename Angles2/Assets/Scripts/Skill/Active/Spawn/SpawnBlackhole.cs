@@ -38,13 +38,14 @@ public class SpawnBlackhole : BaseSkill
         if (weapon == null) return;
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponTargetCountModifier(_data._targetCount));
-        modifiers.Add(new WeaponForceModifier(_data._force));
         modifiers.Add(new WeaponSizeModifier(_data._sizeMultiplier));
         modifiers.Add(new WeaponLifetimeModifier(_data._lifetime));
         modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+        modifiers.Add(new WeaponDamageModifier(3));
 
         weapon.ModifyData(modifiers);
+        weapon.Activate();
+
         weapon.ResetPosition(_castingData.MyTransform.position);
     }
 }

@@ -25,6 +25,7 @@ public class Shooter : BaseWeapon
 
         BaseWeapon weapon = _weaponFactory.Create(_data._fireWeaponName);
         weapon.ModifyData(modifiers);
+        weapon.ResetPosition(transform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
@@ -49,7 +50,6 @@ public class Shooter : BaseWeapon
     public override void ResetData(ShooterData shooterData)
     {
         _data = shooterData;
-        _trackComponent.Initialize(_data._moveSpeed, _data._followOffset, _data._maxDistanceFromPlayer);
     }
 
     public override void Initialize(BaseFactory weaponFactory)
@@ -58,7 +58,10 @@ public class Shooter : BaseWeapon
         _waitFire = 0;
 
         _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent.Initialize(_data._moveSpeed, _data._followOffset, _data._maxDistanceFromPlayer);
+
         _lifetimeComponent = new NoLifetimeComponent();
+        _sizeModifyComponent = new NoSizeModifyComponent();
 
         _targetDatas = new List<ITarget>();
         _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();

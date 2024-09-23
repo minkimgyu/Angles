@@ -30,9 +30,10 @@ public class Heart : MonoBehaviour, IInteractable
         transform.position = pos;
     }
 
-    public void Initialize(CoinData data)
+    public void Initialize(HeartData data)
     {
         _moveSpeed = data._moveSpeed;
+        _healPoint = data._healPoint;
 
         _trackComponent = GetComponent<TrackComponent>();
         _trackComponent.Initialize(_moveSpeed);

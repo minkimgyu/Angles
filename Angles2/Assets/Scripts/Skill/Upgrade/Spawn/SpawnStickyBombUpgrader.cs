@@ -6,16 +6,14 @@ public class SpawnStickyBombUpgrader : IUpgradeVisitor
 {
     public struct UpgradableData
     {
-        public UpgradableData(float damage, float range, float explosionDelay)
+        public UpgradableData(float damage, int stackCount)
         {
             _damage = damage;
-            _range = range;
-            _explosionDelay = explosionDelay;
+            _stackCount = stackCount;
         }
 
         public float _damage;
-        public float _range;
-        public float _explosionDelay;
+        public int _stackCount;
     }
 
     List<UpgradableData> _upgradeDatas;
@@ -30,6 +28,6 @@ public class SpawnStickyBombUpgrader : IUpgradeVisitor
         UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
 
         data._damage += upgradeData._damage;
-        data._delay += upgradeData._explosionDelay;
+        data._maxStackCount += upgradeData._stackCount;
     }
 }

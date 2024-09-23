@@ -6,31 +6,24 @@ using UnityEngine;
 public class BlackholeData : WeaponData, ILifetimeStat, ISizeModifyStat
 {
     public float _absorbForce;
-    public int _maxTargetCount;
     public float _forceDelay;
 
     public float Lifetime { get; set; }
     public float SizeMultiplier { get; set; }
 
-    public BlackholeData(float lifeTime, float absorbForce, int maxTargetCount, float forceDelay)
+    public BlackholeData(float force, float forceDelay)
     {
-        Lifetime = lifeTime;
-        _absorbForce = absorbForce;
-        _maxTargetCount = maxTargetCount;
+        _absorbForce = force;
         _forceDelay = forceDelay;
     }
 
     public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
-    public override void ChangeTargetCount(int targetCount) { _maxTargetCount = targetCount; }
-    public override void ChangeForce(float force) { _absorbForce = force; }
-    public override void ChangeSizeMultiplier(float sizeMultiplier) { sizeMultiplier = sizeMultiplier; }
+    public override void ChangeSizeMultiplier(float sizeMultiplier) { SizeMultiplier = sizeMultiplier; }
 
     public override WeaponData Copy()
     {
         return new BlackholeData(
-            Lifetime,
             _absorbForce,
-            _maxTargetCount,
             _forceDelay
         );
     }

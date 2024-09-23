@@ -2165,8 +2165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f96f431f436e9514c84c1a6905de4445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxStageCount: 5
-  _stageCount: 1
   _stageUIController: {fileID: 1492042883}
 --- !u!114 &986343862
 MonoBehaviour:

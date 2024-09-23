@@ -38,16 +38,15 @@ public class SpreadBullets : BaseSkill
         Vector3 direction = new Vector3(x, y, 0);
         Vector3 spawnPosition = _castingData.MyTransform.position + direction * _data._distanceFromCaster;
 
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Bullet);
+        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.PentagonBullet);
         if (weapon == null) return;
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(_data._damage));
 
-        //weapon.ResetData(_data._bulletData);
-        //weapon.ResetTargetTypes(_data._targetTypes);
-
         weapon.ModifyData(modifiers);
+        weapon.Activate();
+
         weapon.ResetPosition(spawnPosition, direction);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
@@ -71,7 +70,6 @@ public class SpreadBullets : BaseSkill
                 _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:
-                Debug.Log("Shockwave");
 
                 for (int i = 1; i <= _data._bulletCount; i++)
                 {

@@ -24,7 +24,7 @@ MonoBehaviour:
     - Weapon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 33e80fa5cc729a64ba651b0148215156
-    m_Address: Bullet
+    m_Address: ShooterBullet
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon
@@ -55,6 +55,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f4424c944b01a844a914f72eab70ab7
     m_Address: RifleShooter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e91d9f0294bd7a049a6638a29e415942
+    m_Address: PentagonBullet
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon

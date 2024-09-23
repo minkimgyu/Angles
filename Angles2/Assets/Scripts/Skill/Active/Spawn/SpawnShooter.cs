@@ -10,9 +10,10 @@ public class SpawnShooter : BaseSkill
     SpawnShooterData _data;
 
     // 여기서 슈터 데이터와 무기 데이터를 같이 받아오기
-    public SpawnShooter(SpawnShooterData data, BaseFactory weaponFactory) : base(Type.Passive, data._maxUpgradePoint)
+    public SpawnShooter(SpawnShooterData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Passive, data._maxUpgradePoint)
     {
         _data = data;
+        _upgrader = upgrader; // 이건 생성자에서 받아서 쓰기
         _weaponFactory = weaponFactory;
     }
 
@@ -39,11 +40,12 @@ public class SpawnShooter : BaseSkill
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(_data._damage));
-        modifiers.Add(new WeaponDamageModifier(_data._delay));
+        modifiers.Add(new WeaponDelayModifier(_data._delay));
         modifiers.Add(new WeaponProjectileModifier(_data._projectileName));
         modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
 
         _weapon.ModifyData(modifiers);
+        _weapon.Activate();
 
         _weapon.ResetFollower(followable);
         _weapon.ResetPosition(_castingData.MyTransform.position);

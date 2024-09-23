@@ -39,7 +39,7 @@ public class DropController
         for (int i = 0; i < data.ItemDatas.Count; i++)
         {
             float random = UnityEngine.Random.Range(0, 1f);
-            if (data.ItemDatas[i].Item2 <= random)
+            if (random <= data.ItemDatas[i].Item2)
             {
                 IInteractable interactableObject = _interactableFactory.Create(data.ItemDatas[i].Item1);
                 Vector3 pos = ReturnSpreadOffset(position, _spreadOffset);

@@ -7,7 +7,10 @@ abstract public class BaseWeapon : MonoBehaviour
     public enum Name
     {
         Blade,
-        Bullet,
+
+        ShooterBullet,
+        PentagonBullet,
+
         Rocket,
 
         Blackhole,
@@ -22,11 +25,7 @@ abstract public class BaseWeapon : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (_lifetimeComponent.IsFinish() == true)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        _lifetimeComponent.CheckFinish();
     }
 
     // 이하 5개는 스킬에서 데이터를 받아서 사용할 수 있게 만들기

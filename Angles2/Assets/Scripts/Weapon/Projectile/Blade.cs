@@ -65,7 +65,8 @@ public class Blade : ProjectileWeapon
         _captureComponent = GetComponentInChildren<DamageableCaptureComponent>();
         _captureComponent.Initialize(OnEnter, OnExit);
 
-        _lifetimeComponent = new LifetimeComponent(_data);
+        _lifetimeComponent = new LifetimeComponent(_data, () => { Destroy(gameObject); });
+        _sizeModifyComponent = new SizeModifyComponent(transform, _data);
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();

@@ -28,7 +28,7 @@ public class ContactAttack : BaseSkill
         bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
-        Debug.Log("ContactAttack");
+        //Debug.Log("ContactAttack");
 
         Vector3 contactPos = collision.contacts[0].point;
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.HitEffect);
