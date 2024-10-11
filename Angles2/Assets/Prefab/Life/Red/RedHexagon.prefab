@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 3941891624942192180}
   - component: {fileID: 3028505936649599385}
   - component: {fileID: 3317551673917045260}
-  - component: {fileID: 1398970862262821523}
   - component: {fileID: 7636899705933827167}
   - component: {fileID: 5761326524479155237}
   - component: {fileID: 6812095532067343918}
@@ -118,12 +117,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3991731564876525510}
   - {fileID: 4196568726122414724}
-  - {fileID: 586376361961111687}
   - {fileID: 5258328586413808465}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -193,26 +191,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _followTargetCaptureComponent: {fileID: 5744798620831375787}
   _skillTargetCaptureComponent: {fileID: 8323230222176535982}
---- !u!114 &1398970862262821523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5511039987275665547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 991f848b39fe9c445a24a65b4435693c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _behaviorDictionary:
-    m_keys: 0000000001000000020000000300000004000000
-    m_values:
-    - 0.7
-    - 1
-    - 2
-    - 5
-    - 8
 --- !u!114 &7636899705933827167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,86 +290,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.82
---- !u!1 &5890283015003502077
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 586376361961111687}
-  - component: {fileID: 7283862865146943725}
-  - component: {fileID: 4385764800823088701}
-  m_Layer: 11
-  m_Name: FlockCaptureComponent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &586376361961111687
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890283015003502077}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3941891624942192180}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7283862865146943725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890283015003502077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f310f4c67ef6fa42a8d07abadedc948, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!58 &4385764800823088701
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890283015003502077}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 10
 --- !u!1 &6077592287203519463
 GameObject:
   m_ObjectHideFlags: 0

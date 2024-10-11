@@ -24,22 +24,12 @@ public class Rocket : ProjectileWeapon
         _effectFactory = effectFactory;
     }
 
-    protected void ApplyDamage(IDamageable damageable)
-    {
-        DamageableData damageData = 
-            
-        new DamageableData.DamageableDataBuilder().
-       SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
-       .SetTargets(_data._targetTypes)
-       .Build();
-
-        damageable.GetDamage(damageData);
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // 폭발을 우선 적용하고 이후에 접촉한 적에 대해 데미지를 가한다.
         SpawnExplosionEffect();
+
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, transform.position, 0.4f);
 
         DamageableData damageData =
 

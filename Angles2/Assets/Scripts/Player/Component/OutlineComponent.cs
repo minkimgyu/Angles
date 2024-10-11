@@ -25,10 +25,13 @@ public class OutlineComponent : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _outlineColorDictionary.Add(Condition.OnIdle, _spriteRenderer.color);
-        _outlineColorDictionary.Add(Condition.OnDash, new Color(117 / 255f, 217 / 255f, 255 / 255f));
-        _outlineColorDictionary.Add(Condition.OnInteract, new Color(0f, 255f / 255f, 255f / 255f));
-        _outlineColorDictionary.Add(Condition.OnInvincible, new Color(255 / 255f, 73 / 255f, 69 / 255f));
 
+
+        _outlineColorDictionary.Add(Condition.OnInvincible, new Color(20 / 255f, 217 / 255f, 148 / 255f));
+        _outlineColorDictionary.Add(Condition.OnDash, new Color(20 / 255f, 217 / 255f, 148 / 255f));
+
+
+        _outlineColorDictionary.Add(Condition.OnInteract, new Color(0f, 255f / 255f, 255f / 255f));
         _outlineColorDictionary.Add(Condition.OnEnabled, new Color(0f, 255f / 255f, 255f / 255f));
         _outlineColorDictionary.Add(Condition.OnDisabled, new Color(255 / 255f, 73 / 255f, 69 / 255f));
     }

@@ -179,7 +179,7 @@ public class PlayerCreater : LifeCreater
         BaseLife life = UnityEngine.Object.Instantiate(_lifePrefab);
         if (life == null) return null;
 
-        PlayerData data = _lifeData as PlayerData;
+        PlayerData data = CopyLifeData as PlayerData;
 
         life.ResetData(data);
         life.AddEffectFactory(_effectFactory);

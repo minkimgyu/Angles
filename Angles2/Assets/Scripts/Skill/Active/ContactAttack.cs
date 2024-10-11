@@ -15,11 +15,6 @@ public class ContactAttack : BaseSkill
         _effectFactory = effectFactory;
     }
 
-    public override void OnAdd()
-    {
-        _useConstraint = new NoConstraintComponent();
-    }
-
     public override void OnReflect(Collision2D collision)
     {
         ITarget target = collision.gameObject.GetComponent<ITarget>();
@@ -38,6 +33,7 @@ public class ContactAttack : BaseSkill
         DamageableData damageData = new DamageableData.DamageableDataBuilder().
         SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
         .SetTargets(_data._targetTypes)
+        .SetGroggyDuration(_data._groggyDuration)
         .Build();
 
         Damage.HitContact(damageData, collision.gameObject);

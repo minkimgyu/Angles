@@ -22,7 +22,7 @@ public class UpgradeCooltimeCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        UpgradeCooltimeData data = _skillData as UpgradeCooltimeData;
+        UpgradeCooltimeData data = CopySkillData as UpgradeCooltimeData;
         return new UpgradeCooltime(data);
     }
 }

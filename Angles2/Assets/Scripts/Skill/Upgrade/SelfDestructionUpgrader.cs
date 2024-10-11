@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelfDestructionUpgrader : IUpgradeVisitor
+public class SelfDestructionUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
@@ -27,7 +27,8 @@ public class SelfDestructionUpgrader : IUpgradeVisitor
 
     public void Visit(ISkillUpgradable upgradable, SelfDestructionData data)
     {
-        UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
+        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        UpgradableData upgradeData = _upgradeDatas[index];
 
         data._damage += upgradeData._damage;
         data._range += upgradeData._range;

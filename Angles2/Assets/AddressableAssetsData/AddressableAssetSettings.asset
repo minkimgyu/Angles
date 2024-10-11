@@ -51,9 +51,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a28361bf58c793b43861e674603a535b, type: 2}
   - {fileID: 11400000, guid: 4e52011b27370694cbc74da50b894c9b, type: 2}
   - {fileID: 11400000, guid: 7a43d66bd5ed81f4dbee0624b625c870, type: 2}
-  - {fileID: 11400000, guid: 7be2f013107a49a4588f0b3b4f236f15, type: 2}
   - {fileID: 11400000, guid: 18b001d998107104990fe7cb0c482547, type: 2}
   - {fileID: 11400000, guid: 2d1d17dcb8fc94c4bb59cd35dcee9e01, type: 2}
+  - {fileID: 11400000, guid: 7be2f013107a49a4588f0b3b4f236f15, type: 2}
+  - {fileID: 11400000, guid: 4eeb24deb347dcd4c9d7ee5c32c14a4c, type: 2}
+  - {fileID: 11400000, guid: 7cf162e1f27b14f4b835849a5928677b, type: 2}
+  - {fileID: 11400000, guid: bc792b962e2401740a3ebe5c48e90399, type: 2}
+  - {fileID: 11400000, guid: 70617199122c8be4c9fb7f9a1f67690e, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -100,12 +104,12 @@ MonoBehaviour:
     - Effect
     - Life
     - Viewer
-    - StartStage
-    - BonusStage
-    - MobStage
-    - BossStage
     - InteractableObject
     - Sound
+    - RhombusChapterMap
+    - PentagonicChapterMap
+    - TriconChapterMap
+    - ChapterIcon
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: e12fe35937006864a81e8bb7a1736e46, type: 2}

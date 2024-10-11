@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: SFXClips
+  m_EditorClassIdentifier: 
+  m_GroupName: SFXClips
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c3449c7104285c0428f833be5a10b70f
+  m_SerializeEntries:
+  - m_GUID: 37c15b8b4cee8c24cad0b3705ad9cb7d
+    m_Address: Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6f935b673fca66419c8f85408a08a71
+    m_Address: Dash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1c4e86e99afbef438954669e392e601
+    m_Address: Bounce
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa0bbbe57fab53d4aa45b7256f5cbbc7
+    m_Address: EnemyDie
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc6e491e58cbdcb4cb0dbc7637cde012
+    m_Address: GetCoin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fd10431695421042aecf4719ae2ea14
+    m_Address: Shooting
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e02fccfdaf87a54fb1e65967649924a
+    m_Address: GetHeart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1de59e31fd05f84eb60962665ada7a3
+    m_Address: SpreadBullets
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 789273eb7e1380a4d906d010d95912e3
+    m_Address: Hit
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 029f717793add704eab2005283629634
+    m_Address: ShooterFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac85f64cd4e8e9d4f80c90153a7fec31
+    m_Address: Upgrade
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3187d1d80962a34aaaa2a73058da02e
+    m_Address: Click
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ea3ab8feb369894fab59d9d4d36952a
+    m_Address: Shockwave
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0002c26c71a29bc4eb92554060d3cda9
+    m_Address: StageClear
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 421cc80bcd3afb848ab6653b5404d10c
+    m_Address: Statikk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63ba56d892557d940b2ff825aec59783
+    m_Address: Knockback
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80ed04fc1ff2f7640a8f286c91064c41
+    m_Address: Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abe96fccd7f08b148b83b35f8f2ff907
+    m_Address: Impact
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f85e206ba727018458f3c7880c349650
+    m_Address: Blade
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bc462eea99421d4b8fd8cecb370ea89
+    m_Address: Blackhole
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 43e89f3a47192194b87ef1f388866146, type: 2}
+    - {fileID: 11400000, guid: f0ebca5764e48c340b1500fd921de3ae, type: 2}

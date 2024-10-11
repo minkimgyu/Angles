@@ -13,6 +13,7 @@ public class StatikkData : CooltimeSkillData
     public float _damage;
     public float _range;
     public int _maxTargetCount;
+    public float _groggyDuration;
     public List<ITarget.Type> _targetTypes;
 
     public StatikkData(
@@ -22,11 +23,13 @@ public class StatikkData : CooltimeSkillData
         float damage,
         float range,
         int maxTargetCount,
+        float groggyDuration,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
         _range = range;
         _maxTargetCount = maxTargetCount;
+        _groggyDuration = groggyDuration;
         _targetTypes = targetTypes;
     }
 
@@ -39,6 +42,7 @@ public class StatikkData : CooltimeSkillData
             _damage,
             _range,
             _maxTargetCount,
+            _groggyDuration,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );
     }
@@ -57,7 +61,7 @@ public class StatikkCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        StatikkData data = _skillData as StatikkData;
+        StatikkData data = CopySkillData as StatikkData;
         return new Statikk(data, _upgrader, _effectFactory);
     }
 }

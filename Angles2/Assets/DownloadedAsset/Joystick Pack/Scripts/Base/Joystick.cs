@@ -32,7 +32,7 @@ public class Joystick : BaseInputHandler, IPointerDownHandler, IDragHandler, IPo
     [SerializeField] private bool snapX = false;
     [SerializeField] private bool snapY = false;
 
-    [SerializeField] private float _doubleTabDelay = 1.0f;
+    private float _doubleTabDelay = 0.7f;
 
     [SerializeField] protected RectTransform background = null;
     [SerializeField] private RectTransform handle = null;
@@ -65,18 +65,38 @@ public class Joystick : BaseInputHandler, IPointerDownHandler, IDragHandler, IPo
 
     bool CanDoubleTab()
     {
-        if (_tabCnt >= 1)
-        {
-            bool inDuration = false;
-            if(Time.time - _tabTime <= _doubleTabDelay) inDuration = true;
+        Debug.Log(_tabCnt);
+        Debug.Log(_tabTime);
+        Debug.Log(Time.time);
 
-            _tabTime = 0;
+        // 이전에 한번 누르고
+        // 나중에 두번 누르는 경우 이전 경우를 무시해줘야한다.
+        if (Time.time - _tabTime > _doubleTabDelay && _tabCnt == 1)
+        {
             _tabCnt = 0;
-            return inDuration;
         }
 
         _tabTime = Time.time;
         _tabCnt++;
+
+        if (_tabCnt >= 2)
+        {
+            bool isDoubleTab = false;
+            if(Time.time - _tabTime <= _doubleTabDelay)
+            {
+                Debug.Log("DoubleTabSuccess");
+                isDoubleTab = true;
+            }
+            else
+            {
+                isDoubleTab = false;
+            }
+
+            _tabTime = 0;
+            _tabCnt = 0;
+            return isDoubleTab;
+        }
+
         return false;
     }
 

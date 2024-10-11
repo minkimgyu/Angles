@@ -20,7 +20,19 @@ public class InputController : MonoBehaviour
         OnDoubleTab
     }
 
+    [SerializeField] BaseInputHandler _keyboard;
+    [SerializeField] BaseInputHandler _leftJoystick;
+
     [SerializeField] HandlerDictionary _handler;
+
+    public void Initialize()
+    {
+#if UNITY_ANDROID && UNITY_EDITOR
+        _handler[Side.Left] = _keyboard;
+#elif UNITY_ANDROID
+        _handler[Side.Left] = _leftJoystick;
+#endif
+    }
 
     public void AddEvent(Side side, Type type, Action Event)
     {

@@ -13,6 +13,7 @@ public class TextEffect : BaseEffect
 
     public override void Initialize()
     {
+        base.Initialize();
         _text = GetComponentInChildren<TMP_Text>();
     }
 

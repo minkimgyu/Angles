@@ -46,7 +46,7 @@ public class SpawnBlackholeCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        SpawnBlackholeData data = _skillData as SpawnBlackholeData;
+        SpawnBlackholeData data = CopySkillData as SpawnBlackholeData;
         return new SpawnBlackhole(data, _upgrader, _weaponFactory);
     }
 }

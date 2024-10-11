@@ -22,7 +22,7 @@ public class UpgradeDamageCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        UpgradeDamageData data = _skillData as UpgradeDamageData;
+        UpgradeDamageData data = CopySkillData as UpgradeDamageData;
         return new UpgradeDamage(data);
     }
 }

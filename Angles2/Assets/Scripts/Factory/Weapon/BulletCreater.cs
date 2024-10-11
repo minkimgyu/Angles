@@ -39,7 +39,7 @@ public class BulletCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(_weaponData as BulletData);
+        weapon.ResetData(CopyWeaponData as BulletData);
         weapon.Initialize(_effectFactory);
         return weapon;
     }

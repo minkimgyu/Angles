@@ -15,12 +15,16 @@ public class BaseViewer : MonoBehaviour
         DashViewer,
         DirectionViewer,
 
-        BossHPViewer,
+        ChapterSelectViewer,
     }
 
     public virtual void Initialize() { }
     public virtual void Initialize(Action OnReturnToMenuRequested) { }
-    public virtual void Initialize(Sprite skillIcon) { }
+    public virtual void Initialize(Sprite icon) { }
+
+    public virtual void Initialize(Sprite icon, bool isClear) { }
+
+    public virtual void Initialize(ChapterInfo chapterInfo, Sprite chapterSprite) { }
     public virtual void Initialize(SKillCardData cardData, Action OnClick) { }
 
     public virtual void SetFollower(IFollowable followTarget) { }
@@ -33,6 +37,5 @@ public class BaseViewer : MonoBehaviour
     public virtual void UpdateViewer(string info) { }
     public virtual void UpdateViewer(GameState model) { }
 
-    public virtual void TurnOnViewer(bool show) { }
-    public virtual void TurnOnViewer(bool show, float backgroundFadeRatio, float backgroundFadeDuration, string endInfo, Color labelColor, Color labelTxtColor) { }
+    public virtual void TurnOnViewer(bool show) { gameObject.SetActive(show); }
 }

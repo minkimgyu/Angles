@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
-using System.Drawing;
-using UnityEditor.Experimental.GraphView;
 
 [System.Serializable]
 abstract public class LifeData
@@ -25,7 +22,7 @@ abstract public class EnemyData : LifeData
 {
     public int _level;
     public BaseLife.Size _size;
-    public Dictionary<BaseSkill.Name, int> _skillDataToAdd;
+    public Dictionary<BaseSkill.Name, int> CopySkillDataToAdd;
     public DropData _dropData;
 
     public EnemyData(
@@ -36,21 +33,23 @@ abstract public class EnemyData : LifeData
         DropData dropData) : base(maxHp, targetType)
     {
         _size = size;
-        _skillDataToAdd = skillDataToAdd;
+        CopySkillDataToAdd = skillDataToAdd;
         _dropData = dropData;
     }
 }
 
 abstract public class LifeCreater
 {
+    protected LifeData CopyLifeData { get { return _lifeData.Copy(); } }
+
     protected BaseLife _lifePrefab;
-    protected LifeData _lifeData;
+    private LifeData _lifeData;
     protected BaseFactory _effectFactory;
 
     public LifeCreater(BaseLife lifePrefab, LifeData lifeData, BaseFactory effectFactory) 
     { 
-        _lifePrefab = lifePrefab; 
-        _lifeData = lifeData.Copy(); // 복사본을 준다.
+        _lifePrefab = lifePrefab;
+        _lifeData = lifeData; // 복사본을 준다.
         _effectFactory = effectFactory; 
     }
 
@@ -78,7 +77,9 @@ public class LifeFactory : BaseFactory
         _lifeCreaters[BaseLife.Name.RedPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.RedPentagon], lifeDatas[BaseLife.Name.RedPentagon], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.RedHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.RedHexagon], lifeDatas[BaseLife.Name.RedHexagon], effectFactory, skillFactory);
 
-        _lifeCreaters[BaseLife.Name.Lombard] = new LombardCreater(lifePrefabs[BaseLife.Name.Lombard], lifeDatas[BaseLife.Name.Lombard], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Tricon] = new TriconCreater(lifePrefabs[BaseLife.Name.Tricon], lifeDatas[BaseLife.Name.Tricon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Rhombus] = new RhombusCreater(lifePrefabs[BaseLife.Name.Rhombus], lifeDatas[BaseLife.Name.Rhombus], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Pentagonic] = new PentagonicCreater(lifePrefabs[BaseLife.Name.Pentagonic], lifeDatas[BaseLife.Name.Pentagonic], effectFactory, skillFactory);
     }
 
     public override BaseLife Create(BaseLife.Name name)

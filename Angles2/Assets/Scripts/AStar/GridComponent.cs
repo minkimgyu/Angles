@@ -33,7 +33,6 @@ public class GridComponent : MonoBehaviour
 
     List<Vector2> _points;
     const int _nodeSize = 1;
-    bool _canCrossCorner = false;
 
     public Node ReturnNode(Grid2D grid) { return _nodes[grid.Row, grid.Column]; }
     public Node ReturnNode(int r, int c) { return _nodes[r, c]; }
@@ -61,82 +60,127 @@ public class GridComponent : MonoBehaviour
         return new Grid2D(r, c);
     }
 
-    public bool HaveBlockNodeInNearPosition(Grid2D grid, BaseEnemy.Size size)
+    public bool HaveBlockNodeInNearPosition(Grid2D index)
     {
-        int loopCount = 0;
-        switch (size)
+        List<Node> nearNodes = new List<Node>();
+        Grid2D[] nearIndexes = new Grid2D[]  // ↑ ↓ ← → 의 경우
         {
-            case BaseEnemy.Size.Small:
-                return false;
-            case BaseEnemy.Size.Middle:
-                loopCount = 1;
-                break;
-            case BaseEnemy.Size.Large:
-                loopCount = 1;
-                break;
-        }
+            new Grid2D(index.Row - 1, index.Column - 1), new Grid2D(index.Row - 1, index.Column), new Grid2D(index.Row - 1, index.Column + 1),
 
-        Node node = _nodes[grid.Row, grid.Column];
-        if (node.Block == true) return true;
+            new Grid2D(index.Row, index.Column - 1), new Grid2D(index.Row, index.Column + 1),
 
-        HashSet<Node> closeHash = new HashSet<Node>();
-        Queue<Node> nodeQueue = new Queue<Node>();
-        nodeQueue.Enqueue(node);
+            new Grid2D(index.Row + 1, index.Column - 1), new Grid2D(index.Row + 1, index.Column), new Grid2D(index.Row + 1, index.Column + 1)
+        };
 
-        for (int i = 0; i < loopCount; i++)
+        for (int i = 0; i < nearIndexes.Length; i++)
         {
-            int queueCnt = nodeQueue.Count;
-            for (int j = 0; j < queueCnt; j++)
-            {
-                Node frontNode = nodeQueue.Dequeue();
+            bool isOutOfRange =
+               nearIndexes[i].Row < 0 || nearIndexes[i].Column < 0 ||
+               nearIndexes[i].Row >= _gridSize.Row || nearIndexes[i].Column >= _gridSize.Column;
 
-                if (frontNode.Block == true) return true;
-                Grid2D frontGrid = frontNode.Index;
-
-                List<Grid2D> nodeIndexes = ReturnNearNodeIndexes(frontGrid);
-                for (int k = 0; k < nodeIndexes.Count; k++)
-                {
-                    Node nearNode = _nodes[nodeIndexes[k].Row, nodeIndexes[k].Column];
-                    if (nearNode.Block == true) return true;
-
-                    bool nowHave = closeHash.Contains(nearNode);
-                    if (nowHave == true) continue;
-
-                    closeHash.Add(nearNode);
-                    nodeQueue.Enqueue(nearNode); // 가지고 있지 않다면 넣는다.
-                }
-            }
+            if (isOutOfRange == false && ReturnNode(nearIndexes[i]).Block == true) return true;
         }
 
         return false;
     }
 
-    public List<Grid2D> ReturnNearNodeIndexes(Grid2D index)
+    public List<Node> ReturnNearNodes(Grid2D index, BaseLife.Size size)
     {
-        List<Grid2D> closeNodeIndexes = new List<Grid2D>();
-        Grid2D[] closeIndexes;
+        List<Node> nearNodes = new List<Node>();
 
-        // 주변 그리드
-        closeIndexes = new Grid2D[]  // r, c
+        if (size == BaseLife.Size.Small)
         {
+            Grid2D[] nearIndexes = new Grid2D[]  // ↑ ↓ ← → 의 경우
+            {
             new Grid2D(index.Row - 1, index.Column),
 
             new Grid2D(index.Row, index.Column - 1), new Grid2D(index.Row, index.Column + 1),
 
-            new Grid2D(index.Row + 1, index.Column)
-        };
+            new Grid2D(index.Row + 1, index.Column),
+            };
 
-        for (int i = 0; i < closeIndexes.Length; i++)
+            for (int i = 0; i < nearIndexes.Length; i++)
+            {
+                bool isOutOfRange =
+                nearIndexes[i].Row < 0 || nearIndexes[i].Column < 0 ||
+                nearIndexes[i].Row >= _gridSize.Row || nearIndexes[i].Column >= _gridSize.Column;
+
+                if (isOutOfRange == true || ReturnNode(index).Block == true) continue;
+                nearNodes.Add(ReturnNode(nearIndexes[i]));
+            }
+
+            // 주변 그리드
+            Grid2D[] nearCornerIndexes = new Grid2D[]  // 대각선의 경우
+            {
+            new Grid2D(index.Row - 1, index.Column - 1), new Grid2D(index.Row - 1, index.Column + 1),
+            new Grid2D(index.Row + 1, index.Column - 1), new Grid2D(index.Row + 1, index.Column + 1),
+            };
+
+            // 1 _| (1, 2) |_ 2
+            //(1, 3)      (2, 4)
+            //  -          _
+            // 3 | (3, 4) |  4
+
+            for (int i = 0; i < nearCornerIndexes.Length; i++)
+            {
+                bool isOutOfRange =
+                nearCornerIndexes[i].Row < 0 || nearCornerIndexes[i].Column < 0 ||
+                nearCornerIndexes[i].Row >= _gridSize.Row || nearCornerIndexes[i].Column >= _gridSize.Column;
+
+                if (isOutOfRange == true || ReturnNode(index).Block == true) continue;
+
+                // 갈 수 있는 코너인지 체크
+                Node node1, node2;
+                switch (i)
+                {
+                    case 0:
+                        node1 = ReturnNode(nearIndexes[0]);
+                        node2 = ReturnNode(nearIndexes[1]);
+                        if (node1.Block || node2.Block) continue;
+                        break;
+                    case 1:
+                        node1 = ReturnNode(nearIndexes[0]);
+                        node2 = ReturnNode(nearIndexes[2]);
+                        if (node1.Block || node2.Block) continue;
+                        break;
+                    case 2:
+                        node1 = ReturnNode(nearIndexes[1]);
+                        node2 = ReturnNode(nearIndexes[3]);
+                        if (node1.Block || node2.Block) continue;
+                        break;
+                    case 3:
+                        node1 = ReturnNode(nearIndexes[2]);
+                        node2 = ReturnNode(nearIndexes[3]);
+                        if (node1.Block || node2.Block) continue;
+                        break;
+                }
+
+                nearNodes.Add(ReturnNode(nearCornerIndexes[i]));
+            }
+        }
+        else
         {
-            bool isOutOfRange = 
-            closeIndexes[i].Row < 0 || closeIndexes[i].Column < 0 || 
-            closeIndexes[i].Row >= _gridSize.Row || closeIndexes[i].Column >= _gridSize.Column;
+            Grid2D[] nearIndexes = new Grid2D[]
+            {
+                new Grid2D(index.Row - 1, index.Column - 1), new Grid2D(index.Row - 1, index.Column), new Grid2D(index.Row - 1, index.Column + 1),
 
-            if (isOutOfRange == true) continue;
-            closeNodeIndexes.Add(closeIndexes[i]);
+                new Grid2D(index.Row, index.Column - 1), new Grid2D(index.Row, index.Column + 1),
+
+                new Grid2D(index.Row + 1, index.Column - 1), new Grid2D(index.Row + 1, index.Column), new Grid2D(index.Row + 1, index.Column + 1)
+            };
+
+            for (int i = 0; i < nearIndexes.Length; i++)
+            {
+                bool isOutOfRange =
+                nearIndexes[i].Row < 0 || nearIndexes[i].Column < 0 ||
+                nearIndexes[i].Row >= _gridSize.Row || nearIndexes[i].Column >= _gridSize.Column;
+
+                if (isOutOfRange == true || HaveBlockNodeInNearPosition(nearIndexes[i]) == true || ReturnNode(index).Block == true) continue;
+                nearNodes.Add(ReturnNode(nearIndexes[i]));
+            }
         }
 
-        return closeNodeIndexes;
+        return nearNodes;
     }
 
     void CreateNode()
@@ -151,16 +195,23 @@ public class GridComponent : MonoBehaviour
                 TileBase tile = _wallTile.GetTile(new Vector3Int(localPos.x, localPos.y, 0));
                 if (tile == null)
                 {
-                    //Debug.Log("Pass " + localPos.x + " " + localPos.y);
                     _nodes[i, j] = new Node(worldPos, new Grid2D(i, j), false);
                 }
                 else
                 {
-                    //Debug.Log("NonPass " + localPos.x + " " + localPos.y);
                     _nodes[i, j] = new Node(worldPos, new Grid2D(i, j), true);
                 }
                 // 타일이 없다면 바닥
                 // 타일이 존재한다면 벽
+            }
+        }
+
+        for (int i = 0; i < _gridSize.Row; i++)
+        {
+            for (int j = 0; j < _gridSize.Column; j++)
+            {
+                _nodes[i, j].NearNodes[BaseLife.Size.Small] = ReturnNearNodes(new Grid2D(i, j), BaseLife.Size.Small);
+                _nodes[i, j].NearNodes[BaseLife.Size.Medium] = ReturnNearNodes(new Grid2D(i, j), BaseLife.Size.Medium);
             }
         }
 
@@ -201,8 +252,6 @@ public class GridComponent : MonoBehaviour
     {
         _groundTile.CompressBounds(); // 타일의 바운더리를 맞춰준다.
         BoundsInt bounds = _groundTile.cellBounds;
-        Debug.Log(bounds.min);
-        Debug.Log(bounds.max);
 
         int rowSize = bounds.yMax - bounds.yMin;
         int columnSize = bounds.xMax - bounds.xMin;

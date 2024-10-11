@@ -33,11 +33,6 @@ public class MultipleShockwave : BaseSkill
         _effectFactory = effectFactory;
     }
 
-    public override void OnAdd()
-    {
-        _useConstraint = new NoConstraintComponent();
-    }
-
     public override void OnUpdate()
     {
         switch (_delayTimer.CurrentState)
@@ -56,6 +51,8 @@ public class MultipleShockwave : BaseSkill
                     effect.ResetPosition(_castingData.MyTransform.position);
                     effect.Play();
                     effect.ResetSize(_waveSize);
+
+                    ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, _castingData.MyTransform.position);
 
                     Debug.Log("MultipleShockwave " + _waveSize);
                     Debug.Log("MultipleShockwave " + _data._range);

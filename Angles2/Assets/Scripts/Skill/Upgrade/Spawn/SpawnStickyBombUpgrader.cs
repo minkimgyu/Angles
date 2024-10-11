@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnStickyBombUpgrader : IUpgradeVisitor
+public class SpawnStickyBombUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
@@ -25,7 +25,9 @@ public class SpawnStickyBombUpgrader : IUpgradeVisitor
 
     public void Visit(ISkillUpgradable upgradable, SpawnStickyBombData data)
     {
-        UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
+        // 2랩부터 업그레이드가 들어가기 때문에 이렇게 한다.
+        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        UpgradableData upgradeData = _upgradeDatas[index];
 
         data._damage += upgradeData._damage;
         data._maxStackCount += upgradeData._stackCount;

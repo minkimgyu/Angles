@@ -63,6 +63,21 @@ public class CreateReusableCardCommand : BaseCommand
     }
 }
 
+public class SetPlayerInvincibleCommand : BaseCommand
+{
+    public SetPlayerInvincibleCommand(Action SetPlayerInvincibleAction)
+    {
+        this.SetPlayerInvincibleAction = SetPlayerInvincibleAction;
+    }
+
+    Action SetPlayerInvincibleAction;
+
+    public override void Execute()
+    {
+        SetPlayerInvincibleAction?.Invoke();
+    }
+}
+
 public class SubEventBus : BaseEventBus<SubEventBus.State>
 {
     public enum State
@@ -72,5 +87,6 @@ public class SubEventBus : BaseEventBus<SubEventBus.State>
 
         DropItem,
         AddFollableCamera,
+        SetPlayerInvincible
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MagneticFieldUpgrader : IUpgradeVisitor
+public class MagneticFieldUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
@@ -25,7 +25,8 @@ public class MagneticFieldUpgrader : IUpgradeVisitor
 
     public void Visit(ISkillUpgradable upgradable, MagneticFieldData data)
     {
-        UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
+        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        UpgradableData upgradeData = _upgradeDatas[index];
 
         data._damage += upgradeData._damage;
         data._delay += upgradeData._delay;

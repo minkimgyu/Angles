@@ -8,7 +8,7 @@ using UnityEngine;
 
 // 득보다 실이 크다 --> 생성자 사용
 
-public class StatikkUpgrader : IUpgradeVisitor
+public class StatikkUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
@@ -34,9 +34,23 @@ public class StatikkUpgrader : IUpgradeVisitor
         _upgradeDatas = upgradeDatas;
     }
 
+    const int _upgradeOffset = 2;
+
+    //1 - 처음이 1 --> 처음은 업그레이드 X
+    //2 - 업그레이드
+    //3 - 업그레이드
+    //4 - 업그레이드
+    //5 - 업그레이드
+
+    //1 - 업그레이드
+    //2 - 업그레이드
+    //3 - 업그레이드
+
     public void Visit(ISkillUpgradable upgradable, StatikkData data)
     {
-        UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
+        // 2랩부터 업그레이드가 들어가기 때문에 이렇게 한다.
+        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        UpgradableData upgradeData = _upgradeDatas[index];
 
         data._damage += upgradeData._damage;
         data._range += upgradeData._range;

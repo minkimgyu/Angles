@@ -24,6 +24,13 @@ public class Blade : ProjectileWeapon
     List<TargetData> _targetDatas;
 
     BladeData _data;
+    Timer _soundTimer;
+
+    public override void Shoot(Vector3 direction, float force)
+    {
+        base.Shoot(direction, force);
+        _soundTimer.Start(1f);
+    }
 
     protected void ApplyDamage(IDamageable damageable)
     {
@@ -32,6 +39,7 @@ public class Blade : ProjectileWeapon
         new DamageableData.DamageableDataBuilder().
         SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
         .SetTargets(_data._targetTypes)
+        .SetGroggyDuration(1)
         .Build();
 
         damageable.GetDamage(damageData);
@@ -61,6 +69,7 @@ public class Blade : ProjectileWeapon
 
     public override void Initialize()
     {
+        _soundTimer = new Timer();
         _targetDatas = new List<TargetData>();
         _captureComponent = GetComponentInChildren<DamageableCaptureComponent>();
         _captureComponent.Initialize(OnEnter, OnExit);
@@ -87,6 +96,14 @@ public class Blade : ProjectileWeapon
     protected override void Update()
     {
         base.Update();
+
+        if (_soundTimer.CurrentState == Timer.State.Finish)
+        {
+            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Blade, transform.position);
+            _soundTimer.Reset();
+            _soundTimer.Start(_data._attackDelay);
+        }
+
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;

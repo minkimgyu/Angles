@@ -53,7 +53,7 @@ public class MultipleShockwaveCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        MultipleShockwaveData data = _skillData as MultipleShockwaveData;
+        MultipleShockwaveData data = CopySkillData as MultipleShockwaveData;
         return new MultipleShockwave(data, _effectFactory);
     }
 }

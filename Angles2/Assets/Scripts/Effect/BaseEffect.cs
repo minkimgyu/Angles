@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -25,14 +26,17 @@ abstract public class BaseEffect : MonoBehaviour
     }
 
     [SerializeField] protected float _destoryDelay = 0;
+    protected Timer _timer = new Timer();
 
-    public virtual void Initialize() { }
+    public virtual void Initialize() 
+    {
+    }
 
     public virtual void Play() { }
-    public virtual void ResetDestoryDelay(float delay) { _destoryDelay = delay; }
 
-    protected virtual void DestoryMe() => Destroy(gameObject);
-    public void DestoryAfterDelay() => Invoke("DestoryMe", _destoryDelay);
+    void DestroyMe() { Destroy(gameObject); }
+
+    public void DestoryAfterDelay() { Invoke("DestroyMe", _destoryDelay); }
 
     protected virtual void OnDestroy() => CancelInvoke();
 
@@ -51,6 +55,4 @@ abstract public class BaseEffect : MonoBehaviour
 
     public virtual void ResetPosition(Vector3 pos) { transform.position = pos; }
     public virtual void ResetPosition(Vector3 pos, Vector3 direction) { }
-
-    // Creater 내부에서 같이 처리해주기
 }

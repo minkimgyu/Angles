@@ -14,13 +14,14 @@ public class SpreadBulletsData : SkillData
     public List<ITarget.Type> _targetTypes;
 
     public SpreadBulletsData(
+        int maxUpgradePoint,
         float damage,
 
         float delay,
         float force,
         float bulletCount,
         float distanceFromCaster,
-        List<ITarget.Type> targetTypes)
+        List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
 
@@ -34,6 +35,7 @@ public class SpreadBulletsData : SkillData
     public override SkillData Copy()
     {
         return new SpreadBulletsData(
+            _maxUpgradePoint,
             _damage,
             _delay,
             _force,
@@ -57,7 +59,7 @@ public class SpreadBulletsCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        SpreadBulletsData data = _skillData as SpreadBulletsData;
-        return new SpreadBullets(data, _weaponFactory);
+        SpreadBulletsData data = CopySkillData as SpreadBulletsData;
+        return new SpreadBullets(data, _upgrader, _weaponFactory);
     }
 }

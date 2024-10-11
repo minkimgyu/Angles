@@ -26,6 +26,12 @@ public class Blackhole : BaseWeapon
     List<TargetData> _targetDatas;
     BlackholeData _data;
 
+    public override void ResetPosition(Vector3 pos)
+    {
+        base.ResetPosition(pos);
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Blackhole, pos);
+    }
+
     public override void ResetData(BlackholeData data)
     {
         _data = data;

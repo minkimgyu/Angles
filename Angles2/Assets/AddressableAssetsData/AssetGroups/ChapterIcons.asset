@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ChapterIcons
+  m_EditorClassIdentifier: 
+  m_GroupName: ChapterIcons
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 84ea4b950cb79e242aa13bb8bf0ec731
+  m_SerializeEntries:
+  - m_GUID: 8f5b2a674e297594e9064eb12943fdeb
+    m_Address: TriconChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ChapterIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19ad1c367fe5a7a4789ae59e2d131148
+    m_Address: RhombusChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ChapterIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4d6e4beec602a94fa07314e4e634b17
+    m_Address: PentagonicChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ChapterIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9049b7ac1c442be449628f7ed9352cf8, type: 2}
+    - {fileID: 11400000, guid: cf857bc21500d8440b8b07ba9996bea4, type: 2}

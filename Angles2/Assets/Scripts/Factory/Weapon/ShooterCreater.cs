@@ -57,7 +57,7 @@ public class ShooterCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(_weaponData as ShooterData);
+        weapon.ResetData(CopyWeaponData as ShooterData);
         weapon.Initialize(_weaponFactory);
 
         return weapon;

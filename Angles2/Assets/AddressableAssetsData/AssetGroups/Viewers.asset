@@ -41,7 +41,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - Viewer
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 88013859ba5db9949abbfc9cb6e5a17b
+  - m_GUID: 0a329efbca842b840991aaa089022f80
     m_Address: DashViewer
     m_ReadOnly: 0
     m_SerializedLabels:
@@ -53,8 +53,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Viewer
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 141bec106f9782c458343e78ec1643c8
-    m_Address: BossHPViewer
+  - m_GUID: cd819c3c388ac4f488bc615a8a1211c9
+    m_Address: ChapterSelectViewer
     m_ReadOnly: 0
     m_SerializedLabels:
     - Viewer

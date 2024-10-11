@@ -13,8 +13,6 @@ public interface ISkillUpgradeable
     List<SkillUpgradeData> ReturnSkillUpgradeDatas();
 }
 
-
-
 public interface ISkillUser : ISkillAddable, ISkillUpgradeable
 {
 }

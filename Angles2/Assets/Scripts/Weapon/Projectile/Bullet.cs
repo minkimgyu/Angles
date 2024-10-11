@@ -7,33 +7,36 @@ public class Bullet : ProjectileWeapon
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IObstacle obstacle = collision.GetComponent<IObstacle>();
-        if (obstacle != null)
+        ITarget target = collision.GetComponent<ITarget>();
+        if(target == null)
         {
-            Destroy(gameObject);
             SpawnHitEffect();
+            Destroy(gameObject);
             return;
         }
 
-        ITarget target = collision.GetComponent<ITarget>();
-        if (target == null) return;
-        if (target.IsTarget(_data._targetTypes) == false) return;
 
-        IDamageable damageable = collision.GetComponent<IDamageable>();
-        if (damageable != null)
+        if(target.IsTarget(_data._targetTypes) == true)
         {
-            DamageableData damageData =
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                DamageableData damageData =
 
-           new DamageableData.DamageableDataBuilder().
-           SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
-           .SetTargets(_data._targetTypes)
-           .Build();
+               new DamageableData.DamageableDataBuilder().
+               SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
+               .SetTargets(_data._targetTypes)
+               .Build();
 
-            damageable.GetDamage(damageData);
+                damageable.GetDamage(damageData);
+                SpawnHitEffect();
+                Destroy(gameObject);
+                return;
+            }
         }
-
-        Destroy(gameObject);
     }
+
+
 
     BaseFactory _effectFactory;
     BulletData _data;

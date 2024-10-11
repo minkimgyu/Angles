@@ -5,48 +5,58 @@ using UnityEngine.UIElements;
 
 public class GameResultModel
 {
-    BaseViewer _gameEndViewer;
+    GameResultViewer _gameEndViewer;
 
-    public GameResultModel(BaseViewer gameEndViewer)
+    public GameResultModel(GameResultViewer gameEndViewer)
     {
         _gameEndViewer = gameEndViewer;
     }
 
-    public void ResetData(float backgroundFadeRatio, float backgroundFadeDuration, string endInfo, Color labelColor, Color labelTxtColor)
+    public void ResetData(bool turnOn)
     {
-        _backgroundFadeDuration = backgroundFadeDuration;
-        _backgroundFadeRatio = backgroundFadeRatio;
-        _endInfo = endInfo;
-        _labelColor = labelColor;
-        _labelTxtColor = labelTxtColor;
-        _gameEndViewer.TurnOnViewer(true, _backgroundFadeRatio, _backgroundFadeDuration, _endInfo, _labelColor, _labelTxtColor);
+        _gameEndViewer.TurnOnViewer(turnOn);
     }
 
-    float _backgroundFadeRatio;
-    float _backgroundFadeDuration;
-    string _endInfo;
-    Color _labelColor;
-    Color _labelTxtColor;
+    public void ResetData(float recordTime, int coinCount, bool turnOn)
+    {
+        _gameEndViewer.TurnOnViewer(turnOn);
+        _gameEndViewer.ChangeRecord(recordTime);
+        _gameEndViewer.ChangeCoin(coinCount);
+
+        _gameEndViewer.FadeInOutTabTxt();
+    }
+
+    float _recordTime;
+    int _coinCount;
 }
 
 public class GameResultUIController : MonoBehaviour
 {
-    [SerializeField] GameResultViewer _gameResultViewer;
-    GameResultModel _gameResultModel;
+    [SerializeField] GameResultViewer _gameClearViewer;
+    [SerializeField] GameResultViewer _gameFailViewer;
+
+    GameResultModel _gameClearModel;
+    GameResultModel _gameFailModel;
 
     public void Initialize(System.Action OnReturnToMenuRequested)
     {
-        _gameResultViewer.Initialize(OnReturnToMenuRequested);
-        _gameResultModel = new GameResultModel(_gameResultViewer);
+        _gameClearViewer.Initialize(OnReturnToMenuRequested);
+        _gameClearModel = new GameResultModel(_gameClearViewer);
+
+        _gameFailViewer.Initialize(OnReturnToMenuRequested);
+        _gameFailModel = new GameResultModel(_gameFailViewer);
+
+        _gameClearModel.ResetData(false);
+        _gameFailModel.ResetData(false);
     }
 
-    public void OnClearRequested()
+    public void OnClearRequested(float recordTime, int coinCount)
     {
-        _gameResultViewer.TurnOnViewer(true, 0.985f, 1.5f, "Game Clear", Color.white, Color.black);
+        _gameClearModel.ResetData(recordTime, coinCount, true);
     }
 
-    public void OnFailRequested()
+    public void OnFailRequested(float recordTime, int coinCount)
     {
-        _gameResultViewer.TurnOnViewer(true, 0.985f, 1.5f, "Game Over", Color.black, Color.white);
+        _gameFailModel.ResetData(recordTime, coinCount, true);
     }
 }

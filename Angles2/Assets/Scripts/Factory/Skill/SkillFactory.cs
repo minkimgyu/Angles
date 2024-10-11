@@ -4,11 +4,10 @@ using UnityEngine;
 using System;
 
 [Serializable]
-abstract public class SkillData 
+abstract public class SkillData
 {
     public int _maxUpgradePoint;
 
-    public SkillData() { _maxUpgradePoint = 0; }
     public SkillData(int maxUpgradePoint)
     {
         _maxUpgradePoint = maxUpgradePoint;
@@ -22,7 +21,6 @@ abstract public class RandomSkillData : SkillData
 {
     public float _probability;
 
-    public RandomSkillData() { _maxUpgradePoint = 0; _probability = 0; }
     public RandomSkillData(int maxUpgradePoint, float probability) : base(maxUpgradePoint)
     {
         _probability = probability;
@@ -35,7 +33,6 @@ abstract public class CooltimeSkillData : SkillData
     public int _maxStackCount;
     public float _coolTime;
 
-    public CooltimeSkillData() { _maxUpgradePoint = 0; _maxStackCount = 0; _coolTime = 0; }
     public CooltimeSkillData(int maxUpgradePoint, float coolTime, int maxStackCount) : base(maxUpgradePoint)
     {
         _coolTime = coolTime;
@@ -45,10 +42,10 @@ abstract public class CooltimeSkillData : SkillData
 
 abstract public class SkillCreater
 {
-    protected SkillData _skillData;
-    public SkillCreater(SkillData data) { _skillData = data; }
-    // 생성자에 이팩트 생성을 받는 이벤트를 추가해준다.
+    private SkillData _skillData;
+    public SkillCreater(SkillData data) { _skillData = data; } // 생성자에 이팩트 생성을 받는 이벤트를 추가해준다.
 
+    protected SkillData CopySkillData { get { return _skillData.Copy(); } }
     public abstract BaseSkill Create();
 }
 
@@ -70,7 +67,7 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.SpawnRifleShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRifleShooter], upgraders[BaseSkill.Name.SpawnRifleShooter], weaponFactory);
         _skillCreaters[BaseSkill.Name.SpawnRocketShooter] = new SpawnShooterCreater(skillDatas[BaseSkill.Name.SpawnRocketShooter], upgraders[BaseSkill.Name.SpawnRocketShooter], weaponFactory);
 
-        _skillCreaters[BaseSkill.Name.SpawnStickyBomb]  = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], upgraders[BaseSkill.Name.SpawnStickyBomb], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpawnStickyBomb] = new SpawnStickyBombCreater(skillDatas[BaseSkill.Name.SpawnStickyBomb], upgraders[BaseSkill.Name.SpawnStickyBomb], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.ContactAttack] = new ContactAttackCreater(skillDatas[BaseSkill.Name.ContactAttack], effectFactory);
 
@@ -89,6 +86,8 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.SelfDestruction] = new SelfDestructionCreater(skillDatas[BaseSkill.Name.SelfDestruction], upgraders[BaseSkill.Name.SelfDestruction], effectFactory);
 
         _skillCreaters[BaseSkill.Name.MultipleShockwave] = new MultipleShockwaveCreater(skillDatas[BaseSkill.Name.MultipleShockwave], effectFactory);
+
+        _skillCreaters[BaseSkill.Name.SpreadMultipleBullets] = new SpreadMultipleBulletsCreater(skillDatas[BaseSkill.Name.SpreadMultipleBullets], weaponFactory);
     }
 
     public override BaseSkill Create(BaseSkill.Name name)

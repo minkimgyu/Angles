@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 여기서 IUpgradable를 재정의
-// _weaponData를 증가시키는 방향으로 개발 진행
+// CopyWeaponData를 증가시키는 방향으로 개발 진행
 
 public class Shooter : BaseWeapon
 {
@@ -31,6 +31,7 @@ public class Shooter : BaseWeapon
         if (projectile == null) return;
 
         projectile.Shoot(direction, _data._shootForce);
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ShooterFire, transform.position);
     }
 
     protected float _waitFire;

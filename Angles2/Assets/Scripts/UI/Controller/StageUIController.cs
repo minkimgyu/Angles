@@ -4,15 +4,51 @@ using UnityEngine;
 
 public class StageModel
 {
-    BaseViewer _stageCountViewer;
-    BaseViewer _stageResultViewer;
+    StageCountViewer _stageCountViewer;
+    StageResultViewer _stageResultViewer;
+    BossHpViewer _bossHpViewer;
 
-    public StageModel(BaseViewer stageCountViewer, BaseViewer stageResultViewer)
+    public StageModel(StageCountViewer stageCountViewer, BossHpViewer bossHpViewer, StageResultViewer stageResultViewer)
     {
         _stageCountViewer = stageCountViewer;
         _stageResultViewer = stageResultViewer;
+        _bossHpViewer = bossHpViewer;
 
         StageCount = 0;
+    }
+
+    bool _showStageCountViewer = false;
+    public bool ShowStageCountViewer
+    {
+        get => _showStageCountViewer;
+        set
+        {
+            _showBossHPViewer = value;
+            _stageCountViewer.TurnOnViewer(_showStageCountViewer);
+        }
+    }
+
+
+    bool _showBossHPViewer = false;
+    public bool ShowBossHPViewer
+    {
+        get => _showBossHPViewer;
+        set
+        {
+            _showBossHPViewer = value;
+            _bossHpViewer.TurnOnViewer(_showBossHPViewer);
+        }
+    }
+
+    float _bossHpRatio = 1f;
+    public float BossHpRatio
+    {
+        get => _bossHpRatio;
+        set
+        {
+            _bossHpRatio = value;
+            _bossHpViewer.UpdateViewer(_bossHpRatio);
+        }
     }
 
     int _stageCount = 0;
@@ -51,14 +87,31 @@ public class StageModel
 
 public class StageUIController : MonoBehaviour
 {
-    [SerializeField] BaseViewer _stageCountViewer;
-    [SerializeField] BaseViewer _stageResultViewer;
-
+    [SerializeField] StageCountViewer _stageCountViewer;
+    [SerializeField] StageResultViewer _stageResultViewer;
+    [SerializeField] BossHpViewer _bossHpViewer;
     StageModel _stageModel;
 
     public void Initialize()
     {
-        _stageModel = new StageModel(_stageCountViewer, _stageResultViewer);
+        _stageModel = new StageModel(_stageCountViewer, _bossHpViewer, _stageResultViewer);
+        ShowBossHpViewer(false);
+        ShowStageResult(true);
+    }
+
+    public void ShowStageCountViewer(bool nowShow)
+    {
+        _stageModel.ShowStageCountViewer = nowShow;
+    }
+
+    public void ShowBossHpViewer(bool nowShow)
+    {
+        _stageModel.ShowBossHPViewer = nowShow;
+    }
+
+    public void ChangeBossHpRatio(float ratio)
+    {
+        _stageModel.BossHpRatio = ratio;
     }
 
     public void AddStageCount(int count)

@@ -18,7 +18,7 @@ public class Heart : MonoBehaviour, IInteractable
 
     public void OnInteract(IInteracter interacter)
     {
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.GetCoin);
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.GetHeart);
         interacter.GetHeal(_healPoint);
         Destroy(gameObject);
     }

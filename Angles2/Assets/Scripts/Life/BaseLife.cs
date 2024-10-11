@@ -8,14 +8,11 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     protected float _hp;
 
     protected Timer _groggyTimer;
-    //protected Action<float> OnHpChange;
 
-    //protected Action OnDieRequested;
     public enum Size
     {
         Small, // 1 x 1
-        Middle, // 2 x 2
-        Large // 3 x 3
+        Medium, // 2 x 2, 3 X 3
     }
 
     protected Size _size;
@@ -34,13 +31,15 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         RedPentagon,
         RedHexagon,
 
-
-        Lombard
+        Tricon,
+        Rhombus,
+        Pentagonic
     }
 
     public enum AliveState
     {
         Normal, // 일반
+        Immunity, // 데미지 면역
         Invincible, // 무적
         Groggy, // 기절
     }
@@ -65,7 +64,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     protected DisplayPointComponent _displayDamageComponent;
 
     // pathfind 이벤트 추가
-    public virtual void AddPathfindEvent(Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) { }
+    public virtual void InitializeFSM(Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) { }
 
     public virtual void Initialize()
     {
@@ -74,7 +73,10 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void ResetData(PlayerData data) { }
 
-    public virtual void ResetData(LombardData data) { }
+    public virtual void ResetData(TriconData data) { }
+    public virtual void ResetData(RhombusData data) { }
+    public virtual void ResetData(PentagonicData data) { }
+
 
     public virtual void ResetData(TriangleData data) { }
     public virtual void ResetData(RectangleData data) { }
@@ -86,10 +88,15 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void AddEffectFactory(BaseFactory effectFactory) { _effectFactory = effectFactory; }
 
-    protected virtual void SetInvincible(bool nowInvincible)
+    protected virtual void SetImmunity(bool nowImmunity)
     {
-        if (nowInvincible) _aliveState = AliveState.Invincible;
+        if (nowImmunity) _aliveState = AliveState.Immunity;
         else _aliveState = AliveState.Normal;
+    }
+
+    public virtual void SetInvincible()
+    {
+        _aliveState = AliveState.Invincible;
     }
 
     protected virtual void OnDie()
@@ -124,10 +131,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
         switch (_aliveState)
         {
-            case AliveState.Normal:
-                break;
-            case AliveState.Invincible:
-                break;
             case AliveState.Groggy:
                 if (_groggyTimer.CurrentState == Timer.State.Finish)
                 {
@@ -135,14 +138,12 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
                     _groggyTimer.Reset();
                 }
                 break;
-            default:
-                break;
         }
     }
 
     public virtual void GetDamage(DamageableData damageableData)
     {
-        if (_lifeState == LifeState.Alive && _aliveState == AliveState.Invincible) return;
+        if (_lifeState == LifeState.Alive && (_aliveState == AliveState.Immunity || _aliveState == AliveState.Invincible)) return; // 면역 상태거나 무적 상태의 경우 리턴
         if (_lifeState == LifeState.Die) return;
 
         bool canDamage = damageableData._targetType.Contains(_targetType);

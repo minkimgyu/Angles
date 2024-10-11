@@ -13,11 +13,15 @@ public static class ServiceLocater
     static ITimeController _timeController;
     static NullTimeController _nullTimeController;
 
+    static ISaveable _saveController;
+    static NULLSaveManager _nullSaveController;
+
     static ServiceLocater()
     {
         _nullSoundPlayer = new NullSoundPlayer();
         _nullSceneController = new NullSceneController();
         _nullTimeController = new NullTimeController();
+        _nullSaveController = new NULLSaveManager();
     }
 
     public static void Provide(ISoundPlayable soundPlayer)
@@ -35,6 +39,14 @@ public static class ServiceLocater
         _timeController = timeController;
     }
 
+    public static void Provide(ISaveable saveable)
+    {
+        _saveController = saveable;
+    }
+
+
+
+
     public static ISoundPlayable ReturnSoundPlayer()
     {
         if (_soundPlayer == null) return _nullSoundPlayer;
@@ -49,7 +61,13 @@ public static class ServiceLocater
 
     public static ITimeController ReturnTimeController()
     {
-        if (_timeController == null) return _timeController;
+        if (_timeController == null) return _nullTimeController;
         return _timeController;
+    }
+
+    public static ISaveable ReturnSaveManager()
+    {
+        if (_saveController == null) return _nullSaveController;
+        return _saveController;
     }
 }

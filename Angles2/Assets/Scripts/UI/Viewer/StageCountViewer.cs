@@ -11,4 +11,9 @@ public class StageCountViewer : BaseViewer
     {
         _stageCountTxt.text = currentStageCount.ToString();
     }
+
+    public override void TurnOnViewer(bool show)
+    {
+        gameObject.SetActive(show);
+    }
 }

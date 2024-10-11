@@ -28,11 +28,13 @@ abstract public class WeaponData
 public class WeaponCreater
 {
     protected BaseWeapon _weaponPrefab;
-    protected WeaponData _weaponData;
+    private WeaponData _weaponData;
+
+    protected WeaponData CopyWeaponData { get { return _weaponData.Copy(); } }
 
     public WeaponCreater(BaseWeapon weaponPrefab, WeaponData weaponData) 
     { 
-        _weaponPrefab = weaponPrefab; 
+        _weaponPrefab = weaponPrefab;
         _weaponData = weaponData; 
     }
 
@@ -50,8 +52,9 @@ public class WeaponFactory : BaseFactory
         _weaponCreaters[BaseWeapon.Name.Blade] = new BladeCreater(weaponPrefabs[BaseWeapon.Name.Blade], weaponData[BaseWeapon.Name.Blade]);
         _weaponCreaters[BaseWeapon.Name.Blackhole] = new BlackholeCreater(weaponPrefabs[BaseWeapon.Name.Blackhole], weaponData[BaseWeapon.Name.Blackhole]);
 
-
+        _weaponCreaters[BaseWeapon.Name.PentagonicBullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.PentagonicBullet], weaponData[BaseWeapon.Name.PentagonicBullet], effectFactory);
         _weaponCreaters[BaseWeapon.Name.ShooterBullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.ShooterBullet], weaponData[BaseWeapon.Name.ShooterBullet], effectFactory);
+        _weaponCreaters[BaseWeapon.Name.PentagonBullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.PentagonBullet], weaponData[BaseWeapon.Name.PentagonBullet], effectFactory);
         _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.Rocket], weaponData[BaseWeapon.Name.Rocket], effectFactory);
 
         _weaponCreaters[BaseWeapon.Name.RifleShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RifleShooter], weaponData[BaseWeapon.Name.RifleShooter], this);

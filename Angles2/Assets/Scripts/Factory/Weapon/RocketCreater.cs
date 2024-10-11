@@ -45,7 +45,7 @@ public class RocketCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(_weaponData as RocketData);
+        weapon.ResetData(CopyWeaponData as RocketData);
         weapon.Initialize(_effectFactory);
         return weapon;
     }

@@ -5,15 +5,21 @@ using Newtonsoft.Json;
 
 public class JsonParser
 {
-    public T JsonToData<T>(string jdata)
+    public T JsonToObject<T>(string json)
     {
-        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-        return JsonConvert.DeserializeObject<T>(jdata, settings);
+        var setting = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        return JsonConvert.DeserializeObject<T>(json, setting);
     }
 
-    public string DataToJson<T>(T data)
+    public T JsonToObject<T>(TextAsset tmpAsset)
     {
-        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-        return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
+        var setting = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        return JsonConvert.DeserializeObject<T>(tmpAsset.text, setting);
+    }
+
+    public string ObjectToJson(object objectToParse)
+    {
+        var setting = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        return JsonConvert.SerializeObject(objectToParse, setting);
     }
 }

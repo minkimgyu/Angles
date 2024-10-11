@@ -35,6 +35,7 @@ public class Impact : BaseSkill
         bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Impact, 0.7f);
         Debug.Log("Impact");
 
         Vector3 contactPos = collision.contacts[0].point;
@@ -49,6 +50,7 @@ public class Impact : BaseSkill
         new DamageableData.DamageableDataBuilder().
         SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
         .SetTargets(_data._targetTypes)
+        .SetGroggyDuration(_data._groggyDuration)
         .Build();
 
         Damage.HitCircleRange(damageData, contactPos, _data._range * _data._rangeMultiplier, true, Color.red, 3);

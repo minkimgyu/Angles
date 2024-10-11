@@ -4,6 +4,7 @@ using UnityEngine;
 
 abstract public class BaseFactory
 {
+    public virtual AudioSource Create(ISoundPlayable.SoundName name) { return default; }
     public virtual BaseViewer Create(BaseViewer.Name name) { return default; }
     public virtual BaseEffect Create(BaseEffect.Name name) { return default; }
     public virtual BaseWeapon Create(BaseWeapon.Name name) { return default; }
@@ -28,18 +29,17 @@ public class FactoryCollection
 
     public FactoryCollection(AddressableHandler addressableHandler, Database database)
     {
-        _factories.Add(Type.Viewer, new ViewerFactory(addressableHandler.ViewerPrefabs));
+        _factories.Add(Type.Viewer, new ViewerFactory(addressableHandler.ViewerPrefabAsset));
 
-        _factories.Add(Type.Effect, new EffectFactory(addressableHandler.EffectPrefabs));
+        _factories.Add(Type.Effect, new EffectFactory(addressableHandler.EffectPrefabAsset));
 
-        _factories.Add(Type.Weapon, new WeaponFactory(addressableHandler.WeaponPrefabs, database.WeaponDatas, _factories[Type.Effect]));
+        _factories.Add(Type.Weapon, new WeaponFactory(addressableHandler.WeaponPrefabAsset, database.WeaponDatas, _factories[Type.Effect]));
 
         _factories.Add(Type.Skill, new SkillFactory(database.SkillDatas, database.Upgraders, _factories[Type.Effect], _factories[Type.Weapon]));
 
-        _factories.Add(Type.Life, new LifeFactory(addressableHandler.LifePrefabs, database.LifeDatas, _factories[Type.Effect], _factories[Type.Skill]));
+        _factories.Add(Type.Life, new LifeFactory(addressableHandler.LifePrefabAsset, database.LifeDatas, _factories[Type.Effect], _factories[Type.Skill]));
 
-        _factories.Add(Type.Interactable, new InteractableObjectFactory(addressableHandler.InteractableAssetDictionary, database.InteractableObjectDatas));
-
+        _factories.Add(Type.Interactable, new InteractableObjectFactory(addressableHandler.InteractableAsset, database.InteractableObjectDatas));
     }
 
     public BaseFactory ReturnFactory(Type type) { return _factories[type]; }

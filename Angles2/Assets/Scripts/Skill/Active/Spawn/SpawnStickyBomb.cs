@@ -40,9 +40,6 @@ public class SpawnStickyBomb : BaseSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
 
-        if (_useConstraint.CanUse() == false) return;
-        _useConstraint.Use();
-
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(_data._damage));
         modifiers.Add(new WeaponDelayModifier(_data._delay));

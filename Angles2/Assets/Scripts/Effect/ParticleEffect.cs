@@ -5,7 +5,6 @@ using UnityEngine;
 public class ParticleEffect : BaseEffect
 {
     List<ParticleSystem> _effects;
-    [SerializeField] protected bool _isFinite = false;
 
     public override void Initialize()
     {
@@ -26,7 +25,6 @@ public class ParticleEffect : BaseEffect
             _effects[i].Play();
         }
 
-        if (_isFinite == false) return;
         DestoryAfterDelay();
     }
 }

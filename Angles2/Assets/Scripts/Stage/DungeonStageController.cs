@@ -5,27 +5,26 @@ using System;
 
 public class DungeonStageController : BaseStageController
 {
-    int _maxStageCount = 15;
-    int _stageCount = 1;
+    int _maxStageCount;
+    int _stageCount;
 
     Queue<BaseStage> _stageQueue;
 
     BaseStage _currentStage;
     BaseStage _nextStage;
 
-    int _bonusStageGap;
+    const int _bonusStageGap = 5;
 
     // 이 둘은 model에서 관리하자
     [SerializeField] StageUIController _stageUIController;
-
-    BaseGameMode _gameMode;
     FactoryCollection _factoryCollection;
 
-    public void Initialize(int maxStageCount, int bonusStageGap, FactoryCollection factoryCollection)
+    public int ReturnCurrentStageCount() { return _stageCount; }
+
+    public void Initialize(int maxStageCount, FactoryCollection factoryCollection)
     {
         _stageCount = 1;
         _maxStageCount = maxStageCount;
-        _bonusStageGap = bonusStageGap;
         _factoryCollection = factoryCollection;
 
         _stageUIController.Initialize();
@@ -59,14 +58,19 @@ public class DungeonStageController : BaseStageController
     public override void OnMoveToNextStageRequested()
     {
         _stageCount++;
-        _stageUIController.ShowStageResult(false);
         _stageUIController.AddStageCount(1);
+        _stageUIController.ShowStageResult(false);
         _currentStage.Exit();
 
-        _nextStage.Target = _currentStage.Target;
         _currentStage = _nextStage;
         _nextStage = null;
 
+        if (_stageCount == _maxStageCount)  // 마지막 스테이지의 경우
+        {
+            _stageUIController.ShowStageCountViewer(false);
+            _stageUIController.ShowBossHpViewer(true);
+            _currentStage.AddBossHPEvent(_stageUIController.ChangeBossHpRatio);
+        }
         _currentStage.Spawn(_maxStageCount, _maxStageCount - _stageQueue.Count);
     }
 
@@ -75,6 +79,32 @@ public class DungeonStageController : BaseStageController
         int startStageCount = stageObjects[type].Count;
         return stageObjects[type][UnityEngine.Random.Range(0, startStageCount)];
     }
+
+
+    //시작 0
+    //일반 1
+    //일반 2
+    //일반 3
+    //보너스 4
+
+    //일반 5
+    //일반 6
+    //일반 7
+    //일반 8
+    //보너스 9
+
+    //일반 10
+    //일반 11
+    //일반 12
+    //일반 13
+    //보너스 14
+
+    //일반 15
+    //일반 16
+    //일반 17
+    //일반 18
+    //보스 19
+
 
     public void CreateRandomStage(Dictionary<BaseStage.Type, List<BaseStage>> stageObjects)
     {
@@ -87,24 +117,24 @@ public class DungeonStageController : BaseStageController
         }
 
         BaseStage storedBattleStage = null;
-        BaseStage startStage = ReturnRandomStage(BaseStage.Type.Start, stageObjects);
+        BaseStage startStage = ReturnRandomStage(BaseStage.Type.StartStage, stageObjects);
         _stageQueue.Enqueue(startStage);
 
         for (int i = 1; i < _maxStageCount; i++)
         {
             if(i == _maxStageCount - 1)
             {
-                BaseStage bossStage = ReturnRandomStage(BaseStage.Type.Boss, stageObjects);
+                BaseStage bossStage = ReturnRandomStage(BaseStage.Type.BossStage, stageObjects);
                 _stageQueue.Enqueue(bossStage);
             }
-            else if(i % _bonusStageGap == 0)
+            else if((i + 1) % _bonusStageGap == 0)
             {
-                BaseStage bonusStage = ReturnRandomStage(BaseStage.Type.Bonus, stageObjects);
+                BaseStage bonusStage = ReturnRandomStage(BaseStage.Type.BonusStage, stageObjects);
                 _stageQueue.Enqueue(bonusStage);
             }
             else
             {
-                BaseStage battleStage = ReturnRandomStage(BaseStage.Type.Mob, stageObjects);
+                BaseStage battleStage = ReturnRandomStage(BaseStage.Type.MobStage, stageObjects);
 
                 if(storedBattleStage == null)
                 {
@@ -113,7 +143,7 @@ public class DungeonStageController : BaseStageController
                 }
                 else
                 {
-                    while (storedBattleStage == battleStage) battleStage = ReturnRandomStage(BaseStage.Type.Mob, stageObjects);
+                    while (storedBattleStage == battleStage) battleStage = ReturnRandomStage(BaseStage.Type.MobStage, stageObjects);
 
                     _stageQueue.Enqueue(battleStage);
                     storedBattleStage = battleStage;

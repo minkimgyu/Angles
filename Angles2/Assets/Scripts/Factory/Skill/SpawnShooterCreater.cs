@@ -49,7 +49,7 @@ public class SpawnShooterCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        SpawnShooterData data = _skillData as SpawnShooterData;
+        SpawnShooterData data = CopySkillData as SpawnShooterData;
         return new SpawnShooter(data, _upgrader, _weaponFactory);
     }
 }

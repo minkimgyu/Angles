@@ -6,15 +6,10 @@ using UnityEngine;
 public class GameState
 {
     BaseViewer _coinViewer;
-    BaseViewer _enemyDieViewer;
 
-    public GameState(BaseViewer coinViewer, BaseViewer enemyDieViewer)
+    public GameState(BaseViewer coinViewer)
     {
         _coinViewer = coinViewer;
-        _enemyDieViewer = enemyDieViewer;
-
-        CoinCount = 1000000;
-        EnemyDieCount = 0;
     }
 
     int _coinCount;
@@ -25,17 +20,6 @@ public class GameState
         {
             _coinCount = value;
             _coinViewer.UpdateViewer(_coinCount);
-        }
-    }
-
-    int _enemyDieCount;
-    public int EnemyDieCount
-    {
-        get => _enemyDieCount;
-        set
-        {
-            _enemyDieCount = value;
-            _enemyDieViewer.UpdateViewer(_enemyDieCount);
         }
     }
 }
@@ -61,15 +45,5 @@ public class GameStateManager : Singleton<GameStateManager>
     public int ReturnCoin()
     {
         return _gameState.CoinCount;
-    }
-
-    public void ChangeEnemyDieCount(int dieCount)
-    {
-        _gameState.EnemyDieCount += dieCount;
-    }
-
-    public int ReturnEnemyDieCount()
-    {
-        return _gameState.EnemyDieCount;
     }
 }

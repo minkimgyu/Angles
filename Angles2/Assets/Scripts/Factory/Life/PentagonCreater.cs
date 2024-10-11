@@ -24,7 +24,7 @@ public class PentagonData : EnemyData
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _size, // EnemyData에서 상속된 값
-            new Dictionary<BaseSkill.Name, int>(_skillDataToAdd), // 딕셔너리 깊은 복사
+            new Dictionary<BaseSkill.Name, int>(CopySkillDataToAdd), // 딕셔너리 깊은 복사
             _dropData, // EnemyData에서 상속된 값
             _moveSpeed, // TriangleData 고유 값
             _stopDistance,
@@ -48,7 +48,7 @@ public class PentagonCreater : LifeCreater
         BaseLife life = UnityEngine.Object.Instantiate(_lifePrefab);
         if (life == null) return null;
 
-        PentagonData data = _lifeData as PentagonData;
+        PentagonData data = CopyLifeData as PentagonData;
 
         life.ResetData(data);
         life.AddEffectFactory(_effectFactory);
@@ -58,7 +58,7 @@ public class PentagonCreater : LifeCreater
         ISkillAddable skillUsable = life.GetComponent<ISkillAddable>();
         if (skillUsable == null) return life;
 
-        foreach (var item in data._skillDataToAdd)
+        foreach (var item in data.CopySkillDataToAdd)
         {
             BaseSkill skill = _skillFactory.Create(item.Key);
             skill.Upgrade(item.Value);

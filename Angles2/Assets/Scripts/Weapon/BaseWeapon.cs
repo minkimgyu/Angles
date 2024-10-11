@@ -10,6 +10,7 @@ abstract public class BaseWeapon : MonoBehaviour
 
         ShooterBullet,
         PentagonBullet,
+        PentagonicBullet,
 
         Rocket,
 

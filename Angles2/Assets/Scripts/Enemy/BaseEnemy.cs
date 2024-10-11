@@ -25,11 +25,12 @@ public class BaseEnemy : BaseLife, ISkillAddable, IFollowable, IForce
         _moveComponent.Initialize();
 
         _skillController = GetComponent<SkillController>();
-        _skillController.Initialize(); // 
+        _skillController.Initialize(new NoUpgradeableRatio());
     }
 
     protected override void Update()
     {
+
         base.Update();
         _skillController.OnUpdate();
     }
@@ -61,6 +62,12 @@ public class BaseEnemy : BaseLife, ISkillAddable, IFollowable, IForce
     {
         Vector3 direction = pos - transform.position;
         _moveComponent.AddForce(direction, speed, forceMode);
+    }
+
+    public override void GetDamage(DamageableData damageableData)
+    {
+        base.GetDamage(damageableData);
+        _skillController.OnDamaged(_hp / _maxHp);
     }
 
     public void AddSkill(BaseSkill.Name name) { }

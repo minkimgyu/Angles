@@ -18,10 +18,13 @@ public struct SkillUpgradeData
     int _upgradeCount;
     public int UpgradeCount { get { return _upgradeCount; } }
 
-
     int _maxUpgradeCount;
     public int MaxUpgradeCount { get { return _maxUpgradeCount; } }
 
+    // 1, 2, 3, 4, 5
+    // 5
+
+    public bool CanUpgrade() { return _upgradeCount <= _maxUpgradeCount; } // 만약 같다면 더 이상 업그레이드 불가능
 }
 
 public class SkillController : MonoBehaviour
@@ -65,13 +68,6 @@ public class SkillController : MonoBehaviour
     public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested;
     public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested;
 
-    public void Initialize()
-    {
-        _castingData = new CastingData(gameObject, transform);
-        _upgradeableRatio = new NoUpgradeableRatio();
-        _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
-    }
-
     public void Initialize(IUpgradeableRatio upgradeableRatio)
     {
         _castingData = new CastingData(gameObject, transform);
@@ -85,7 +81,7 @@ public class SkillController : MonoBehaviour
         List<SkillUpgradeData> upgradeDatas = new List<SkillUpgradeData>();
         foreach (var item in _skillDictionary)
         {
-            SkillUpgradeData upgradeData = new SkillUpgradeData(item.Key, item.Value.UpgradePoint, item.Value.MaxUpgradePoint);
+            SkillUpgradeData upgradeData = new SkillUpgradeData(item.Key, item.Value.UpgradePoint + 1, item.Value.MaxUpgradePoint); // 1을 더해서 준다.
             upgradeDatas.Add(upgradeData);
         }
 
@@ -115,6 +111,15 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnReflect(collision);
+        }
+    }
+
+    public void OnDamaged(float ratio)
+    {
+        foreach (var skill in _skillDictionary)
+        {
+            if (skill.Value.CanUse() == false) continue;
+            skill.Value.OnDamaged(ratio);
         }
     }
 

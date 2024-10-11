@@ -7,15 +7,18 @@ using System;
 public class SelfDestructionData : SkillData
 {
     public float _delay;
+    public float _hpRatioOnInvoke;
     public float _damage;
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public SelfDestructionData(int maxUpgradePoint, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public SelfDestructionData(int maxUpgradePoint, float damage, float range, float delay, float hpRatioOnInvoke, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
         _delay = delay;
         _range = range;
+
+        _hpRatioOnInvoke = hpRatioOnInvoke;
         _targetTypes = targetTypes;
     }
 
@@ -26,6 +29,7 @@ public class SelfDestructionData : SkillData
             _damage,
             _range,
             _delay,
+            _hpRatioOnInvoke,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );
     }
@@ -44,7 +48,7 @@ public class SelfDestructionCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        SelfDestructionData data = _skillData as SelfDestructionData;
+        SelfDestructionData data = CopySkillData as SelfDestructionData;
         return new SelfDestruction(data, _upgrader, _effectFactory);
     }
 }

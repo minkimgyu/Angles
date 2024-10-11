@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RhombusChapterMap
+  m_EditorClassIdentifier: 
+  m_GroupName: RhombusChapterMap
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d880c63c91950a74ca29d573a113f681
+  m_SerializeEntries:
+  - m_GUID: 56e820db689d7954c986e866b8f453ec
+    m_Address: MobStage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1d25322b117b5e489ae1e8588292b3b
+    m_Address: MobStage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d269139464293cf4bbf61b1a3f4165ac
+    m_Address: MobStage3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ead6fca4d48c7024d9fa3b9425e26511
+    m_Address: MobStage4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3ca25361c59d894e8ddae021b76903a
+    m_Address: MobStage5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccf47c1007590024fbe484813de3caed
+    m_Address: BonusStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc9d67a616dc99144a80ea667d42b9dc
+    m_Address: BossStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68eb21d0e4beb2a4bb41d83d1a278017
+    m_Address: StartStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterMap
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7096e802e27ba574d8c9088de9ef87f2, type: 2}
+    - {fileID: 11400000, guid: fd5e3b1744b13eb488221036afda1205, type: 2}

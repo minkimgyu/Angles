@@ -9,6 +9,7 @@ public class StickyBombData : WeaponData, ILifetimeStat
     /// 적용되는 데미지
     /// </summary>
     public float _damage;
+    public float _groggyDuration;
 
     /// <summary>
     /// 시전 범위
@@ -16,10 +17,12 @@ public class StickyBombData : WeaponData, ILifetimeStat
     public float _range;
     public float Lifetime { get; set; }
 
-    public StickyBombData(float range, float lifetime)
+    public StickyBombData(float range, float lifetime, float groggyDuration)
     {
         _damage = 0;
         _range = range;
+        _groggyDuration = groggyDuration;
+
         Lifetime = lifetime;
     }
 
@@ -30,7 +33,8 @@ public class StickyBombData : WeaponData, ILifetimeStat
     {
         return new StickyBombData(
             _range,
-            Lifetime
+            Lifetime,
+            _groggyDuration
         );
     }
 }
@@ -49,7 +53,7 @@ public class StickyBombCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(_weaponData as StickyBombData);
+        weapon.ResetData(CopyWeaponData as StickyBombData);
         weapon.Initialize(_effectFactory);
         return weapon;
     }

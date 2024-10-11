@@ -11,17 +11,20 @@ public class KnockbackData : CooltimeSkillData
     public SerializableVector2 _size;
     public SerializableVector2 _offset;
     public List<ITarget.Type> _targetTypes;
+    public float _groggyDuration;
 
     public KnockbackData(
         int maxUpgradePoint,
         float coolTime,
         int maxStackCount,
         float damage,
+        float groggyDuration,
         SerializableVector2 size,
         SerializableVector2 offset,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
+        _groggyDuration = groggyDuration;
         _rangeMultiplier = 1;
         _size = size;
         _offset = offset;
@@ -35,6 +38,7 @@ public class KnockbackData : CooltimeSkillData
             _coolTime, // CooltimeSkillData에서 상속된 값
             _maxStackCount, // CooltimeSkillData에서 상속된 값
             _damage,
+            _groggyDuration,
             new SerializableVector2(_size.x, _size.y), // SerializableVector2 깊은 복사
             new SerializableVector2(_offset.x, _offset.y), // SerializableVector2 깊은 복사
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
@@ -55,7 +59,7 @@ public class KnockbackCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        KnockbackData data = _skillData as KnockbackData;
+        KnockbackData data = CopySkillData as KnockbackData;
         return new Knockback(data, _upgrader, _effectFactory);
     }
 }

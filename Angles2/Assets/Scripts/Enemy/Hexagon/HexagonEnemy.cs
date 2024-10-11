@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexagonEnemy : TrackableEnemy
+public class HexagonEnemy : BasicMob
 {
     [SerializeField] TargetCaptureComponent _skillTargetCaptureComponent;
 

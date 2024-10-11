@@ -6,14 +6,13 @@ public class BaseStage : MonoBehaviour
 {
     public enum Type
     {
-        Start,
-        Bonus,
-        Mob,
-        Boss,
+        StartStage,
+        BonusStage,
+        MobStage,
+        BossStage,
     }
 
     [SerializeField] protected Transform _entryPoint;
-    protected Portal _portal;
 
     protected List<GameObject> _spawnedObjects;
 
@@ -25,17 +24,11 @@ public class BaseStage : MonoBehaviour
         _spawnedObjects = new List<GameObject>();
         _baseStageController = baseStageController;
         _factoryCollection = factoryCollection;
-
-        _portal = GetComponentInChildren<Portal>();
-        _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
     }
 
-    public void ActivePortal(Vector2 movePos)
-    {
-        _portal.Active(movePos);
-    }
+    public virtual void ActivePortal(Vector2 movePos) { }
 
-    public IPos Target;
+    public virtual void AddBossHPEvent(Action<float> OnHPChange) { }
 
     public Vector3 ReturnEntryPosition()
     {
@@ -50,7 +43,5 @@ public class BaseStage : MonoBehaviour
         {
             Destroy(_spawnedObjects[i]);
         }
-
-        _portal.Disable();
     }
 }

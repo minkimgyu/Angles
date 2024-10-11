@@ -25,9 +25,26 @@ public class MobStage : BattleStage
     Dictionary<Vector2, Difficulty> _difficultyRangeDictionary;
     [SerializeField] List<LevelData> _stageDatas;
 
+    Portal _portal;
+
+    public override void ActivePortal(Vector2 movePos)
+    {
+        _portal.Active(movePos);
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        _portal.Disable();
+    }
+
     public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection) 
     {
         base.Initialize(baseStageController, factoryCollection);
+
+        _portal = GetComponentInChildren<Portal>();
+        _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
+
         _difficultyRangeDictionary = new Dictionary<Vector2, Difficulty>
         {
             { new Vector2(0f, 0.3f), Difficulty.Easy},
@@ -38,12 +55,11 @@ public class MobStage : BattleStage
 
     protected override void OnEnemyDieRequested()
     {
-        _enemyCount -= 1;
+        _bossCount -= 1;
+        if (_bossCount > 0) return;
+        Debug.Log(_bossCount);
 
-        GameStateManager.Instance.ChangeEnemyDieCount(1);
-        if (_enemyCount > 0) return;
-        Debug.Log(_enemyCount);
-
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.StageClear, 0.8f);
         _baseStageController.OnStageClearRequested();
     }
 
@@ -61,7 +77,8 @@ public class MobStage : BattleStage
 
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
-        Difficulty difficulty = ReturnDifficultyByProgress((float)totalStageCount / currentStageCount);
+        Difficulty difficulty = ReturnDifficultyByProgress((float)currentStageCount / totalStageCount);
+        Debug.Log(difficulty);
 
         List<LevelData> possibleLevelDatas = new List<LevelData>();
 
@@ -72,7 +89,8 @@ public class MobStage : BattleStage
             possibleLevelDatas.Add(_stageDatas[i]);
         }
 
-        LevelData levelData = _stageDatas[0]; // possibleLevelDatas[UnityEngine.Random.Range(0, possibleLevelDatas.Count)];
+        // _stageDatas[0]
+        LevelData levelData = possibleLevelDatas[UnityEngine.Random.Range(0, possibleLevelDatas.Count)];
 
         foreach (var item in levelData.LevelDictionary)
         {
@@ -80,8 +98,8 @@ public class MobStage : BattleStage
             enemy.transform.position = item.Key.position;
 
             enemy.AddObserverEvent(OnEnemyDieRequested);
-            enemy.AddPathfindEvent(_pathfinder.FindPath);
-            _enemyCount++;
+            enemy.InitializeFSM(_pathfinder.FindPath);
+            _bossCount++;
         }
     }
 }

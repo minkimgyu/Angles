@@ -24,7 +24,7 @@ public class UpgradeDashCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        UpgradeDashData data = _skillData as UpgradeDashData;
+        UpgradeDashData data = CopySkillData as UpgradeDashData;
         return new UpgradeDash(data);
     }
 }

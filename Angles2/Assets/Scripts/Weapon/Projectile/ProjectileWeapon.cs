@@ -7,7 +7,7 @@ abstract public class ProjectileWeapon : BaseWeapon, IProjectable
     protected float _force;
     protected MoveComponent _moveComponent;
 
-    public void Shoot(Vector3 direction, float force)
+    public virtual void Shoot(Vector3 direction, float force)
     {
         transform.right = direction;
         _force = force;

@@ -7,13 +7,17 @@ public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
 {
     public float _damage;
     public float _attackDelay;
+    public float _groggyDuration;
+
     public float Lifetime { get; set; }
     public float SizeMultiplier { get; set; }
 
-    public BladeData(float attackDelay)
+    public BladeData(float attackDelay, float groggyDuration)
     {
         _damage = 0;
         _attackDelay = attackDelay;
+        _groggyDuration = groggyDuration;
+
         Lifetime = 3;
         SizeMultiplier = 1f;
     }
@@ -25,7 +29,8 @@ public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
     public override WeaponData Copy()
     {
         return new BladeData(
-            _attackDelay
+            _attackDelay,
+            _groggyDuration
         );
     }
 }
@@ -41,7 +46,7 @@ public class BladeCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(_weaponData as BladeData);
+        weapon.ResetData(CopyWeaponData as BladeData);
         weapon.Initialize();
         return weapon;
     }

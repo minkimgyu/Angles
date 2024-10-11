@@ -7,17 +7,24 @@ using System;
 public class ContactAttackData : SkillData
 {
     public float _damage;
+    public float _groggyDuration;
     public List<ITarget.Type> _targetTypes;
 
-    public ContactAttackData(int maxUpgradePoint, float damage, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public ContactAttackData(int maxUpgradePoint, float damage, float groggyDuration, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
+        _groggyDuration = groggyDuration;
         _targetTypes = targetTypes;
     }
 
     public override SkillData Copy()
     {
-       return new ContactAttackData(_maxUpgradePoint, _damage, _targetTypes);
+       return new ContactAttackData(
+           _maxUpgradePoint,
+           _damage,
+           _groggyDuration,
+           _targetTypes
+       );
     }
 }
 
@@ -32,7 +39,7 @@ public class ContactAttackCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        ContactAttackData data = _skillData as ContactAttackData;
+        ContactAttackData data = CopySkillData as ContactAttackData;
         return new ContactAttack(data, _effectFactory);
     }
 }

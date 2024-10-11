@@ -11,18 +11,14 @@ public class SpreadBullets : BaseSkill
     BaseFactory _weaponFactory;
     SpreadBulletsData _data;
 
-    public SpreadBullets(SpreadBulletsData data, BaseFactory weaponFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public SpreadBullets(SpreadBulletsData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
         _data = data;
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
 
+        _upgrader = upgrader;
         _weaponFactory = weaponFactory;
-    }
-
-    public override void OnAdd()
-    {
-        _useConstraint = new NoConstraintComponent();
     }
 
     public override void Upgrade()
@@ -33,6 +29,8 @@ public class SpreadBullets : BaseSkill
 
     void ShootBullet(float angle)
     {
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.SpreadBullets, _castingData.MyTransform.position, 0.3f);
+
         float x = Mathf.Sin(angle * Mathf.Deg2Rad);
         float y = Mathf.Cos(angle * Mathf.Deg2Rad);
         Vector3 direction = new Vector3(x, y, 0);
@@ -43,6 +41,7 @@ public class SpreadBullets : BaseSkill
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
 
         weapon.ModifyData(modifiers);
         weapon.Activate();
@@ -62,11 +61,6 @@ public class SpreadBullets : BaseSkill
         {
             case Timer.State.Ready:
                 if (_targets.Count == 0) return;
-
-                CastingComponent castingComponent = _castingData.MyObject.GetComponent<CastingComponent>();
-                if (castingComponent == null) break;
-
-                castingComponent.CastSkill(_data._delay);
                 _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:

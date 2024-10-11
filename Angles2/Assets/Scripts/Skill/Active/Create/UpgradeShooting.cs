@@ -6,7 +6,7 @@ public class UpgradeShooting : BaseSkill
 {
     UpgradeShootingData _data;
 
-    public UpgradeShooting(UpgradeShootingData data) : base(Type.Active, data._maxUpgradePoint)
+    public UpgradeShooting(UpgradeShootingData data) : base(Type.Passive, data._maxUpgradePoint)
     {
         _data = data;
     }
@@ -19,7 +19,6 @@ public class UpgradeShooting : BaseSkill
 
     public override void OnAdd()
     {
-        _useConstraint = new NoConstraintComponent();
         UpgradeStat();
     }
 
@@ -29,6 +28,6 @@ public class UpgradeShooting : BaseSkill
         IStatUpgradable visitor = myObject.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._shootingDatas[UpgradePoint]);
+        visitor.Upgrade(_data._shootingDatas[UpgradePoint - 1]);
     }
 }

@@ -25,7 +25,7 @@ public class UpgradeShootingCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        UpgradeShootingData data = _skillData as UpgradeShootingData;
+        UpgradeShootingData data = CopySkillData as UpgradeShootingData;
         return new UpgradeShooting(data);
     }
 }

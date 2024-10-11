@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBlackholeUpgrader : IUpgradeVisitor
+public class SpawnBlackholeUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
@@ -25,7 +25,10 @@ public class SpawnBlackholeUpgrader : IUpgradeVisitor
 
     public void Visit(ISkillUpgradable upgradable, SpawnBlackholeData data) 
     {
-        UpgradableData upgradeData = _upgradeDatas[upgradable.UpgradePoint - 1];
+        // 2랩부터 업그레이드가 들어가기 때문에 이렇게 한다.
+        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        UpgradableData upgradeData = _upgradeDatas[index];
+
         data._lifetime += upgradeData._lifeTime;
         data._sizeMultiplier += upgradeData._range;
     }

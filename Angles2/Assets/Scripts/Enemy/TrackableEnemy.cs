@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackableEnemy : BaseEnemy
+abstract public class TrackableEnemy : BaseEnemy
 {
     public enum State
     {
@@ -11,10 +11,9 @@ public class TrackableEnemy : BaseEnemy
         Tracking
     }
 
-    FSM<State> _fsm;
-    List<ITarget.Type> _followableTypes;
+    protected FSM<State> _fsm;
+    protected List<ITarget.Type> _followableTypes;
 
-    ITarget _followTarget;
     [SerializeField] TargetCaptureComponent _followTargetCaptureComponent;
     protected float _stopDistance;
     protected float _gap;
@@ -41,18 +40,6 @@ public class TrackableEnemy : BaseEnemy
 
         if (_aliveState == AliveState.Groggy) return;
         _fsm.OnFixedUpdate();
-    }
-
-    public override void AddPathfindEvent(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
-    {
-        _fsm.Initialize(
-           new Dictionary<State, BaseState<State>>
-           {
-               { State.Wandering, new WanderingState(_fsm, _moveComponent, transform, _followableTypes, 3, _moveSpeed, _moveSpeed) },
-               { State.Tracking, new TrackingState(_fsm, _moveComponent, transform, _size, _moveSpeed, _stopDistance, _gap, FindPath) }
-           },
-           State.Wandering
-        );
     }
 
     protected virtual void OnTargetEnter(ITarget target)

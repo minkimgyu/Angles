@@ -11,18 +11,20 @@ public class Shockwave : BaseSkill
     Timer _delayTimer;
     List<ITarget> _targets;
 
-    public Shockwave(ShockwaveData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public Shockwave(ShockwaveData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
     {
         _data = data;
         _delayTimer = new Timer();
         _targets = new List<ITarget>();
 
+        _upgrader = upgrader;
         _effectFactory = effectFactory;
     }
 
-    public override void OnAdd()
+    public override void Upgrade()
     {
-        _useConstraint = new NoConstraintComponent();
+        base.Upgrade();
+        _upgrader.Visit(this, _data);
     }
 
     public override void OnUpdate()
@@ -40,6 +42,8 @@ public class Shockwave : BaseSkill
                 _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:
+
+                ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, _castingData.MyTransform.position, 0.6f);
 
                 effect = _effectFactory.Create(BaseEffect.Name.ShockwaveEffect);
                 effect.ResetPosition(_castingData.MyTransform.position);

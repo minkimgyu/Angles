@@ -26,7 +26,10 @@ public class CardViewer : BaseViewer, IPointerClickHandler
             _upgradeIcons[i].SetActive(false);
         }
 
-        for (int i = 0; i < cardData.UpgradeCount + 1; i++)
+        Debug.Log(cardData.UpgradeCount);
+        Debug.Log(cardData.MaxUpgradeCount);
+
+        for (int i = 0; i < cardData.UpgradeCount; i++)
         {
             _upgradeIcons[i].SetActive(true);
         }

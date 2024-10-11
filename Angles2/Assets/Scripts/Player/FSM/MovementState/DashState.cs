@@ -48,10 +48,13 @@ public class DashState : State<Player.MovementState>
 
         _moveComponent.AddForce(direction, _playerData._dashSpeed);
         _timer.Start(_playerData._dashDuration);
+
+        _moveComponent.FreezeRotation(true);
     }
 
     public override void OnStateExit()
     {
+        _moveComponent.FreezeRotation(false);
         EndDash?.Invoke();
     }
 

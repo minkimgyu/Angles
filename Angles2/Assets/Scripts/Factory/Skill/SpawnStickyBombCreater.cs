@@ -44,7 +44,7 @@ public class SpawnStickyBombCreater : SkillCreater
 
     public override BaseSkill Create()
     {
-        SpawnStickyBombData data = _skillData as SpawnStickyBombData;
+        SpawnStickyBombData data = CopySkillData as SpawnStickyBombData;
         return new SpawnStickyBomb(data, _upgrader, _weaponFactory);
     }
 }

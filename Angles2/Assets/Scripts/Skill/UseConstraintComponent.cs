@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
-using Unity.VisualScripting.Antlr3.Runtime;
 
 abstract public class UseConstraintComponent
 {
@@ -25,8 +24,6 @@ public class CooltimeConstraint : UseConstraintComponent
     protected int _stackCount;
     protected Timer _cooltimer;
 
-    //protected float _cooltime;
-
     protected bool _showStackCount;
     Action<float, int, bool> ViewerEvent;
 
@@ -38,7 +35,6 @@ public class CooltimeConstraint : UseConstraintComponent
         _showStackCount = true;
         _cooltimeSkillData = cooltimeSkillData;
         _upgradeableRatio = upgradeableRatio;
-        //if (_maxStackCount == 1) _showStackCount = false;
 
         _stackCount = 1;
         _cooltimer = new Timer();
@@ -61,7 +57,6 @@ public class CooltimeConstraint : UseConstraintComponent
                 _cooltimer.Start(_cooltimeSkillData._coolTime * _upgradeableRatio.TotalCooltimeRatio);
                 break;
             case Timer.State.Running:
-                //showStack = _cooltimeSkillData._maxStackCount > 1;
                 ViewerEvent?.Invoke(1 - _cooltimer.Ratio, _stackCount, showStack);
                 break;
             case Timer.State.Finish:
@@ -70,7 +65,6 @@ public class CooltimeConstraint : UseConstraintComponent
 
                 if (_stackCount >= _cooltimeSkillData._maxStackCount)
                 {
-                    //showStack = _cooltimeSkillData._maxStackCount > 1;
                     ViewerEvent?.Invoke(0, _stackCount, showStack);
                     return;
                 }

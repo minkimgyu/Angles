@@ -40,7 +40,7 @@ public class BlackholeCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(_weaponData as BlackholeData);
+        weapon.ResetData(CopyWeaponData as BlackholeData);
         weapon.Initialize();
 
         return weapon;

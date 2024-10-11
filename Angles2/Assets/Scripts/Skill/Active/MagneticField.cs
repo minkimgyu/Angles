@@ -18,11 +18,6 @@ public class MagneticField : BaseSkill
         _delayTimer = new Timer();
     }
 
-    public override void OnAdd() 
-    {
-        _useConstraint = new NoConstraintComponent();
-    }
-
     public override void Upgrade()
     {
         base.Upgrade();

@@ -44,10 +44,8 @@ public class ShootState : State<Player.ActionState>
 
     public override void OnCollisionEnter(Collision2D collision)
     {
-
-
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce, 0.6f);
         OnReflect?.Invoke(collision);
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce);
 
         Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, collision.contacts[0].normal);
         _myTransform.right = reflectDirection;

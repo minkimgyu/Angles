@@ -5,44 +5,46 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using System;
+using UnityEngine.EventSystems;
 
-public class GameResultViewer : BaseViewer
+public class GameResultViewer : BaseViewer, IPointerClickHandler
 {
-    [SerializeField] GameObject _viwerObject;
+    [SerializeField] TMP_Text _recordTxt;
+    [SerializeField] TMP_Text _coinTxt;
+    [SerializeField] TMP_Text _tabTxt;
 
-    [SerializeField] Image _background;
-    [SerializeField] TMP_Text _labelTxt;
-    [SerializeField] Image _labelImg;
-    [SerializeField] Button _returnToMenuBtn;
+    Action OnReturnToMenuRequested;
 
     public override void Initialize(Action OnReturnToMenuRequested) 
     {
-        _returnToMenuBtn.onClick.AddListener(() => { OnReturnToMenuRequested?.Invoke(); });
-        _viwerObject.SetActive(false);
+        this.OnReturnToMenuRequested = OnReturnToMenuRequested;
+        TurnOnViewer(false);
 
-        _background.color = new Color(_background.color.r, _background.color.g, _background.color.b, 0);
-        _labelImg.transform.localScale = new Vector3(1, 0, 1);
-        _labelTxt.text = "";
+        _recordTxt.text = "";
+        _coinTxt.text = "";
     }
 
-    public override void TurnOnViewer(bool show, float backgroundFadeRatio, float backgroundFadeDuration, string endInfo, Color labelColor, Color labelTxtColor) 
+    public void FadeInOutTabTxt()
     {
-        _viwerObject.SetActive(show);
-
-        if (show == true)
-        {
-            _background.DOFade(backgroundFadeRatio, backgroundFadeDuration);
-
-            _labelImg.transform.DOScale(new Vector3(1, 1, 1), 0.1f);
-            _labelTxt.text = endInfo;
-            _labelTxt.color = labelTxtColor;
-            _labelImg.color = labelColor;
-        }
+        _tabTxt.DOFade(0, 1).SetLoops(-1, LoopType.Yoyo);
     }
 
-    private void OnDestroy()
+    public void ChangeCoin(int coinCount)
     {
-        _labelImg.DOKill();
-        _background.DOKill();
+        _coinTxt.text = coinCount.ToString();
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_coinTxt.transform);
+    }
+
+    public void ChangeRecord(float recordTime)
+    {
+        int minute = (int)recordTime / 60;
+        int second = (int)recordTime % 60;
+
+        _recordTxt.text = $"Record : {minute}:{second}";
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnReturnToMenuRequested?.Invoke();
     }
 }

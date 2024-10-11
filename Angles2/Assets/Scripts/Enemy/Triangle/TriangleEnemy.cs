@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriangleEnemy : TrackableEnemy
+public class TriangleEnemy : BasicMob
 {
     [SerializeField] DamageableTargetCaptureComponent _skillTargetCaptureComponent;
 

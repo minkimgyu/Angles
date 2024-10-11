@@ -72,7 +72,19 @@ MonoBehaviour:
     - Life
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 503470cabadce5e42b56de53775c4433
-    m_Address: Lombard
+    m_Address: Rhombus
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 01c8ee4dfffdfae4cb461f7eca029109
+    m_Address: Tricon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76f34f42b08b5884c92ddb44db464e78
+    m_Address: Pentagonic
     m_ReadOnly: 0
     m_SerializedLabels:
     - Life

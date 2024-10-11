@@ -5,12 +5,9 @@ using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
 {
-    Func<Grid2D, BaseEnemy.Size, bool> HaveBlockNodeInNearPosition; // 주변에 이동 불가능한 노드가 존재하는지 검사한다.
-
-    Func<Grid2D, List<Grid2D>> ReturnNearNodeIndexes; // --> 주변 노드를 반환한다.
     Func<Vector2, Grid2D> ReturnNodeIndex;
-
     Func<Grid2D, Node> ReturnNode;
+
     const int maxSize = 1000;
 
     Heap<Node> _openList = new Heap<Node>(maxSize);
@@ -18,11 +15,7 @@ public class Pathfinder : MonoBehaviour
 
     public void Initialize(GridComponent gridComponent)
     {
-        HaveBlockNodeInNearPosition = gridComponent.HaveBlockNodeInNearPosition;
-
-        ReturnNearNodeIndexes = gridComponent.ReturnNearNodeIndexes;
         ReturnNodeIndex = gridComponent.ReturnNodeIndex;
-
         ReturnNode = gridComponent.ReturnNode;
     }
 
@@ -84,21 +77,21 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-    void AddNearGridInList(Node targetGrid, Grid2D targetNodeIndex, BaseEnemy.Size size)
+    void AddNearGridInList(Node targetGrid, Grid2D targetNodeIndex, BaseLife.Size size)
     {
-        List<Grid2D> nearGridIndexes = ReturnNearNodeIndexes(targetGrid.Index);
-        if (nearGridIndexes == null) return;
+        List<Node> nearNodes = targetGrid.NearNodes[size];
+        if (nearNodes == null) return;
 
-        for (int i = 0; i < nearGridIndexes.Count; i++)
+        for (int i = 0; i < nearNodes.Count; i++)
         {
-            Node nearNode = ReturnNode(nearGridIndexes[i]);
+            Node nearNode = nearNodes[i];
+            //bool nowHave = HaveBlockNodeInNearPosition(nearNode.Index, size);
+            //if (nowHave) continue;
 
-            bool nowHave = HaveBlockNodeInNearPosition(nearNode.Index, size);
-            if (nowHave) continue;
             // 여기서 bfs 돌려서 주변 3X3 칸에 이동 불가능한 경로가 있다면 다시 뽑아준다.
             // 만약 모든 노드를 다 뽑은 경우 리턴시킨다.
 
-            if (nearNode.Block == true || _closedList.Contains(nearNode)) continue; // 통과하지 못하거나 닫힌 리스트에 있는 경우 다음 그리드 탐색
+            if (_closedList.Contains(nearNode)) continue; // 통과하지 못하거나 닫힌 리스트에 있는 경우 다음 그리드 탐색
 
             // 이 부분 중요! --> 거리를 측정해서 업데이트 하지 않고 계속 더해주는 방식으로 진행해야함
             float moveCost = Vector2.Distance(targetGrid.WorldPos, nearNode.WorldPos);

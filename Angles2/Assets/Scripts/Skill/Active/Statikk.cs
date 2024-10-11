@@ -35,8 +35,7 @@ public class Statikk : BaseSkill
         bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
-        if (_useConstraint.CanUse() == false) return;
-        _useConstraint.Use();
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Statikk);
 
         List<Vector2> hitPoints;
 
@@ -44,6 +43,7 @@ public class Statikk : BaseSkill
         new DamageableData.DamageableDataBuilder().
         SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
         .SetTargets(_data._targetTypes)
+        .SetGroggyDuration(_data._groggyDuration)
         .Build();
 
         Damage.HitRaycast(damageData, _data._maxTargetCount, collision.transform.position, _data._range, out hitPoints, true, Color.red, 3);

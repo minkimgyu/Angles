@@ -35,9 +35,8 @@ public class Knockback : BaseSkill
         bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
-        if (_useConstraint.CanUse() == false) return;
-        _useConstraint.Use();
 
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Knockback);
         Debug.Log("Knockback");
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.KnockbackEffect);
@@ -46,10 +45,11 @@ public class Knockback : BaseSkill
         effect.Play();
 
         DamageableData damageData =
+
         new DamageableData.DamageableDataBuilder().
         SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
         .SetTargets(_data._targetTypes)
-        .SetGroggyDuration(1f)
+        .SetGroggyDuration(_data._groggyDuration)
         .Build();
 
         Damage.HitBoxRange(damageData, _castingData.MyTransform.position, _data._offset.V2, _castingData.MyTransform.right,

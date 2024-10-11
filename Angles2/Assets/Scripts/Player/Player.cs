@@ -17,7 +17,6 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
         Ready,
         Charge,
         Shoot,
-        Reflect
     }
 
     FSM<MovementState> _movementFSM;
@@ -56,9 +55,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
                     new Vector3(maxScale, maxScale, transform.localScale.z), ratio);
     }
 
-    protected override void SetInvincible(bool nowInvincible)
+    protected override void SetImmunity(bool nowInvincible)
     {
-        base.SetInvincible(nowInvincible);
+        base.SetImmunity(nowInvincible);
         _moveComponent.FreezeRotation(nowInvincible);
 
         if (nowInvincible) _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnInvincible);
@@ -127,10 +126,10 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
         Dictionary<ActionState, BaseState<ActionState>> actionStates = new Dictionary<ActionState, BaseState<ActionState>>
         {
             { ActionState.Ready, new ReadyState(_actionFSM) },
-            { ActionState.Charge, new ChargeState(_actionFSM, _playerData, transform,_moveComponent, ChangeBodyScale, SetInvincible) },
+            { ActionState.Charge, new ChargeState(_actionFSM, _playerData, transform,_moveComponent, ChangeBodyScale, SetImmunity) },
             { 
                 ActionState.Shoot, new ShootState(_actionFSM, _playerData, transform, _moveComponent, ChangeBodyScale, 
-                _skillController.OnReflect, SetInvincible) 
+                _skillController.OnReflect, SetImmunity) 
             }
         };
         _actionFSM.Initialize(actionStates, ActionState.Ready);

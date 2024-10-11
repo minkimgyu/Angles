@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +8,8 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] Transform _stageParent;
     [SerializeField] Vector3 _offsetFromCenter;
 
-    List<BaseStage> _startStagePrefabs;
-    List<BaseStage> _mobStagePrefabs;
-    List<BaseStage> _bonusStagePrefabs;
-    List<BaseStage> _bossStagePrefabs;
-
-    Dictionary<BaseStage.Type, List<BaseStage>> _stageObjects;
-    public Dictionary<BaseStage.Type, List<BaseStage>> StageObjects { get { return _stageObjects; } }
+    Dictionary<BaseStage.Type, List<BaseStage>> _stagePrefabs;
+    public Dictionary<BaseStage.Type, List<BaseStage>> StageObjects { get; private set; }
 
     const int _maxRow = 3;
     const int _offset = 100;
@@ -21,24 +17,18 @@ public class MapGenerator : MonoBehaviour
     int xPos = 0;
     int rowCount = 0;
 
-    public void Initialize(List<BaseStage> startStagePrefabs, List<BaseStage> bonusStagePrefabs, List<BaseStage> mobStagePrefabs, List<BaseStage> bossStagePrefabs)
+    public void Initialize(Dictionary<BaseStage.Type, List<BaseStage>> stagePrefabs)
     {
-        _startStagePrefabs = startStagePrefabs;
-        _bonusStagePrefabs = bonusStagePrefabs;
-        _mobStagePrefabs = mobStagePrefabs;
-        _bossStagePrefabs = bossStagePrefabs;
-
-        _stageObjects = new Dictionary<BaseStage.Type, List<BaseStage>>();
+        _stagePrefabs = stagePrefabs;
+        StageObjects = new Dictionary<BaseStage.Type, List<BaseStage>>();
     }
-
-    public Dictionary<BaseStage.Type, List<BaseStage>> ReturnStageObjects() { return _stageObjects; }
 
     public void CreateMap()
     {
-        CreateStage(BaseStage.Type.Start, _startStagePrefabs);
-        CreateStage(BaseStage.Type.Bonus, _bonusStagePrefabs);
-        CreateStage(BaseStage.Type.Mob, _mobStagePrefabs);
-        CreateStage(BaseStage.Type.Boss, _bossStagePrefabs);
+        foreach (BaseStage.Type stageType in Enum.GetValues(typeof(BaseStage.Type)))
+        {
+            CreateStage(stageType, _stagePrefabs[stageType]);
+        }
     }
 
     void CreateStage(BaseStage.Type type, List<BaseStage> stagePrefabs)
@@ -61,6 +51,6 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        _stageObjects.Add(type, stages);
+        StageObjects.Add(type, stages);
     }
 }

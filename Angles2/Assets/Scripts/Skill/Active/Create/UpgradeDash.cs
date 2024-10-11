@@ -6,7 +6,7 @@ public class UpgradeDash : BaseSkill
 {
     UpgradeDashData _data;
 
-    public UpgradeDash(UpgradeDashData data) : base(Type.Active, data._maxUpgradePoint)
+    public UpgradeDash(UpgradeDashData data) : base(Type.Passive, data._maxUpgradePoint)
     {
         _data = data;
     }
@@ -19,7 +19,6 @@ public class UpgradeDash : BaseSkill
 
     public override void OnAdd()
     {
-        _useConstraint = new NoConstraintComponent();
         UpgradeStat();
     }
 
@@ -29,6 +28,6 @@ public class UpgradeDash : BaseSkill
         IStatUpgradable visitor = myObject.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._dashDatas[UpgradePoint]);
+        visitor.Upgrade(_data._dashDatas[UpgradePoint - 1]);
     }
 }

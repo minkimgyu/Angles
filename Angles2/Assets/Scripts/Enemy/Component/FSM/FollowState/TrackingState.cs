@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Reflection;
 
 public class TrackingState : State<TrackableEnemy.State>
 {
-    BaseEnemy.Size _size;
+    BaseLife.Size _size;
     float _moveSpeed;
 
     Timer _pathfinderTimer;
     float _pathfindGap = 0.5f;
 
     Transform _myTransform;
-    MoveComponent _moveComponent;
-    Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath;
+    protected MoveComponent _moveComponent;
+    Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath;
 
-    public TrackingState(FSM<TrackableEnemy.State> baseFSM, MoveComponent moveComponent, Transform myTransform, BaseEnemy.Size size, float moveSpeed, float stopDistance, float gap,
-        Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) : base(baseFSM)
+    public TrackingState(FSM<TrackableEnemy.State> baseFSM, MoveComponent moveComponent, Transform myTransform, BaseLife.Size size, float moveSpeed, float stopDistance, float gap,
+        Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) : base(baseFSM)
     {
         _size = size;
         _moveSpeed = moveSpeed;
@@ -78,7 +77,10 @@ public class TrackingState : State<TrackableEnemy.State>
         if (_target as UnityEngine.Object == null)
         {
             _baseFSM.SetState(TrackableEnemy.State.Wandering);
+            return;
         }
+
+
         float diatance;
         switch (_state)
         {
@@ -88,6 +90,7 @@ public class TrackingState : State<TrackableEnemy.State>
 
                 _moveComponent.FreezeRotation(false);
                 _state = State.Follow;
+
                 break;
             case State.Follow:
                 diatance = ReturnDistanceBetweenTarget();

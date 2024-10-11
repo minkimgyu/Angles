@@ -31,7 +31,9 @@ abstract public class BaseSkill : ISkillUpgradable
         MultipleShockwave,
         Shockwave,
         MagneticField,
-        SelfDestruction
+        SelfDestruction,
+
+        SpreadMultipleBullets,
     }
 
     public enum Type
@@ -45,7 +47,9 @@ abstract public class BaseSkill : ISkillUpgradable
     {
         _skillType = skillType;
         _maxUpgradePoint = maxUpgradePoint;
-        _upgradePoint = 0;
+        _upgradePoint = 1;
+        // 0, 1, 2, 3, 4 까지 도달
+        // 0, 1, 2
     }
 
     protected IUpgradeVisitor _upgrader;
@@ -62,8 +66,6 @@ abstract public class BaseSkill : ISkillUpgradable
 
     int _upgradePoint;
     public int UpgradePoint { get { return _upgradePoint; } }
-
-    public bool CanUpgrade() { return _upgradePoint < _maxUpgradePoint; }
 
     public virtual void Upgrade(int step)
     {
@@ -88,9 +90,16 @@ abstract public class BaseSkill : ISkillUpgradable
         _useConstraint.RemoveViewEvent(viewEvent); 
     }
 
-    public virtual bool CanUse() { return true; }
+    public virtual bool CanUse() 
+    {
+        bool canUse = _useConstraint.CanUse();
+        if(canUse == true) _useConstraint.Use();
 
+        return canUse; 
+    }
+    public virtual void OnAdd() { }
     public virtual void OnReflect(Collision2D collision) { }
+    public virtual void OnDamaged(float ratio) { }
 
     public virtual void OnCaptureEnter(ITarget target) { }
     public virtual void OnCaptureExit(ITarget target) { }
@@ -98,10 +107,8 @@ abstract public class BaseSkill : ISkillUpgradable
     public virtual void OnCaptureEnter(ITarget target, IDamageable damageable) { }
     public virtual void OnCaptureExit(ITarget target, IDamageable damageable) { }
 
-    public virtual void OnUpdate() 
+    public virtual void OnUpdate()
     {
         _useConstraint.OnUpdate();
     }
-
-    public abstract void OnAdd();
 }

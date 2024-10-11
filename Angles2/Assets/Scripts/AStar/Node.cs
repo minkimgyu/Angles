@@ -21,6 +21,12 @@ public class Node : IItem<Node>
     bool _block;
     public bool Block { get { return _block; } }
 
+    public Dictionary<BaseLife.Size, List<Node>> NearNodes { get; set; } = new Dictionary<BaseLife.Size, List<Node>>() // small 급
+    {
+        { BaseLife.Size.Small, new List<Node>() },
+        { BaseLife.Size.Medium, new List<Node>() },
+    };
+
     // g는 시작 노드부터의 거리
     // h는 끝 노드부터의 거리
     // f는 이 둘을 합친 값
