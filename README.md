@@ -34,21 +34,6 @@ Unity (C#)
     플레이어의 움직임, 슈팅 기능을 구현하기 위해 각각의 기능을 독립시켜 Concurrent State Machine을 적용했습니다.
   </div>
 
-### Flocking Algorithm를 활용한 Enemy AI 구현
-  <div align="center">
-    <img src="https://github.com/user-attachments/assets/28c82035-7b42-4b73-a3f5-03c8100c37a8" width="40%" height="40%"/>
-  </div>
-
-   <div align="center">
-    <a href="https://github.com/minkimgyu/Angles/tree/main/Angles2/Assets/Scripts/Enemy/Component/Flock/Behavior">Behavior 코드 보러가기</a>
-    </br>
-    <a href="https://github.com/minkimgyu/Angles/blob/d24868f5af10776a53480baafc25e3bd9e0c78d8/Angles2/Assets/Scripts/Enemy/BaseEnemy.cs#L87">Enemy 코드 보러가기</a>
-  </div>
-  </br>
-
-* Flocking Algorithm을 활용하여 기본적인 움직임을 구현하기 위해 Alignment, Cohesion, Separation Behavior를 개발했습니다.
-* 추적과 회피 기능을 구현하기 위해 Follow, Avoid Behavior를 개발하여 적용했습니다.
-
 
 ### Factory 패턴을 사용한 생성 시스템 개발
   <div align="center">
