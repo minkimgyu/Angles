@@ -2,7 +2,7 @@
 
 ![ezgif-3-d13b2d286e](https://github.com/user-attachments/assets/1c205434-7dd6-4cb2-b618-ed5f4a5f8bfc)
 </br>
-플레이 영상: https://www.youtube.com/watch?v=gC9k8V1H3kU
+플레이 영상: https://www.youtube.com/watch?v=xxmwnQG-NLo&t=377s
 
 ## 프로젝트 소개
 Unity를 사용하여 개발한 캐주얼 2D 게임
