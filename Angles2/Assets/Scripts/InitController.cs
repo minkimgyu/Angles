@@ -18,14 +18,10 @@ public class InitController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-#if UNITY_ANDROID
+
+#if UNITY_ANDROID && !UNITY_EDITOR
         Application.targetFrameRate = 60;
 #endif
-
-#if UNITY_EDITOR
-        Application.targetFrameRate = 100;
-#endif
-
         Screen.SetResolution(Screen.width, Screen.height, true);
 
         _loadingPregressBar.fillAmount = 0;

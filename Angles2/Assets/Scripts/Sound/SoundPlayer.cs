@@ -24,6 +24,7 @@ public class SoundPlayer : MonoBehaviour, ISoundPlayable
 
     public void PlayBGM(ISoundPlayable.SoundName name, float volumn = 1)
     {
+        if (_clipDictionary.ContainsKey(name) == false) return;
         _bgmPlayer.clip = _clipDictionary[name];
 
         _bgmPlayer.volume = volumn;
@@ -32,15 +33,18 @@ public class SoundPlayer : MonoBehaviour, ISoundPlayable
 
     public void PlaySFX(ISoundPlayable.SoundName name, Vector3 pos, float volumn = 1)
     {
+        if (_clipDictionary.ContainsKey(name) == false) return;
+
         AudioSource.PlayClipAtPoint(_clipDictionary[name], pos, volumn);
     }
 
     public void PlaySFX(ISoundPlayable.SoundName name, float volumn = 1)
     {
+        if (_clipDictionary.ContainsKey(name) == false) return;
+
         for (int i = 0; i < _sfxPlayer.Length; i++)
         {
             if (_sfxPlayer[i].isPlaying == true) continue;
-
             _sfxPlayer[i].clip = _clipDictionary[name];
 
             _sfxPlayer[i].volume = volumn;

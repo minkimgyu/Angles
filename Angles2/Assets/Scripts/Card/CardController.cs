@@ -185,6 +185,7 @@ public class CardController : MonoBehaviour
             _recreateButton.onClick.AddListener(
                 () =>
                 {
+                    ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Reroll);
                     DeleteCards();
                     CreateCards(skillUser, cardCount, recreateCount);
                 }

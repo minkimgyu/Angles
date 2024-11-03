@@ -5,17 +5,27 @@ using UnityEngine;
 public class MoveComponent : MonoBehaviour
 {
     Rigidbody2D _rigid;
-    bool _applyDirection = true;
-    public bool ApplyDirection { get { return _applyDirection; } set { _applyDirection = value; } }
+
+    bool _applyMovement = true; // 움직임 적용 여부
+    public bool ApplyMovement { set { _applyMovement = value; } }
+
+    bool _applyDirection = true; // 회전 적용 여부
+    public bool ApplyDirection { set { _applyDirection = value; } }
+
+    float _moveSpeedRatio = 1f; // 속도 비율
+    public float MoveSpeedRatio { set { _moveSpeedRatio = value; } }
 
     public void Initialize()
     {
         _rigid = GetComponent<Rigidbody2D>();
+        _applyMovement = true;
         _applyDirection = true;
     }
 
     public void Stop()
     {
+        if (_applyMovement == false) return;
+
         _rigid.velocity = Vector2.zero;
         FaceDirection(Vector2.right);
     }
@@ -34,12 +44,16 @@ public class MoveComponent : MonoBehaviour
 
     public void Move(Vector2 direction, float speed)
     {
-        _rigid.velocity = direction * speed;
+        if (_applyMovement == false) return;
+
+        _rigid.velocity = direction * speed * _moveSpeedRatio;
         if(_applyDirection == true) FaceDirection(direction, speed);
     }
 
     public void Move(Vector2 pos)
     {
+        if (_applyMovement == false) return;
+
         _rigid.MovePosition(pos);
     }
 

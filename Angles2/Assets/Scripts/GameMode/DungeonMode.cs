@@ -54,6 +54,7 @@ public class DungeonMode : BaseGameMode
     public override void OnGameClearRequested()
     {
         OnEnd();
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ChapterClear);
         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.SetPlayerInvincible);
         
         UnlockNextChapter();
@@ -66,6 +67,7 @@ public class DungeonMode : BaseGameMode
     public override void OnGameOverRequested()
     {
         OnEnd();
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ChapterFail);
         float passedTime = (float)_dungeonStopwatch.Elapsed.TotalSeconds;
         _dungeonStopwatch.Stop();
         _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());

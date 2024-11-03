@@ -46,10 +46,10 @@ public class MoveState : State<Player.MovementState>
 
     public override void OnDash()
     {
-        bool canUseDash = CanUseDash();
-        if (canUseDash == false) return;
+        //bool canUseDash = CanUseDash();
+        //if (canUseDash == false) return;
 
-        UseDash?.Invoke();
-        _baseFSM.SetState(Player.MovementState.Dash, _storedInput, "GoToDashState");
+        //UseDash?.Invoke();
+        //_baseFSM.SetState(Player.MovementState.Dash, _storedInput, "GoToDashState");
     }
 }

@@ -8,16 +8,15 @@ public class ChargeState : State<Player.ActionState>
     Action<bool, float> ChangeBodyScale;
     Action<bool> SetInvincible;
 
-    //Action<float> OnChargeRatioChangeRequested;
-
-    //Action<bool> ShowShootDirection;
-
     Transform _myTransform;
     Vector2 _storedInput;
     MoveComponent _moveComponent;
 
     Timer _chargeTimer;
     PlayerData _playerData;
+
+    const float _chargeMoveSpeedRatio = 0.7f;
+    const float _normalMoveSpeedRatio = 1.0f;
 
     public ChargeState(
         FSM<Player.ActionState> fsm,
@@ -56,6 +55,7 @@ public class ChargeState : State<Player.ActionState>
 
     public override void OnStateEnter()
     {
+        _moveComponent.MoveSpeedRatio = _chargeMoveSpeedRatio;
         _chargeTimer.Start(_playerData._chargeDuration);
 
         EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnTurnOnOffDirection, true);
@@ -65,6 +65,7 @@ public class ChargeState : State<Player.ActionState>
 
     public override void OnStateExit()
     {
+        _moveComponent.MoveSpeedRatio = _normalMoveSpeedRatio;
         _chargeTimer.Reset();
     }
 

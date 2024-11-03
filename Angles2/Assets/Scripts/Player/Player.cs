@@ -39,6 +39,12 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
     InteractableCaptureComponent _interactableCaptureComponent;
     List<IInteractable> _interactableObjects;
 
+    public override void GetDamage(DamageableData damageableData)
+    {
+        base.GetDamage(damageableData);
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Hit);
+    }
+
     void ChangeBodyScale(bool xAxis, float ratio)
     {
         float minScale = _playerData._shrinkScale;

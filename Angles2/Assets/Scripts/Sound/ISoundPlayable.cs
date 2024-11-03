@@ -44,6 +44,10 @@ public interface ISoundPlayable
 
         PentagonicChapterBGM,
         PentagonicChapterBossBGM,
+
+        Reroll,
+        ChapterClear,
+        ChapterFail,
     }
 
     void Initialize(Dictionary<SoundName, AudioClip> clipDictionary);

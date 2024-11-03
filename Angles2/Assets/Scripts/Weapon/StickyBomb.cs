@@ -38,7 +38,6 @@ public class StickyBomb : BaseWeapon
     void Explode()
     {
         Debug.Log("Explode");
-
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, transform.position, 0.4f);
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);

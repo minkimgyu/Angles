@@ -52,11 +52,13 @@ public class ShootState : State<Player.ActionState>
 
         Debug.DrawRay(_myTransform.position, reflectDirection, Color.red, 5);
 
+        _moveComponent.Stop();
         Shoot(reflectDirection);
     }
 
     public override void OnStateEnter(Vector2 direction, float ratio, string message)
     {
+        _moveComponent.ApplyMovement = false;
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shooting);
 
         _ratio = ratio;
@@ -68,6 +70,11 @@ public class ShootState : State<Player.ActionState>
         Shoot(direction);
     }
 
+    public override void OnStateExit()
+    {
+        _moveComponent.ApplyMovement = true;
+    }
+
     public override void OnStateUpdate()
     {
         if(_timer.CurrentState == Timer.State.Finish)
@@ -77,8 +84,13 @@ public class ShootState : State<Player.ActionState>
         }
     }
 
-    // move가 검출된다면 바로 Ready로 보냄
-    public override void OnMove(Vector2 vec2)
+    //// move가 검출된다면 바로 Ready로 보냄
+    //public override void OnMove(Vector2 vec2)
+    //{
+    //    GoToReadyState();
+    //}
+
+    public override void OnChargeStart()
     {
         GoToReadyState();
     }

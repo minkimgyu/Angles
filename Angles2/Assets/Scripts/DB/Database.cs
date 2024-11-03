@@ -296,9 +296,9 @@ public class Database
                 ITarget.Type.Blue, 
                 10, 
 
-                2f,
+                1.1f,
                 10,
-                2f,
+                1.1f,
 
                 8,
                 10,
@@ -312,7 +312,7 @@ public class Database
                 10f,
                 2f,
 
-                20f,
+                15f,
                 0.2f, 
                 3, 
                 1, 

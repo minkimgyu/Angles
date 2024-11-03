@@ -18,7 +18,6 @@ public class StartMenuController : MonoBehaviour
     public void OnStartRequested()
     {
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Click);
-
         ISceneControllable controller = ServiceLocater.ReturnSceneController();
         controller.ChangeScene("LobbyScene");
     }
