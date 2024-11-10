@@ -2,8 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IStat
+{
+
+}
+
 public class StatUpgrader : IUpgradeVisitor
 {
+    public struct DamageReductionData
+    {
+        public float _additionalDamageReduction;
+
+        public DamageReductionData(float additionalDamageReduction)
+        {
+            _additionalDamageReduction = additionalDamageReduction;
+        }
+    }
+
+    public struct AdditionalHealthData
+    {
+        public float _additionalDamageReduction;
+
+        public AdditionalHealthData(float additionalDamageReduction)
+        {
+            _additionalDamageReduction = additionalDamageReduction;
+        }
+    }
+
+
+
     public struct DamageData
     {
         public float _additionalDamageRatio;
