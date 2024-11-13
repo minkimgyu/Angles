@@ -29,8 +29,8 @@ public interface IUpgradeVisitor
     void Visit(ISkillUpgradable upgradable, MagneticFieldData data) { }
     void Visit(ISkillUpgradable upgradable, SelfDestructionData data) { }
 
-    public void Visit(PlayerData data, StatUpgrader.DashData dashData) { }
-    public void Visit(PlayerData data, StatUpgrader.ShootingData shootingData) { }
-    public void Visit(PlayerData data, StatUpgrader.CooltimeData shootingData) { }
-    public void Visit(PlayerData data, StatUpgrader.DamageData damageData) { }
+    //public void Visit(PlayerData data, StatUpgrader.DashData dashData) { }
+    //public void Visit(PlayerData data, StatUpgrader.ShootingData shootingData) { }
+    //public void Visit(PlayerData data, StatUpgrader.CooltimeData shootingData) { }
+    //public void Visit(PlayerData data, StatUpgrader.DamageData damageData) { }
 }

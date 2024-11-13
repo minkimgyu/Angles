@@ -37,15 +37,26 @@ public class SpawnBlackhole : BaseSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blackhole);
         if (weapon == null) return;
 
+        Transform casterTransform = _caster.GetComponent<Transform>();
+
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
+
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
+        modifiers.Add(new WeaponDamageModifier(damageData));
         modifiers.Add(new WeaponSizeModifier(_data._sizeMultiplier));
         modifiers.Add(new WeaponLifetimeModifier(_data._lifetime));
-        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
-        modifiers.Add(new WeaponDamageModifier(3));
 
         weapon.ModifyData(modifiers);
         weapon.Activate();
 
-        weapon.ResetPosition(_castingData.MyTransform.position);
+        weapon.ResetPosition(casterTransform.position);
     }
 }

@@ -4,10 +4,14 @@ using UnityEngine;
 
 abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 {
-    protected float _maxHp;
-    protected float _hp;
+    //protected abstract float Hp { get; set; }
+    //protected abstract float MaxHp { get; set; }
+    //protected abstract float DamageReductionRatio { get; }
+    //protected abstract float AutoRecoveryPoint { get; }
 
-    protected Timer _groggyTimer;
+    LifeData _lifeData;
+    protected Timer _groggyTimer = new Timer();
+    protected Timer _autoHealTimer = new Timer();
 
     public enum Size
     {
@@ -69,19 +73,18 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void Initialize()
     {
         _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
+        _autoHealTimer.Start(oneTick);
     }
 
-    public virtual void ResetData(PlayerData data) { }
-
-    public virtual void ResetData(TriconData data) { }
-    public virtual void ResetData(RhombusData data) { }
-    public virtual void ResetData(PentagonicData data) { }
-
-
-    public virtual void ResetData(TriangleData data) { }
-    public virtual void ResetData(RectangleData data) { }
-    public virtual void ResetData(PentagonData data) { }
-    public virtual void ResetData(HexagonData data) { }
+    void SetUp(LifeData data) { _lifeData = data; }
+    public virtual void ResetData(PlayerData data) { SetUp(data); }
+    public virtual void ResetData(TriconData data) { SetUp(data); }
+    public virtual void ResetData(RhombusData data) { SetUp(data); }
+    public virtual void ResetData(PentagonicData data) { SetUp(data); }
+    public virtual void ResetData(TriangleData data) { SetUp(data); }
+    public virtual void ResetData(RectangleData data) { SetUp(data); }
+    public virtual void ResetData(PentagonData data) { SetUp(data); }
+    public virtual void ResetData(HexagonData data) { SetUp(data); }
 
     public void AddObserverEvent(Action<float> OnHpChangeRequested) { this.OnHpChangeRequested = OnHpChangeRequested; }
     public virtual void AddObserverEvent(Action OnDieRequested) { }
@@ -110,13 +113,15 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void GetHeal(float point)
     {
-        _hp += point;
-        OnHpChangeRequested?.Invoke(_hp / _maxHp);
-        _displayDamageComponent.SpawnDamageTxt(point, transform.position);
+        if(point == 0) return;
 
-        if (_maxHp < _hp)
+        _lifeData._hp += point;
+        OnHpChangeRequested?.Invoke(_lifeData._hp / _lifeData.MaxHp);
+        _displayDamageComponent.SpawnHealTxt(point, transform.position);
+
+        if (_lifeData.MaxHp < _lifeData._hp)
         {
-            _hp = _maxHp;
+            _lifeData._hp = _lifeData.MaxHp;
         }
     }
 
@@ -125,9 +130,18 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         if (_lifeState == LifeState.Die) return;
     }
 
+    const float oneTick = 10f;
+
     protected virtual void Update()
     {
         if (_lifeState == LifeState.Die) return;
+
+        if (_autoHealTimer.CurrentState != Timer.State.Running)
+        {
+            GetHeal(_lifeData._autoHpRecoveryPoint);
+            _autoHealTimer.Reset();
+            _autoHealTimer.Start(oneTick);
+        }
 
         switch (_aliveState)
         {
@@ -149,8 +163,12 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         bool canDamage = damageableData._targetType.Contains(_targetType);
         if (canDamage == false) return;
 
-        _hp -= damageableData._damageData.Damage;
-        OnHpChangeRequested?.Invoke(_hp / _maxHp);
+        float finalDamage = damageableData.CalculateDamage(_lifeData._damageReductionRatio);
+        _lifeData._hp -= finalDamage;
+        OnHpChangeRequested?.Invoke(_lifeData._hp / _lifeData.MaxHp);
+
+        ICaster caster = damageableData._caster;
+        if (caster != null) caster.GetDamageData(damageableData);
 
         if (_aliveState == AliveState.Normal && damageableData._groggyDuration > 0)
         {
@@ -158,11 +176,11 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
             _groggyTimer.Start(damageableData._groggyDuration);
         }
 
-        _displayDamageComponent.SpawnDamageTxt(damageableData, transform.position);
+        _displayDamageComponent.SpawnDamageTxt(finalDamage, transform.position);
 
-        if (_hp <= 0)
+        if (_lifeData._hp <= 0)
         {
-            _hp = 0;
+            _lifeData._hp = 0;
             _lifeState = LifeState.Die;
             OnDie();
         }

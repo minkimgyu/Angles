@@ -7,6 +7,8 @@ using System;
 public class ImpactData : RandomSkillData
 {
     public float _damage;
+    public float _adRatio;
+
     public float _rangeMultiplier;
     public float _range;
     public float _groggyDuration;
@@ -17,11 +19,14 @@ public class ImpactData : RandomSkillData
         int maxUpgradePoint,
         float probability,
         float damage,
+        float adRatio,
         float range,
         float groggyDuration,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
         _damage = damage;
+        _adRatio = adRatio;
+
         _range = range;
         _rangeMultiplier = 1;
         _groggyDuration = groggyDuration;
@@ -34,6 +39,7 @@ public class ImpactData : RandomSkillData
             _maxUpgradePoint, // RandomSkillData에서 상속된 값
             _probability, // RandomSkillData에서 상속된 값
             _damage,
+            _adRatio,
             _range,
             _groggyDuration,
             new List<ITarget.Type>(_targetTypes) // 리스트의 깊은 복사

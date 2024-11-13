@@ -5,7 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
 {
-    public float _damage;
     public float _attackDelay;
     public float _groggyDuration;
 
@@ -14,15 +13,10 @@ public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
 
     public BladeData(float attackDelay, float groggyDuration)
     {
-        _damage = 0;
         _attackDelay = attackDelay;
         _groggyDuration = groggyDuration;
-
-        Lifetime = 3;
-        SizeMultiplier = 1f;
     }
 
-    public override void ChangeDamage(float damage) => _damage = damage;
     public override void ChangeLifetime(float lifeTime) => Lifetime = lifeTime;
     public override void ChangeSizeMultiplier(float sizeMultiplier) => SizeMultiplier = sizeMultiplier;
 

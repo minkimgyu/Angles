@@ -46,13 +46,18 @@ public class Impact : BaseSkill
         effect.ResetSize(_data._rangeMultiplier);
         effect.Play();
 
-        DamageableData damageData = 
-        new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-        .SetTargets(_data._targetTypes)
-        .SetGroggyDuration(_data._groggyDuration)
-        .Build();
-
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
         Damage.HitCircleRange(damageData, contactPos, _data._range * _data._rangeMultiplier, true, Color.red, 3);
     }
 }

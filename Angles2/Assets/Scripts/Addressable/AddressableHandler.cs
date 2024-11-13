@@ -25,6 +25,8 @@ public class AddressableHandler : MonoBehaviour
         PentagonicChapterMap,
 
         ChapterIcon,
+        StatIcon,
+        SkinIcon
     }
 
     HashSet<BaseLoader> _assetLoaders;
@@ -44,14 +46,16 @@ public class AddressableHandler : MonoBehaviour
         _successCount = 0;
         _totalCount = 0;
 
-        ChapterMapAsset = new Dictionary<DungeonChapter, Dictionary<BaseStage.Type, List<BaseStage>>>();
-        foreach (DungeonChapter chapter in Enum.GetValues(typeof(DungeonChapter)))
+        ChapterMapAsset = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Type, List<BaseStage>>>();
+        foreach (DungeonMode.Chapter chapter in Enum.GetValues(typeof(DungeonMode.Chapter)))
         {
             ChapterMapAsset[chapter] = new Dictionary<BaseStage.Type, List<BaseStage>>();
         }
     }
 
-    public Dictionary<DungeonChapter, Sprite> ChapterIconAsset { get; private set; }
+    public Dictionary<SkinData.Key, Sprite> SkinIconAsset { get; private set; }
+    public Dictionary<StatData.Key, Sprite> StatIconAsset { get; private set; }
+    public Dictionary<DungeonMode.Chapter, Sprite> ChapterIconAsset { get; private set; }
     public Dictionary<BaseSkill.Name, Sprite> SkillIconAsset { get; private set; }
     public Dictionary<BaseWeapon.Name, BaseWeapon> WeaponPrefabAsset { get; private set; }
     public Dictionary<BaseEffect.Name, BaseEffect> EffectPrefabAsset { get; private set; }
@@ -60,12 +64,14 @@ public class AddressableHandler : MonoBehaviour
     public Dictionary<IInteractable.Name, IInteractable> InteractableAsset { get; private set; }
     public Dictionary<ISoundPlayable.SoundName, AudioClip> SoundAsset { get; private set; }
 
-    public Dictionary<DungeonChapter, Dictionary<BaseStage.Type, List<BaseStage>>> ChapterMapAsset { get; private set; }
+    public Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Type, List<BaseStage>>> ChapterMapAsset { get; private set; }
 
     public void Load(Action OnCompleted)
     {
         _assetLoaders = new HashSet<BaseLoader>();
 
+        _assetLoaders.Add(new SkinIconAssetLoader(Label.SkinIcon, (value, label) => { SkinIconAsset = value; OnSuccess(label); }));
+        _assetLoaders.Add(new StatIconAssetLoader(Label.StatIcon, (value, label) => { StatIconAsset = value; OnSuccess(label); }));
         _assetLoaders.Add(new ChapterIconAssetLoader(Label.ChapterIcon, (value, label) => { ChapterIconAsset = value; OnSuccess(label); }));
         _assetLoaders.Add(new SkillIconAssetLoader(Label.SkillIcon, (value, label) => { SkillIconAsset = value; OnSuccess(Label.SkillIcon); }));
         _assetLoaders.Add(new WeaponAssetLoader(Label.Weapon, (value, label) => { WeaponPrefabAsset = value; OnSuccess(Label.Weapon); }));
@@ -78,14 +84,14 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new MapAssetLoader(
             Label.TriconChapterMap,
             (value, label) => {
-                ChapterMapAsset[DungeonChapter.TriconChapter] = value;
+                ChapterMapAsset[DungeonMode.Chapter.TriconChapter] = value;
                 OnSuccess(label);
             }
         ));
 
         _assetLoaders.Add(new MapAssetLoader(
             Label.RhombusChapterMap, 
-            (value, label) => { ChapterMapAsset[DungeonChapter.RhombusChapter] = value; 
+            (value, label) => { ChapterMapAsset[DungeonMode.Chapter.RhombusChapter] = value; 
             OnSuccess(Label.RhombusChapterMap); 
             }
         ));
@@ -93,7 +99,7 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new MapAssetLoader(
             Label.PentagonicChapterMap,
             (value, label) => {
-                ChapterMapAsset[DungeonChapter.PentagonicChapter] = value;
+                ChapterMapAsset[DungeonMode.Chapter.PentagonicChapter] = value;
                 OnSuccess(label);
             }
         ));

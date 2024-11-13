@@ -8,12 +8,25 @@ public class SpawnStickyBombData : CooltimeSkillData
 {
     public List<ITarget.Type> _targetTypes;
     public float _damage;
+    public float _adRatio;
+    public float _groggyDuration;
+
     public float _delay;
 
-    public SpawnStickyBombData(int maxUpgradePoint, float coolTime, int maxStackCount, float damage, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
+    public SpawnStickyBombData(
+        int maxUpgradePoint,
+        float coolTime,
+        int maxStackCount,
+        float damage,
+        float adRatio,
+        float groggyDuration,
+        float delay,
+        List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _maxStackCount = maxStackCount;
         _damage = damage;
+        _adRatio = adRatio;
+        _groggyDuration = groggyDuration;
         _delay = delay;
         _targetTypes = targetTypes;
     }
@@ -25,6 +38,8 @@ public class SpawnStickyBombData : CooltimeSkillData
             _coolTime, // CooltimeSkillData에서 상속된 값
             _maxStackCount, // CooltimeSkillData에서 상속된 값
             _damage,
+            _adRatio,
+            _groggyDuration,
             _delay,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );

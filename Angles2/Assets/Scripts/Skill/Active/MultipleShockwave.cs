@@ -47,23 +47,32 @@ public class MultipleShockwave : BaseSkill
 
                 if(_waveTimer.CurrentState == Timer.State.Ready || _waveTimer.CurrentState == Timer.State.Finish)
                 {
+                    Transform casterTransform = _caster.GetComponent<Transform>();
+
                     BaseEffect effect = _effectFactory.Create(BaseEffect.Name.MultipleShockwaveEffect);
-                    effect.ResetPosition(_castingData.MyTransform.position);
+                    effect.ResetPosition(casterTransform.position);
                     effect.Play();
                     effect.ResetSize(_waveSize);
 
-                    ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, _castingData.MyTransform.position);
+                    ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, casterTransform.position);
 
                     Debug.Log("MultipleShockwave " + _waveSize);
                     Debug.Log("MultipleShockwave " + _data._range);
 
-                    DamageableData damageData =
-                    new DamageableData.DamageableDataBuilder().
-                    SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-                    .SetTargets(_data._targetTypes)
-                    .Build();
+                    DamageableData damageData = new DamageableData
+                    (
+                        _caster,
+                        new DamageStat(
+                            _data._damage,
+                            _upgradeableRatio.AttackDamage,
+                            _data._adRatio,
+                            _upgradeableRatio.TotalDamageRatio
+                        ),
+                        _data._targetTypes
+                    );
 
-                    Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _data._range * _waveSize, true, Color.red, 3);
+
+                    Damage.HitCircleRange(damageData, casterTransform.position, _data._range * _waveSize, true, Color.red, 3);
 
                     _waveTimer.Reset();
                     _waveTimer.Start(_data._waveDelay);

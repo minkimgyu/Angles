@@ -10,6 +10,8 @@ public class SpreadMultipleBulletsData : SkillData
     public int _maxWaveCount;
 
     public float _damage;
+    public float _adRatio;
+    public float _groggyDuration;
 
     public float _delay;
     public float _force;
@@ -23,6 +25,9 @@ public class SpreadMultipleBulletsData : SkillData
         int maxWaveCount,
 
         float damage,
+        float adRatio,
+        float groggyDuration,
+
         float delay,
         float force,
         float bulletCount,
@@ -33,6 +38,8 @@ public class SpreadMultipleBulletsData : SkillData
         _maxWaveCount = maxWaveCount;
 
         _damage = damage;
+        _adRatio = adRatio;
+        _groggyDuration = groggyDuration;
 
         _delay = delay;
         _force = force;
@@ -48,6 +55,8 @@ public class SpreadMultipleBulletsData : SkillData
             _waveDelay,
             _maxWaveCount,
             _damage,
+            _adRatio,
+            _groggyDuration,
             _delay,
             _force,
             _bulletCount,

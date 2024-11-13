@@ -4,48 +4,16 @@ using UnityEngine;
 
 public class WeaponDamageModifier : WeaponDataModifier
 {
-    float _damageModifier;
+    DamageableData _damageableDataModifier;
 
-    public WeaponDamageModifier(float damageModifier)
+    public WeaponDamageModifier(DamageableData damageableDataModifier)
     {
-        _damageModifier = damageModifier;
+        _damageableDataModifier = damageableDataModifier;
     }
 
     public override T Visit<T>(T weaponData)
     {
-        weaponData.ChangeDamage(_damageModifier);
-        return weaponData;
-    }
-}
-
-public class WeaponTotalDamageRatioModifier : WeaponDataModifier
-{
-    float _totalDamageRatio;
-
-    public WeaponTotalDamageRatioModifier(float totalDamageRatio)
-    {
-        _totalDamageRatio = totalDamageRatio;
-    }
-
-    public override T Visit<T>(T weaponData)
-    {
-        weaponData.ChangeTotalDamageRatio(_totalDamageRatio);
-        return weaponData;
-    }
-}
-
-public class WeaponTargetModifier : WeaponDataModifier
-{
-    List<ITarget.Type> _targetType;
-
-    public WeaponTargetModifier(List<ITarget.Type> targetType)
-    {
-        _targetType = targetType;
-    }
-
-    public override T Visit<T>(T weaponData)
-    {
-        weaponData.ChangeTarget(_targetType);
+        weaponData.ChangeDamage(_damageableDataModifier);
         return weaponData;
     }
 }
@@ -97,6 +65,7 @@ public class WeaponTargetCountModifier : WeaponDataModifier
         return weaponData;
     }
 }
+
 public class WeaponForceModifier : WeaponDataModifier
 {
     float _forceModifier;

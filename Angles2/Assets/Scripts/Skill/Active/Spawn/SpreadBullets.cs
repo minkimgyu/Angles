@@ -29,19 +29,32 @@ public class SpreadBullets : BaseSkill
 
     void ShootBullet(float angle)
     {
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.SpreadBullets, _castingData.MyTransform.position, 0.3f);
+        Transform casterTransform = _caster.GetComponent<Transform>();
+        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.SpreadBullets, casterTransform.position, 0.3f);
 
         float x = Mathf.Sin(angle * Mathf.Deg2Rad);
         float y = Mathf.Cos(angle * Mathf.Deg2Rad);
         Vector3 direction = new Vector3(x, y, 0);
-        Vector3 spawnPosition = _castingData.MyTransform.position + direction * _data._distanceFromCaster;
+        Vector3 spawnPosition = casterTransform.position + direction * _data._distanceFromCaster;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.PentagonBullet);
         if (weapon == null) return;
 
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
+
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damage));
-        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
+        modifiers.Add(new WeaponDamageModifier(damageData));
 
         weapon.ModifyData(modifiers);
         weapon.Activate();

@@ -17,6 +17,6 @@ abstract public class BaseCommand
     public virtual void Execute(BaseSkill.Name value1, BaseSkill value2) { }
     public virtual void Execute(DropData value1, Vector3 value2) { }
 
-    public virtual void Execute(ISkillUser skillUser, int value) { }
-    public virtual void Execute(ISkillUser skillUser, int cardCount, int recreateCount) { }
+    public virtual void Execute(ICaster caster, int value) { }
+    public virtual void Execute(ICaster caster, int cardCount, int recreateCount) { }
 }

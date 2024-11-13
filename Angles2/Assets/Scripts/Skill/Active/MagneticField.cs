@@ -1,3 +1,4 @@
+using DamageUtility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,15 +36,22 @@ public class MagneticField : BaseSkill
                 break;
             case Timer.State.Finish:
 
-                DamageableData damageData =
-                new DamageableData.DamageableDataBuilder().
-                SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-                .SetTargets(_data._targetTypes)
-                .Build();
+                DamageableData damageData = new DamageableData
+                (
+                    _caster,
+                     new DamageStat(
+                        _data._damage,
+                        _upgradeableRatio.AttackDamage,
+                        _data._adRatio,
+                        _upgradeableRatio.TotalDamageRatio
+                    ),
+                    _data._targetTypes
+                );
+
 
                 for (int i = 0; i < _damageableTargets.Count; i++)
                 {
-                    _damageableTargets[i].GetDamage(damageData);
+                    Damage.Hit(damageData, _damageableTargets[i]);
                 }
                 _delayTimer.Reset();
                 break;

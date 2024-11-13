@@ -30,6 +30,9 @@ public class LobbyTopViewer : MonoBehaviour
 
     public void ChangeGoldCount(int gold)
     {
-        _goldTxt.text = gold.ToString();
+        _goldTxt.text = gold.ToString(); // 여기서 골드 데이터 바꾸기
+
+        ISaveable saveable = ServiceLocater.ReturnSaveManager();
+        saveable.ChangeCoinCount(gold);
     }
 }

@@ -45,14 +45,7 @@ public class StickyBomb : BaseWeapon
         //effect.ResetSize(_data._range); 
         effect.Play();
 
-        DamageableData damageData =
-
-        new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
-        .SetTargets(_data._targetTypes)
-        .Build();
-
-        Damage.HitCircleRange(damageData, transform.position, _data._range, true, Color.red, 3);
+        Damage.HitCircleRange(_data._damageableData, transform.position, _data._range, true, Color.red, 3);
     }
 
     protected override void Update()

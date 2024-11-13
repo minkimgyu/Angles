@@ -1,3 +1,4 @@
+using DamageUtility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -76,16 +77,7 @@ public class Blackhole : BaseWeapon
             if(duration > _data._forceDelay)
             {
                 _targetDatas[i].AbsorbableTarget.ApplyForce(transform.position, _data._absorbForce, ForceMode2D.Force);
-
-                DamageableData damageData =
-
-                new DamageableData.DamageableDataBuilder().
-                SetDamage(new DamageData(0, _data._totalDamageRatio))
-                .SetTargets(_data._targetTypes)
-                .SetGroggyDuration(_data._forceDelay)
-                .Build();
-
-                _targetDatas[i].DamageableTarget.GetDamage(damageData);
+                Damage.Hit(_data._damageableData, _targetDatas[i].DamageableTarget);
 
                 if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;

@@ -59,6 +59,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Viewer
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c1e41ee3c208904f9407ca2957dce22
+    m_Address: StatViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6218a6ec00cd6fc448188549b7a3e3f0
+    m_Address: SkinViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

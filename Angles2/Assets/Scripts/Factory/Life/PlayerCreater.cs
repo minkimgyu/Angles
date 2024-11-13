@@ -3,57 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class NoUpgradeableRatio : IUpgradeableRatio
+public class NoUpgradeableData : IUpgradeableSkillData
 {
+    public float AttackDamage { get; set; } = 0;
+
     public float TotalDamageRatio { get; set; } = 1;
     public float TotalCooltimeRatio { get; set; } = 1;
     public float TotalRandomRatio { get; set; } = 1;
 }
 
-public interface IUpgradeableRatio
+public interface IUpgradeableSkillData
 {
+    public float AttackDamage { get; set; }
     public float TotalDamageRatio { get; set; }
     public float TotalCooltimeRatio { get; set; }
     public float TotalRandomRatio { get; set; }
 }
 
 [System.Serializable]
-public class PlayerData : LifeData, IUpgradeableRatio
+public class PlayerData : LifeData, IUpgradeableSkillData
 {
     public float _moveSpeed;
+    public float _drainRatio;
 
-    public float _minChargeDuration;
-    public float _maxChargeDuration;
     public float _chargeDuration;
-
-    public float _minDashSpeed;
-    public float _maxDashSpeed;
     public float _dashSpeed;
-
-    public float _minDashDuration;
-    public float _maxDashDuration;
     public float _dashDuration;
 
-    public float _minShootDuration;
-    public float _maxShootDuration;
     public float _shootDuration;
-
     public float _shootSpeed;
 
     public float _minJoystickLength;
-
     public int _maxDashCount;
-
     public int _dashConsumeCount;
 
-    public float _minDashRestoreDuration;
-    public float _maxDashRestoreDuration;
     public float _dashRestoreDuration;
 
     public float _shrinkScale;
     public float _normalScale;
 
     public List<BaseSkill.Name> _skillNames;
+
+    public float AttackDamage { get; set; }
 
     public float TotalDamageRatio { get; set; }
     public float TotalCooltimeRatio { get; set; }
@@ -64,25 +55,25 @@ public class PlayerData : LifeData, IUpgradeableRatio
         return new PlayerData(
             _maxHp, // LifeData에서 상속된 값
             _targetType, // LifeData에서 상속된 값
+            _autoHpRecoveryPoint, // LifeData에서 상속된 값
+            _damageReductionRatio, // LifeData에서 상속된 값
+
+            AttackDamage,
+            TotalDamageRatio,
+            TotalCooltimeRatio,
+            TotalRandomRatio,
+
+            _drainRatio,
             _moveSpeed,
-            _minChargeDuration,
-            _maxChargeDuration,
+
             _chargeDuration,
-            _minDashSpeed,
-            _maxDashSpeed,
             _dashSpeed,
-            _minDashDuration,
-            _maxDashDuration,
             _dashDuration,
-            _minShootDuration,
-            _maxShootDuration,
             _shootDuration,
             _shootSpeed,
             _minJoystickLength,
             _maxDashCount,
             _dashConsumeCount,
-            _minDashRestoreDuration,
-            _maxDashRestoreDuration,
             _dashRestoreDuration,
             _shrinkScale,
             _normalScale,
@@ -93,22 +84,23 @@ public class PlayerData : LifeData, IUpgradeableRatio
     public PlayerData(
         float maxHp, 
         ITarget.Type targetType,
+        float autoRecoveryPoint, 
+        float damageReductionRatio,
+
+        float attackDamage,
+        float totalDamageRatio,
+        float totalCooltimeRatio,
+        float totalRandomRatio,
+
+        float drainRatio,
         float moveSpeed,
 
-        float minChargeDuration,
-        float maxChargeDuration,
         float chargeDuration,
 
-        float minDashSpeed,
-        float maxDashSpeed,
         float dashSpeed,
 
-        float minDashDuration,
-        float maxDashDuration,
         float dashDuration,
 
-        float minShootDuration,
-        float maxShootDuration,
         float shootDuration,
 
         float shootSpeed,
@@ -116,34 +108,26 @@ public class PlayerData : LifeData, IUpgradeableRatio
         int maxDashCount, 
         int dashConsumeCount, 
 
-        float minDashRestoreDuration,
-        float maxDashRestoreDuration,
         float dashRestoreDuration,
 
         float shrinkScale, 
         float normalScale, 
-        List<BaseSkill.Name> skillNames) : base(maxHp, targetType)
+        List<BaseSkill.Name> skillNames) : base(maxHp, targetType, autoRecoveryPoint, damageReductionRatio)
     {
-        TotalDamageRatio = 1;
-        TotalCooltimeRatio = 1;
-        TotalRandomRatio = 1;
+        AttackDamage = attackDamage;
+        TotalDamageRatio = totalDamageRatio;
+        TotalCooltimeRatio = totalCooltimeRatio;
+        TotalRandomRatio = totalRandomRatio;
 
         _moveSpeed = moveSpeed;
+        _drainRatio = drainRatio;
 
-        _minChargeDuration = minChargeDuration;
-        _maxChargeDuration = maxChargeDuration;
         _chargeDuration = chargeDuration;
 
-        _minDashSpeed = minDashSpeed;
-        _maxDashSpeed = maxDashSpeed;
         _dashSpeed = dashSpeed;
 
-        _minDashDuration = minDashDuration;
-        _maxDashDuration = maxDashDuration;
         _dashDuration = dashDuration;
 
-        _minShootDuration = minShootDuration;
-        _maxShootDuration = maxShootDuration;
         _shootDuration = shootDuration;
 
         _shootSpeed = shootSpeed;
@@ -153,8 +137,6 @@ public class PlayerData : LifeData, IUpgradeableRatio
 
         _dashConsumeCount = dashConsumeCount;
 
-        _minDashRestoreDuration = minDashRestoreDuration;
-        _maxDashRestoreDuration = maxDashRestoreDuration;
         _dashRestoreDuration = dashRestoreDuration;
 
         _shrinkScale = shrinkScale;
@@ -186,7 +168,7 @@ public class PlayerCreater : LifeCreater
 
         life.Initialize();
 
-        ISkillAddable skillUser = life.GetComponent<ISkillAddable>();
+        ICaster skillUser = life.GetComponent<ICaster>();
         if (skillUser == null) return life;
 
         for (int i = 0; i < data._skillNames.Count; i++)

@@ -53,14 +53,14 @@ public class TriangleCreater : LifeCreater
 
         life.Initialize();
 
-        ISkillAddable skillUsable = life.GetComponent<ISkillAddable>();
-        if (skillUsable == null) return life;
+        ICaster caster = life.GetComponent<ICaster>();
+        if (caster == null) return life;
 
         foreach (var item in data.CopySkillDataToAdd)
         {
             BaseSkill skill = _skillFactory.Create(item.Key);
             skill.Upgrade(item.Value);
-            skillUsable.AddSkill(item.Key, skill);
+            caster.AddSkill(item.Key, skill);
         }
 
         return life;

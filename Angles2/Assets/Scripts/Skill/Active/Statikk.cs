@@ -39,13 +39,19 @@ public class Statikk : BaseSkill
 
         List<Vector2> hitPoints;
 
-        DamageableData damageData =
-        new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-        .SetTargets(_data._targetTypes)
-        .SetGroggyDuration(_data._groggyDuration)
-        .Build();
-
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat
+            (
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
         Damage.HitRaycast(damageData, _data._maxTargetCount, collision.transform.position, _data._range, out hitPoints, true, Color.red, 3);
 
         for (int i = 0; i < hitPoints.Count; i++)

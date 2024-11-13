@@ -22,8 +22,21 @@ public class SpawnShooter : BaseSkill
         base.Upgrade();
         _upgrader.Visit(this, _data);
 
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
+
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDamageModifier(damageData));
         modifiers.Add(new WeaponDelayModifier(_data._delay));
         _weapon.ModifyData(modifiers);
     }
@@ -33,21 +46,34 @@ public class SpawnShooter : BaseSkill
         BaseWeapon weapon = _weaponFactory.Create(_data._shooterName);
         if (weapon == null) return;
 
-        IFollowable followable = _castingData.MyObject.GetComponent<IFollowable>();
+        IFollowable followable = _caster.GetComponent<IFollowable>();
         if (followable == null) return;
 
         _weapon = weapon;
 
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
+
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDamageModifier(damageData));
         modifiers.Add(new WeaponDelayModifier(_data._delay));
         modifiers.Add(new WeaponProjectileModifier(_data._projectileName));
-        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
 
         _weapon.ModifyData(modifiers);
         _weapon.Activate();
 
+        Transform casterTransform = _caster.GetComponent<Transform>();
         _weapon.ResetFollower(followable);
-        _weapon.ResetPosition(_castingData.MyTransform.position);
+        _weapon.ResetPosition(casterTransform.position);
     }
 }

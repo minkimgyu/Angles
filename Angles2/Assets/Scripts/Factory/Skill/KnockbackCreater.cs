@@ -7,6 +7,7 @@ using System;
 public class KnockbackData : CooltimeSkillData
 {
     public float _damage;
+    public float _adRatio;
     public float _rangeMultiplier;
     public SerializableVector2 _size;
     public SerializableVector2 _offset;
@@ -18,12 +19,14 @@ public class KnockbackData : CooltimeSkillData
         float coolTime,
         int maxStackCount,
         float damage,
+        float adRatio,
         float groggyDuration,
         SerializableVector2 size,
         SerializableVector2 offset,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
+        _adRatio = adRatio;
         _groggyDuration = groggyDuration;
         _rangeMultiplier = 1;
         _size = size;
@@ -38,6 +41,7 @@ public class KnockbackData : CooltimeSkillData
             _coolTime, // CooltimeSkillData에서 상속된 값
             _maxStackCount, // CooltimeSkillData에서 상속된 값
             _damage,
+            _adRatio,
             _groggyDuration,
             new SerializableVector2(_size.x, _size.y), // SerializableVector2 깊은 복사
             new SerializableVector2(_offset.x, _offset.y), // SerializableVector2 깊은 복사

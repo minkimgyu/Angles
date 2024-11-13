@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 public class StatikkData : CooltimeSkillData
 {
     public float _damage;
+    public float _adRatio;
     public float _range;
     public int _maxTargetCount;
     public float _groggyDuration;
@@ -21,12 +22,14 @@ public class StatikkData : CooltimeSkillData
         float coolTime,
         int maxStackCount,
         float damage,
+        float adRatio,
         float range,
         int maxTargetCount,
         float groggyDuration,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
+        _adRatio = adRatio;
         _range = range;
         _maxTargetCount = maxTargetCount;
         _groggyDuration = groggyDuration;
@@ -40,6 +43,7 @@ public class StatikkData : CooltimeSkillData
             _coolTime, // CooltimeSkillData에서 상속된 값
             _maxStackCount, // CooltimeSkillData에서 상속된 값
             _damage,
+            _adRatio,
             _range,
             _maxTargetCount,
             _groggyDuration,

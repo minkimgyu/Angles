@@ -24,10 +24,9 @@ public class UpgradeDash : BaseSkill
 
     void UpgradeStat()
     {
-        GameObject myObject = _castingData.MyObject;
-        IStatUpgradable visitor = myObject.GetComponent<IStatUpgradable>();
+        IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._dashDatas[UpgradePoint - 1]);
+        visitor.Upgrade(_data._dashStatModifier, UpgradePoint - 1);
     }
 }

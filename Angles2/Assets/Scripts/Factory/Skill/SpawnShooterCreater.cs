@@ -7,15 +7,28 @@ using System;
 public class SpawnShooterData : SkillData
 {
     public float _damage;
+    public float _adRatio;
+    public float _groggyDuration;
+
     public float _delay;
     public BaseWeapon.Name _shooterName;
     public BaseWeapon.Name _projectileName;
     public List<ITarget.Type> _targetTypes;
 
-    public SpawnShooterData(int maxUpgradePoint, BaseWeapon.Name shooterName, float damage, float delay, BaseWeapon.Name projectileName, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public SpawnShooterData(
+        int maxUpgradePoint,
+        BaseWeapon.Name shooterName,
+        float damage,
+        float adRatio,
+        float groggyDuration,
+        float delay,
+        BaseWeapon.Name projectileName,
+        List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _shooterName = shooterName;
         _damage = damage;
+        _adRatio = adRatio;
+        _groggyDuration = groggyDuration;
         _delay = delay;
         _projectileName = projectileName;
         _targetTypes = targetTypes;
@@ -27,6 +40,8 @@ public class SpawnShooterData : SkillData
             _maxUpgradePoint, // SkillData에서 상속된 값
             _shooterName,
             _damage,
+            _adRatio,
+            _groggyDuration,
             _delay,
             _projectileName,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사

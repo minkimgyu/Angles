@@ -11,13 +11,9 @@ namespace DamageUtility
         const float _instantDeathDamage = 100000000;
         public static float InstantDeathDamage { get { return _instantDeathDamage; } }
 
-        public static void HitContact(DamageableData damageData, GameObject target)
+        public static void Hit(DamageableData damageData, IDamageable damageable)
         {
-            if (target == null) return;
-
-            IDamageable damageable = target.GetComponent<IDamageable>();
             if (damageable == null) return;
-
             damageable.GetDamage(damageData);
         }
 

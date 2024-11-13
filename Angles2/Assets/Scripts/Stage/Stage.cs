@@ -17,13 +17,13 @@ public class BaseStage : MonoBehaviour
     protected List<GameObject> _spawnedObjects;
 
     protected BaseStageController _baseStageController;
-    protected FactoryCollection _factoryCollection;
+    protected CoreSystem _coreSystem;
 
-    public virtual void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection) 
+    public virtual void Initialize(BaseStageController baseStageController, CoreSystem coreSystem) 
     {
         _spawnedObjects = new List<GameObject>();
         _baseStageController = baseStageController;
-        _factoryCollection = factoryCollection;
+        _coreSystem = coreSystem;
     }
 
     public virtual void ActivePortal(Vector2 movePos) { }

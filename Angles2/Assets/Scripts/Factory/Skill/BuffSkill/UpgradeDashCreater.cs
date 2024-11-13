@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UpgradeDashData : SkillData
 {
-    public List<StatUpgrader.DashData> _dashDatas;
-    public UpgradeDashData(int maxUpgradePoint, List<StatUpgrader.DashData> dashDatas) : base(maxUpgradePoint)
+    public DashStatModifier _dashStatModifier;
+    public UpgradeDashData(int maxUpgradePoint, DashStatModifier dashStatModifier) : base(maxUpgradePoint)
     {
-        _dashDatas = dashDatas;
+        _dashStatModifier = dashStatModifier;
     }
 
     public override SkillData Copy()
     {
-        return new UpgradeDashData(_maxUpgradePoint, _dashDatas);
+        return new UpgradeDashData(_maxUpgradePoint, _dashStatModifier);
     }
 }
 

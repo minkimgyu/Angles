@@ -6,18 +6,15 @@ using UnityEngine;
 [System.Serializable]
 public class RocketData : WeaponData, ILifetimeStat
 {
-    public float _damage;
     public float _range;
     public float Lifetime { get; set; }
 
     public RocketData(float range, float lifeTime)
     {
-        _damage = 0;
         _range = range;
         Lifetime = lifeTime;
     }
 
-    public override void ChangeDamage(float damage) => _damage = damage;
     public override void ChangeRange(float range) => _range = range;
     public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
 

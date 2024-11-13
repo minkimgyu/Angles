@@ -17,15 +17,15 @@ public class DungeonStageController : BaseStageController
 
     // 이 둘은 model에서 관리하자
     [SerializeField] StageUIController _stageUIController;
-    FactoryCollection _factoryCollection;
+    CoreSystem _coreSystem;
 
     public int ReturnCurrentStageCount() { return _stageCount; }
 
-    public void Initialize(int maxStageCount, FactoryCollection factoryCollection)
+    public void Initialize(int maxStageCount, CoreSystem coreSystem)
     {
         _stageCount = 1;
         _maxStageCount = maxStageCount;
-        _factoryCollection = factoryCollection;
+        _coreSystem = coreSystem;
 
         _stageUIController.Initialize();
         _stageUIController.ShowStageResult(false);
@@ -112,7 +112,7 @@ public class DungeonStageController : BaseStageController
         {
             for (int i = 0; i < item.Value.Count; i++)
             {
-                item.Value[i].Initialize(this, _factoryCollection);
+                item.Value[i].Initialize(this, _coreSystem);
             }
         }
 

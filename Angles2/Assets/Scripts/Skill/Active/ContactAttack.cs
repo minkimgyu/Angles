@@ -20,22 +20,31 @@ public class ContactAttack : BaseSkill
         ITarget target = collision.gameObject.GetComponent<ITarget>();
         if (target == null) return;
 
+        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+        if (damageable == null) return;
+
         bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
-        //Debug.Log("ContactAttack");
+        Debug.Log("ContactAttack");
 
         Vector3 contactPos = collision.contacts[0].point;
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.HitEffect);
         effect.ResetPosition(contactPos);
         effect.Play();
 
-        DamageableData damageData = new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-        .SetTargets(_data._targetTypes)
-        .SetGroggyDuration(_data._groggyDuration)
-        .Build();
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
 
-        Damage.HitContact(damageData, collision.gameObject);
+        Damage.Hit(damageData, damageable);
     }
 }

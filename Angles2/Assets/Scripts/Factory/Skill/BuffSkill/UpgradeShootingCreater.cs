@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class UpgradeShootingData : SkillData
 {
-    public List<StatUpgrader.ShootingData> _shootingDatas;
-    public UpgradeShootingData(int maxUpgradePoint, List<StatUpgrader.ShootingData> shootingDatas) : base(maxUpgradePoint)
+    public ShootingStatModifier _shootingStatModifier;
+
+    public UpgradeShootingData(int maxUpgradePoint, ShootingStatModifier shootingStatModifier) : base(maxUpgradePoint)
     {
-        _shootingDatas = shootingDatas;
+        _shootingStatModifier = shootingStatModifier;
     }
 
     public override SkillData Copy()
     {
-        return new UpgradeShootingData(_maxUpgradePoint, _shootingDatas);
+        return new UpgradeShootingData(_maxUpgradePoint, _shootingStatModifier);
     }
 }
 

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Skins
+  m_EditorClassIdentifier: 
+  m_GroupName: Skins
+  m_Data:
+    m_SerializedData: []
+  m_GUID: a8e640ca9a2e7b34fb4fe9a382692ee8
+  m_SerializeEntries:
+  - m_GUID: 81353a61e5f14fc47bb40db4257f1d27
+    m_Address: Guard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkinIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d50e358ac7edc944963bb614d49b49f
+    m_Address: BloodEater
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkinIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02011dfbd5e8bad40b67ed4a8e38adbe
+    m_Address: Normal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkinIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 928e035274d7a2e4698ec9e46788fc66, type: 2}
+    - {fileID: 11400000, guid: c61d3923e94000b41b374afed94bfbca, type: 2}

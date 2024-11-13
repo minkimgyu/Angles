@@ -28,9 +28,9 @@ public class CooltimeConstraint : UseConstraintComponent
     Action<float, int, bool> ViewerEvent;
 
     CooltimeSkillData _cooltimeSkillData;
-    IUpgradeableRatio _upgradeableRatio;
+    IUpgradeableSkillData _upgradeableRatio;
 
-    public CooltimeConstraint(CooltimeSkillData cooltimeSkillData, IUpgradeableRatio upgradeableRatio)
+    public CooltimeConstraint(CooltimeSkillData cooltimeSkillData, IUpgradeableSkillData upgradeableRatio)
     {
         _showStackCount = true;
         _cooltimeSkillData = cooltimeSkillData;
@@ -80,9 +80,9 @@ public class CooltimeConstraint : UseConstraintComponent
 public class RandomConstraintComponent : UseConstraintComponent
 {
     RandomSkillData _randomSkillData;
-    IUpgradeableRatio _upgradeableRatio;
+    IUpgradeableSkillData _upgradeableRatio;
 
-    public RandomConstraintComponent(RandomSkillData randomSkillData, IUpgradeableRatio upgradeableRatio)
+    public RandomConstraintComponent(RandomSkillData randomSkillData, IUpgradeableSkillData upgradeableRatio)
     {
         _randomSkillData = randomSkillData;
         _upgradeableRatio = upgradeableRatio;

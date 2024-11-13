@@ -58,6 +58,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7cf162e1f27b14f4b835849a5928677b, type: 2}
   - {fileID: 11400000, guid: bc792b962e2401740a3ebe5c48e90399, type: 2}
   - {fileID: 11400000, guid: 70617199122c8be4c9fb7f9a1f67690e, type: 2}
+  - {fileID: 11400000, guid: 79a71ef61137a0f4b83a644f4779d261, type: 2}
+  - {fileID: 11400000, guid: 6d79757fb5d9ae942a5caa5b0b022091, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -99,8 +101,11 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - Weapon
+    - SkinIcon
     - SkillIcon
+    - StatIcon
+    - ChapterIcon
+    - Weapon
     - Effect
     - Life
     - Viewer
@@ -109,7 +114,6 @@ MonoBehaviour:
     - RhombusChapterMap
     - PentagonicChapterMap
     - TriconChapterMap
-    - ChapterIcon
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: e12fe35937006864a81e8bb7a1736e46, type: 2}

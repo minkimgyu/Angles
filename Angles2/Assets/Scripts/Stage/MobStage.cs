@@ -38,9 +38,9 @@ public class MobStage : BattleStage
         _portal.Disable();
     }
 
-    public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection) 
+    public override void Initialize(BaseStageController baseStageController, CoreSystem coreSystem) 
     {
-        base.Initialize(baseStageController, factoryCollection);
+        base.Initialize(baseStageController, coreSystem);
 
         _portal = GetComponentInChildren<Portal>();
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
@@ -94,7 +94,7 @@ public class MobStage : BattleStage
 
         foreach (var item in levelData.LevelDictionary)
         {
-            BaseLife enemy = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
+            BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
             enemy.transform.position = item.Key.position;
 
             enemy.AddObserverEvent(OnEnemyDieRequested);

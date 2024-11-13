@@ -22,11 +22,16 @@ public class MoveComponent : MonoBehaviour
         _applyDirection = true;
     }
 
+    public void ResetVelocity()
+    {
+        _rigid.velocity = Vector2.zero;
+    }
+
     public void Stop()
     {
         if (_applyMovement == false) return;
 
-        _rigid.velocity = Vector2.zero;
+        ResetVelocity();
         FaceDirection(Vector2.right);
     }
 

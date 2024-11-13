@@ -6,12 +6,14 @@ using UnityEngine;
 public class MagneticFieldData : SkillData
 {
     public float _damage;
+    public float _adRatio;
     public float _delay;
     public List<ITarget.Type> _targetTypes;
 
-    public MagneticFieldData(int maxUpgradePoint, float damage, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public MagneticFieldData(int maxUpgradePoint, float damage, float adRatio, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
+        _adRatio = adRatio;
         _delay = delay;
         _targetTypes = targetTypes;
     }
@@ -21,6 +23,7 @@ public class MagneticFieldData : SkillData
         return new MagneticFieldData(
             _maxUpgradePoint, // SkillData에서 상속된 값
             _damage,
+            _adRatio,
             _delay,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );

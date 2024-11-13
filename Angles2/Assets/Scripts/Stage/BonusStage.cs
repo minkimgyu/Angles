@@ -9,9 +9,9 @@ public class BonusStage : BaseStage
 
     Portal _portal;
 
-    public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection)
+    public override void Initialize(BaseStageController baseStageController, CoreSystem coreSystem)
     {
-        base.Initialize(baseStageController, factoryCollection);
+        base.Initialize(baseStageController, coreSystem);
 
         _portal = GetComponentInChildren<Portal>();
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
@@ -33,7 +33,7 @@ public class BonusStage : BaseStage
         //_events.OnStageClearRequested?.Invoke();
         _baseStageController.OnStageClearRequested();
 
-        IInteractable interactableObject = _factoryCollection.ReturnFactory(FactoryCollection.Type.Interactable).Create(IInteractable.Name.Shop);
+        IInteractable interactableObject = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Interactable).Create(IInteractable.Name.Shop);
         _spawnedObjects.Add(interactableObject.ReturnGameObject());
         interactableObject.ResetPosition(_bonusPostion.position);
         //interactableObject.AddCreateCardsEvent(_events.RecreatableCardsCommand);

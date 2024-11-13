@@ -31,7 +31,7 @@ public class SelfDestruction : BaseSkill
         if (_delayTimer.CurrentState != Timer.State.Ready) return;
 
         _delayTimer.Start(_data._delay);
-        CastingComponent castingComponent = _castingData.MyObject.GetComponent<CastingComponent>();
+        CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
         if (castingComponent == null) return;
 
         castingComponent.CastSkill(_data._delay);
@@ -45,27 +45,34 @@ public class SelfDestruction : BaseSkill
             BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
             if (effect == null) return;
 
-            effect.ResetPosition(_castingData.MyObject.transform.position);
+            Transform casterTransform = _caster.GetComponent<Transform>();
+
+            effect.ResetPosition(casterTransform.position);
             effect.Play();
 
-            IDamageable damageable = _castingData.MyObject.GetComponent<IDamageable>();
+            IDamageable damageable = _caster.GetComponent<IDamageable>();
             if (damageable == null) return;
 
-            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, _castingData.MyTransform.position, 0.3f);
+            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, casterTransform.position, 0.3f);
 
-            DamageableData selfDamage = new DamageableData.DamageableDataBuilder().
-            SetDamage(new DamageData(Damage.InstantDeathDamage, _upgradeableRatio.TotalDamageRatio))
-            .Build();
+            DamageableData selfDamageData = new DamageableData(_caster, new DamageStat(Damage.InstantDeathDamage));
+            Damage.Hit(selfDamageData, damageable);
 
-            damageable.GetDamage(selfDamage);
+            DamageableData damageData = new DamageableData
+            (
+                _caster,
+               new DamageStat
+               (
+                    _data._damage,
+                    _upgradeableRatio.AttackDamage,
+                    _data._adRatio,
+                    _upgradeableRatio.TotalDamageRatio
+               ),
+                _data._targetTypes
+            );
 
-            DamageableData damageData =
-            new DamageableData.DamageableDataBuilder().
-            SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-            .SetTargets(_data._targetTypes)
-            .Build();
 
-            Damage.HitCircleRange(damageData, _castingData.MyObject.transform.position, _data._range, true, Color.red, 3);
+            Damage.HitCircleRange(damageData, casterTransform.position, _data._range, true, Color.red, 3);
         }
     }
 }

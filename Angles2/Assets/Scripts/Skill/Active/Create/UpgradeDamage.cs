@@ -24,10 +24,9 @@ public class UpgradeDamage : BaseSkill
 
     void UpgradeStat()
     {
-        GameObject myObject = _castingData.MyObject;
-        IStatUpgradable visitor = myObject.GetComponent<IStatUpgradable>();
+        IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._damageDatas[UpgradePoint - 1]);
+        visitor.Upgrade(_data._damageStatModifier, UpgradePoint - 1);
     }
 }

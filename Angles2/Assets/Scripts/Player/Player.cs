@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static Cinemachine.DocumentationSortingAttribute;
 
-public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgradable
+public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradable
 {
     public enum MovementState
     {
@@ -25,11 +26,70 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
     float _currentDashFillDuration = 0;
     int _currentDashCount;
 
-    StatUpgrader _statUpgrader;
     PlayerData _playerData;
+
+    private void OnGUI()
+    {
+        int size = 25;
+        Color color = Color.red;
+
+        int startY = 120;
+        int gap = 30;
+
+        List<Tuple<string, float>> datas = new List<Tuple<string, float>>
+        {
+            { new Tuple<string, float>("MaxHp", _playerData.MaxHp) },
+            { new Tuple<string, float>("AutoHpRecoveryPoint", _playerData._autoHpRecoveryPoint) },
+
+            { new Tuple<string, float>("DamageReductionRatio", _playerData._damageReductionRatio) },
+
+            { new Tuple<string, float>("AttackDamage", _playerData.AttackDamage) },
+            { new Tuple<string, float>("TotalDamageRatio", _playerData.TotalDamageRatio) },
+            { new Tuple<string, float>("TotalCooltimeRatio", _playerData.TotalCooltimeRatio) },
+            { new Tuple<string, float>("TotalRandomRatio", _playerData.TotalRandomRatio) },
+
+            { new Tuple<string, float>("MoveSpeed", _playerData._moveSpeed) },
+            { new Tuple<string, float>("DrainRatio", _playerData._drainRatio) },
+
+            { new Tuple<string, float>("ChargeDuration", _playerData._chargeDuration) },
+            { new Tuple<string, float>("ShootDuration", _playerData._shootDuration) },
+            { new Tuple<string, float>("ShootSpeed", _playerData._shootSpeed) },
+        };
+
+        for (int i = 0; i < datas.Count; i++)
+        {
+            GUIStyle style = new GUIStyle();
+            Rect rect = new Rect(30, startY + gap * i, Screen.width, Screen.height);
+            style.alignment = TextAnchor.UpperLeft;
+            style.fontSize = size;
+            style.normal.textColor = color;
+
+            string text = $"{datas[i].Item1} : {datas[i].Item2}";
+            GUI.Label(rect, text, style);
+        }
+    }
+
 
     float DashRatio { get { return _currentDashFillDuration / _playerData._dashRestoreDuration; } }
     float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
+
+    //protected override float MaxHp 
+    //{   
+    //    get => _playerData.MaxHp;
+    //    set
+    //    {
+    //        _playerData.MaxHp = value;
+    //        OnHpChangeRequested?.Invoke(Hp / MaxHp); // hp 비율 재조정
+    //    }
+    //}
+    //protected override float Hp { get => _playerData._hp; set => _playerData._hp = value; }
+    //protected override float DamageReductionRatio { get => _playerData._damageReductionRatio; }
+    //protected override float AutoRecoveryPoint { get => _playerData._autoHpRecoveryPoint; }
+
+    SpriteRenderer _spriteRenderer;
+
+    public void ApplySkinSprite(Sprite skin) => _spriteRenderer.sprite = skin;
+
     bool CanUseDash() { return _currentDashCount >= _playerData._dashConsumeCount; }
 
     MoveComponent _moveComponent;
@@ -75,7 +135,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
         //BuffValueCommand speedModifyCommand = new BuffValueCommand();
         // 값이 바뀌는 변수들은 BuffFloat나 BuffInt를 사용해서 최소, 최대 값을 지정해주고
         // 참조 타입으로 설정했으므로 버프로 인해 수정되면 알아서 값이 반영되게 된다.
-        _maxHp = data._maxHp;
+        base.ResetData(data);
         _targetType = data._targetType;
         _playerData = data;
     }
@@ -97,16 +157,14 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
     {
         base.Initialize();
         _interactableObjects = new List<IInteractable>();
-        _groggyTimer = new Timer();
-        _hp = _maxHp;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
 
-        _statUpgrader = new StatUpgrader();
         _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
         _interactableCaptureComponent = GetComponentInChildren<InteractableCaptureComponent>();
         _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
 
         _skillController = GetComponent<SkillController>();
-        _skillController.Initialize(_playerData);
+        _skillController.Initialize(_playerData, this);
 
         _outlineComponent = GetComponent<OutlineComponent>();
         _outlineComponent.Initialize();
@@ -252,34 +310,25 @@ public class Player : BaseLife, IFollowable, IInteracter, ISkillUser, IStatUpgra
         return transform.right;
     }
 
-    public ISkillUser ReturnSkillUser()
-    {
-        return this;
-    }
+    public ICaster GetCaster() { return this; }
 
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas()
     {
         return _skillController.ReturnSkillUpgradeDatas();
     }
 
-
-    public void Upgrade(StatUpgrader.CooltimeData cooltimeData)
+    public void Upgrade(IStatModifier stat, int level)
     {
-        _statUpgrader.Visit(_playerData, cooltimeData);
+        stat.Visit(_playerData, level);
     }
 
-    public void Upgrade(StatUpgrader.DamageData damageData)
+    public void Upgrade(IStatModifier stat)
     {
-        _statUpgrader.Visit(_playerData, damageData);
+        stat.Visit(_playerData);
     }
 
-    public void Upgrade(StatUpgrader.DashData dashData)
+    public void GetDamageData(DamageableData damageData)
     {
-        _statUpgrader.Visit(_playerData, dashData);
-    }
-
-    public void Upgrade(StatUpgrader.ShootingData shootingData)
-    {
-        _statUpgrader.Visit(_playerData, shootingData);
+        GetHeal(damageData._damageStat.TotalDamage * _playerData._drainRatio);
     }
 }

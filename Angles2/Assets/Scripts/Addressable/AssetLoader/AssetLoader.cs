@@ -13,9 +13,23 @@ public class SoundAssetLoader : AssetLoader<ISoundPlayable.SoundName, AudioClip,
     }
 }
 
-public class ChapterIconAssetLoader : AssetLoader<DungeonChapter, Sprite, Sprite>
+public class SkinIconAssetLoader : AssetLoader<SkinData.Key, Sprite, Sprite>
 {
-    public ChapterIconAssetLoader(AddressableHandler.Label label, Action<Dictionary<DungeonChapter, Sprite>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    public SkinIconAssetLoader(AddressableHandler.Label label, Action<Dictionary<SkinData.Key, Sprite>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+}
+
+public class StatIconAssetLoader : AssetLoader<StatData.Key, Sprite, Sprite>
+{
+    public StatIconAssetLoader(AddressableHandler.Label label, Action<Dictionary<StatData.Key, Sprite>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+}
+
+public class ChapterIconAssetLoader : AssetLoader<DungeonMode.Chapter, Sprite, Sprite>
+{
+    public ChapterIconAssetLoader(AddressableHandler.Label label, Action<Dictionary<DungeonMode.Chapter, Sprite>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
     }
 }

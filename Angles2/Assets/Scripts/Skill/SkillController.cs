@@ -27,20 +27,14 @@ public struct SkillUpgradeData
     public bool CanUpgrade() { return _upgradeCount <= _maxUpgradeCount; } // 만약 같다면 더 이상 업그레이드 불가능
 }
 
+//public interface ICaster
+//{
+//    T GetComponent<T>();
+//    void ReturnDamage(float damagePoint);
+//}
+
 public class SkillController : MonoBehaviour
 {
-    public class CastingData
-    {
-        public CastingData(GameObject myObject, Transform myTransform)
-        {
-            MyObject = myObject;
-            MyTransform = myTransform;
-        }
-
-        public GameObject MyObject { get; }
-        public Transform MyTransform { get; }
-    }
-
     public class UpgradeableData
     {
         public UpgradeableData(float totalDamageRatio, float totalCooltimeRatio, float totalRandomRatio)
@@ -62,15 +56,15 @@ public class SkillController : MonoBehaviour
 
 
     Dictionary<BaseSkill.Name, BaseSkill> _skillDictionary;
-    CastingData _castingData;
-    IUpgradeableRatio _upgradeableRatio;
+    IUpgradeableSkillData _upgradeableRatio;
+    ICaster _caster;
 
     public Action<BaseSkill.Name, BaseSkill> OnAddSkillRequested;
     public Action<BaseSkill.Name, BaseSkill> OnRemoveSkillRequested;
 
-    public void Initialize(IUpgradeableRatio upgradeableRatio)
+    public void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        _castingData = new CastingData(gameObject, transform);
+        _caster = caster;
         _upgradeableRatio = upgradeableRatio;
         _skillDictionary = new Dictionary<BaseSkill.Name, BaseSkill>();
     }
@@ -97,7 +91,7 @@ public class SkillController : MonoBehaviour
             return;
         }
 
-        skill.Initialize(_castingData, _upgradeableRatio);
+        skill.Initialize(_upgradeableRatio, _caster);
         skill.OnAdd();
         EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnAddSkill, name, skill);
 

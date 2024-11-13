@@ -8,6 +8,13 @@ using UnityEditor;
 
 public class DungeonMode : BaseGameMode
 {
+    public enum Chapter
+    {
+        TriconChapter,
+        RhombusChapter,
+        PentagonicChapter,
+    }
+
     DungeonStageController _stageController;
 
     MapGenerator _mapGenerator;
@@ -36,15 +43,15 @@ public class DungeonMode : BaseGameMode
         int coinCount = GameStateManager.Instance.ReturnCoin();
         ServiceLocater.ReturnSaveManager().AddCoinCount(coinCount);
 
-        SaveData data = ServiceLocater.ReturnSaveManager().ReturnSaveData();
+        SaveData data = ServiceLocater.ReturnSaveManager().GetSaveData();
         int stageCount = _stageController.ReturnCurrentStageCount();
         ServiceLocater.ReturnSaveManager().ChangeStageProgress(data._chapter, stageCount);
     }
 
     void UnlockNextChapter()
     {
-        SaveData saveData = ServiceLocater.ReturnSaveManager().ReturnSaveData();
-        int lastChapterIndex = Enum.GetValues(typeof(DungeonChapter)).Length - 1;
+        SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
+        int lastChapterIndex = Enum.GetValues(typeof(DungeonMode.Chapter)).Length - 1;
         if (lastChapterIndex > (int)saveData._chapter)
         {
             ServiceLocater.ReturnSaveManager().UnlockChapter(saveData._chapter + 1);
@@ -75,10 +82,10 @@ public class DungeonMode : BaseGameMode
 
     protected override void Initialize()
     {
-        CoreSystem gameSystem = FindObjectOfType<CoreSystem>();
-        if (gameSystem == null)
+        CoreSystem coreSystem = FindObjectOfType<CoreSystem>();
+        if (coreSystem == null)
         {
-            Debug.Log("gameSystem 존재하지 않음");
+            Debug.Log("coreSystem 존재하지 않음");
             return;
         }
 
@@ -91,24 +98,24 @@ public class DungeonMode : BaseGameMode
         GameState gameState = new GameState(_coinViewer);
         GameStateManager.Instance.Initialize(gameState);
 
-        BaseFactory viewerFactory = gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
-        BaseFactory skillFactory = gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Skill);
+        BaseFactory viewerFactory = coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
+        BaseFactory skillFactory = coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Skill);
 
         _chargeUIController.Initialize();
 
-        _dashUIController.Initialize(gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer));
+        _dashUIController.Initialize(coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer));
 
         _skillUIController.Initialize(new List<BaseSkill.Type> { BaseSkill.Type.Active },
-                                      gameSystem.AddressableHandler.SkillIconAsset,
+                                      coreSystem.AddressableHandler.SkillIconAsset,
                                       viewerFactory); // --> 아이콘을 Factory에서 초기화하게끔 만들기
         
-        _cardUIController.Initialize(gameSystem.Database.CardDatas, gameSystem.Database.UpgradeableSkills,
-                                     gameSystem.Database.SkillDatas, gameSystem.AddressableHandler.SkillIconAsset,
+        _cardUIController.Initialize(coreSystem.Database.CardDatas, coreSystem.Database.UpgradeableSkills,
+                                     coreSystem.Database.SkillDatas, coreSystem.AddressableHandler.SkillIconAsset,
                                      viewerFactory, skillFactory); // --> 커멘드 패턴을 사용해서 리팩토링 해보기
        
         _gameResultUIController.Initialize(() => { ServiceLocater.ReturnSceneController().ChangeScene("LobbyScene"); });
 
-        BaseFactory interactableFactory = gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Interactable);
+        BaseFactory interactableFactory = coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Interactable);
 
         // 이거는 StageController로 내려서 사용하자
         // 적이 죽은 경우 사용
@@ -116,20 +123,20 @@ public class DungeonMode : BaseGameMode
         _dropController = new DropController(interactableFactory);
         _cameraController.Initialize();
 
-        SaveData saveData = ServiceLocater.ReturnSaveManager().ReturnSaveData();
+        SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
 
-        DungeonChapter chapter = saveData._chapter;
+        DungeonMode.Chapter chapter = saveData._chapter;
         ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{chapter.ToString()}BGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
         _mapGenerator = GetComponent<MapGenerator>();
-        _mapGenerator.Initialize(gameSystem.AddressableHandler.ChapterMapAsset[chapter]);
+        _mapGenerator.Initialize(coreSystem.AddressableHandler.ChapterMapAsset[chapter]);
         _mapGenerator.CreateMap();
 
         _stageController = GetComponent<DungeonStageController>();
 
         ChapterInfo chapterInfo = saveData._chapterInfos[chapter];
-        _stageController.Initialize(chapterInfo._maxLevel, gameSystem.FactoryCollection);
+        _stageController.Initialize(chapterInfo._maxLevel, coreSystem);
         _stageController.CreateRandomStage(_mapGenerator.StageObjects);
     }
 }

@@ -29,6 +29,8 @@ public class ViewerFactory : BaseFactory
     {
         _viewerCreaters = new Dictionary<BaseViewer.Name, ViewerCreater>();
 
+        _viewerCreaters[BaseViewer.Name.SkinViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.SkinViewer]);
+        _viewerCreaters[BaseViewer.Name.StatViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.StatViewer]);
         _viewerCreaters[BaseViewer.Name.CardViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.CardViewer]);
         _viewerCreaters[BaseViewer.Name.CostCardViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.CostCardViewer]);
         _viewerCreaters[BaseViewer.Name.SkillViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.SkillViewer]);

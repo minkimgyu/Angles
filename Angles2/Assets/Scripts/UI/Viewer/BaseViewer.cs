@@ -16,6 +16,8 @@ public class BaseViewer : MonoBehaviour
         DirectionViewer,
 
         ChapterSelectViewer,
+        StatViewer,
+        SkinViewer
     }
 
     public virtual void Initialize() { }

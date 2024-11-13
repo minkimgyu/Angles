@@ -36,26 +36,33 @@ public class Shockwave : BaseSkill
             case Timer.State.Ready:
                 if (_targets.Count == 0) return;
 
-                CastingComponent castingComponent = _castingData.MyObject.GetComponent<CastingComponent>();
+                CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
                 if (castingComponent != null) castingComponent.CastSkill(_data._delay);
 
                 _delayTimer.Start(_data._delay);
                 break;
             case Timer.State.Finish:
 
-                ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, _castingData.MyTransform.position, 0.6f);
+                Transform casterTransform = _caster.GetComponent<Transform>();
+                ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, casterTransform.position, 0.6f);
 
                 effect = _effectFactory.Create(BaseEffect.Name.ShockwaveEffect);
-                effect.ResetPosition(_castingData.MyTransform.position);
+                effect.ResetPosition(casterTransform.position);
                 effect.Play();
 
-                DamageableData damageData =
-                new DamageableData.DamageableDataBuilder().
-                SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-                .SetTargets(_data._targetTypes)
-                .Build();
+                DamageableData damageData = new DamageableData
+                (
+                    _caster,
+                    new DamageStat(
+                        _data._damage,
+                        _upgradeableRatio.AttackDamage,
+                        _data._adRatio,
+                        _upgradeableRatio.TotalDamageRatio
+                    ),
+                    _data._targetTypes
+                );
 
-                Damage.HitCircleRange(damageData, _castingData.MyTransform.position, _data._range, true, Color.red, 3);
+                Damage.HitCircleRange(damageData, casterTransform.position, _data._range, true, Color.red, 3);
 
                 _delayTimer.Reset();
                 break;

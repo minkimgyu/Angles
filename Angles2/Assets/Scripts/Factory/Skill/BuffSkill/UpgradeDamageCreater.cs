@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UpgradeDamageData : SkillData
 {
-    public List<StatUpgrader.DamageData> _damageDatas;
-    public UpgradeDamageData(int maxUpgradePoint, List<StatUpgrader.DamageData> damageDatas) : base(maxUpgradePoint) 
+    public DamageRatioStatModifier _damageStatModifier;
+    public UpgradeDamageData(int maxUpgradePoint, DamageRatioStatModifier damageStatModifier) : base(maxUpgradePoint) 
     {
-        _damageDatas = damageDatas;
+        _damageStatModifier = damageStatModifier;
     }
 
     public override SkillData Copy()
     {
-        return new UpgradeDamageData(_maxUpgradePoint, _damageDatas);
+        return new UpgradeDamageData(_maxUpgradePoint, _damageStatModifier);
     }
 }
 

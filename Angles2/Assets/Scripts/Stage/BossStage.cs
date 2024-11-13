@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DamageUtility;
 
 public class BossStage : BattleStage
 {
@@ -31,9 +32,9 @@ public class BossStage : BattleStage
 
     System.Action<float> OnHPChange;
 
-    public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection)
+    public override void Initialize(BaseStageController baseStageController, CoreSystem coreSystem)
     {
-        base.Initialize(baseStageController, factoryCollection);
+        base.Initialize(baseStageController, coreSystem);
 
         _mobs = new List<IDamageable>();
         _timer = new Timer();
@@ -52,13 +53,10 @@ public class BossStage : BattleStage
 
         _isActive = false;
 
-        DamageableData damageData = new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(DamageUtility.Damage.InstantDeathDamage, 1))
-        .Build();
-
+        DamageableData damageData = new DamageableData(new DamageStat(DamageUtility.Damage.InstantDeathDamage));
         for (int i = 0; i < _mobs.Count; i++)
         {
-            _mobs[i].GetDamage(damageData);
+            Damage.Hit(damageData, _mobs[i]);
         }
 
         _baseStageController.OnStageClearRequested();
@@ -88,7 +86,7 @@ public class BossStage : BattleStage
         {
             if (_spawnCount >= _maxSpawnCount) return;
 
-            BaseLife enemy = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
+            BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
             _spawnCount++;
 
             enemy.transform.position = item.Key.position;
@@ -103,7 +101,7 @@ public class BossStage : BattleStage
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
         _isActive = true;
-        BaseLife enemy = _factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(_bossName);
+        BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(_bossName);
 
         enemy.AddObserverEvent(OnHPChange);
         enemy.AddObserverEvent(OnEnemyDieRequested);
@@ -111,7 +109,7 @@ public class BossStage : BattleStage
         enemy.transform.position = _bossSpawnPoint.position;
         _bossCount++;
 
-        DungeonChapter chapter = ServiceLocater.ReturnSaveManager().ReturnSaveData()._chapter;
+        DungeonMode.Chapter chapter = ServiceLocater.ReturnSaveManager().GetSaveData()._chapter;
         ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{chapter.ToString()}BossBGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
     }

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UpgradeCooltimeData : SkillData
 {
-    public List<StatUpgrader.CooltimeData> _cooltimeDatas;
-    public UpgradeCooltimeData(int maxUpgradePoint, List<StatUpgrader.CooltimeData> cooltimeDatas) : base(maxUpgradePoint)
+    public CooltimeStatModifier _cooltimeStatModifier;
+    public UpgradeCooltimeData(int maxUpgradePoint, CooltimeStatModifier cooltimeStatModifier) : base(maxUpgradePoint)
     {
-        _cooltimeDatas = cooltimeDatas;
+        _cooltimeStatModifier = cooltimeStatModifier;
     }
 
     public override SkillData Copy()
     {
-        return new UpgradeCooltimeData(_maxUpgradePoint, _cooltimeDatas);
+        return new UpgradeCooltimeData(_maxUpgradePoint, _cooltimeStatModifier);
     }
 }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,8 @@ public class TriangleEnemy : BasicMob
 
     public override void ResetData(TriangleData data)
     {
+        base.ResetData(data);
         _size = data._size;
-        _maxHp = data._maxHp;
         _targetType = data._targetType;
         _moveSpeed = data._moveSpeed;
         _dropData = data._dropData;

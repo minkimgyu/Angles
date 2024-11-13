@@ -8,14 +8,11 @@ public interface ISkillUpgradable
     public int MaxUpgradePoint { get; }
 
     void Upgrade();
-    void Upgrade(int step);
+    void Upgrade(int level);
 }
 
 public interface IStatUpgradable
 {
-    void Upgrade(StatUpgrader.DamageData cooltimeData);
-    void Upgrade(StatUpgrader.CooltimeData cooltimeData);
-
-    void Upgrade(StatUpgrader.DashData cooltimeData);
-    void Upgrade(StatUpgrader.ShootingData cooltimeData);
+    void Upgrade(IStatModifier stat, int level = 0);
+    void Upgrade(IStatModifier stat);
 }

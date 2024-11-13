@@ -107,9 +107,9 @@ public class CardController : MonoBehaviour
     }
 
     // maxUpgrade인 스킬은 포함하지 않는다.
-    public void CreateCards(ISkillUser skillUser, int cardCount)
+    public void CreateCards(ICaster caster, int cardCount)
     {
-        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(skillUser, cardCount);
+        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(caster, cardCount);
         if (upgradeDatas.Count == 0) return;
 
         _uiObject.SetActive(true);
@@ -131,7 +131,7 @@ public class CardController : MonoBehaviour
                 upgradeCount,
                 maxUpgradeCount
             );
-            AddCard(skillUser,cardData, BaseViewer.Name.CardViewer);
+            AddCard(caster, cardData, BaseViewer.Name.CardViewer);
         }
 
         _recreateCountObject.SetActive(false);
@@ -144,9 +144,9 @@ public class CardController : MonoBehaviour
     }
 
     // maxUpgrade인 스킬은 포함하지 않는다.
-    public void CreateCards(ISkillUser skillUser, int cardCount, int recreateCount)
+    public void CreateCards(ICaster caster, int cardCount, int recreateCount)
     {
-        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(skillUser, cardCount);
+        List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(caster, cardCount);
         if (upgradeDatas.Count == 0) return;
 
         _uiObject.SetActive(true);
@@ -170,7 +170,7 @@ public class CardController : MonoBehaviour
                 maxUpgradeCount
             );
 
-            AddCard(skillUser, cardData, BaseViewer.Name.CostCardViewer);
+            AddCard(caster, cardData, BaseViewer.Name.CostCardViewer);
         }
 
         recreateCount -= 1;
@@ -187,7 +187,7 @@ public class CardController : MonoBehaviour
                 {
                     ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Reroll);
                     DeleteCards();
-                    CreateCards(skillUser, cardCount, recreateCount);
+                    CreateCards(caster, cardCount, recreateCount);
                 }
             );
         }
@@ -206,7 +206,7 @@ public class CardController : MonoBehaviour
         ServiceLocater.ReturnTimeController().Stop();
     }
 
-    List<SkillUpgradeData> ReturnUpgradeDatas(ISkillUpgradeable upgradeable, int maxCardCount)
+    List<SkillUpgradeData> ReturnUpgradeDatas(ICaster upgradeable, int maxCardCount)
     {
         // 먼저 5 - 5 이런 끝까지 업그레이드 된 스킬들을 파악한다 --> 이 친구는 제외시킴
         // 최대 획득, 업그레이드 가능한 스킬 개수를 구한다 --> 최대 3개 그리고 없다면 카드를 줄여야함 --> 체력+ 카드나 체력 회복 카드를 넣어도 될 듯?
@@ -287,7 +287,7 @@ public class CardController : MonoBehaviour
     //2 - 업그레이드
     //3 - 업그레이드
 
-    void PickCard(ISkillAddable skillAddable, int cost, BaseSkill.Name name)
+    void PickCard(ICaster caster, int cost, BaseSkill.Name name)
     {
         int currentCoinCount = GameStateManager.Instance.ReturnCoin();
         if (cost > currentCoinCount) return;
@@ -297,10 +297,10 @@ public class CardController : MonoBehaviour
         CloseTab();
 
         BaseSkill skill = _skillFactory.Create(name);
-        skillAddable.AddSkill(name, skill);
+        caster.AddSkill(name, skill);
     }
 
-    void AddCard(ISkillAddable skillAddable, SKillCardData skillCardData, BaseViewer.Name type)
+    void AddCard(ICaster caster, SKillCardData skillCardData, BaseViewer.Name type)
     {
         BaseViewer viewer = _viewerFactory.Create(type);
         viewer.transform.SetParent(_cardParent);
@@ -308,7 +308,7 @@ public class CardController : MonoBehaviour
         viewer.Initialize
         (
             skillCardData,
-            () => { PickCard(skillAddable, skillCardData.Cost, skillCardData.Name); }
+            () => { PickCard(caster, skillCardData.Cost, skillCardData.Name); }
         );
         _cardViewerDictionary.Add(skillCardData.Name, viewer);
     }

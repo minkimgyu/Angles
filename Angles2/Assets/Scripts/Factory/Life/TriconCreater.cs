@@ -62,7 +62,7 @@ public class TriconCreater : LifeCreater
 
         life.Initialize();
 
-        ISkillAddable skillAddable = life.GetComponent<ISkillAddable>();
+        ICaster skillAddable = life.GetComponent<ICaster>();
         if (skillAddable == null) return life;
 
         foreach (var item in data.CopySkillDataToAdd)

@@ -9,12 +9,14 @@ public class SelfDestructionData : SkillData
     public float _delay;
     public float _hpRatioOnInvoke;
     public float _damage;
+    public float _adRatio;
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public SelfDestructionData(int maxUpgradePoint, float damage, float range, float delay, float hpRatioOnInvoke, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public SelfDestructionData(int maxUpgradePoint, float damage, float adRatio, float range, float delay, float hpRatioOnInvoke, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
+        _adRatio = adRatio;
         _delay = delay;
         _range = range;
 
@@ -27,6 +29,7 @@ public class SelfDestructionData : SkillData
         return new SelfDestructionData(
             _maxUpgradePoint, // SkillData에서 상속된 값
             _damage,
+            _adRatio,
             _range,
             _delay,
             _hpRatioOnInvoke,

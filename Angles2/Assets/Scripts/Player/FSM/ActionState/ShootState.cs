@@ -84,12 +84,6 @@ public class ShootState : State<Player.ActionState>
         }
     }
 
-    //// move가 검출된다면 바로 Ready로 보냄
-    //public override void OnMove(Vector2 vec2)
-    //{
-    //    GoToReadyState();
-    //}
-
     public override void OnChargeStart()
     {
         GoToReadyState();
@@ -97,7 +91,7 @@ public class ShootState : State<Player.ActionState>
 
     void Shoot(Vector2 direction)
     {
-        _moveComponent.Stop();
+        _moveComponent.ResetVelocity();
         _moveComponent.AddForce(direction, _playerData._shootSpeed * _ratio);
     }
 

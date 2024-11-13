@@ -40,10 +40,22 @@ public class SpawnStickyBomb : BaseSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
         if (weapon == null) return;
 
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
+
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDamageModifier(damageData));
         modifiers.Add(new WeaponDelayModifier(_data._delay));
-        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
 
         weapon.ModifyData(modifiers);
         weapon.Activate();

@@ -18,12 +18,9 @@ public class Shooter : BaseWeapon
         _waitFire = 0;
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDamageModifier(_data._damageableData));
 
-        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
-        modifiers.Add(new WeaponTotalDamageRatioModifier(_data._totalDamageRatio));
-
-        BaseWeapon weapon = _weaponFactory.Create(_data._fireWeaponName);
+        ProjectileWeapon weapon = (ProjectileWeapon)_weaponFactory.Create(_data._fireWeaponName);
         weapon.ModifyData(modifiers);
         weapon.ResetPosition(transform.position);
 
@@ -92,7 +89,7 @@ public class Shooter : BaseWeapon
         {
             if ((_targetDatas[i] as UnityEngine.Object) == null) continue;
 
-            bool isTarget = _targetDatas[i].IsTarget(_data._targetTypes);
+            bool isTarget = _targetDatas[i].IsTarget(_data._damageableData._targetType);
             if (isTarget == false) continue;
 
             capturedTarget = _targetDatas[i];

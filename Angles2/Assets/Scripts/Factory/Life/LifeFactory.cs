@@ -5,13 +5,32 @@ using System;
 [System.Serializable]
 abstract public class LifeData
 {
-    public LifeData(float maxHp, ITarget.Type targetType)
+    public LifeData(float maxHp, ITarget.Type targetType, float autoHpRecoveryPoint = 0, float damageReductionRatio = 0)
     {
         _maxHp = maxHp;
+        _hp = maxHp;
+        _autoHpRecoveryPoint = autoHpRecoveryPoint;
+        _damageReductionRatio = damageReductionRatio;
         _targetType = targetType;
     }
 
-    public float _maxHp;
+    // setter 활용
+    public float MaxHp
+    {
+        get {  return _maxHp; } 
+        set
+        {
+            float addPoint = value - _maxHp;
+            _maxHp = value;
+            _hp += addPoint;  // 기존 체력에 최대 체력 추가치를 더해준다.
+        }
+    }
+
+    protected float _maxHp;
+    public float _hp;
+
+    public float _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
+    public float _damageReductionRatio; // 데미지 감소 수치
     public ITarget.Type _targetType;
 
     public abstract LifeData Copy();

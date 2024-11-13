@@ -37,23 +37,34 @@ public class SpawnBlade : BaseSkill
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blade);
         if (weapon == null) return;
 
+        Transform casterTransform = _caster.GetComponent<Transform>();
+
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
+
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damage));
+        modifiers.Add(new WeaponDamageModifier(damageData));
         modifiers.Add(new WeaponSizeModifier(_data._sizeMultiplier));
         modifiers.Add(new WeaponLifetimeModifier(_data._lifetime));
 
-        // 아래 두 개는 필수!
-        modifiers.Add(new WeaponTargetModifier(_data._targetTypes));
-        modifiers.Add(new WeaponTotalDamageRatioModifier(_upgradeableRatio.TotalDamageRatio));
-
         weapon.ModifyData(modifiers);
         weapon.Activate();
-        weapon.ResetPosition(_castingData.MyTransform.position);
+        weapon.ResetPosition(casterTransform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
-        Vector2 direction = _castingData.MyTransform.right;
+        Vector2 direction = casterTransform.right;
         projectile.Shoot(direction, _data._force);
     }
 }

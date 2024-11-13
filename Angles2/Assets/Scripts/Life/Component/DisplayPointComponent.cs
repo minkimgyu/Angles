@@ -17,7 +17,7 @@ public class DisplayPointComponent
         _effectFactory = effectFactory;
     }
 
-    public void SpawnDamageTxt(float healPoint, Vector3 pos)
+    public void SpawnHealTxt(float healPoint, Vector3 pos)
     {
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.DamageTextEffect);
 
@@ -27,9 +27,9 @@ public class DisplayPointComponent
         effect.Play();
     }
 
-    public void SpawnDamageTxt(DamageableData damageableData, Vector3 pos)
+    public void SpawnDamageTxt(float finalDamage, Vector3 pos)
     {
-        if (damageableData._damageData.Damage == 0) return; // 데미지가 0이면 출력하지 않음
+        if (finalDamage == 0) return; // 데미지가 0이면 출력하지 않음
         Color damageColor = Color.white;
 
         switch (_targetType)
@@ -47,7 +47,7 @@ public class DisplayPointComponent
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.DamageTextEffect);
 
         effect.ResetPosition(pos);
-        effect.ResetText(damageableData._damageData.Damage);
+        effect.ResetText(finalDamage);
         effect.ResetColor(damageColor);
         effect.Play();
     }

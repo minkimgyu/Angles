@@ -58,8 +58,8 @@ abstract public class BaseSkill : ISkillUpgradable
     protected Type _skillType;
     public Type SkillType { get { return _skillType; } }
 
-    protected SkillController.CastingData _castingData;
-    protected IUpgradeableRatio _upgradeableRatio;
+    protected ICaster _caster;
+    protected IUpgradeableSkillData _upgradeableRatio;
 
     int _maxUpgradePoint;
     public int MaxUpgradePoint { get { return _maxUpgradePoint; } }
@@ -77,8 +77,11 @@ abstract public class BaseSkill : ISkillUpgradable
         _upgradePoint++;
     }
 
-    public void Initialize(SkillController.CastingData castingData, IUpgradeableRatio upgradeableRatio ) 
-    { _castingData = castingData; _upgradeableRatio = upgradeableRatio; }
+    public void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster) 
+    {
+        _upgradeableRatio = upgradeableRatio;
+        _caster = caster; 
+    }
 
     public void AddViewEvent(Action<float, int, bool> viewEvent) 
     { 

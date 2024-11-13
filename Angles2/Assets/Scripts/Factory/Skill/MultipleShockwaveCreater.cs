@@ -11,10 +11,11 @@ public class MultipleShockwaveData : SkillData
 
     public float _delay;
     public float _damage;
+    public float _adRatio;
     public float _range;
     public List<ITarget.Type> _targetTypes;
 
-    public MultipleShockwaveData(int maxUpgradePoint, float waveSizeMultiply, float waveDelay, int maxWaveCount, float damage, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
+    public MultipleShockwaveData(int maxUpgradePoint, float waveSizeMultiply, float waveDelay, int maxWaveCount, float damage, float adRatio, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _waveSizeMultiply = waveSizeMultiply;
         _waveDelay = waveDelay;
@@ -22,6 +23,7 @@ public class MultipleShockwaveData : SkillData
 
         _delay = delay;
         _damage = damage;
+        _adRatio = adRatio;
         _range = range;
         _targetTypes = targetTypes;
     }
@@ -34,6 +36,7 @@ public class MultipleShockwaveData : SkillData
             _waveDelay,
             _maxWaveCount,
             _damage,
+            _adRatio,
             _range,
             _delay,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사

@@ -31,12 +31,12 @@ public class SelectChapterController : MonoBehaviour
     [SerializeField] SelectChapterViewer _selectChapterViewer;
     SelectChapterModel _selectChapterModel;
 
-    Dictionary<DungeonChapter, ChapterInfo> _chapterInfos;
-    public Action<DungeonChapter> OnSelectChapter;
+    Dictionary<DungeonMode.Chapter, ChapterInfo> _chapterInfos;
+    public Action<DungeonMode.Chapter> OnSelectChapter;
 
     public void Activate(bool on) => _content.SetActive(on);
 
-    public void ChangeChapter(DungeonChapter chapter)
+    public void ChangeChapter(DungeonMode.Chapter chapter)
     {
         _selectScrollUI.ScrollUsingChapter(chapter);
         OnChapterSelected(chapter);
@@ -45,20 +45,20 @@ public class SelectChapterController : MonoBehaviour
     void OnChooseChapter()
     {
         int index = _selectScrollUI.TargetIndex;
-        if (_chapterInfos[(DungeonChapter)index]._nowLock == true) return; // 잠겨있다면 진행 X
+        if (_chapterInfos[(DungeonMode.Chapter)index]._nowLock == true) return; // 잠겨있다면 진행 X
 
         Activate(false);
-        OnSelectChapter?.Invoke((DungeonChapter)index);
+        OnSelectChapter?.Invoke((DungeonMode.Chapter)index);
     }
 
-    void OnChapterSelected(DungeonChapter chapter)
+    void OnChapterSelected(DungeonMode.Chapter chapter)
     {
         _selectChapterModel.Title = chapter.ToString();
         _selectChapterModel.Info = _chapterInfos[chapter]._content;
         _selectChapterModel.Level = _chapterInfos[chapter]._maxLevel;
     }
 
-    public void Initialize(Dictionary<DungeonChapter, ChapterInfo> chapterInfos, Dictionary<DungeonChapter, Sprite> chapterSprite, BaseFactory viewerFactory, Action<DungeonChapter> OnSelectChapter)
+    public void Initialize(Dictionary<DungeonMode.Chapter, ChapterInfo> chapterInfos, Dictionary<DungeonMode.Chapter, Sprite> chapterSprite, BaseFactory viewerFactory, Action<DungeonMode.Chapter> OnSelectChapter)
     {
         this.OnSelectChapter = OnSelectChapter;
         _selectChapterModel = new SelectChapterModel(_selectChapterViewer);

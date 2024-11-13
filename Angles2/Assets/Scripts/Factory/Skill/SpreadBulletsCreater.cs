@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class SpreadBulletsData : SkillData
 {
     public float _damage;
+    public float _adRatio;
+    public float _groggyDuration;
 
     public float _delay;
     public float _force;
@@ -16,6 +18,8 @@ public class SpreadBulletsData : SkillData
     public SpreadBulletsData(
         int maxUpgradePoint,
         float damage,
+        float adRatio,
+        float groggyDuration,
 
         float delay,
         float force,
@@ -24,6 +28,8 @@ public class SpreadBulletsData : SkillData
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
+        _adRatio = adRatio;
+        _groggyDuration = groggyDuration;
 
         _delay = delay;
         _force = force;
@@ -37,6 +43,8 @@ public class SpreadBulletsData : SkillData
         return new SpreadBulletsData(
             _maxUpgradePoint,
             _damage,
+            _adRatio,
+            _groggyDuration,
             _delay,
             _force,
             _bulletCount,

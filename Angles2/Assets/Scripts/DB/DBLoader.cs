@@ -15,8 +15,8 @@ public class DBLoader : MonoBehaviour
         //DBConnectionCheck();
         StartCoroutine(DBCreater());
 
-        DataBaseInsert("insert into Person(ID, Name, Birthday) VALUES(4, \"³ª\", \"2001-01-26\")");
-        DataBaseRead("Select * From Person");
+        DataBaseInsert("insert into Person(ID, Key, Birthday) VALUES(4, \"³ª\", \"2001-01-26\")");
+        DataBaseRead("Selected * From Person");
     }
 
     public void DataBaseInsert(string query)

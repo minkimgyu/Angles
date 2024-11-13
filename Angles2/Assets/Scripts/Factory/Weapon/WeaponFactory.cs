@@ -6,14 +6,10 @@ using UnityEngine;
 [System.Serializable]
 abstract public class WeaponData 
 {
-    public List<ITarget.Type> _targetTypes = new List<ITarget.Type>();
-    public float _totalDamageRatio = 1;
-
-    public void ChangeTarget(List<ITarget.Type> targetTypes) { _targetTypes = targetTypes; }
-    public void ChangeTotalDamageRatio(float totalDamageRatio) { _totalDamageRatio = totalDamageRatio; }
+    public DamageableData _damageableData;
+    public void ChangeDamage(DamageableData damageableData) { _damageableData = damageableData; }
 
     public virtual void ChangeRange(float range) { }
-    public virtual void ChangeDamage(float damage) { }
     public virtual void ChangeSizeMultiplier(float sizeMultiplier) { }
     public virtual void ChangeLifetime(float lifetime) { }
 

@@ -35,24 +35,31 @@ public class Knockback : BaseSkill
         bool isTarget = target.IsTarget(_data._targetTypes);
         if (isTarget == false) return;
 
+        Transform casterTransform = _caster.GetComponent<Transform>();
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Knockback);
         Debug.Log("Knockback");
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.KnockbackEffect);
         effect.ResetSize(_data._rangeMultiplier);
-        effect.ResetPosition(_castingData.MyTransform.position, _castingData.MyTransform.right);
+        effect.ResetPosition(casterTransform.position, casterTransform.right);
         effect.Play();
 
-        DamageableData damageData =
+        DamageableData damageData = new DamageableData
+        (
+            _caster,
+            new DamageStat(
+                _data._damage,
+                _upgradeableRatio.AttackDamage,
+                _data._adRatio,
+                _upgradeableRatio.TotalDamageRatio
+            ),
+            _data._targetTypes,
+            _data._groggyDuration
+        );
 
-        new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(_data._damage, _upgradeableRatio.TotalDamageRatio))
-        .SetTargets(_data._targetTypes)
-        .SetGroggyDuration(_data._groggyDuration)
-        .Build();
 
-        Damage.HitBoxRange(damageData, _castingData.MyTransform.position, _data._offset.V2, _castingData.MyTransform.right,
+        Damage.HitBoxRange(damageData, casterTransform.position, _data._offset.V2, casterTransform.right,
             _data._size.V2 * _data._rangeMultiplier, true, Color.red);
     }
 }

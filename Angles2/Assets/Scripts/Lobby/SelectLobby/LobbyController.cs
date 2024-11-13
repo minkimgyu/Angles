@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DungeonChapter
-{
-    TriconChapter,
-    RhombusChapter,
-    PentagonicChapter,
-}
-
 public class LobbyController : MonoBehaviour
 {
-    [SerializeField] LobbyTopViewer _lobbyTopViewer;
     LobbyTopModel _lobbyTopModel;
 
-    [SerializeField] LevelSelectController _levelSelectController;
+    [SerializeField] LobbyTopViewer _lobbyTopViewer;
+    [SerializeField] LobbyScrollController _lobbyScrollController;
+
+    [SerializeField] PopUpViewer _popUpViewer;
+
+    [SerializeField] LevelSelectPage _levelSelectPage;
+    [SerializeField] StatSelectPage _statSelectPage;
+    [SerializeField] SkinSelectPage _skinSelectPage;
 
     private void Start()
     {
@@ -22,16 +21,37 @@ public class LobbyController : MonoBehaviour
         ServiceLocater.ReturnSoundPlayer().PlayBGM(ISoundPlayable.SoundName.LobbyBGM);
 
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
-        SaveData saveData = saveable.ReturnSaveData(); // 历厘等 单捞磐
+        SaveData saveData = saveable.GetSaveData(); // 历厘等 单捞磐
+
+        _lobbyScrollController.Initialize();
+
+        _popUpViewer.Initialize(gameSystem.Database.AlarmInfos);
 
         _lobbyTopModel = new LobbyTopModel(_lobbyTopViewer);
         _lobbyTopModel.GoldCount = saveData._gold;
 
-        _levelSelectController.Initialize(
+        _levelSelectPage.Initialize(
             saveData._chapter,
             saveData._chapterInfos,
             gameSystem.AddressableHandler.ChapterIconAsset,
             gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer)
         );
+
+        _statSelectPage.Initialize(
+            gameSystem.AddressableHandler.StatIconAsset,
+            gameSystem.Database.StatDatas,
+            gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer),
+            _popUpViewer.UpdateInfo,
+            _lobbyTopModel
+        );
+
+        _skinSelectPage.Initialize(
+           gameSystem.AddressableHandler.SkinIconAsset,
+           gameSystem.Database.SkinDatas,
+           gameSystem.Database.BtnInfos,
+           gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer),
+           _popUpViewer.UpdateInfo,
+           _lobbyTopModel
+       );
     }
 }

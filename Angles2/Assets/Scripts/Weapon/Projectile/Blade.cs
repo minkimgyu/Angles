@@ -32,19 +32,6 @@ public class Blade : ProjectileWeapon
         _soundTimer.Start(1f);
     }
 
-    protected void ApplyDamage(IDamageable damageable)
-    {
-        DamageableData damageData =
-
-        new DamageableData.DamageableDataBuilder().
-        SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
-        .SetTargets(_data._targetTypes)
-        .SetGroggyDuration(1)
-        .Build();
-
-        damageable.GetDamage(damageData);
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log(collision.collider.name);
@@ -84,7 +71,7 @@ public class Blade : ProjectileWeapon
     void OnEnter(IDamageable damageable)
     {
         _targetDatas.Add(new TargetData(Time.time, damageable));
-        ApplyDamage(damageable);
+        Damage.Hit(_data._damageableData, damageable);
     }
 
     void OnExit(IDamageable damageable)
@@ -109,7 +96,7 @@ public class Blade : ProjectileWeapon
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if (duration > _data._attackDelay)
             {
-                ApplyDamage(_targetDatas[i].Damageable);
+                Damage.Hit(_data._damageableData, _targetDatas[i].Damageable);
 
                 if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;

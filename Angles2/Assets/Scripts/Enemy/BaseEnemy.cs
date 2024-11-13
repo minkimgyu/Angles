@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.Mathematics;
 
-public class BaseEnemy : BaseLife, ISkillAddable, IFollowable, IForce
+abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 {
     protected SkillController _skillController;
     protected float _moveSpeed;
@@ -14,23 +15,22 @@ public class BaseEnemy : BaseLife, ISkillAddable, IFollowable, IForce
     protected DropData _dropData;
 
     Action OnDieRequested;
+   
 
     public override void Initialize()
     {
         base.Initialize();
-        _groggyTimer = new Timer();
-        _hp = _maxHp;
-
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
 
         _skillController = GetComponent<SkillController>();
-        _skillController.Initialize(new NoUpgradeableRatio());
+        _skillController.Initialize(new NoUpgradeableData(), this);
+
+        OnHpChangeRequested += (float ratio) => _skillController.OnDamaged(ratio);
     }
 
     protected override void Update()
     {
-
         base.Update();
         _skillController.OnUpdate();
     }
@@ -67,12 +67,15 @@ public class BaseEnemy : BaseLife, ISkillAddable, IFollowable, IForce
     public override void GetDamage(DamageableData damageableData)
     {
         base.GetDamage(damageableData);
-        _skillController.OnDamaged(_hp / _maxHp);
+        
     }
 
-    public void AddSkill(BaseSkill.Name name) { }
+    public List<SkillUpgradeData> ReturnSkillUpgradeDatas()
+    {
+        return _skillController.ReturnSkillUpgradeDatas();
+    }
+
     public void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { _skillController.AddSkill(skillName, skill); }
-    public List<SkillUpgradeData> ReturnSkillUpgradeDatas() { return default; }
 
     public bool CanFollow() { return true; }
     public Vector3 ReturnFowardDirection() { return transform.forward; }

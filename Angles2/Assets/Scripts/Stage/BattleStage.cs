@@ -7,9 +7,9 @@ abstract public class BattleStage : BaseStage
     protected int _bossCount = 0;
     protected Pathfinder _pathfinder;
 
-    public override void Initialize(BaseStageController baseStageController, FactoryCollection factoryCollection)
+    public override void Initialize(BaseStageController baseStageController, CoreSystem coreSystem)
     {
-        base.Initialize(baseStageController, factoryCollection);
+        base.Initialize(baseStageController, coreSystem);
         _pathfinder = GetComponent<Pathfinder>();
 
         GridComponent gridComponent = GetComponent<GridComponent>();

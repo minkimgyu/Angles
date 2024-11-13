@@ -24,10 +24,9 @@ public class UpgradeShooting : BaseSkill
 
     void UpgradeStat()
     {
-        GameObject myObject = _castingData.MyObject;
-        IStatUpgradable visitor = myObject.GetComponent<IStatUpgradable>();
+        IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._shootingDatas[UpgradePoint - 1]);
+        visitor.Upgrade(_data._shootingStatModifier, UpgradePoint - 1);
     }
 }

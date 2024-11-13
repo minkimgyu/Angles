@@ -6,60 +6,72 @@ using DamageUtility;
 
 public struct DamageableData
 {
-    public DamageData _damageData;
+    public ICaster _caster; // 공격을 적용한 대상
+    public DamageStat _damageStat;
     public List<ITarget.Type> _targetType;
     public float _groggyDuration;
 
-    public class DamageableDataBuilder
+    public float CalculateDamage(float damageReductionRatio)
     {
-        private DamageData _damage = new DamageData();
-        private List<ITarget.Type> _targetType = new List<ITarget.Type> { ITarget.Type.Blue, ITarget.Type.Red };
-        private float _groggyDuration = 0f;
+        float totalDamage = _damageStat.TotalDamage;
+        float reducedDamage = _damageStat.TotalDamage * damageReductionRatio;
+        return totalDamage - reducedDamage;
+    }
 
-        // Damage 설정
-        public DamageableDataBuilder SetDamage(DamageData damage)
-        {
-            _damage = damage;
-            return this;
-        }
+    public DamageableData(DamageStat damageStat)
+    {
+        _caster = null;
+        _damageStat = damageStat;
+        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue };
+        _groggyDuration = 0;
+    }
 
-        // Damageable 대상 설정
-        public DamageableDataBuilder SetTargets(List<ITarget.Type> targetTypes)
-        {
-            _targetType = targetTypes;
-            return this;
-        }
+    public DamageableData(ICaster caster, DamageStat damageStat)
+    {
+        _caster = caster;
+        _damageStat = damageStat;
+        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue };
+        _groggyDuration = 0;
+    }
 
-        // Groggy 시간 설정
-        public DamageableDataBuilder SetGroggyDuration(float groggyDuration)
-        {
-            _groggyDuration = groggyDuration;
-            return this;
-        }
-
-        // DamageableData 생성
-        public DamageableData Build()
-        {
-            DamageableData data;
-            data._damageData = _damage;
-            data._targetType = _targetType;
-            data._groggyDuration = _groggyDuration;
-
-            return data;
-        }
+    public DamageableData(ICaster caster, DamageStat damageStat, List<ITarget.Type> targetType, float groggyDuration = 0)
+    {
+        _caster = caster;
+        _damageStat = damageStat;
+        _targetType = targetType;
+        _groggyDuration = groggyDuration;
     }
 }
 
-public struct DamageData
+public struct DamageStat
 {
-    public float Damage { get { return _originDamage * _totalMultiplier; } }
+    public float TotalDamage 
+    { 
+        get 
+        { 
+            return (_originDamage + (_attackDamage * _adRatio)) * _totalMultiplier;  // (오리지널 데미지 + (AD * AD 반영 비율)) * 데미지 증가 비율
+        } 
+    }
 
     float _originDamage;
     float _totalMultiplier;
 
-    public DamageData(float originDamage, float totalMultiplier) 
+    float _attackDamage; // ad 수치
+    float _adRatio; // ad 실 반영 비율
+
+    public DamageStat(float originDamage)
+    {
+        _originDamage = originDamage;
+        _attackDamage = 0;
+        _adRatio = 0;
+        _totalMultiplier = 1;
+    }
+
+    public DamageStat(float originDamage, float attackDamage, float adRatio, float totalMultiplier) 
     { 
         _originDamage = originDamage;
+        _attackDamage = attackDamage;
+        _adRatio = adRatio;
         _totalMultiplier = totalMultiplier;
     }
 }

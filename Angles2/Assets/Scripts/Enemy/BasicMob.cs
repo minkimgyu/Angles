@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicMob : TrackableEnemy
+abstract public class BasicMob : TrackableEnemy
 {
     public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
     {

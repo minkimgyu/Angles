@@ -7,13 +7,16 @@ using System;
 public class SpawnBladeData : RandomSkillData
 {
     public float _damage;
+    public float _adRatio;
+    public float _groggyDuration;
+
     public float _lifetime;
     public float _sizeMultiplier;
 
     public List<ITarget.Type> _targetTypes;
     public float _force;
 
-    public SpawnBladeData(int maxUpgradePoint, float probability, float damage, float lifetime, float force, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    public SpawnBladeData(int maxUpgradePoint, float probability, float damage, float adRatio, float groggyDuration, float lifetime, float force, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
         _damage = damage;
         _lifetime = lifetime;
@@ -21,6 +24,8 @@ public class SpawnBladeData : RandomSkillData
 
         _force = force;
         _targetTypes = targetTypes;
+        _adRatio = adRatio;
+        _groggyDuration = groggyDuration;
     }
 
     public override SkillData Copy()
@@ -29,6 +34,8 @@ public class SpawnBladeData : RandomSkillData
             _maxUpgradePoint, // RandomSkillData에서 상속된 값
             _probability, // RandomSkillData에서 상속된 값
             _damage,
+            _adRatio,
+            _groggyDuration,
             _lifetime,
             _force,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사

@@ -15,28 +15,18 @@ public class Bullet : ProjectileWeapon
             return;
         }
 
-
-        if(target.IsTarget(_data._targetTypes) == true)
+        if(target.IsTarget(_data._damageableData._targetType) == true)
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                DamageableData damageData =
-
-               new DamageableData.DamageableDataBuilder().
-               SetDamage(new DamageData(_data._damage, _data._totalDamageRatio))
-               .SetTargets(_data._targetTypes)
-               .Build();
-
-                damageable.GetDamage(damageData);
+                Damage.Hit(_data._damageableData, damageable);
                 SpawnHitEffect();
                 Destroy(gameObject);
                 return;
             }
         }
     }
-
-
 
     BaseFactory _effectFactory;
     BulletData _data;

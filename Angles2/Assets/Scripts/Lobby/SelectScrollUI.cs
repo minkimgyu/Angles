@@ -16,9 +16,9 @@ public class SelectScrollUI : ScrollUI
 
     RectTransform _rectTransform;
 
-    Action<DungeonChapter> OnChapterSelected;
+    Action<DungeonMode.Chapter> OnChapterSelected;
 
-    public void Initialize(Dictionary<DungeonChapter, ChapterInfo> chapterInfos, Dictionary<DungeonChapter, Sprite> chapterSprite, BaseFactory viewerFactory, Action<DungeonChapter> OnChapterSelected)
+    public void Initialize(Dictionary<DungeonMode.Chapter, ChapterInfo> chapterInfos, Dictionary<DungeonMode.Chapter, Sprite> chapterSprite, BaseFactory viewerFactory, Action<DungeonMode.Chapter> OnChapterSelected)
     {
         int chapterRectHalfSize = (int)(350 * 1.3 / 2);
         int offset = (Screen.width / 2) - chapterRectHalfSize;
@@ -31,7 +31,7 @@ public class SelectScrollUI : ScrollUI
         this.OnChapterSelected = OnChapterSelected;
         _rectTransform = GetComponent<RectTransform>();
 
-        int chapterCount = Enum.GetValues(typeof(DungeonChapter)).Length;
+        int chapterCount = Enum.GetValues(typeof(DungeonMode.Chapter)).Length;
         SetUp(chapterCount);
 
         _viewerFactory = viewerFactory;
@@ -40,7 +40,7 @@ public class SelectScrollUI : ScrollUI
         for (int i = 0; i < chapterCount; i++)
         {
             BaseViewer viewer = _viewerFactory.Create(BaseViewer.Name.ChapterSelectViewer);
-            DungeonChapter chapter = (DungeonChapter)i;
+            DungeonMode.Chapter chapter = (DungeonMode.Chapter)i;
 
             viewer.Initialize(chapterSprite[chapter], chapterInfos[chapter]._nowLock);
             viewer.transform.SetParent(contentTr);
@@ -54,13 +54,13 @@ public class SelectScrollUI : ScrollUI
        base.OnEndDrag(eventData);
 
 
-        OnChapterSelected?.Invoke((DungeonChapter)_targetIndex);
+        OnChapterSelected?.Invoke((DungeonMode.Chapter)_targetIndex);
 
         _scaleChangeTimer.Reset();
         _scaleChangeTimer.Start(1f);
     }
 
-    public void ScrollUsingChapter(DungeonChapter chapter)
+    public void ScrollUsingChapter(DungeonMode.Chapter chapter)
     {
         _currentPos = SetPos();
 

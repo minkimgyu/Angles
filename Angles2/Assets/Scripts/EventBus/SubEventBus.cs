@@ -35,14 +35,14 @@ public class RegisterFollowerCommand : BaseCommand
 
 public class CreateCardCommand : BaseCommand
 {
-    public CreateCardCommand(Action<ISkillUser, int> CreateCardAction)
+    public CreateCardCommand(Action<ICaster, int> CreateCardAction)
     {
         this.CreateCardAction = CreateCardAction;
     }
 
-    Action<ISkillUser, int> CreateCardAction;
+    Action<ICaster, int> CreateCardAction;
 
-    public override void Execute(ISkillUser skillUser, int cardCount)
+    public override void Execute(ICaster skillUser, int cardCount)
     {
         CreateCardAction?.Invoke(skillUser, cardCount);
     }
@@ -50,14 +50,14 @@ public class CreateCardCommand : BaseCommand
 
 public class CreateReusableCardCommand : BaseCommand
 {
-    public CreateReusableCardCommand(Action<ISkillUser, int, int> CreateReusableCardAction)
+    public CreateReusableCardCommand(Action<ICaster, int, int> CreateReusableCardAction)
     {
         this.CreateReusableCardAction = CreateReusableCardAction;
     }
 
-    Action<ISkillUser, int, int> CreateReusableCardAction;
+    Action<ICaster, int, int> CreateReusableCardAction;
 
-    public override void Execute(ISkillUser skillUser, int cardCount, int recreateCount)
+    public override void Execute(ICaster skillUser, int cardCount, int recreateCount)
     {
         CreateReusableCardAction?.Invoke(skillUser, cardCount, recreateCount);
     }

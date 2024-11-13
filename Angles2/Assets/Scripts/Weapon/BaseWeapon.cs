@@ -37,8 +37,11 @@ abstract public class BaseWeapon : MonoBehaviour
     public virtual void ResetData(BlackholeData data) { }
     public virtual void ResetData(ShooterData data) { }
 
+    //protected ICaster _caster;
+
     public virtual void Activate() 
     {
+        //_caster = caster;
         _lifetimeComponent.Activate();
         _sizeModifyComponent.ResetSize();
     }

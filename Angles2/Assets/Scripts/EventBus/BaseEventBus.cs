@@ -62,15 +62,15 @@ abstract public class BaseEventBus<T>
         commands[state].Execute(value1, value2);
     }
 
-    public virtual void Publish(T state, ISkillUser skillUser, int value1)
+    public virtual void Publish(T state, ICaster caster, int value1)
     {
         if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(skillUser, value1);
+        commands[state].Execute(caster, value1);
     }
 
-    public virtual void Publish(T state, ISkillUser skillUser, int value1, int value2)
+    public virtual void Publish(T state, ICaster caster, int value1, int value2)
     {
         if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(skillUser, value1, value2);
+        commands[state].Execute(caster, value1, value2);
     }
 }

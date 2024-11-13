@@ -6,15 +6,12 @@ using UnityEngine;
 [System.Serializable]
 public class BulletData : WeaponData, ILifetimeStat
 {
-    public float _damage;
     public float Lifetime { get; set; }
     public BulletData(float lifeTime)
     {
-        _damage = 0;
         Lifetime = lifeTime;
     }
 
-    public override void ChangeDamage(float damage) => _damage = damage;
     public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
 
     public override WeaponData Copy()
