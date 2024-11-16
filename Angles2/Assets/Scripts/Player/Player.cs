@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using static Cinemachine.DocumentationSortingAttribute;
+using static InputController;
 
-public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradable
+public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradable, IForce
 {
     public enum MovementState
     {
@@ -30,6 +30,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     private void OnGUI()
     {
+#if UNITY_ANDROID && UNITY_EDITOR
         int size = 25;
         Color color = Color.red;
 
@@ -67,6 +68,8 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
             string text = $"{datas[i].Item1} : {datas[i].Item2}";
             GUI.Label(rect, text, style);
         }
+#elif UNITY_ANDROID
+#endif
     }
 
 
@@ -228,9 +231,10 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         }
     }
 
-    protected override void FixedUpdate()
+    void FixedUpdate()
     {
-        base.FixedUpdate();
+        if (_aliveState == AliveState.Groggy) return;
+
         switch (_lifeState)
         {
             case LifeState.Alive:
@@ -245,6 +249,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     protected override void Update()
     {
         base.Update();
+
+        if (_aliveState == AliveState.Groggy) return;
+
         switch (_lifeState)
         {
             case LifeState.Alive:
@@ -330,5 +337,15 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     public void GetDamageData(DamageableData damageData)
     {
         GetHeal(damageData._damageStat.TotalDamage * _playerData._drainRatio);
+    }
+
+    public bool CanApplyForce()
+    {
+        return _lifeState == LifeState.Alive && (_aliveState == AliveState.Normal || _aliveState == AliveState.Groggy);
+    }
+
+    public void ApplyForce(Vector3 direction, float force, ForceMode2D mode)
+    {
+        _moveComponent.AddForce(direction, force, mode);
     }
 }

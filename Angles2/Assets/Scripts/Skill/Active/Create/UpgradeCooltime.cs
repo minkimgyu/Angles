@@ -24,8 +24,7 @@ public class UpgradeCooltime : BaseSkill
 
     void UpgradeStat()
     {
-        GameObject myObject = _caster.GetComponent<GameObject>();
-        IStatUpgradable visitor = myObject.GetComponent<IStatUpgradable>();
+        IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
         visitor.Upgrade(_data._cooltimeStatModifier, UpgradePoint - 1);

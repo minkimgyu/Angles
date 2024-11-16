@@ -467,7 +467,7 @@ public class Database
         { BaseWeapon.Name.PentagonBullet, new BulletData(5)},
         { BaseWeapon.Name.Rocket, new RocketData(3, 5)},
 
-        { BaseWeapon.Name.Blackhole, new BlackholeData(100, 0.1f)},
+        { BaseWeapon.Name.Blackhole, new BlackholeData(-100, 0.1f)},
         { BaseWeapon.Name.StickyBomb, new StickyBombData(3, 3)},
 
         { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 18, 4.0f, 10.0f)},

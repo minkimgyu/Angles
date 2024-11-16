@@ -10,6 +10,11 @@ public class StageResultViewer : BaseViewer
     [SerializeField] Image _stageResult;
     float _fadeDuration = 2;
 
+    private void OnDestroy()
+    {
+        _stageResult.DOKill();
+    }
+
     public override void TurnOnViewer(bool show)
     {
         _stageResult.DOKill();

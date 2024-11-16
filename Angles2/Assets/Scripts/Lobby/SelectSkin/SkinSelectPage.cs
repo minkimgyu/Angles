@@ -86,7 +86,7 @@ public class SkinSelectPage : MonoBehaviour
     void EquipSkin(SkinData.Key key)
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
-        saveable.EquipSkin(key);
+        saveable.ChangeSkin(key);
 
         _skinInfoController.SelectSkin();
     }

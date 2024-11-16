@@ -40,7 +40,7 @@ public class InitController : MonoBehaviour
         CoreSystem coreSystem = CreateCoreSystem(addressableHandler, factoryCollection, database);
 
         TimeController timeController = new TimeController();
-        SceneController controller = new SceneController();
+        SceneController sceneController = new SceneController();
 
         SoundPlayer soundPlayer = FindObjectOfType<SoundPlayer>();
         soundPlayer.Initialize(coreSystem.AddressableHandler.SoundAsset);
@@ -48,9 +48,14 @@ public class InitController : MonoBehaviour
         SaveManager saveController = new SaveManager(database.DefaultSaveData);
 
         ServiceLocater.Provide(timeController);
-        ServiceLocater.Provide(controller);
+        ServiceLocater.Provide(sceneController);
         ServiceLocater.Provide(soundPlayer);
         ServiceLocater.Provide(saveController);
+
+        // 위 내용을 전부 반영하고 SettingController 적용
+        SettingController settingController = FindObjectOfType<SettingController>();
+        settingController.Initialize();
+        ServiceLocater.Provide(settingController);
 
         ServiceLocater.ReturnSceneController().ChangeScene("MenuScene");
     }

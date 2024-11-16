@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
@@ -27,6 +28,8 @@ public class DungeonMode : BaseGameMode
     [SerializeField] ChargeUIController _chargeUIController;
 
     [SerializeField] BaseViewer _coinViewer;
+    [SerializeField] Button _settingBtn;
+
     DropController _dropController;
 
     Stopwatch _dungeonStopwatch;
@@ -39,7 +42,6 @@ public class DungeonMode : BaseGameMode
 
     void OnEnd()
     {
-        ServiceLocater.ReturnSoundPlayer().StopBGM();
         int coinCount = GameStateManager.Instance.ReturnCoin();
         ServiceLocater.ReturnSaveManager().AddCoinCount(coinCount);
 
@@ -88,6 +90,8 @@ public class DungeonMode : BaseGameMode
             Debug.Log("coreSystem 존재하지 않음");
             return;
         }
+
+        _settingBtn.onClick.AddListener(() => { Debug.Log("Setting"); ServiceLocater.ReturnSettingController().Activate(true); });
 
         _dungeonStopwatch = new Stopwatch();
         _dungeonStopwatch.Start();

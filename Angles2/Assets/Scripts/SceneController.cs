@@ -7,6 +7,12 @@ public class SceneController : ISceneControllable
 {
     public void ChangeScene(string sceneName)
     {
+        ServiceLocater.ReturnSoundPlayer().StopBGM(); // ∫Í±› ∏ÿ√Á¡ÿ¥Ÿ.
         SceneManager.LoadScene(sceneName);
+    }
+
+    public string GetCurrentSceneName()
+    {
+        return SceneManager.GetActiveScene().name;
     }
 }

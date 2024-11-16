@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class NullSoundPlayer : ISoundPlayable
 {
+    public bool GetBGMMute() { return default; }
+    public bool GetSFXMute() { return default; }
+
     public void Initialize(Dictionary<ISoundPlayable.SoundName, AudioClip> clipDictionary) { }
+
+    public void MuteBGM(bool nowMute) { }
+    public void MuteSFX(bool nowMute) { }
 
     public void PlayBGM(ISoundPlayable.SoundName name, float volumn = 1) { }
 

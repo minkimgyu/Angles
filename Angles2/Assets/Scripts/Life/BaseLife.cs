@@ -37,7 +37,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
         Tricon,
         Rhombus,
-        Pentagonic
+        Pentagonic,
+
+        Bomb
     }
 
     public enum AliveState
@@ -123,11 +125,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         {
             _lifeData._hp = _lifeData.MaxHp;
         }
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        if (_lifeState == LifeState.Die) return;
     }
 
     const float oneTick = 10f;

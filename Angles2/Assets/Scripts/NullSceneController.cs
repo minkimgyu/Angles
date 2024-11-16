@@ -5,4 +5,5 @@ using UnityEngine;
 public class NullSceneController : ISceneControllable
 {
     public void ChangeScene(string sceneName) { }
+    public string GetCurrentSceneName() { return default; }
 }

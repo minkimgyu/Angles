@@ -27,15 +27,17 @@ public class SoundPlayer : MonoBehaviour, ISoundPlayable
         if (_clipDictionary.ContainsKey(name) == false) return;
         _bgmPlayer.clip = _clipDictionary[name];
 
+
         _bgmPlayer.volume = volumn;
         _bgmPlayer.Play();
     }
 
     public void PlaySFX(ISoundPlayable.SoundName name, Vector3 pos, float volumn = 1)
     {
+        if (_nowSFXMute == true) return;
         if (_clipDictionary.ContainsKey(name) == false) return;
-
         AudioSource.PlayClipAtPoint(_clipDictionary[name], pos, volumn);
+
     }
 
     public void PlaySFX(ISoundPlayable.SoundName name, float volumn = 1)
@@ -64,6 +66,26 @@ public class SoundPlayer : MonoBehaviour, ISoundPlayable
         for (int i = 0; i < _sfxPlayer.Length; i++)
         {
             _sfxPlayer[i].Stop();
+        }
+    }
+
+    public bool GetBGMMute() { return _bgmPlayer.mute; }
+    public bool GetSFXMute() { return _nowSFXMute; }
+
+    bool _nowSFXMute = false;
+
+    public void MuteBGM(bool nowMute)
+    {
+        _bgmPlayer.mute = nowMute;
+    }
+
+    public void MuteSFX(bool nowMute)
+    {
+        _nowSFXMute = nowMute;
+
+        for (int i = 0; i < _sfxPlayer.Length; i++)
+        {
+            _sfxPlayer[i].mute = _nowSFXMute;
         }
     }
 }

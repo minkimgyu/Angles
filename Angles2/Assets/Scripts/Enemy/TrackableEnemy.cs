@@ -34,10 +34,8 @@ abstract public class TrackableEnemy : BaseEnemy
         _fsm.OnUpdate();
     }
 
-    protected override void FixedUpdate()
+    void FixedUpdate()
     {
-        base.FixedUpdate();
-
         if (_aliveState == AliveState.Groggy) return;
         _fsm.OnFixedUpdate();
     }

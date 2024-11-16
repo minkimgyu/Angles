@@ -53,21 +53,14 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
         this._effectFactory = _effectFactory;
     }
 
-    public bool CanAbsorb()
+    public bool CanApplyForce()
     {
-        return _lifeState == LifeState.Alive;
+        return _lifeState == LifeState.Alive && (_aliveState == AliveState.Normal || _aliveState == AliveState.Groggy);
     }
 
-    public void ApplyForce(Vector3 pos, float speed, ForceMode2D forceMode)
+    public void ApplyForce(Vector3 direction, float force, ForceMode2D mode)
     {
-        Vector3 direction = pos - transform.position;
-        _moveComponent.AddForce(direction, speed, forceMode);
-    }
-
-    public override void GetDamage(DamageableData damageableData)
-    {
-        base.GetDamage(damageableData);
-        
+        _moveComponent.AddForce(direction, force, mode);
     }
 
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas()

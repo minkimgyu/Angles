@@ -9,9 +9,10 @@ abstract public class LifeData
     {
         _maxHp = maxHp;
         _hp = maxHp;
+        _targetType = targetType;
+
         _autoHpRecoveryPoint = autoHpRecoveryPoint;
         _damageReductionRatio = damageReductionRatio;
-        _targetType = targetType;
     }
 
     // setter È°¿ë

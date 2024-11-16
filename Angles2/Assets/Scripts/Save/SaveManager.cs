@@ -8,7 +8,10 @@ public interface ISaveable
     void Save();
     void Load();
 
-    void EquipSkin(SkinData.Key name);
+    void ChangeBGMMute(bool nowMute);
+    void ChangeSFXMute(bool nowMute);
+
+    void ChangeSkin(SkinData.Key name);
     void UnlockSkin(SkinData.Key name);
 
     void ChangeStat(StatData.Key name, int level);
@@ -44,12 +47,19 @@ public class NULLSaveManager : ISaveable
     public void UnlockChapter(DungeonMode.Chapter chapter) { }
     public void ChangeStat(StatData.Key name, int level) { }
 
-    public void EquipSkin(SkinData.Key name) { }
+    public void ChangeSkin(SkinData.Key name) { }
     public void UnlockSkin(SkinData.Key name) { }
+
+
+    public void ChangeBGMMute(bool nowMute) { }
+    public void ChangeSFXMute(bool nowMute) { }
 }
 
 public struct SaveData
 {
+    public bool _muteBGM;
+    public bool _muteSFX;
+
     public int _gold; // 골드
     public DungeonMode.Chapter _chapter; // 현재 선택한 챕터
     public Dictionary<DungeonMode.Chapter, ChapterInfo> _chapterInfos; // 챕터 정보
@@ -70,6 +80,9 @@ public struct SaveData
         SkinData.Key skin,
         Dictionary<SkinData.Key, bool> skinLockInfos)
     {
+        _muteBGM = false;
+        _muteSFX = false;
+
         _gold = gold;
         _chapter = chapter;
         _chapterInfos = chapterInfos;
@@ -97,7 +110,7 @@ public class SaveManager : ISaveable
         Load();
     }
 
-    public void EquipSkin(SkinData.Key name)
+    public void ChangeSkin(SkinData.Key name)
     {
         _saveData._skin = name;
         Save();
@@ -161,7 +174,7 @@ public class SaveManager : ISaveable
 
     public void Load()
     {
-        if (!File.Exists(_filePath)) 
+        if (!File.Exists(_filePath))
         {
             _saveData = _defaultSaveData;
             Save();
@@ -169,12 +182,35 @@ public class SaveManager : ISaveable
         }
 
         string json = File.ReadAllText(_filePath);
-        _saveData = _parser.JsonToObject<SaveData>(json);
+
+        // 불러오는 중 오류가 있다면 기본 세이브로 바꾸고 다시 저장
+        try
+        {
+            _saveData = _parser.JsonToObject<SaveData>(json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e);
+            _saveData = _defaultSaveData;
+            Save();
+        }
     }
 
     public void Save()
     {
         string json = _parser.ObjectToJson(_saveData);
         File.WriteAllText(_filePath, json);
+    }
+
+    public void ChangeBGMMute(bool nowMute)
+    {
+        _saveData._muteBGM = nowMute;
+        Save();
+    }
+
+    public void ChangeSFXMute(bool nowMute)
+    {
+        _saveData._muteSFX = nowMute;
+        Save();
     }
 }

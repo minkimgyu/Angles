@@ -5,4 +5,5 @@ using UnityEngine;
 public interface ISceneControllable
 {
     void ChangeScene(string sceneName);
+    string GetCurrentSceneName();
 }

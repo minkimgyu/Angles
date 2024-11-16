@@ -11,7 +11,7 @@ public struct DamageableData
     public List<ITarget.Type> _targetType;
     public float _groggyDuration;
 
-    public float CalculateDamage(float damageReductionRatio)
+    public float CalculateDamage(float damageReductionRatio = 0)
     {
         float totalDamage = _damageStat.TotalDamage;
         float reducedDamage = _damageStat.TotalDamage * damageReductionRatio;
@@ -22,15 +22,23 @@ public struct DamageableData
     {
         _caster = null;
         _damageStat = damageStat;
-        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue };
+        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue, ITarget.Type.Construction };
         _groggyDuration = 0;
+    }
+
+    public DamageableData(DamageStat damageStat, float groggyDuration)
+    {
+        _caster = null;
+        _damageStat = damageStat;
+        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue, ITarget.Type.Construction };
+        _groggyDuration = groggyDuration;
     }
 
     public DamageableData(ICaster caster, DamageStat damageStat)
     {
         _caster = caster;
         _damageStat = damageStat;
-        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue };
+        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue, ITarget.Type.Construction };
         _groggyDuration = 0;
     }
 
@@ -82,6 +90,7 @@ public interface ITarget : IPos
     {
         Blue, // 플레이어 편
         Red, // 적 편
+        Construction // 건물
     }
 
     bool IsTarget(List<Type> types);

@@ -27,6 +27,7 @@ public class LobbyController : MonoBehaviour
 
         _popUpViewer.Initialize(gameSystem.Database.AlarmInfos);
 
+        _lobbyTopViewer.Initialize(() => { ServiceLocater.ReturnSettingController().Activate(true); });
         _lobbyTopModel = new LobbyTopModel(_lobbyTopViewer);
         _lobbyTopModel.GoldCount = saveData._gold;
 
