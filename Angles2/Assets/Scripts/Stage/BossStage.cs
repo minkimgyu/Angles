@@ -78,7 +78,7 @@ public class BossStage : BattleStage
             BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(_bossStageData.mobSpawnDatas[i].name);
             _spawnCount++;
 
-            enemy.transform.position = new Vector2(_bossStageData.mobSpawnDatas[i].spawnPosition.x, _bossStageData.mobSpawnDatas[i].spawnPosition.y);
+            enemy.transform.position = transform.position + new Vector3(_bossStageData.mobSpawnDatas[i].spawnPosition.x, _bossStageData.mobSpawnDatas[i].spawnPosition.y);
             enemy.InitializeFSM(_pathfinder.FindPath);
             enemy.AddObserverEvent(() => { _spawnCount--; });
 
@@ -95,7 +95,7 @@ public class BossStage : BattleStage
         enemy.AddObserverEvent(OnHPChange);
         enemy.AddObserverEvent(OnEnemyDieRequested);
         enemy.InitializeFSM(_pathfinder.FindPath);
-        enemy.transform.position = new Vector2(_bossStageData.bossSpawnData.spawnPosition.x, _bossStageData.bossSpawnData.spawnPosition.y);
+        enemy.transform.position = transform.position + new Vector3(_bossStageData.bossSpawnData.spawnPosition.x, _bossStageData.bossSpawnData.spawnPosition.y);
         _enemyCount++;
 
         DungeonMode.Chapter chapter = ServiceLocater.ReturnSaveManager().GetSaveData()._chapter;

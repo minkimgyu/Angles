@@ -78,7 +78,7 @@ public class MobStage : BattleStage
         for (int i = 0; i < spawnDatas.Length; i++)
         {
             BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(spawnDatas[i].name);
-            enemy.transform.position = new Vector2(spawnDatas[i].spawnPosition.x, spawnDatas[i].spawnPosition.y);
+            enemy.transform.position = transform.position + new Vector3(spawnDatas[i].spawnPosition.x, spawnDatas[i].spawnPosition.y);
 
             enemy.AddObserverEvent(OnEnemyDieRequested);
             enemy.InitializeFSM(_pathfinder.FindPath);

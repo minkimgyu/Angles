@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomPropertyDrawer(typeof(TrasformEnemyNameDictionary))]
 [CustomPropertyDrawer(typeof(FlockBehaviorDictionary))]
-[CustomPropertyDrawer(typeof(StringStringDictionary))]
-
 [CustomPropertyDrawer(typeof(HandlerDictionary))]
+
 [CustomPropertyDrawer(typeof(ObjectColorDictionary))]
 [CustomPropertyDrawer(typeof(StringColorArrayDictionary))]
 public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer {}
