@@ -2,25 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using DamageUtility;
 
 public class BossStage : BattleStage
 {
-    // 적의 지속적 생성
-    // 보스 몬스터 + 체력바 생성
-
-    [System.Serializable]
-    public struct LevelData
-    {
-        [SerializeField] TrasformEnemyNameDictionary _levelDictionary;
-        public TrasformEnemyNameDictionary LevelDictionary { get { return _levelDictionary; } }
-    }
-
-    [SerializeField] Transform _bossSpawnPoint;
-    [SerializeField] List<LevelData> _stageDatas;
-    [SerializeField] BaseLife.Name _bossName;
-
     List<IDamageable> _mobs;
 
     bool _isActive = false;
@@ -41,6 +26,13 @@ public class BossStage : BattleStage
         _spawnDelay = 15f;
     }
 
+    BossStageData _bossStageData;
+
+    public override void ResetData(BossStageData bossStageData)
+    {
+        _bossStageData = bossStageData;
+    }
+
     public override void AddBossHPEvent(System.Action<float> OnHPChange)
     {
         this.OnHPChange = OnHPChange;
@@ -48,8 +40,8 @@ public class BossStage : BattleStage
 
     protected override void OnEnemyDieRequested()
     {
-        _bossCount -= 1;
-        if (_bossCount > 0) return;
+        _enemyCount -= 1;
+        if (_enemyCount > 0) return;
 
         _isActive = false;
 
@@ -79,17 +71,14 @@ public class BossStage : BattleStage
 
     void SpawnMob()
     {
-        int randomIndex = Random.Range(0, _stageDatas.Count);
-        LevelData levelData = _stageDatas[randomIndex];
-
-        foreach (var item in levelData.LevelDictionary)
+        for (int i = 0; i < _bossStageData.mobSpawnDatas.Length; i++)
         {
             if (_spawnCount >= _maxSpawnCount) return;
 
-            BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
+            BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(_bossStageData.mobSpawnDatas[i].name);
             _spawnCount++;
 
-            enemy.transform.position = item.Key.position;
+            enemy.transform.position = new Vector2(_bossStageData.mobSpawnDatas[i].spawnPosition.x, _bossStageData.mobSpawnDatas[i].spawnPosition.y);
             enemy.InitializeFSM(_pathfinder.FindPath);
             enemy.AddObserverEvent(() => { _spawnCount--; });
 
@@ -101,13 +90,13 @@ public class BossStage : BattleStage
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
         _isActive = true;
-        BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(_bossName);
+        BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(_bossStageData.bossSpawnData.name);
 
         enemy.AddObserverEvent(OnHPChange);
         enemy.AddObserverEvent(OnEnemyDieRequested);
         enemy.InitializeFSM(_pathfinder.FindPath);
-        enemy.transform.position = _bossSpawnPoint.position;
-        _bossCount++;
+        enemy.transform.position = new Vector2(_bossStageData.bossSpawnData.spawnPosition.x, _bossStageData.bossSpawnData.spawnPosition.y);
+        _enemyCount++;
 
         DungeonMode.Chapter chapter = ServiceLocater.ReturnSaveManager().GetSaveData()._chapter;
         ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{chapter.ToString()}BossBGM");

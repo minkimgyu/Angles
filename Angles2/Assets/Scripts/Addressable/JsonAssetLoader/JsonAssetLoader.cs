@@ -18,12 +18,21 @@ public class WeaponJsonAssetLoader : JsonAssetLoader<BaseWeapon.Name, WeaponData
     {
     }
 }
-public class InteractableJsonAssetLoader : JsonAssetLoader<IInteractable.Name, IInteractable>
+
+//public class InteractableJsonAssetLoader : JsonAssetLoader<IInteractable.Name, IInteractable>
+//{
+//    public InteractableJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<IInteractable.Name, IInteractable>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+//    {
+//    }
+//}
+
+public class ChapterMapJsonAssetLoader : JsonAssetLoader<BaseStage.Name, IStageData>
 {
-    public InteractableJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<IInteractable.Name, IInteractable>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    public ChapterMapJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<BaseStage.Name, IStageData>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
     }
 }
+
 
 abstract public class JsonAssetLoader<Key, Value> : BaseDictionaryAssetLoader<Key, Value, TextAsset>
 {

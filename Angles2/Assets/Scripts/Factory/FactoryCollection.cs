@@ -11,6 +11,7 @@ abstract public class BaseFactory
     public virtual BaseSkill Create(BaseSkill.Name name) { return default; }
     public virtual BaseLife Create(BaseLife.Name name) { return default; }
     public virtual IInteractable Create(IInteractable.Name name) { return default; }
+    public virtual BaseStage Create(DungeonMode.Chapter chapter, BaseStage.Name name) { return default; }
 }
 
 public class FactoryCollection
@@ -23,6 +24,7 @@ public class FactoryCollection
         Skill,
         Life,
         Interactable,
+        Stage,
     }
 
     Dictionary<Type, BaseFactory> _factories = new Dictionary<Type, BaseFactory>();
@@ -40,6 +42,8 @@ public class FactoryCollection
         _factories.Add(Type.Life, new LifeFactory(addressableHandler.LifePrefabAsset, database.LifeDatas, _factories[Type.Effect], _factories[Type.Skill]));
 
         _factories.Add(Type.Interactable, new InteractableObjectFactory(addressableHandler.InteractableAsset, database.InteractableObjectDatas));
+
+        _factories.Add(Type.Stage, new ChapterStageFactory(addressableHandler.ChapterMapAsset, addressableHandler.ChapterMapLevelDesignAsset));
     }
 
     public BaseFactory ReturnFactory(Type type) { return _factories[type]; }

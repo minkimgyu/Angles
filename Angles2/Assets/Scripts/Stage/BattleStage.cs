@@ -4,7 +4,7 @@ using UnityEngine;
 
 abstract public class BattleStage : BaseStage
 {
-    protected int _bossCount = 0;
+    protected int _enemyCount = 0;
     protected Pathfinder _pathfinder;
 
     public override void Initialize(BaseStageController baseStageController, CoreSystem coreSystem)

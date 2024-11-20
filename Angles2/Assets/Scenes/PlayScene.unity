@@ -2699,7 +2699,6 @@ GameObject:
   m_Component:
   - component: {fileID: 986343859}
   - component: {fileID: 986343858}
-  - component: {fileID: 986343862}
   - component: {fileID: 986343861}
   m_Layer: 0
   m_Name: DungeonSystem
@@ -2756,20 +2755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stageUIController: {fileID: 1492042883}
---- !u!114 &986343862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986343857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 752a7bb96e6c14e4289fe8a1e595d69d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stageParent: {fileID: 1859088538}
-  _offsetFromCenter: {x: 50, y: 50, z: 0}
 --- !u!1 &1004787112
 GameObject:
   m_ObjectHideFlags: 0

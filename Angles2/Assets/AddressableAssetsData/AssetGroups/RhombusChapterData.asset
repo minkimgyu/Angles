@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RhombusChapterData
+  m_EditorClassIdentifier: 
+  m_GroupName: RhombusChapterData
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3ba0581bf842ee94a8822ade6c577bf9
+  m_SerializeEntries:
+  - m_GUID: 11486999fde4ff443bb16e4f6e94525b
+    m_Address: MobStage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 564a8cc9f560c6347a46cdd88ea983af
+    m_Address: MobStage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20d77e42c48ad504ab8c98ae4bdf606f
+    m_Address: MobStage3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9915f06f4ef14d47afeaedd3043fd56
+    m_Address: MobStage4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c9f7bca739acfb46973b7da69b8de8d
+    m_Address: MobStage5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48268bc47c0a73f4184f8c0bfbe16a9c
+    m_Address: BossStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhombusChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: fc214af376cb125488e254117638978c, type: 2}
+    - {fileID: 11400000, guid: 5b29ab5e2ea3e4d4c80be86236ef5f9f, type: 2}

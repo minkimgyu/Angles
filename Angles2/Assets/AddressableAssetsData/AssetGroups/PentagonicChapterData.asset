@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: PentagonicChapterData
+  m_EditorClassIdentifier: 
+  m_GroupName: PentagonicChapterData
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 8c3ea01ae4c662f4fbaa21654bcde872
+  m_SerializeEntries:
+  - m_GUID: 1db0f97ec4f70264f9277b1bf726c161
+    m_Address: MobStage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a6c5f5df7ca06341b104db3d1a54c35
+    m_Address: MobStage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c79bab95baf58c94393ad7deafd1c6c9
+    m_Address: MobStage3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1a33b1130ce01c4b9f0e606fece76ba
+    m_Address: MobStage4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52de4b725a396ee4fa8a2df8d60b41b4
+    m_Address: MobStage5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28180d08df991274cab4ec3c75431559
+    m_Address: BossStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d4c0a1b15bda5744b803d9434d9e891e, type: 2}
+    - {fileID: 11400000, guid: 189628fa7d4197a4e91dc85aeffd009d, type: 2}

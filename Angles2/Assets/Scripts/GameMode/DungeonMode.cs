@@ -18,7 +18,6 @@ public class DungeonMode : BaseGameMode
 
     DungeonStageController _stageController;
 
-    MapGenerator _mapGenerator;
     [SerializeField] CameraController _cameraController;
     [SerializeField] DashUIController _dashUIController;
     [SerializeField] SkillUIController _skillUIController;
@@ -133,14 +132,10 @@ public class DungeonMode : BaseGameMode
         ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{chapter.ToString()}BGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
-        _mapGenerator = GetComponent<MapGenerator>();
-        _mapGenerator.Initialize(coreSystem.AddressableHandler.ChapterMapAsset[chapter]);
-        _mapGenerator.CreateMap();
-
         _stageController = GetComponent<DungeonStageController>();
 
         ChapterInfo chapterInfo = saveData._chapterInfos[chapter];
         _stageController.Initialize(chapterInfo._maxLevel, coreSystem);
-        _stageController.CreateRandomStage(_mapGenerator.StageObjects);
+        _stageController.CreateRandomStage(chapter);
     }
 }

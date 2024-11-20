@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class BaseStage : MonoBehaviour
 {
-    public enum Type
+    public enum Name
     {
         StartStage,
         BonusStage,
-        MobStage,
         BossStage,
+
+        MobStage1,
+        MobStage2,
+        MobStage3,
+        MobStage4,
+        MobStage5,
     }
 
     [SerializeField] protected Transform _entryPoint;
@@ -18,6 +23,9 @@ public class BaseStage : MonoBehaviour
 
     protected BaseStageController _baseStageController;
     protected CoreSystem _coreSystem;
+
+    public virtual void ResetData(MobStageData mobStageData) { }
+    public virtual void ResetData(BossStageData bossStageData) { }
 
     public virtual void Initialize(BaseStageController baseStageController, CoreSystem coreSystem) 
     {

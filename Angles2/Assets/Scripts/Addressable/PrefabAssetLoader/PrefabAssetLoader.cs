@@ -41,6 +41,13 @@ public class ViewerAssetLoader : PrafabAssetLoader<BaseViewer.Name, BaseViewer>
     }
 }
 
+public class ChapterMapAssetLoader : PrafabAssetLoader<BaseStage.Name, BaseStage>
+{
+    public ChapterMapAssetLoader(AddressableHandler.Label label, Action<Dictionary<BaseStage.Name, BaseStage>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+}
+
 abstract public class PrafabAssetLoader<Key, Value> : BaseDictionaryAssetLoader<Key, Value, GameObject>
 {
     protected PrafabAssetLoader(AddressableHandler.Label label, Action<Dictionary<Key, Value>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)

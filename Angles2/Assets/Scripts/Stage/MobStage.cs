@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class MobStage : BattleStage
 {
-    [System.Serializable]
-    public struct LevelData
-    {
-        [SerializeField] Difficulty _difficulty;
-        public Difficulty Difficulty { get { return _difficulty; } }
+    MobStageData _mobStageData;
 
-        [SerializeField] TrasformEnemyNameDictionary _levelDictionary;
-        public TrasformEnemyNameDictionary LevelDictionary { get { return _levelDictionary; } }
+    public override void ResetData(MobStageData mobStageData)
+    {
+        _mobStageData = mobStageData;
     }
 
     public enum Difficulty
@@ -23,8 +19,6 @@ public class MobStage : BattleStage
     }
 
     Dictionary<Vector2, Difficulty> _difficultyRangeDictionary;
-    [SerializeField] List<LevelData> _stageDatas;
-
     Portal _portal;
 
     public override void ActivePortal(Vector2 movePos)
@@ -55,9 +49,9 @@ public class MobStage : BattleStage
 
     protected override void OnEnemyDieRequested()
     {
-        _bossCount -= 1;
-        if (_bossCount > 0) return;
-        Debug.Log(_bossCount);
+        _enemyCount -= 1;
+        if (_enemyCount > 0) return;
+        Debug.Log(_enemyCount);
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.StageClear, 0.8f);
         _baseStageController.OnStageClearRequested();
@@ -80,26 +74,15 @@ public class MobStage : BattleStage
         Difficulty difficulty = ReturnDifficultyByProgress((float)currentStageCount / totalStageCount);
         Debug.Log(difficulty);
 
-        List<LevelData> possibleLevelDatas = new List<LevelData>();
-
-        for (int i = 0; i < _stageDatas.Count; i++)
+        SpawnData[] spawnDatas = _mobStageData.GetSpawnData(difficulty);
+        for (int i = 0; i < spawnDatas.Length; i++)
         {
-            if (_stageDatas[i].Difficulty != difficulty) continue;
-
-            possibleLevelDatas.Add(_stageDatas[i]);
-        }
-
-        // _stageDatas[0]
-        LevelData levelData = possibleLevelDatas[UnityEngine.Random.Range(0, possibleLevelDatas.Count)];
-
-        foreach (var item in levelData.LevelDictionary)
-        {
-            BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(item.Value);
-            enemy.transform.position = item.Key.position;
+            BaseLife enemy = _coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(spawnDatas[i].name);
+            enemy.transform.position = new Vector2(spawnDatas[i].spawnPosition.x, spawnDatas[i].spawnPosition.y);
 
             enemy.AddObserverEvent(OnEnemyDieRequested);
             enemy.InitializeFSM(_pathfinder.FindPath);
-            _bossCount++;
+            _enemyCount++;
         }
     }
 }

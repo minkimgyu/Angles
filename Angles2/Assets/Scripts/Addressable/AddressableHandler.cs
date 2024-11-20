@@ -24,6 +24,10 @@ public class AddressableHandler : MonoBehaviour
         RhombusChapterMap,
         PentagonicChapterMap,
 
+        TriconChapterData,
+        RhombusChapterData,
+        PentagonicChapterData,
+
         ChapterIcon,
         StatIcon,
         SkinIcon
@@ -46,10 +50,16 @@ public class AddressableHandler : MonoBehaviour
         _successCount = 0;
         _totalCount = 0;
 
-        ChapterMapAsset = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Type, List<BaseStage>>>();
+        ChapterMapAsset = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, BaseStage>>();
         foreach (DungeonMode.Chapter chapter in Enum.GetValues(typeof(DungeonMode.Chapter)))
         {
-            ChapterMapAsset[chapter] = new Dictionary<BaseStage.Type, List<BaseStage>>();
+            ChapterMapAsset[chapter] = new Dictionary<BaseStage.Name, BaseStage>();
+        }
+
+        ChapterMapLevelDesignAsset = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, IStageData>>();
+        foreach (DungeonMode.Chapter chapter in Enum.GetValues(typeof(DungeonMode.Chapter)))
+        {
+            ChapterMapLevelDesignAsset[chapter] = new Dictionary<BaseStage.Name, IStageData>();
         }
     }
 
@@ -64,7 +74,8 @@ public class AddressableHandler : MonoBehaviour
     public Dictionary<IInteractable.Name, IInteractable> InteractableAsset { get; private set; }
     public Dictionary<ISoundPlayable.SoundName, AudioClip> SoundAsset { get; private set; }
 
-    public Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Type, List<BaseStage>>> ChapterMapAsset { get; private set; }
+    public Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, BaseStage>> ChapterMapAsset { get; private set; }
+    public Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, IStageData>> ChapterMapLevelDesignAsset { get; private set; }
 
     public void Load(Action OnCompleted)
     {
@@ -81,7 +92,36 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new InteractableAssetLoader(Label.InteractableObject, (value, label) => { InteractableAsset = value; OnSuccess(Label.InteractableObject); }));
         _assetLoaders.Add(new SoundAssetLoader(Label.Sound, (value, label) => { SoundAsset = value; OnSuccess(Label.Sound); }));
 
-        _assetLoaders.Add(new MapAssetLoader(
+
+
+        _assetLoaders.Add(new ChapterMapJsonAssetLoader(
+            Label.TriconChapterData,
+            (value, label) => {
+                ChapterMapLevelDesignAsset[DungeonMode.Chapter.TriconChapter] = value; 
+                OnSuccess(Label.TriconChapterData); 
+            }
+        ));
+
+        _assetLoaders.Add(new ChapterMapJsonAssetLoader(
+            Label.RhombusChapterData,
+            (value, label) => {
+                ChapterMapLevelDesignAsset[DungeonMode.Chapter.RhombusChapter] = value;
+                OnSuccess(Label.RhombusChapterData);
+            }
+        ));
+
+        _assetLoaders.Add(new ChapterMapJsonAssetLoader(
+            Label.PentagonicChapterData,
+            (value, label) => {
+                ChapterMapLevelDesignAsset[DungeonMode.Chapter.PentagonicChapter] = value;
+                OnSuccess(Label.PentagonicChapterData);
+            }
+        ));
+
+
+
+
+        _assetLoaders.Add(new ChapterMapAssetLoader(
             Label.TriconChapterMap,
             (value, label) => {
                 ChapterMapAsset[DungeonMode.Chapter.TriconChapter] = value;
@@ -89,14 +129,14 @@ public class AddressableHandler : MonoBehaviour
             }
         ));
 
-        _assetLoaders.Add(new MapAssetLoader(
+        _assetLoaders.Add(new ChapterMapAssetLoader(
             Label.RhombusChapterMap, 
             (value, label) => { ChapterMapAsset[DungeonMode.Chapter.RhombusChapter] = value; 
             OnSuccess(Label.RhombusChapterMap); 
             }
         ));
 
-        _assetLoaders.Add(new MapAssetLoader(
+        _assetLoaders.Add(new ChapterMapAssetLoader(
             Label.PentagonicChapterMap,
             (value, label) => {
                 ChapterMapAsset[DungeonMode.Chapter.PentagonicChapter] = value;

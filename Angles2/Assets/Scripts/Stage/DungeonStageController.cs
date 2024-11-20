@@ -30,6 +30,9 @@ public class DungeonStageController : BaseStageController
         _stageUIController.Initialize();
         _stageUIController.ShowStageResult(false);
         _stageQueue = new Queue<BaseStage>();
+
+        _mapGenerator = new MapGenerator(coreSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Stage));
+
         _currentStage = null;
         _nextStage = null;
     }
@@ -74,10 +77,10 @@ public class DungeonStageController : BaseStageController
         _currentStage.Spawn(_maxStageCount, _maxStageCount - _stageQueue.Count);
     }
 
-    BaseStage ReturnRandomStage(BaseStage.Type type, Dictionary<BaseStage.Type, List<BaseStage>> stageObjects)
+    BaseStage ReturnRandomMobStage(Dictionary<BaseStage.Name, BaseStage> stageObjects)
     {
-        int startStageCount = stageObjects[type].Count;
-        return stageObjects[type][UnityEngine.Random.Range(0, startStageCount)];
+        int randomRange = UnityEngine.Random.Range(3, 8); // 3, 4, 5, 6, 7
+        return stageObjects[(BaseStage.Name)randomRange];
     }
 
 
@@ -105,36 +108,36 @@ public class DungeonStageController : BaseStageController
     //일반 18
     //보스 19
 
+    MapGenerator _mapGenerator;
 
-    public void CreateRandomStage(Dictionary<BaseStage.Type, List<BaseStage>> stageObjects)
+    public void CreateRandomStage(DungeonMode.Chapter chapter)
     {
+        Dictionary<BaseStage.Name, BaseStage> stageObjects = _mapGenerator.CreateMap(chapter);
+
         foreach (var item in stageObjects)
         {
-            for (int i = 0; i < item.Value.Count; i++)
-            {
-                item.Value[i].Initialize(this, _coreSystem);
-            }
+            item.Value.Initialize(this, _coreSystem);
         }
 
         BaseStage storedBattleStage = null;
-        BaseStage startStage = ReturnRandomStage(BaseStage.Type.StartStage, stageObjects);
+        BaseStage startStage = stageObjects[BaseStage.Name.StartStage];
         _stageQueue.Enqueue(startStage);
 
         for (int i = 1; i < _maxStageCount; i++)
         {
             if(i == _maxStageCount - 1)
             {
-                BaseStage bossStage = ReturnRandomStage(BaseStage.Type.BossStage, stageObjects);
+                BaseStage bossStage = stageObjects[BaseStage.Name.BossStage];
                 _stageQueue.Enqueue(bossStage);
             }
             else if((i + 1) % _bonusStageGap == 0)
             {
-                BaseStage bonusStage = ReturnRandomStage(BaseStage.Type.BonusStage, stageObjects);
+                BaseStage bonusStage = stageObjects[BaseStage.Name.BonusStage];
                 _stageQueue.Enqueue(bonusStage);
             }
             else
             {
-                BaseStage battleStage = ReturnRandomStage(BaseStage.Type.MobStage, stageObjects);
+                BaseStage battleStage = ReturnRandomMobStage(stageObjects);
 
                 if(storedBattleStage == null)
                 {
@@ -143,7 +146,7 @@ public class DungeonStageController : BaseStageController
                 }
                 else
                 {
-                    while (storedBattleStage == battleStage) battleStage = ReturnRandomStage(BaseStage.Type.MobStage, stageObjects);
+                    while (storedBattleStage == battleStage) battleStage = ReturnRandomMobStage(stageObjects);
 
                     _stageQueue.Enqueue(battleStage);
                     storedBattleStage = battleStage;

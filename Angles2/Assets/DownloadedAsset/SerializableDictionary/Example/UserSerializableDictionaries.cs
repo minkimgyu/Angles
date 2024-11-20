@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-[Serializable]
-public class TrasformEnemyNameDictionary : SerializableDictionary<Transform, BaseEnemy.Name> { }
+//[Serializable]
+//public class TrasformEnemyNameDictionary : SerializableDictionary<Transform, BaseEnemy.Name> { }
 
-[Serializable]
-public class StringStringDictionary : SerializableDictionary<string, string> {}
+//[Serializable]
+//public class StringStringDictionary : SerializableDictionary<string, string> {}
 
 //[Serializable]
 //public class CardInfoDictionary : SerializableDictionary<BaseSkill.Name, BaseCardInfo> { }

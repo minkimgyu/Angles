@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator
 {
     [SerializeField] Transform _stageParent;
     [SerializeField] Vector3 _offsetFromCenter;
 
-    Dictionary<BaseStage.Type, List<BaseStage>> _stagePrefabs;
-    public Dictionary<BaseStage.Type, List<BaseStage>> StageObjects { get; private set; }
+    BaseFactory _stageFactory;
 
     const int _maxRow = 3;
     const int _offset = 100;
@@ -17,31 +16,24 @@ public class MapGenerator : MonoBehaviour
     int xPos = 0;
     int rowCount = 0;
 
-    public void Initialize(Dictionary<BaseStage.Type, List<BaseStage>> stagePrefabs)
+    public MapGenerator(BaseFactory stageFactory)
     {
-        _stagePrefabs = stagePrefabs;
-        StageObjects = new Dictionary<BaseStage.Type, List<BaseStage>>();
+        _stageFactory = stageFactory;
     }
 
-    public void CreateMap()
+    public Dictionary<BaseStage.Name, BaseStage> CreateMap(DungeonMode.Chapter chapter)
     {
-        foreach (BaseStage.Type stageType in Enum.GetValues(typeof(BaseStage.Type)))
-        {
-            CreateStage(stageType, _stagePrefabs[stageType]);
-        }
-    }
+        Dictionary<BaseStage.Name, BaseStage> stages = new Dictionary<BaseStage.Name, BaseStage>();
 
-    void CreateStage(BaseStage.Type type, List<BaseStage> stagePrefabs)
-    {
-        List<BaseStage> stages = new List<BaseStage>();
-
-        for (int i = 0; i < stagePrefabs.Count; i++)
+        int count = System.Enum.GetValues(typeof(BaseStage.Name)).Length;
+        for (int i = 0; i < count; i++)
         {
+            BaseStage.Name stageName = (BaseStage.Name)i;
             Vector3 stagePosition = new Vector3(xPos, rowCount * _offset) + _offsetFromCenter;
-            BaseStage stage = Instantiate(stagePrefabs[i], _stageParent);
-            stage.transform.position = stagePosition;
 
-            stages.Add(stage);
+            BaseStage stage = _stageFactory.Create(chapter, stageName);
+            stages.Add(stageName, stage);
+            stage.transform.position = stagePosition;
 
             rowCount++;
             if (rowCount == _maxRow)
@@ -51,6 +43,6 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        StageObjects.Add(type, stages);
+        return stages;
     }
 }
