@@ -4320,18 +4320,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entryPoint: {fileID: 4185485368483619311}
-  _bossSpawnPoint: {fileID: 1856154895863591465}
-  _stageDatas:
-  - _levelDictionary:
-      m_keys:
-      - {fileID: 9199384476534607927}
-      - {fileID: 2612277372128790522}
-      - {fileID: 8766420786280719706}
-      - {fileID: 700495780101520235}
-      - {fileID: 7776375782889510311}
-      - {fileID: 2481144151650208754}
-      m_values: 060000000600000003000000030000000100000001000000
-  _bossName: 9
 --- !u!114 &7613425430534972146
 MonoBehaviour:
   m_ObjectHideFlags: 0

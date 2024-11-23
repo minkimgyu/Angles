@@ -17,37 +17,37 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d152b88b3d805c643a6f09c404c86d58
   m_SerializeEntries:
-  - m_GUID: e7dfed4f1e2dbb24180cb53338825319
-    m_Address: MobStage1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TriconChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 49ce81523825249409d833cca6c2660e
-    m_Address: MobStage2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TriconChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bf58a886d736a84408ae53cd684bcf5f
-    m_Address: MobStage3
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TriconChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 046b0f389612ce743a3c4a198d38a07d
-    m_Address: MobStage4
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - TriconChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83d9865263088ba45aef70431b7cda30
+  - m_GUID: 2d0d42dfacdf8fa4182dd63a8f45ba58
     m_Address: MobStage5
     m_ReadOnly: 0
     m_SerializedLabels:
     - TriconChapterData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a7be5efccc6b43142bedd4a273d25539
+  - m_GUID: 76e56df147c1dc440b09eb08de7ce466
+    m_Address: MobStage4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TriconChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abda27ad546899a4ab8ec74d2c2bfa45
+    m_Address: MobStage3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TriconChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45a40ef3e4244d34ca8446c7547872d8
+    m_Address: MobStage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TriconChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ee0fd3c58b59f74d99a06c8ac3cf966
+    m_Address: MobStage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TriconChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4f295d12ca11cc4d86efd8e49828a60
     m_Address: BossStage
     m_ReadOnly: 0
     m_SerializedLabels:

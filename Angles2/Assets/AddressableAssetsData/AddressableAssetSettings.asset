@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 3589b5c9e1b0b804fb0093a279ef9087
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: a74010af3a628df5ef752c60045f3ba6
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -81,9 +81,9 @@ MonoBehaviour:
       - m_Id: 1f8b752659d96d84facc3af8fb4155b4
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 830743defea9d33499842e2873a905ea
-        m_Value: ServerData/[BuildTarget]
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 74950372ab85a4d4eaf582a78c4bfb1e
-        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
     m_ProfileEntryNames:
     - m_Id: 3459de583ce48764cbf215a3bd5b321a
       m_Name: BuildTarget
@@ -120,6 +120,7 @@ MonoBehaviour:
     - RhombusChapterData
     - PentagonicChapterData
     - TriconChapterData
+    - Materials
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: e12fe35937006864a81e8bb7a1736e46, type: 2}

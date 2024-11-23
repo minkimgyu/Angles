@@ -76,7 +76,7 @@ public class Blackhole : BaseWeapon
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if(duration > _data._forceDelay)
             {
-                Vector3 direction = transform.position - _targetDatas[i].AbsorbableTarget.ReturnPosition();
+                Vector3 direction = _targetDatas[i].AbsorbableTarget.ReturnPosition() - transform.position;
                 _targetDatas[i].AbsorbableTarget.ApplyForce(direction, _data._absorbForce, ForceMode2D.Force);
                 Damage.Hit(_data._damageableData, _targetDatas[i].DamageableTarget);
 

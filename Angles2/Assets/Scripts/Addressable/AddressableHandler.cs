@@ -81,6 +81,8 @@ public class AddressableHandler : MonoBehaviour
     {
         _assetLoaders = new HashSet<BaseLoader>();
 
+
+
         _assetLoaders.Add(new SkinIconAssetLoader(Label.SkinIcon, (value, label) => { SkinIconAsset = value; OnSuccess(label); }));
         _assetLoaders.Add(new StatIconAssetLoader(Label.StatIcon, (value, label) => { StatIconAsset = value; OnSuccess(label); }));
         _assetLoaders.Add(new ChapterIconAssetLoader(Label.ChapterIcon, (value, label) => { ChapterIconAsset = value; OnSuccess(label); }));

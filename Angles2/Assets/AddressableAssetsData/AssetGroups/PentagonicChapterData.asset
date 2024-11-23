@@ -17,37 +17,37 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 8c3ea01ae4c662f4fbaa21654bcde872
   m_SerializeEntries:
-  - m_GUID: 1db0f97ec4f70264f9277b1bf726c161
-    m_Address: MobStage1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PentagonicChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1a6c5f5df7ca06341b104db3d1a54c35
-    m_Address: MobStage2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PentagonicChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c79bab95baf58c94393ad7deafd1c6c9
-    m_Address: MobStage3
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PentagonicChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d1a33b1130ce01c4b9f0e606fece76ba
-    m_Address: MobStage4
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PentagonicChapterData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 52de4b725a396ee4fa8a2df8d60b41b4
+  - m_GUID: 6057a165c6d95cf4aa3f985f63ea2164
     m_Address: MobStage5
     m_ReadOnly: 0
     m_SerializedLabels:
     - PentagonicChapterData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 28180d08df991274cab4ec3c75431559
+  - m_GUID: 80473e307f96db8459644c835e7259c5
+    m_Address: MobStage4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: deedcb90df7f86b4d828f85c58b88c6b
+    m_Address: MobStage3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25c7a21f24abd084c968435dc9e3c5b2
+    m_Address: MobStage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f72000e9198a0dd4896360cd2a93177f
+    m_Address: MobStage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PentagonicChapterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbde74280a3410640a25c62446ff075d
     m_Address: BossStage
     m_ReadOnly: 0
     m_SerializedLabels:
