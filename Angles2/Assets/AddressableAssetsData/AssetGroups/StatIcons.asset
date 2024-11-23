@@ -35,14 +35,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - StatIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b5877620fe641654eabf0af5fd4142ae
-    m_Address: MaxHp
+  - m_GUID: a90cee380e9cc5e45b8a33c5049d328d
+    m_Address: AttackDamage
     m_ReadOnly: 0
     m_SerializedLabels:
     - StatIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a90cee380e9cc5e45b8a33c5049d328d
-    m_Address: AttackDamage
+  - m_GUID: 81173a7a2c19d644ea0e6828c138a261
+    m_Address: MaxHp
     m_ReadOnly: 0
     m_SerializedLabels:
     - StatIcon
