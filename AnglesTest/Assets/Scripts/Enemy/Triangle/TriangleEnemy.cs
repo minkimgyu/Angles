@@ -7,13 +7,13 @@ public class TriangleEnemy : BasicMob
 {
     [SerializeField] DamageableTargetCaptureComponent _skillTargetCaptureComponent;
 
-    public override void ResetData(TriangleData data)
+    public override void ResetData(TriangleData data, DropData dropData)
     {
-        base.ResetData(data);
-        _size = data._size;
-        _targetType = data._targetType;
-        _moveSpeed = data._moveSpeed;
-        _dropData = data._dropData;
+        base.ResetData(data, dropData);
+        _size = data.Size;
+        _targetType = data.TargetType;
+        _moveSpeed = data.MoveSpeed;
+        _dropData = dropData;
 
         _gap = 0.5f;
         _destoryEffect = BaseEffect.Name.TriangleDestroyEffect;

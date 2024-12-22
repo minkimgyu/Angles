@@ -15,7 +15,7 @@ public class CardViewer : BaseViewer, IPointerClickHandler
     [SerializeField] List<GameObject> _upgradeIcons;
     Action OnClick;
 
-    public override void Initialize(SKillCardData cardData, Action OnClick)
+    public virtual void Initialize(SKillCardData cardData, Action OnClick)
     {
         _nameText.text = cardData.Name;
         _iconImage.sprite = cardData.Icon;

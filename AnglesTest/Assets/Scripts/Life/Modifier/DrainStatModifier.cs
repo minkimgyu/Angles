@@ -1,11 +1,19 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class DrainStatModifier : IStatModifier
 {
-    List<float> _additionalDrainRatios;
-    float _additionalDrainRatio;
+    [JsonProperty] List<float> _additionalDrainRatios;
+    [JsonProperty] float _additionalDrainRatio;
+
+    public DrainStatModifier() 
+    {
+        _additionalDrainRatios = new List<float>();
+        _additionalDrainRatio = 0;
+    }
 
     public DrainStatModifier(List<float> additionalDrainRatios)
     {
@@ -19,11 +27,11 @@ public class DrainStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data._drainRatio += _additionalDrainRatios[level];
+        data.DrainRatio += _additionalDrainRatios[level];
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data._drainRatio += _additionalDrainRatio;
+        data.DrainRatio += _additionalDrainRatio;
     }
 }

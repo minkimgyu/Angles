@@ -8,7 +8,7 @@ public class ShootState : State<Player.ActionState>
     Action<bool, float> ChangeBodyScale;
 
     Action<bool> SetInvincible;
-    Action<Collision2D> OnReflect;
+    Action<GameObject, Vector3> OnReflect;
 
     float _ratio;
 
@@ -17,6 +17,8 @@ public class ShootState : State<Player.ActionState>
     MoveComponent _moveComponent;
 
     PlayerData _playerData;
+
+    LayerMask _layerMask;
 
     public ShootState(
         FSM<Player.ActionState> fsm,
@@ -27,7 +29,7 @@ public class ShootState : State<Player.ActionState>
         MoveComponent moveComponent,
 
         Action<bool, float> ChangeBodyScale,
-        Action<Collision2D> OnReflect,
+        Action<GameObject, Vector3> OnReflect,
 
         Action<bool> SetInvincible) : base(fsm)
     {
@@ -40,16 +42,24 @@ public class ShootState : State<Player.ActionState>
 
         _timer = new Timer();
         this.SetInvincible = SetInvincible;
+
+        _layerMask = LayerMask.GetMask("Obstacle", "Target");
     }
 
     public override void OnCollisionEnter(Collision2D collision)
     {
+        ReflectTo(collision.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
+    }
+
+    void ReflectTo(GameObject targetObject, Vector3 contactPos, Vector3 contactNormal)
+    {
         // collision -> 적, 벽
+        Debug.Log(targetObject.name);
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce, 0.6f);
-        OnReflect?.Invoke(collision);
+        OnReflect?.Invoke(targetObject, contactPos);
 
-        Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, collision.contacts[0].normal);
+        Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, contactNormal);
         _myTransform.right = reflectDirection;
 
         Debug.DrawRay(_myTransform.position, reflectDirection, Color.red, 5);
@@ -66,10 +76,11 @@ public class ShootState : State<Player.ActionState>
         _ratio = ratio;
 
         _timer.Reset();
-        _timer.Start(_playerData._shootDuration);
+        _timer.Start(_playerData.ShootDuration);
 
         ChangeBodyScale?.Invoke(false, 0);
         Shoot(direction);
+        RaycastToRight();
     }
 
     public override void OnStateExit()
@@ -77,9 +88,31 @@ public class ShootState : State<Player.ActionState>
         _moveComponent.ApplyMovement = true;
     }
 
+    void RaycastToRight()
+    {
+        // direction 방향으로 raycast를 쏴서 앞에 뭔가 있으면 반대로 튕기게 하기
+        // 나중에 크기 키우면 변경해줘야함
+        float raycastDistance = 0.2f + 0.5f;
+        float raycastDistanceFrom = 0f;
+
+        RaycastHit2D hit = Physics2D.Raycast(_myTransform.position + (Vector3)_myTransform.right * raycastDistanceFrom, _myTransform.right, raycastDistance, _layerMask);
+        Debug.DrawRay(_myTransform.position + (Vector3)_myTransform.right * raycastDistanceFrom, _myTransform.right * raycastDistance, Color.red, 3);
+
+        //Time.timeScale = 0;
+
+        if (hit.transform != null)
+        {
+            GameObject hitObject = hit.collider.gameObject;
+            Vector3 hitPos = hit.point;
+            Vector3 hitNormal = hit.normal;
+
+            ReflectTo(hitObject, hitPos, hitNormal);
+        }
+    }
+
     public override void OnStateUpdate()
     {
-        if(_timer.CurrentState == Timer.State.Finish)
+        if (_timer.CurrentState == Timer.State.Finish)
         {
             GoToReadyState();
             return;
@@ -94,7 +127,7 @@ public class ShootState : State<Player.ActionState>
     void Shoot(Vector2 direction)
     {
         _moveComponent.ResetVelocity();
-        _moveComponent.AddForce(direction, _playerData._shootSpeed * _ratio);
+        _moveComponent.AddForce(direction, _playerData.ShootSpeed * _ratio);
     }
 
     void GoToReadyState()

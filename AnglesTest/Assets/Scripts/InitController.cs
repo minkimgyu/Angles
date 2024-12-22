@@ -34,17 +34,14 @@ public class InitController : MonoBehaviour
     public void Initialize(AddressableHandler addressableHandler)
     {
         Database database = new Database();
-        FactoryCollection factoryCollection = new FactoryCollection(addressableHandler, database);
-
-        CoreSystem coreSystem = CreateCoreSystem(addressableHandler, factoryCollection, database);
 
         TimeController timeController = new TimeController();
         SceneController sceneController = new SceneController();
 
         SoundPlayer soundPlayer = FindObjectOfType<SoundPlayer>();
-        soundPlayer.Initialize(coreSystem.AddressableHandler.SoundAsset);
+        soundPlayer.Initialize(addressableHandler.SoundAsset);
 
-        SaveManager saveController = new SaveManager(database.DefaultSaveData);
+        SaveManager saveController = new SaveManager(new SaveData(3000));
 
         ServiceLocater.Provide(timeController);
         ServiceLocater.Provide(sceneController);
@@ -56,27 +53,14 @@ public class InitController : MonoBehaviour
         settingController.Initialize();
         ServiceLocater.Provide(settingController);
 
-        ServiceLocater.ReturnSceneController().ChangeScene("MenuScene");
-    }
-
-    CoreSystem CreateCoreSystem(AddressableHandler addressableHandler, FactoryCollection factoryCollection, Database database)
-    {
-        GameObject gameSystem = new GameObject();
-        gameSystem.name = "gameSystem";
-        gameSystem.AddComponent<CoreSystem>();
-
-        CoreSystem coreSystem = gameSystem.GetComponent<CoreSystem>();
-        coreSystem.Initialize(addressableHandler, factoryCollection, database);
-        DontDestroyOnLoad(coreSystem);
-        return coreSystem;
+        ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.MenuScene);
     }
 
     AddressableHandler CreateAddressableHandler()
     {
         GameObject addressable = new GameObject();
         addressable.name = "Addressable";
-        addressable.AddComponent<AddressableHandler>();
-        AddressableHandler addressableHandler = addressable.GetComponent<AddressableHandler>();
+        AddressableHandler addressableHandler = addressable.AddComponent<AddressableHandler>();
         DontDestroyOnLoad(addressable);
 
         return addressableHandler;

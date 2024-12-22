@@ -1,11 +1,19 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class DamageReductionStatModifier : IStatModifier
 {
-    List<float> _additionalDamageReductionRatios;
-    float _additionalDamageReductionRatio;
+    [JsonProperty] List<float> _additionalDamageReductionRatios;
+    [JsonProperty] float _additionalDamageReductionRatio;
+
+    public DamageReductionStatModifier()
+    {
+        _additionalDamageReductionRatios = new List<float>();
+        _additionalDamageReductionRatio = 0;
+    }
 
     public DamageReductionStatModifier(List<float> additionalDamageReductionRatios)
     {
@@ -19,11 +27,11 @@ public class DamageReductionStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data._damageReductionRatio += _additionalDamageReductionRatios[level];
+        data.DamageReductionRatio += _additionalDamageReductionRatios[level];
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data._damageReductionRatio += _additionalDamageReductionRatio;
+        data.DamageReductionRatio += _additionalDamageReductionRatio;
     }
 }

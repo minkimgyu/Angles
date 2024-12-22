@@ -6,38 +6,34 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using System;
 
-public class LifeJsonAssetLoader : JsonAssetLoader<BaseLife.Name, LifeData>
-{
-    public LifeJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<BaseLife.Name, LifeData>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
-    {
-    }
-}
-public class WeaponJsonAssetLoader : JsonAssetLoader<BaseWeapon.Name, WeaponData>
-{
-    public WeaponJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<BaseWeapon.Name, WeaponData>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
-    {
-    }
-}
-
-//public class InteractableJsonAssetLoader : JsonAssetLoader<IInteractable.Name, IInteractable>
-//{
-//    public InteractableJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<IInteractable.Name, IInteractable>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
-//    {
-//    }
-//}
-
-public class ChapterMapJsonAssetLoader : JsonAssetLoader<BaseStage.Name, IStageData>
+public class ChapterMapJsonAssetLoader : DictionaryJsonAssetLoader<BaseStage.Name, IStageData>
 {
     public ChapterMapJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<BaseStage.Name, IStageData>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
     }
 }
 
-
-abstract public class JsonAssetLoader<Key, Value> : BaseDictionaryAssetLoader<Key, Value, TextAsset>
+public class JsonAssetLoader<Value> : BaseAssetLoader<Value, TextAsset>
 {
     JsonParser _parser;
-    protected JsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<Key, Value>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    public JsonAssetLoader(AddressableHandler.Label label, Action<Value, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+        _parser = new JsonParser();
+    }
+
+    protected override void LoadAsset(TextAsset value)
+    {
+        //byte[] bytes = System.Convert.FromBase64String(value.text);
+        //string decodedJson = System.Text.Encoding.UTF8.GetString(bytes);
+        //_asset = _parser.JsonToObject<Value>(decodedJson);
+        _asset = _parser.JsonToObject<Value>(value.text);
+    }
+}
+
+abstract public class DictionaryJsonAssetLoader<Key, Value> : BaseDictionaryAssetLoader<Key, Value, TextAsset>
+{
+    JsonParser _parser;
+    protected DictionaryJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<Key, Value>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
         _parser = new JsonParser();
     }

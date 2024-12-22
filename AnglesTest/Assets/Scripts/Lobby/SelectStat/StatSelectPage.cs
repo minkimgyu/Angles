@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using Newtonsoft.Json;
 
+[System.Serializable]
 public struct StatData
 {
     public enum Key
@@ -12,19 +14,22 @@ public struct StatData
         AttackDamage,
         MoveSpeed,
         MaxHp,
-        AutoHpRecovery,
+        //AutoHpRecovery,
         DamageReduction,
     }
 
-    public string _name;
-    List<int> _cost;
-    List<string> _description;
+    [JsonProperty] string _name;
+    [JsonProperty] int _maxLevel;
 
-    public int _maxLevel;
+    [JsonProperty] List<int> _cost;
+    [JsonProperty] List<string> _description;
+
+    [JsonIgnore] public string Name { get => _name; }
+    [JsonIgnore] public int MaxLevel { get => _maxLevel; }
 
     public int ReturnCost(int level) 
     { 
-        if(level == _maxLevel) return 0;
+        if(level == MaxLevel) return 0;
         return _cost[level]; 
     }
 
@@ -34,12 +39,22 @@ public struct StatData
         return _description[level - 1]; // 하나씩 앞선 값을 전달
     }
 
-    public StatData(string name, List<int> cost, int maxLevel, List<string> description)
+    public StatData(string name, int maxLevel, List<int> cost, List<string> description)
     {
         _name = name;
-        _cost = cost;
         _maxLevel = maxLevel;
+        _cost = cost;
         _description = description;
+    }
+}
+
+public struct SavableStatData
+{
+    public int _currentLevel;
+
+    public SavableStatData(int currentLevel)
+    {
+        _currentLevel = currentLevel;
     }
 }
 
@@ -97,10 +112,10 @@ public class StatSelectPage : MonoBehaviour
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
-        int currentStatLevel = saveData._statLevelInfos[_selectedStatKey];
+        int currentStatLevel = saveData._statLevelInfos[_selectedStatKey]._currentLevel;
 
         StatData statData = _statData[_selectedStatKey];
-        int maxStatLevel = statData._maxLevel;
+        int maxStatLevel = statData.MaxLevel;
         int currentCost = statData.ReturnCost(currentStatLevel);
 
         bool canUpgrade = saveData._gold >= currentCost;
@@ -133,14 +148,14 @@ public class StatSelectPage : MonoBehaviour
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
-        int currentStatLevel = saveData._statLevelInfos[key];
+        int currentStatLevel = saveData._statLevelInfos[key]._currentLevel;
 
         StatData statData = _statData[key];
 
         _selectedStatKey = key;
         _statInfoController.UpdateStat(
             _statSprite[key], 
-            _statData[key]._name,
+            _statData[key].Name,
             currentStatLevel,
             statData.ReturnCost(currentStatLevel),
             statData.ReturnDescription(currentStatLevel)

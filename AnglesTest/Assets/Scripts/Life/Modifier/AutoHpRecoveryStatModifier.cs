@@ -19,11 +19,11 @@ public class AutoHpRecoveryStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data._autoHpRecoveryPoint += _additionalAutoHpRecoveryPoints[level];
+        data.AutoHpRecoveryPoint += _additionalAutoHpRecoveryPoints[level];
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data._autoHpRecoveryPoint += _additionalAutoHpRecoveryPoint;
+        data.AutoHpRecoveryPoint += _additionalAutoHpRecoveryPoint;
     }
 }

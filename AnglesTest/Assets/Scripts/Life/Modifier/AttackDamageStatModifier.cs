@@ -1,11 +1,15 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class AttackDamageStatModifier : IStatModifier
 {
-    List<float> _additionalAttackDamages;
-    float _additionalAttackDamage;
+    [JsonProperty] List<float> _additionalAttackDamages;
+    [JsonProperty] float _additionalAttackDamage;
+
+    public AttackDamageStatModifier() { }
 
     public AttackDamageStatModifier(List<float> additionalAttackDamages)
     {

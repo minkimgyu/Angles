@@ -27,6 +27,7 @@ public class TextEffect : BaseEffect
         _text.alpha = 0;
         _text.transform.localScale = Vector3.one;
 
+        //_text.text = Mathf.RoundToInt(damage).ToString();
         _text.text = damage.ToString();
     }
 

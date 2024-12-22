@@ -1,14 +1,18 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class UpgradeDamageData : SkillData
 {
-    public DamageRatioStatModifier _damageStatModifier;
+    [JsonProperty] private DamageRatioStatModifier _damageStatModifier;
     public UpgradeDamageData(int maxUpgradePoint, DamageRatioStatModifier damageStatModifier) : base(maxUpgradePoint) 
     {
         _damageStatModifier = damageStatModifier;
     }
+
+    [JsonIgnore] public DamageRatioStatModifier DamageStatModifier { get => _damageStatModifier; set => _damageStatModifier = value; }
 
     public override SkillData Copy()
     {

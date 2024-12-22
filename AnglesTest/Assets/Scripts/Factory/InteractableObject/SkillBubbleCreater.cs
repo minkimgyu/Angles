@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
 
 public class SkillBubbleData : BaseInteractableObjectData
 {
-    public int _cardCount;
-    public float _moveSpeed;
+    [JsonProperty] private int _cardCount;
+    [JsonProperty] private float _moveSpeed;
+
+    [JsonIgnore] public int CardCount { get => _cardCount; }
+    [JsonIgnore] public float MoveSpeed { get => _moveSpeed; }
 
     public SkillBubbleData(int cardCount, float moveSpeed)
     {

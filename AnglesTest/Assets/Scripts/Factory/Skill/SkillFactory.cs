@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
 
 [Serializable]
 abstract public class SkillData
 {
-    public int _maxUpgradePoint;
+    [JsonProperty] protected int _maxUpgradePoint;
 
     public SkillData(int maxUpgradePoint)
     {
         _maxUpgradePoint = maxUpgradePoint;
     }
+
+    public int MaxUpgradePoint { get => _maxUpgradePoint; set => _maxUpgradePoint = value; }
 
     public abstract SkillData Copy();
 }
@@ -19,19 +22,24 @@ abstract public class SkillData
 [Serializable]
 abstract public class RandomSkillData : SkillData
 {
-    public float _probability;
+    [JsonProperty] protected float _probability;
 
     public RandomSkillData(int maxUpgradePoint, float probability) : base(maxUpgradePoint)
     {
         _probability = probability;
     }
+
+    public float Probability { get => _probability; set => _probability = value; }
 }
 
 [Serializable]
 abstract public class CooltimeSkillData : SkillData
 {
-    public int _maxStackCount;
-    public float _coolTime;
+    [JsonProperty] protected float _coolTime;
+    [JsonProperty] protected int _maxStackCount;
+
+    [JsonIgnore] public int MaxStackCount { get => _maxStackCount; set => _maxStackCount = value; }
+    [JsonIgnore] public float CoolTime { get => _coolTime; set => _coolTime = value; }
 
     public CooltimeSkillData(int maxUpgradePoint, float coolTime, int maxStackCount) : base(maxUpgradePoint)
     {

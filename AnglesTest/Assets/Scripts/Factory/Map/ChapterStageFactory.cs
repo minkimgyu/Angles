@@ -65,24 +65,42 @@ public class MobStageCreater : StageCreater
     }
 }
 
+public class SurvivalStageCreater : StageCreater
+{
+    MobStageData _mobStageData;
+
+    public SurvivalStageCreater(BaseStage stagePrefab, MobStageData mobStageData) : base(stagePrefab)
+    {
+        _mobStageData = mobStageData;
+    }
+
+    public override BaseStage Create()
+    {
+        BaseStage stage = Object.Instantiate(_stagePrefab);
+        if (stage == null) return null;
+
+        stage.ResetData(_mobStageData);
+        return stage;
+    }
+}
 
 public class ChapterStageFactory : BaseFactory
 {
-    Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, StageCreater>> _stageCreaters;
+    Dictionary<GameMode.Level, Dictionary<BaseStage.Name, StageCreater>> _stageCreaters;
 
-    public ChapterStageFactory(Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, BaseStage>> stagePrefab, Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, IStageData>> stageData)
+    public ChapterStageFactory(Dictionary<GameMode.Level, Dictionary<BaseStage.Name, BaseStage>> stagePrefab, Dictionary<GameMode.Level, Dictionary<BaseStage.Name, IStageData>> stageData)
     {
-        _stageCreaters = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, StageCreater>>();
-        foreach (DungeonMode.Chapter chapter in Enum.GetValues(typeof(DungeonMode.Chapter)))
+        _stageCreaters = new Dictionary<GameMode.Level, Dictionary<BaseStage.Name, StageCreater>>();
+
+        List<GameMode.Level> levels = GameMode.GetLevels(GameMode.Type.Chapter);
+        for (int i = 0; i < levels.Count; i++)
         {
-            _stageCreaters[chapter] = new Dictionary<BaseStage.Name, StageCreater>();
+            _stageCreaters[levels[i]] = new Dictionary<BaseStage.Name, StageCreater>();
         }
 
-        int count = System.Enum.GetValues(typeof(DungeonMode.Chapter)).Length;
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < levels.Count; i++)
         {
-            DungeonMode.Chapter chapter = (DungeonMode.Chapter)i;
-
+            GameMode.Level chapter = levels[i];
             _stageCreaters[chapter][BaseStage.Name.StartStage] = new NormalStageCreater(stagePrefab[chapter][BaseStage.Name.StartStage]);
             _stageCreaters[chapter][BaseStage.Name.BonusStage] = new NormalStageCreater(stagePrefab[chapter][BaseStage.Name.BonusStage]);
 
@@ -97,7 +115,7 @@ public class ChapterStageFactory : BaseFactory
 
     }
 
-    public override BaseStage Create(DungeonMode.Chapter chapter, BaseStage.Name name)
+    public override BaseStage Create(GameMode.Level chapter, BaseStage.Name name)
     {
         return _stageCreaters[chapter][name].Create();
     }

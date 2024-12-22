@@ -11,7 +11,7 @@ public class CardTable : MonoBehaviour, IInteractable
 
     public void Initialize(CardTableData data)
     {
-        _cardCount = data._cardCount;
+        _cardCount = data.CardCount;
 
         _isActive = true;
         _outlineComponent = GetComponentInChildren<OutlineComponent>();
@@ -32,13 +32,15 @@ public class CardTable : MonoBehaviour, IInteractable
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.GetCaster(), _cardCount);
+        Destroy(gameObject);
     }
 
     public void OnInteractExit(IInteracter interacter)
     {
-        if (_isActive == false) return;
+        //if (_isActive == false) return;
 
-        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
+        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
+        //Destroy(gameObject);
     }
 
     public void ResetPosition(Vector3 pos)

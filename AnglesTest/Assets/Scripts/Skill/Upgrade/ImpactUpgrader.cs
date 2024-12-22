@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 public class ImpactUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
@@ -16,11 +16,15 @@ public class ImpactUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public float _range;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public ImpactUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public ImpactUpgrader()
+    {
     }
 
     public void Visit(ISkillUpgradable upgradable, ImpactData data)
@@ -29,10 +33,10 @@ public class ImpactUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._rangeMultiplier += upgradeData._range;
+        data.Damage += upgradeData._damage;
+        data.RangeMultiplier += upgradeData._range;
 
-        Debug.Log("_damage: " + data._damage);
-        Debug.Log("_rangeMultiplier: " + data._rangeMultiplier);
+        Debug.Log("_damage: " + data.Damage);
+        Debug.Log("_rangeMultiplier: " + data.RangeMultiplier);
     }
 }

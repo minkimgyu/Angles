@@ -23,12 +23,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - StatIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1d75cb097b45a2b43a0f9b79672ff063
-    m_Address: AutoHpRecovery
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - StatIcon
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba07dd7d78518454ab47e901836ce731
     m_Address: MoveSpeed
     m_ReadOnly: 0

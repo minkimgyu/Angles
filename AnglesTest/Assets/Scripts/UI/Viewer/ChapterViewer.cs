@@ -8,9 +8,9 @@ public class ChapterViewer : BaseViewer
     [SerializeField] Image _selectImg;
     [SerializeField] Image _lockImg;
 
-    public override void Initialize(Sprite icon, bool isClear) 
+    public void Initialize(Sprite icon, bool isUnlock) 
     {
         _selectImg.sprite = icon;
-        _lockImg.gameObject.SetActive(isClear);
+        _lockImg.gameObject.SetActive(!isUnlock);
     }
 }

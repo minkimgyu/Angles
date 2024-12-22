@@ -13,21 +13,21 @@ public class Shooter : BaseWeapon
     void FireProjectile(Vector2 direction)
     {
         _waitFire += Time.deltaTime;
-        if (_data._fireDelay > _waitFire) return;
+        if (_data.FireDelay > _waitFire) return;
 
         _waitFire = 0;
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data._damageableData));
+        modifiers.Add(new WeaponDamageModifier(_data.DamageableData));
 
-        ProjectileWeapon weapon = (ProjectileWeapon)_weaponFactory.Create(_data._fireWeaponName);
+        ProjectileWeapon weapon = (ProjectileWeapon)_weaponFactory.Create(_data.FireWeaponName);
         weapon.ModifyData(modifiers);
         weapon.ResetPosition(transform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
-        projectile.Shoot(direction, _data._shootForce);
+        projectile.Shoot(direction, _data.ShootForce);
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ShooterFire, transform.position);
     }
 
@@ -56,7 +56,11 @@ public class Shooter : BaseWeapon
         _waitFire = 0;
 
         _trackComponent = GetComponent<TrackComponent>();
-        _trackComponent.Initialize(_data._moveSpeed, _data._followOffset, _data._maxDistanceFromPlayer);
+        _trackComponent.Initialize(
+            _data.MoveSpeed,
+            _data.FollowOffset,
+            new Vector2(_data.FollowOffsetDirection.x, _data.FollowOffsetDirection.y),
+            _data.MaxDistanceFromPlayer);
 
         _lifetimeComponent = new NoLifetimeComponent();
         _sizeModifyComponent = new NoSizeModifyComponent();
@@ -89,7 +93,7 @@ public class Shooter : BaseWeapon
         {
             if ((_targetDatas[i] as UnityEngine.Object) == null) continue;
 
-            bool isTarget = _targetDatas[i].IsTarget(_data._damageableData._targetType);
+            bool isTarget = _targetDatas[i].IsTarget(_data.DamageableData._targetType);
             if (isTarget == false) continue;
 
             capturedTarget = _targetDatas[i];

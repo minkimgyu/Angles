@@ -36,7 +36,7 @@ public class MoveState : State<Player.MovementState>
 
     public override void OnFixedUpdate()
     {
-        _moveComponent.Move(_storedInput, _playerData._moveSpeed);
+        _moveComponent.Move(_storedInput, _playerData.MoveSpeed);
     }
 
     public override void OnMoveEnd()

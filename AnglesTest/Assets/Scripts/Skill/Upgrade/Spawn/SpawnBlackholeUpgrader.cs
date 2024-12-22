@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 public class SpawnBlackholeUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
@@ -16,11 +16,15 @@ public class SpawnBlackholeUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public float _range;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public SpawnBlackholeUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public SpawnBlackholeUpgrader()
+    {
     }
 
     public void Visit(ISkillUpgradable upgradable, SpawnBlackholeData data) 
@@ -29,7 +33,7 @@ public class SpawnBlackholeUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._lifetime += upgradeData._lifeTime;
-        data._sizeMultiplier += upgradeData._range;
+        data.Lifetime += upgradeData._lifeTime;
+        data.SizeMultiplier += upgradeData._range;
     }
 }

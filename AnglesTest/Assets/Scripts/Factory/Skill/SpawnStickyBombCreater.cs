@@ -2,16 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 [Serializable]
 public class SpawnStickyBombData : CooltimeSkillData
 {
-    public List<ITarget.Type> _targetTypes;
-    public float _damage;
-    public float _adRatio;
-    public float _groggyDuration;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _groggyDuration;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
+    [JsonProperty] private float _delay;
 
-    public float _delay;
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
+    [JsonIgnore] public float Delay { get => _delay; set => _delay = value; }
 
     public SpawnStickyBombData(
         int maxUpgradePoint,

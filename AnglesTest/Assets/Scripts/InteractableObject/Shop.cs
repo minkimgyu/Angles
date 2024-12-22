@@ -13,8 +13,8 @@ public class Shop : MonoBehaviour, IInteractable
 
     public void Initialize(ShopData data)
     {
-        _cardCount = data._cardCount;
-        _recreateCount = data._recreateCount;
+        _cardCount = data.CardCount;
+        _recreateCount = data.RecreateCount;
 
         _isActive = true;
         _outlineComponent = GetComponentInChildren<OutlineComponent>();
@@ -35,13 +35,15 @@ public class Shop : MonoBehaviour, IInteractable
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateReusableCard, interacter.GetCaster(), _cardCount, _recreateCount);
+        Destroy(gameObject);
     }
 
     public void OnInteractExit(IInteracter interacter)
     {
-        if (_isActive == false) return;
+        //if (_isActive == false) return;
 
-        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
+        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
+        //Destroy(gameObject);
     }
 
     public void ResetPosition(Vector3 pos)

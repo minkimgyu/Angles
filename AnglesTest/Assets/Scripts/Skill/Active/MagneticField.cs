@@ -10,7 +10,7 @@ public class MagneticField : BaseSkill
 
     MagneticFieldData _data;
 
-    public MagneticField(MagneticFieldData data, IUpgradeVisitor upgrader) : base(Type.Basic, data._maxUpgradePoint)
+    public MagneticField(MagneticFieldData data, IUpgradeVisitor upgrader) : base(Type.Basic, data.MaxUpgradePoint)
     {
         _data = data;
         _upgrader = upgrader;
@@ -32,7 +32,7 @@ public class MagneticField : BaseSkill
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:
-                _delayTimer.Start(_data._delay);
+                _delayTimer.Start(_data.Delay);
                 break;
             case Timer.State.Finish:
 
@@ -40,12 +40,12 @@ public class MagneticField : BaseSkill
                 (
                     _caster,
                      new DamageStat(
-                        _data._damage,
+                        _data.Damage,
                         _upgradeableRatio.AttackDamage,
-                        _data._adRatio,
+                        _data.AdRatio,
                         _upgradeableRatio.TotalDamageRatio
                     ),
-                    _data._targetTypes
+                    _data.TargetTypes
                 );
 
 
@@ -62,7 +62,7 @@ public class MagneticField : BaseSkill
 
     public override void OnCaptureEnter(ITarget target, IDamageable damageable)
     {
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         _damageableTargets.Add(damageable);
@@ -70,7 +70,7 @@ public class MagneticField : BaseSkill
 
     public override void OnCaptureExit(ITarget target, IDamageable damageable)
     {
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         _damageableTargets.Remove(damageable);

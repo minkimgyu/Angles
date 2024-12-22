@@ -58,7 +58,7 @@ public class Blackhole : BaseWeapon
 
     void OnEnter(IForce absorbable, IDamageable damageable, ITarget target)
     {
-        if (target.IsTarget(_data._damageableData._targetType) == false) return;
+        if (target.IsTarget(_data.DamageableData._targetType) == false) return;
 
         _targetDatas.Add(new TargetData(Time.time, absorbable, damageable));
     }
@@ -75,11 +75,11 @@ public class Blackhole : BaseWeapon
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
-            if(duration > _data._forceDelay)
+            if(duration > _data.AbsorbForce)
             {
                 Vector3 direction = _targetDatas[i].AbsorbableTarget.ReturnPosition() - transform.position;
-                _targetDatas[i].AbsorbableTarget.ApplyForce(direction, _data._absorbForce, ForceMode2D.Force);
-                Damage.Hit(_data._damageableData, _targetDatas[i].DamageableTarget);
+                _targetDatas[i].AbsorbableTarget.ApplyForce(direction, _data.AbsorbForce, ForceMode2D.Force);
+                Damage.Hit(_data.DamageableData, _targetDatas[i].DamageableTarget);
 
                 if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;

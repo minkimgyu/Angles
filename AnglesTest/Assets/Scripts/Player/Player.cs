@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using static InputController;
+using Random = UnityEngine.Random;
 
 public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradable, IForce
 {
@@ -40,21 +40,22 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         List<Tuple<string, float>> datas = new List<Tuple<string, float>>
         {
             { new Tuple<string, float>("MaxHp", _playerData.MaxHp) },
-            { new Tuple<string, float>("AutoHpRecoveryPoint", _playerData._autoHpRecoveryPoint) },
+            { new Tuple<string, float>("AutoHpRecoveryPoint", _playerData.AutoHpRecoveryPoint) },
 
-            { new Tuple<string, float>("DamageReductionRatio", _playerData._damageReductionRatio) },
+            { new Tuple<string, float>("DamageReductionRatio", _playerData.AutoHpRecoveryPoint) },
 
             { new Tuple<string, float>("AttackDamage", _playerData.AttackDamage) },
             { new Tuple<string, float>("TotalDamageRatio", _playerData.TotalDamageRatio) },
             { new Tuple<string, float>("TotalCooltimeRatio", _playerData.TotalCooltimeRatio) },
             { new Tuple<string, float>("TotalRandomRatio", _playerData.TotalRandomRatio) },
 
-            { new Tuple<string, float>("MoveSpeed", _playerData._moveSpeed) },
-            { new Tuple<string, float>("DrainRatio", _playerData._drainRatio) },
+            { new Tuple<string, float>("MoveSpeed", _playerData.MoveSpeed) },
+            { new Tuple<string, float>("DrainRatio", _playerData.DrainRatio) },
+            { new Tuple<string, float>("DrainPercentage", _playerData.DrainPercentage) },
 
-            { new Tuple<string, float>("ChargeDuration", _playerData._chargeDuration) },
-            { new Tuple<string, float>("ShootDuration", _playerData._shootDuration) },
-            { new Tuple<string, float>("ShootSpeed", _playerData._shootSpeed) },
+            { new Tuple<string, float>("ChargeDuration", _playerData.ChargeDuration) },
+            { new Tuple<string, float>("ShootDuration", _playerData.ShootDuration) },
+            { new Tuple<string, float>("ShootSpeed", _playerData.ShootSpeed) },
         };
 
         for (int i = 0; i < datas.Count; i++)
@@ -73,7 +74,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     }
 
 
-    float DashRatio { get { return _currentDashFillDuration / _playerData._dashRestoreDuration; } }
+    float DashRatio { get { return _currentDashFillDuration / _playerData.DashRestoreDuration; } }
     float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
 
     //protected override float MaxHp 
@@ -93,13 +94,15 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     public void ApplySkinSprite(Sprite skin) => _spriteRenderer.sprite = skin;
 
-    bool CanUseDash() { return _currentDashCount >= _playerData._dashConsumeCount; }
+    bool CanUseDash() { return _currentDashCount >= _playerData.DashConsumeCount; }
 
     MoveComponent _moveComponent;
     OutlineComponent _outlineComponent;
     SkillController _skillController;
 
-    InteractableCaptureComponent _interactableCaptureComponent;
+    [SerializeField] InteractableCaptureComponent _closeInteractableCaptureComponent;
+    [SerializeField] InteractableCaptureComponent _farInteractableCaptureComponent;
+
     List<IInteractable> _interactableObjects;
 
     public override void GetDamage(DamageableData damageableData)
@@ -110,8 +113,8 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     void ChangeBodyScale(bool xAxis, float ratio)
     {
-        float minScale = _playerData._shrinkScale;
-        float maxScale = _playerData._normalScale;
+        float minScale = _playerData.ShrinkScale;
+        float maxScale = _playerData.NormalScale;
 
         if(xAxis) transform.localScale = 
                 Vector3.Lerp(
@@ -139,7 +142,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         // 값이 바뀌는 변수들은 BuffFloat나 BuffInt를 사용해서 최소, 최대 값을 지정해주고
         // 참조 타입으로 설정했으므로 버프로 인해 수정되면 알아서 값이 반영되게 된다.
         base.ResetData(data);
-        _targetType = data._targetType;
+        _targetType = data.TargetType;
         _playerData = data;
     }
 
@@ -163,8 +166,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
-        _interactableCaptureComponent = GetComponentInChildren<InteractableCaptureComponent>();
-        _interactableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit);
+
+        _farInteractableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit); // 원거리 인터랙션
+        _closeInteractableCaptureComponent.Initialize(OnInteract); // 근접 인터렉션
 
         _skillController = GetComponent<SkillController>();
         _skillController.Initialize(_playerData, this);
@@ -210,7 +214,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     void OnUseDash() 
     { 
-        _currentDashCount -= _playerData._dashConsumeCount;
+        _currentDashCount -= _playerData.DashConsumeCount;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDash);
     }
 
@@ -221,7 +225,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     void FillDashCount()
     {
-        if (_playerData._maxDashCount == _currentDashCount) return;
+        if (_playerData.MaxDashCount == _currentDashCount) return;
 
         _currentDashFillDuration += Time.deltaTime;
         if (DashRatio >= 1)
@@ -286,16 +290,29 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
-        if (interactable != null && _interactableObjects.Contains(interactable) == true)
-        {
-            OnInteract(interactable);
-        }
-        else
-        {
+        // 다른 방식으로 들어감
+        // 아예 트리거 방식으로 상호작용하는 기능 설계
+        //IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
+        //if (interactable != null && _interactableObjects.Contains(interactable) == true)
+        //{
+        //    OnInteract(interactable);
+        //}
+        //else
+        //{
             _actionFSM.OnCollisionEnter(collision); // 위와 같은 경우가 아닌 경우 OnCollisionEnter2D 이벤트 진행
-        }
+        //}
     }
+
+    //private void OnTriggerEnter2D(Collider2D collider)
+    //{
+    //    // 다른 방식으로 들어감
+    //    // 아예 트리거 방식으로 상호작용하는 기능 설계
+    //    IInteractable interactable = collider.gameObject.GetComponent<IInteractable>();
+    //    if (interactable != null && _interactableObjects.Contains(interactable) == true)
+    //    {
+    //        OnInteract(interactable);
+    //    }
+    //}
 
     public void OnLeftInputStart() => _movementFSM.OnMoveStart();
     public void OnLeftInput(Vector2 direction)
@@ -336,7 +353,10 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     public void GetDamageData(DamageableData damageData)
     {
-        GetHeal(damageData._damageStat.TotalDamage * _playerData._drainRatio);
+        float random = Random.Range(0.0f, 1.0f);
+        if (random > _playerData.DrainPercentage) return; // 10% 확률로 가능
+
+        GetHeal(damageData._damageStat.TotalDamage * _playerData.DrainRatio);
     }
 
     public bool CanApplyForce()

@@ -27,9 +27,9 @@ public class StatIconAssetLoader : AssetLoader<StatData.Key, Sprite, Sprite>
     }
 }
 
-public class ChapterIconAssetLoader : AssetLoader<DungeonMode.Chapter, Sprite, Sprite>
+public class LevelIconAssetLoader : AssetLoader<GameMode.Level, Sprite, Sprite>
 {
-    public ChapterIconAssetLoader(AddressableHandler.Label label, Action<Dictionary<DungeonMode.Chapter, Sprite>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    public LevelIconAssetLoader(AddressableHandler.Label label, Action<Dictionary<GameMode.Level, Sprite>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
     }
 }

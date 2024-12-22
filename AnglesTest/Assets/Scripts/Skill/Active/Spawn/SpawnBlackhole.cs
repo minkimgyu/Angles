@@ -8,7 +8,7 @@ public class SpawnBlackhole : BaseSkill
     BaseFactory _weaponFactory;
     SpawnBlackholeData _data;
 
-    public SpawnBlackhole(SpawnBlackholeData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
+    public SpawnBlackhole(SpawnBlackholeData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Active, data.MaxUpgradePoint)
     {
         _data = data;
         _upgrader = upgrader;
@@ -26,12 +26,12 @@ public class SpawnBlackhole : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(Collision2D collision)
+    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
     {
-        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        ITarget target = targetObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blackhole);
@@ -43,16 +43,16 @@ public class SpawnBlackhole : BaseSkill
         (
             _caster,
             new DamageStat(
-                _data._damage
+                _data.Damage
             ),
-            _data._targetTypes,
-            _data._groggyDuration
+            _data.TargetTypes,
+            _data.GroggyDuration
         );
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponSizeModifier(_data._sizeMultiplier));
-        modifiers.Add(new WeaponLifetimeModifier(_data._lifetime));
+        modifiers.Add(new WeaponSizeModifier(_data.SizeMultiplier));
+        modifiers.Add(new WeaponLifetimeModifier(_data.Lifetime));
 
         weapon.ModifyData(modifiers);
         weapon.Activate();

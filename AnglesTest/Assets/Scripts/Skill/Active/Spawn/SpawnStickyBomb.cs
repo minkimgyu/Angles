@@ -8,7 +8,7 @@ public class SpawnStickyBomb : BaseSkill
     BaseFactory _weaponFactory;
     SpawnStickyBombData _data;
 
-    public SpawnStickyBomb(SpawnStickyBombData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Active, data._maxUpgradePoint)
+    public SpawnStickyBomb(SpawnStickyBombData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Active, data.MaxUpgradePoint)
     {
         _upgrader = upgrader;
         _data = data;
@@ -26,15 +26,15 @@ public class SpawnStickyBomb : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(Collision2D collision)
+    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
     {
-        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        ITarget target = targetObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
-        IFollowable followable = collision.gameObject.GetComponent<IFollowable>();
+        IFollowable followable = targetObject.GetComponent<IFollowable>();
         if (followable == null) return;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
@@ -44,18 +44,18 @@ public class SpawnStickyBomb : BaseSkill
         (
             _caster,
             new DamageStat(
-                _data._damage,
+                _data.Damage,
                 _upgradeableRatio.AttackDamage,
-                _data._adRatio,
+                _data.AdRatio,
                 _upgradeableRatio.TotalDamageRatio
             ),
-            _data._targetTypes,
-            _data._groggyDuration
+            _data.TargetTypes,
+            _data.GroggyDuration
         );
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
         modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponDelayModifier(_data._delay));
+        modifiers.Add(new WeaponDelayModifier(_data.Delay));
 
         weapon.ModifyData(modifiers);
         weapon.Activate();

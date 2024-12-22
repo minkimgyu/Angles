@@ -8,7 +8,6 @@ using System;
 
 public class LobbyScrollController : ScrollUI
 {
-    [SerializeField] Transform _content;
     [SerializeField] Button _leftButton, _rightButton;
 
     public void Initialize()
@@ -16,10 +15,10 @@ public class LobbyScrollController : ScrollUI
         _leftButton.onClick.AddListener(() => TabClick(true));
         _rightButton.onClick.AddListener(() => TabClick(false));
 
-        int childCount = _content.childCount;
+        int childCount = _contentTr.childCount;
         for (int i = 0; i < childCount; i++)
         {
-            RectTransform rectTransform = _content.GetChild(i).GetComponent<RectTransform>();
+            RectTransform rectTransform = _contentTr.GetChild(i).GetComponent<RectTransform>();
 
             // 현재 sizeDelta 값을 가져옴 (현재 크기의 높이는 유지하고 너비만 수정)
             Vector2 newSize = rectTransform.sizeDelta;
@@ -35,7 +34,7 @@ public class LobbyScrollController : ScrollUI
     public void TabClick(bool isLeft)
     {
         _currentPos = SetPos();
-        int childCount = _content.childCount;
+        int childCount = _contentTr.childCount;
 
         if (isLeft)
         {

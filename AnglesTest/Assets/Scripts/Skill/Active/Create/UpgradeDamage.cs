@@ -6,7 +6,7 @@ public class UpgradeDamage : BaseSkill
 {
     UpgradeDamageData _data;
 
-    public UpgradeDamage(UpgradeDamageData data) : base(Type.Passive, data._maxUpgradePoint)
+    public UpgradeDamage(UpgradeDamageData data) : base(Type.Passive, data.MaxUpgradePoint)
     {
         _data = data;
     }
@@ -27,6 +27,6 @@ public class UpgradeDamage : BaseSkill
         IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._damageStatModifier, UpgradePoint - 1);
+        visitor.Upgrade(_data.DamageStatModifier, UpgradePoint - 1);
     }
 }

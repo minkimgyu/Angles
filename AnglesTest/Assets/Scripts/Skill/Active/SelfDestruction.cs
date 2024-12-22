@@ -11,7 +11,7 @@ public class SelfDestruction : BaseSkill
     SelfDestructionData _data;
     BaseFactory _effectFactory;
 
-    public SelfDestruction(SelfDestructionData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public SelfDestruction(SelfDestructionData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Basic, data.MaxUpgradePoint)
     {
         _data = data;
         _upgrader = upgrader;
@@ -27,14 +27,14 @@ public class SelfDestruction : BaseSkill
 
     public override void OnDamaged(float ratio)
     {
-        if (ratio > _data._hpRatioOnInvoke) return;
+        if (ratio > _data.HpRatioOnInvoke) return;
         if (_delayTimer.CurrentState != Timer.State.Ready) return;
 
-        _delayTimer.Start(_data._delay);
+        _delayTimer.Start(_data.Delay);
         CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
         if (castingComponent == null) return;
 
-        castingComponent.CastSkill(_data._delay);
+        castingComponent.CastSkill(_data.Delay);
     }
 
     public override void OnUpdate()
@@ -63,16 +63,16 @@ public class SelfDestruction : BaseSkill
                 _caster,
                new DamageStat
                (
-                    _data._damage,
+                    _data.Damage,
                     _upgradeableRatio.AttackDamage,
-                    _data._adRatio,
+                    _data.AdRatio,
                     _upgradeableRatio.TotalDamageRatio
                ),
-                _data._targetTypes
+                _data.TargetTypes
             );
 
 
-            Damage.HitCircleRange(damageData, casterTransform.position, _data._range, true, Color.red, 3);
+            Damage.HitCircleRange(damageData, casterTransform.position, _data.Range, true, Color.red, 3);
         }
     }
 }

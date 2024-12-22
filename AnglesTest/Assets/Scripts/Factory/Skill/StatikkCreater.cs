@@ -4,18 +4,26 @@ using UnityEngine;
 using System;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 
 // 업그레이드 가능한 스킬 데이터를 따로 Struct로 빼서 관리하자
 [Serializable]
 public class StatikkData : CooltimeSkillData
 {
-    public float _damage;
-    public float _adRatio;
-    public float _range;
-    public int _maxTargetCount;
-    public float _groggyDuration;
-    public List<ITarget.Type> _targetTypes;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _range;
+    [JsonProperty] private int _maxTargetCount;
+    [JsonProperty] private float _groggyDuration;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
+
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float Range { get => _range; set => _range = value; }
+    [JsonIgnore] public int MaxTargetCount { get => _maxTargetCount; set => _maxTargetCount = value; }
+    [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public StatikkData(
         int maxUpgradePoint,

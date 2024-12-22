@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SkillUIController : MonoBehaviour
 {
-    Dictionary<BaseSkill.Name, BaseViewer> _viewers; // 생성해서 딕셔너리에 넣어준다.
+    Dictionary<BaseSkill.Name, SkillViewer> _viewers; // 생성해서 딕셔너리에 넣어준다.
     Dictionary<BaseSkill.Name, Sprite> _skillIcons;
 
     [SerializeField] RectTransform _skillViewerParent;
@@ -18,7 +18,7 @@ public class SkillUIController : MonoBehaviour
         EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnAddSkill, new AddSkillCommand(AddViewer));
         EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnRemoveSkill, new RemoveSkillCommand(RemoveViewer));
 
-        _viewers = new Dictionary<BaseSkill.Name, BaseViewer>();
+        _viewers = new Dictionary<BaseSkill.Name, SkillViewer>();
         _showTypes = showTypes;
         _skillIcons = skillIcons;
         _viewerFactory = viewerFactory;
@@ -29,7 +29,7 @@ public class SkillUIController : MonoBehaviour
         bool isShowType = _showTypes.Contains(skill.SkillType);
         if (isShowType == false) return;
 
-        BaseViewer viewer = _viewerFactory.Create(BaseViewer.Name.SkillViewer);
+        SkillViewer viewer = (SkillViewer)_viewerFactory.Create(BaseViewer.Name.SkillViewer);
         Sprite skillIcon = _skillIcons[skillName];
         viewer.Initialize(skillIcon);
 
@@ -41,7 +41,7 @@ public class SkillUIController : MonoBehaviour
 
     public void RemoveViewer(BaseSkill.Name skillName, BaseSkill skill)
     {
-        BaseViewer viewer = _viewers[skillName];
+        SkillViewer viewer = _viewers[skillName];
 
         skill.RemoveViewEvent(viewer.UpdateViewer);
         _viewers.Remove(skillName);

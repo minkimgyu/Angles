@@ -4,6 +4,15 @@ using UnityEngine;
 
 public interface ISceneControllable
 {
-    void ChangeScene(string sceneName);
-    string GetCurrentSceneName();
+    public enum SceneName
+    {
+        InitScene,
+        MenuScene,
+        LobbyScene,
+        ChapterScene,
+        SurvivalScene,
+    }
+
+    void ChangeScene(SceneName sceneName);
+    SceneName GetCurrentSceneName();
 }

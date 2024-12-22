@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/LobbyScene.unity
     guid: 3011d422ecc2e9a4a92630ffe59c0471
   - enabled: 1
-    path: Assets/Scenes/PlayScene.unity
+    path: Assets/Scenes/ChapterScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: c151018873e495548b71f563c3f03893, type: 2}

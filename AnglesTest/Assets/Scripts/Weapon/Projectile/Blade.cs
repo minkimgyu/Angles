@@ -71,7 +71,7 @@ public class Blade : ProjectileWeapon
     void OnEnter(IDamageable damageable)
     {
         _targetDatas.Add(new TargetData(Time.time, damageable));
-        Damage.Hit(_data._damageableData, damageable);
+        Damage.Hit(_data.DamageableData, damageable);
     }
 
     void OnExit(IDamageable damageable)
@@ -88,15 +88,15 @@ public class Blade : ProjectileWeapon
         {
             ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Blade, transform.position);
             _soundTimer.Reset();
-            _soundTimer.Start(_data._attackDelay);
+            _soundTimer.Start(_data.AttackDelay);
         }
 
         for (int i = _targetDatas.Count - 1; i >= 0; i--)
         {
             float duration = Time.time - _targetDatas[i].CaptureTime;
-            if (duration > _data._attackDelay)
+            if (duration > _data.AttackDelay)
             {
-                Damage.Hit(_data._damageableData, _targetDatas[i].Damageable);
+                Damage.Hit(_data.DamageableData, _targetDatas[i].Damageable);
 
                 if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;

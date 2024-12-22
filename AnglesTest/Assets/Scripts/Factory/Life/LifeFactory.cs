@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json;
 
 [System.Serializable]
 abstract public class LifeData
@@ -15,7 +16,12 @@ abstract public class LifeData
         _damageReductionRatio = damageReductionRatio;
     }
 
+    protected LifeData()
+    {
+    }
+
     // setter 활용
+    [JsonIgnore]
     public float MaxHp
     {
         get {  return _maxHp; } 
@@ -27,12 +33,17 @@ abstract public class LifeData
         }
     }
 
-    protected float _maxHp;
-    public float _hp;
+    [JsonIgnore] public float Hp { get => _hp; set => _hp = value; }
+    [JsonIgnore] public float AutoHpRecoveryPoint { get => _autoHpRecoveryPoint; set => _autoHpRecoveryPoint = value; }
+    [JsonIgnore] public float DamageReductionRatio { get => _damageReductionRatio; set => _damageReductionRatio = value; }
+    [JsonIgnore] public ITarget.Type TargetType { get => _targetType; set => _targetType = value; }
 
-    public float _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
-    public float _damageReductionRatio; // 데미지 감소 수치
-    public ITarget.Type _targetType;
+    [JsonProperty] protected float _maxHp;
+    [JsonProperty] private float _hp;
+
+    [JsonProperty] protected float _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
+    [JsonProperty] protected float _damageReductionRatio; // 데미지 감소 수치
+    [JsonProperty] protected ITarget.Type _targetType;
 
     public abstract LifeData Copy();
 }
@@ -40,21 +51,26 @@ abstract public class LifeData
 [Serializable]
 abstract public class EnemyData : LifeData
 {
-    public int _level;
-    public BaseLife.Size _size;
-    public Dictionary<BaseSkill.Name, int> CopySkillDataToAdd;
-    public DropData _dropData;
+    [JsonProperty] private int _level;
+    [JsonProperty] protected BaseLife.Size _size;
+    [JsonProperty] protected Dictionary<BaseSkill.Name, int> _skillData;
+
+    [JsonIgnore] public int Level { get => _level; set => _level = value; }
+    [JsonIgnore] public BaseLife.Size Size { get => _size; set => _size = value; }
+    [JsonIgnore] public Dictionary<BaseSkill.Name, int> SkillData { get => _skillData; set => _skillData = value; }
 
     public EnemyData(
         float maxHp,
         ITarget.Type targetType,
         BaseLife.Size size,
-        Dictionary<BaseSkill.Name, int> skillDataToAdd,
-        DropData dropData) : base(maxHp, targetType)
+        Dictionary<BaseSkill.Name, int> skillData) : base(maxHp, targetType)
     {
         _size = size;
-        CopySkillDataToAdd = skillDataToAdd;
-        _dropData = dropData;
+        _skillData = skillData;
+    }
+
+    protected EnemyData()
+    {
     }
 }
 
@@ -80,26 +96,26 @@ public class LifeFactory : BaseFactory
 {
     Dictionary<BaseLife.Name, LifeCreater> _lifeCreaters;
 
-    public LifeFactory(Dictionary<BaseLife.Name, BaseLife> lifePrefabs, Dictionary<BaseLife.Name, LifeData> lifeDatas,
+    public LifeFactory(Dictionary<BaseLife.Name, BaseLife> lifePrefabs, Dictionary<BaseLife.Name, LifeData> lifeDatas, Dictionary<BaseLife.Name, DropData> dropDatas,
         BaseFactory effectFactory, BaseFactory skillFactory)
     {
         _lifeCreaters = new Dictionary<BaseLife.Name, LifeCreater>();
 
         _lifeCreaters[BaseLife.Name.Player] = new PlayerCreater(lifePrefabs[BaseLife.Name.Player], lifeDatas[BaseLife.Name.Player], effectFactory, skillFactory);
 
-        _lifeCreaters[BaseLife.Name.YellowTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.YellowTriangle], lifeDatas[BaseLife.Name.YellowTriangle], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.YellowRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.YellowRectangle], lifeDatas[BaseLife.Name.YellowRectangle], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.YellowPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.YellowPentagon], lifeDatas[BaseLife.Name.YellowPentagon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.YellowHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.YellowHexagon], lifeDatas[BaseLife.Name.YellowHexagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.YellowTriangle], lifeDatas[BaseLife.Name.YellowTriangle], dropDatas[BaseLife.Name.YellowTriangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.YellowRectangle], lifeDatas[BaseLife.Name.YellowRectangle], dropDatas[BaseLife.Name.YellowRectangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.YellowPentagon], lifeDatas[BaseLife.Name.YellowPentagon], dropDatas[BaseLife.Name.YellowPentagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.YellowHexagon], lifeDatas[BaseLife.Name.YellowHexagon], dropDatas[BaseLife.Name.YellowHexagon], effectFactory, skillFactory);
 
-        _lifeCreaters[BaseLife.Name.RedTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.RedTriangle], lifeDatas[BaseLife.Name.RedTriangle], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.RedRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.RedRectangle], lifeDatas[BaseLife.Name.RedRectangle], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.RedPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.RedPentagon], lifeDatas[BaseLife.Name.RedPentagon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.RedHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.RedHexagon], lifeDatas[BaseLife.Name.RedHexagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.RedTriangle], lifeDatas[BaseLife.Name.RedTriangle], dropDatas[BaseLife.Name.RedTriangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.RedRectangle], lifeDatas[BaseLife.Name.RedRectangle], dropDatas[BaseLife.Name.RedRectangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.RedPentagon], lifeDatas[BaseLife.Name.RedPentagon], dropDatas[BaseLife.Name.RedPentagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.RedHexagon], lifeDatas[BaseLife.Name.RedHexagon], dropDatas[BaseLife.Name.RedHexagon], effectFactory, skillFactory);
 
-        _lifeCreaters[BaseLife.Name.Tricon] = new TriconCreater(lifePrefabs[BaseLife.Name.Tricon], lifeDatas[BaseLife.Name.Tricon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.Rhombus] = new RhombusCreater(lifePrefabs[BaseLife.Name.Rhombus], lifeDatas[BaseLife.Name.Rhombus], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.Pentagonic] = new PentagonicCreater(lifePrefabs[BaseLife.Name.Pentagonic], lifeDatas[BaseLife.Name.Pentagonic], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Tricon] = new TriconCreater(lifePrefabs[BaseLife.Name.Tricon], lifeDatas[BaseLife.Name.Tricon], dropDatas[BaseLife.Name.Tricon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Rhombus] = new RhombusCreater(lifePrefabs[BaseLife.Name.Rhombus], lifeDatas[BaseLife.Name.Rhombus], dropDatas[BaseLife.Name.Rhombus], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Pentagonic] = new PentagonicCreater(lifePrefabs[BaseLife.Name.Pentagonic], lifeDatas[BaseLife.Name.Pentagonic], dropDatas[BaseLife.Name.Pentagonic], effectFactory, skillFactory);
     }
 
     public override BaseLife Create(BaseLife.Name name)

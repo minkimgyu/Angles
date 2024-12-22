@@ -31,13 +31,13 @@ public class DashStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data._dashSpeed += _dashStats[level]._additionalSpeed;
-        data._dashRestoreDuration += _dashStats[level]._additionalRestoreDuration;
+        data.DashSpeed += _dashStats[level]._additionalSpeed;
+        data.DashRestoreDuration += _dashStats[level]._additionalRestoreDuration;
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data._dashSpeed += _dashStat._additionalSpeed;
-        data._dashRestoreDuration += _dashStat._additionalRestoreDuration;
+        data.DashSpeed += _dashStat._additionalSpeed;
+        data.DashRestoreDuration += _dashStat._additionalRestoreDuration;
     }
 }

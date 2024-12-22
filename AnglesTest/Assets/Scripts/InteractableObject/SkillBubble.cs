@@ -11,8 +11,8 @@ public class SkillBubble : MonoBehaviour, IInteractable
 
     public void Initialize(SkillBubbleData data) 
     {
-        _cardCount = data._cardCount;
-        _moveSpeed = data._moveSpeed;
+        _cardCount = data.CardCount;
+        _moveSpeed = data.MoveSpeed;
 
         _trackComponent = GetComponent<TrackComponent>();
         _trackComponent.Initialize(_moveSpeed);

@@ -46,8 +46,8 @@ public class DashState : State<Player.MovementState>
         Debug.Log(message);
         ChangeBodyScale?.Invoke(false, 0);
 
-        _moveComponent.AddForce(direction, _playerData._dashSpeed);
-        _timer.Start(_playerData._dashDuration);
+        _moveComponent.AddForce(direction, _playerData.DashSpeed);
+        _timer.Start(_playerData.DashDuration);
 
         _moveComponent.FreezeRotation(true);
     }

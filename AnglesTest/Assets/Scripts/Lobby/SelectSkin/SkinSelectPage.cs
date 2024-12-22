@@ -1,9 +1,11 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public struct SkinData
 {
     public enum Key
@@ -13,15 +15,30 @@ public struct SkinData
         Guard,
     }
 
-    public string _name;
-    public int _cost;
-    public string _description;
+    [JsonProperty] private string _name;
+    [JsonProperty] private int _cost;
+    [JsonProperty] private string _description;
+
+    [JsonIgnore] public string Name { get => _name; }
+    [JsonIgnore] public int Cost { get => _cost; }
+    [JsonIgnore] public string Description { get => _description; }
 
     public SkinData(string name, int cost, string description)
     {
         _name = name;
         _cost = cost;
         _description = description;
+    }
+}
+
+[System.Serializable]
+public struct SavableSkinData
+{
+    public bool _nowUnlock;
+
+    public SavableSkinData(bool nowUnlock)
+    {
+        _nowUnlock = nowUnlock;
     }
 }
 
@@ -67,14 +84,14 @@ public class SkinSelectPage : MonoBehaviour
         int count = System.Enum.GetValues(typeof(SkinData.Key)).Length;
         for (int i = 0; i < count; i++)
         {
-            bool isLock = saveData._skinLockInfos[(SkinData.Key)i];
+            bool isUnlock = saveData._skinLockInfos[(SkinData.Key)i]._nowUnlock;
 
             SkinViewer skinViewer = (SkinViewer)viewerFactory.Create(BaseViewer.Name.SkinViewer);
             SkinData.Key skinType = (SkinData.Key)i;
             skinViewer.transform.SetParent(_skinInfoParent);
 
             skinViewer.Initialize(skinSprite[skinType], () => { OnClickViewer(skinType); });
-            skinViewer.ActivateLockImg(isLock);
+            skinViewer.ActivateLockImg(!isUnlock);
 
             _skinViewers.Add(skinType, skinViewer);
         }
@@ -99,14 +116,14 @@ public class SkinSelectPage : MonoBehaviour
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
 
         // 이미 구매한 경우
-        if (saveData._skinLockInfos[_selectedSkinKey] == false)
+        if (saveData._skinLockInfos[_selectedSkinKey]._nowUnlock == true)
         {
             EquipSkin(_selectedSkinKey);
             return;
         }
 
         SkinData skinData = _skinData[_selectedSkinKey];
-        int currentCost = skinData._cost;
+        int currentCost = skinData.Cost;
 
         bool canBuy = saveData._gold >= currentCost;
         if (canBuy == false)
@@ -131,20 +148,20 @@ public class SkinSelectPage : MonoBehaviour
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
 
         bool isSelected = saveData._skin == key;
-        bool isLock = saveData._skinLockInfos[key];
+        bool isUnlock = saveData._skinLockInfos[key]._nowUnlock;
         SkinData statData = _skinData[key];
 
         int cost = 0;
-        if(isLock) cost = _skinData[key]._cost;
+        if(!isUnlock) cost = _skinData[key].Cost;
         _selectedSkinKey = key;
 
         _skinInfoController.PickSkin(
             _skinSprite[key],
-            isLock,
+            isUnlock,
             isSelected,
-            _skinData[key]._name,
+            _skinData[key].Name,
             cost,
-            _skinData[key]._description
+            _skinData[key].Description
         );
     }
 }

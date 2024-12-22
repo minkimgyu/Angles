@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,15 +7,24 @@ using UnityEngine;
 [System.Serializable]
 public class MultipleShockwaveData : SkillData
 {
-    public float _waveSizeMultiply;
-    public float _waveDelay;
-    public int _maxWaveCount;
+    [JsonProperty] private float _waveSizeMultiply;
+    [JsonProperty] private float _waveDelay;
+    [JsonProperty] private int _maxWaveCount;
 
-    public float _delay;
-    public float _damage;
-    public float _adRatio;
-    public float _range;
-    public List<ITarget.Type> _targetTypes;
+    [JsonProperty] private float _delay;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _range;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
+
+    [JsonIgnore] public float WaveSizeMultiply { get => _waveSizeMultiply; set => _waveSizeMultiply = value; }
+    [JsonIgnore] public float WaveDelay { get => _waveDelay; set => _waveDelay = value; }
+    [JsonIgnore] public int MaxWaveCount { get => _maxWaveCount; set => _maxWaveCount = value; }
+    [JsonIgnore] public float Delay { get => _delay; set => _delay = value; }
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float Range { get => _range; set => _range = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public MultipleShockwaveData(int maxUpgradePoint, float waveSizeMultiply, float waveDelay, int maxWaveCount, float damage, float adRatio, float range, float delay, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {

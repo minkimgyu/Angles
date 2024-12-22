@@ -99,12 +99,12 @@ public class SkillController : MonoBehaviour
         OnAddSkillRequested?.Invoke(name, skill);
     }
 
-    public void OnReflect(Collision2D collision)
+    public void OnReflect(GameObject targetObject, Vector3 contactPos)
     {
         foreach (var skill in _skillDictionary)
         {
             if (skill.Value.CanUse() == false) continue;
-            skill.Value.OnReflect(collision);
+            skill.Value.OnReflect(targetObject, contactPos);
         }
     }
 

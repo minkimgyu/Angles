@@ -2,18 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 [System.Serializable]
 public class ImpactData : RandomSkillData
 {
-    public float _damage;
-    public float _adRatio;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _rangeMultiplier;
+    [JsonProperty] private float _range;
+    [JsonProperty] private float _groggyDuration;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
 
-    public float _rangeMultiplier;
-    public float _range;
-    public float _groggyDuration;
-
-    public List<ITarget.Type> _targetTypes;
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float RangeMultiplier { get => _rangeMultiplier; set => _rangeMultiplier = value; }
+    [JsonIgnore] public float Range { get => _range; set => _range = value; }
+    [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public ImpactData(
         int maxUpgradePoint,

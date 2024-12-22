@@ -1,11 +1,15 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CoinData : BaseInteractableObjectData
 {
-    public int _upCount;
-    public float _moveSpeed;
+    [JsonProperty] private int _upCount;
+    [JsonProperty] private float _moveSpeed;
+
+    [JsonIgnore] public int UpCount { get => _upCount; }
+    [JsonIgnore] public float MoveSpeed { get => _moveSpeed; }
 
     public CoinData(int upCount, float moveSpeed)
     {

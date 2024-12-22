@@ -9,7 +9,7 @@ public class Impact : BaseSkill
     ImpactData _data;
     BaseFactory _effectFactory;
 
-    public Impact(ImpactData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
+    public Impact(ImpactData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data.MaxUpgradePoint)
     {
         _data = data;
         _upgrader = upgrader;
@@ -27,37 +27,36 @@ public class Impact : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(Collision2D collision)
+    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
     {
-        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        ITarget target = targetObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Impact, 0.7f);
         Debug.Log("Impact");
 
-        Vector3 contactPos = collision.contacts[0].point;
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
         if (effect == null) return;
 
         effect.ResetPosition(contactPos);
-        effect.ResetSize(_data._rangeMultiplier);
+        effect.ResetSize(_data.RangeMultiplier);
         effect.Play();
 
         DamageableData damageData = new DamageableData
         (
             _caster,
             new DamageStat(
-                _data._damage,
+                _data.Damage,
                 _upgradeableRatio.AttackDamage,
-                _data._adRatio,
+                _data.AdRatio,
                 _upgradeableRatio.TotalDamageRatio
             ),
-            _data._targetTypes,
-            _data._groggyDuration
+            _data.TargetTypes,
+            _data.GroggyDuration
         );
-        Damage.HitCircleRange(damageData, contactPos, _data._range * _data._rangeMultiplier, true, Color.red, 3);
+        Damage.HitCircleRange(damageData, contactPos, _data.Range * _data.RangeMultiplier, true, Color.red, 3);
     }
 }

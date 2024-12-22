@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class SpawnStickyBombUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
@@ -16,11 +17,15 @@ public class SpawnStickyBombUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public int _stackCount;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public SpawnStickyBombUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public SpawnStickyBombUpgrader()
+    {
     }
 
     public void Visit(ISkillUpgradable upgradable, SpawnStickyBombData data)
@@ -29,7 +34,7 @@ public class SpawnStickyBombUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._maxStackCount += upgradeData._stackCount;
+        data.Damage += upgradeData._damage;
+        data.MaxStackCount += upgradeData._stackCount;
     }
 }

@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
 
 [System.Serializable]
 public class PentagonData : EnemyData
 {
-    public float _moveSpeed;
-    public float _stopDistance;
-    public float _gap;
+    [JsonProperty] private float _moveSpeed;
+    [JsonProperty] private float _stopDistance;
+    [JsonProperty] private float _gap;
+
+    [JsonIgnore] public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
+    [JsonIgnore] public float StopDistance { get => _stopDistance; set => _stopDistance = value; }
+    [JsonIgnore] public float Gap { get => _gap; set => _gap = value; }
 
     public PentagonData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
-        DropData dropData, float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillDataToAdd, dropData)
+        float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _stopDistance = stopDistance;
@@ -24,8 +29,7 @@ public class PentagonData : EnemyData
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _size, // EnemyData에서 상속된 값
-            new Dictionary<BaseSkill.Name, int>(CopySkillDataToAdd), // 딕셔너리 깊은 복사
-            _dropData, // EnemyData에서 상속된 값
+            new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed, // TriangleData 고유 값
             _stopDistance,
             _gap
@@ -36,11 +40,13 @@ public class PentagonData : EnemyData
 public class PentagonCreater : LifeCreater
 {
     BaseFactory _skillFactory;
+    DropData _dropData;
 
-    public PentagonCreater(BaseLife lifePrefab, LifeData lifeData, BaseFactory SpawnEffect,
+    public PentagonCreater(BaseLife lifePrefab, LifeData lifeData, DropData dropData, BaseFactory SpawnEffect,
         BaseFactory skillFactory) : base(lifePrefab, lifeData, SpawnEffect)
     {
         _skillFactory = skillFactory;
+        _dropData = dropData;
     }
 
     public override BaseLife Create()
@@ -50,7 +56,7 @@ public class PentagonCreater : LifeCreater
 
         PentagonData data = CopyLifeData as PentagonData;
 
-        life.ResetData(data);
+        life.ResetData(data, _dropData);
         life.AddEffectFactory(_effectFactory);
 
         life.Initialize();
@@ -58,7 +64,7 @@ public class PentagonCreater : LifeCreater
         ICaster caster = life.GetComponent<ICaster>();
         if (caster == null) return life;
 
-        foreach (var item in data.CopySkillDataToAdd)
+        foreach (var item in data.SkillData)
         {
             BaseSkill skill = _skillFactory.Create(item.Key);
             skill.Upgrade(item.Value);

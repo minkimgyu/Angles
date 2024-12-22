@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,15 @@ public class ShockwaveUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public float _sizeMultiplier;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public ShockwaveUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public ShockwaveUpgrader()
+    {
     }
 
     public void Visit(ISkillUpgradable upgradable, ShockwaveData data)
@@ -30,8 +35,8 @@ public class ShockwaveUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._delay += upgradeData._delay;
-        data._sizeMultiplier += upgradeData._sizeMultiplier;
+        data.Damage += upgradeData._damage;
+        data.Delay += upgradeData._delay;
+        data.SizeMultiplier += upgradeData._sizeMultiplier;
     }
 }

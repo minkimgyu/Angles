@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,9 @@ using UnityEngine;
 [System.Serializable]
 abstract public class WeaponData 
 {
-    public DamageableData _damageableData;
+    private DamageableData _damageableData;
+    [JsonIgnore] public DamageableData DamageableData { get => _damageableData; set => _damageableData = value; }
+
     public void ChangeDamage(DamageableData damageableData) { _damageableData = damageableData; }
 
     public virtual void ChangeRange(float range) { }

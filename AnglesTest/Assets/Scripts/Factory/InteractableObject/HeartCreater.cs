@@ -1,11 +1,15 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HeartData : BaseInteractableObjectData
 {
-    public int _healPoint;
-    public float _moveSpeed;
+    [JsonProperty] private int _healPoint;
+    [JsonProperty] private float _moveSpeed;
+
+    [JsonIgnore] public int HealPoint { get => _healPoint; }
+    [JsonIgnore] public float MoveSpeed { get => _moveSpeed; }
 
     public HeartData(int healPoint, float moveSpeed)
     {

@@ -1,11 +1,16 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageRatioStatModifier : IStatModifier
 {
-    List<float> _additionalDamageRatios;
-    float _additionalDamageRatio;
+    [JsonProperty] List<float> _additionalDamageRatios;
+    [JsonProperty] float _additionalDamageRatio;
+
+    public DamageRatioStatModifier()
+    {
+    }
 
     public DamageRatioStatModifier(List<float> additionalDamageRatios)
     {

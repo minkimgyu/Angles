@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,11 @@ using UnityEngine;
 [System.Serializable]
 public class BlackholeData : WeaponData, ILifetimeStat, ISizeModifyStat
 {
-    public float _absorbForce;
-    public float _forceDelay;
+    [JsonProperty] private float _absorbForce;
+    [JsonProperty] private float _forceDelay;
+
+    [JsonIgnore] public float AbsorbForce { get => _absorbForce; set => _absorbForce = value; }
+    [JsonIgnore] public float ForceDelay { get => _forceDelay; set => _forceDelay = value; }
 
     public float Lifetime { get; set; }
     public float SizeMultiplier { get; set; }

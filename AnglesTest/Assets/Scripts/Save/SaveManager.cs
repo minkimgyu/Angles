@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using System;
 public interface ISaveable
 {
     void Save();
@@ -17,8 +17,10 @@ public interface ISaveable
     void UnlockSkin(SkinData.Key name);
 
     void ChangeStat(StatData.Key name, int level);
-    void ChangeStageProgress(DungeonMode.Chapter chapter, int level);
-    void ChangeCurrentStage(DungeonMode.Chapter chapter);
+
+    void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel);
+    void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration);
+    void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level);
 
     /// <summary>
     /// 코인을 추가한다.
@@ -30,7 +32,7 @@ public interface ISaveable
     /// </summary>
     void ChangeCoinCount(int cointCount);
 
-    void UnlockChapter(DungeonMode.Chapter chapter);
+    void UnlockLevel(GameMode.Type type, GameMode.Level level);
     SaveData GetSaveData() { return default; }
 }
 
@@ -40,13 +42,12 @@ public class NULLSaveManager : ISaveable
     public void Save() { }
     public SaveData GetSaveData() { return default; }
 
-    public void ChangeStageProgress(DungeonMode.Chapter chapter, int level) { }
-    public void ChangeCurrentStage(DungeonMode.Chapter chapter) { }
+
 
     public void AddCoinCount(int cointCount) { }
     public void ChangeCoinCount(int cointCount) { }
 
-    public void UnlockChapter(DungeonMode.Chapter chapter) { }
+    public void UnlockLevel(GameMode.Type type, GameMode.Level level) { }
     public void ChangeStat(StatData.Key name, int level) { }
 
     public void ChangeSkin(SkinData.Key name) { }
@@ -57,6 +58,10 @@ public class NULLSaveManager : ISaveable
     public void ChangeSFXMute(bool nowMute) { }
 
     public void ClearSave() { }
+
+    public void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel) { }
+    public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration) { }
+    public void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level) { }
 }
 
 public struct SaveData
@@ -65,35 +70,65 @@ public struct SaveData
     public bool _muteSFX;
 
     public int _gold; // 골드
-    public DungeonMode.Chapter _chapter; // 현재 선택한 챕터
-    public Dictionary<DungeonMode.Chapter, ChapterInfo> _chapterInfos; // 챕터 정보
-    public Dictionary<StatData.Key, int> _statLevelInfos; // 스텟 레벨 정보
+    public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 선택된 스테이지 정보
 
     public SkinData.Key _skin;
-    public Dictionary<SkinData.Key, bool> _skinLockInfos; // 스킨 해금 정보
+    public Dictionary<GameMode.Type, Dictionary<GameMode.Level, ISavableLevelInfo>> _levelTypeInfos; // 레벨 정보
+
+    public Dictionary<StatData.Key, SavableStatData> _statLevelInfos; // 스텟 레벨 정보
+    public Dictionary<SkinData.Key, SavableSkinData> _skinLockInfos; // 스킨 해금 정보
 
     // 딕셔너리를 채워주는 코드 필요
     // --> 새로 생긴 데이터를 확인하는 과정에서 문제가 생김
+    // 해결 방법 --> 만약 딕셔너리에 없다면 해당 데이터를 그때 채워넣는다.
+    // --> 좀 더 생각해보자
 
-    public SaveData(
-        int gold,
-        DungeonMode.Chapter chapter,
-        Dictionary<DungeonMode.Chapter, ChapterInfo> chapterInfos,
-        Dictionary<StatData.Key, int> statLevelInfos,
-
-        SkinData.Key skin,
-        Dictionary<SkinData.Key, bool> skinLockInfos)
+    public SaveData(int gold, bool muteBGM = false, bool muteSFX = false)
     {
-        _muteBGM = false;
-        _muteSFX = false;
-
+        _muteBGM = muteBGM;
+        _muteSFX = muteSFX;
         _gold = gold;
-        _chapter = chapter;
-        _chapterInfos = chapterInfos;
-        _statLevelInfos = statLevelInfos;
 
-        _skin = skin;
-        _skinLockInfos = skinLockInfos;
+        _selectedLevel = new Dictionary<GameMode.Type, GameMode.Level>();
+        _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
+        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.CubeSurvival;
+
+        _skin = SkinData.Key.Normal;
+
+        _levelTypeInfos = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, ISavableLevelInfo>>()
+        {
+            {
+                GameMode.Type.Chapter,
+                new Dictionary<GameMode.Level, ISavableLevelInfo>()
+                {
+                    { GameMode.Level.TriconChapter, new SavableChapterInfo(0, true) },
+                    { GameMode.Level.RhombusChapter, new SavableChapterInfo(0, false) },
+                    { GameMode.Level.PentagonicChapter, new SavableChapterInfo(0, false) },
+                }
+            },
+            {
+                GameMode.Type.Survival,
+                new Dictionary<GameMode.Level, ISavableLevelInfo>()
+                {
+                    { GameMode.Level.CubeSurvival, new SavableSurvivalInfo(0, true) },
+                    { GameMode.Level.PyramidSurvival, new SavableSurvivalInfo(0, false) },
+                    { GameMode.Level.PrismSurvival, new SavableSurvivalInfo(0, false) },
+                }
+            }
+        };
+
+        _statLevelInfos = new Dictionary<StatData.Key, SavableStatData>();
+        foreach (StatData.Key i in Enum.GetValues(typeof(StatData.Key)))
+        {
+            _statLevelInfos.Add(i, new SavableStatData(0));
+        }
+
+        _skinLockInfos = new Dictionary<SkinData.Key, SavableSkinData>();
+        foreach (SkinData.Key i in Enum.GetValues(typeof(SkinData.Key)))
+        {
+            if (i == 0) _skinLockInfos.Add(i, new SavableSkinData(true));
+            else _skinLockInfos.Add(i, new SavableSkinData(false));
+        }
     }
 }
 
@@ -122,27 +157,46 @@ public class SaveManager : ISaveable
 
     public void UnlockSkin(SkinData.Key name)
     {
-        _saveData._skinLockInfos[name] = false;
+        SavableSkinData savableSkinData = _saveData._skinLockInfos[name];
+        savableSkinData._nowUnlock = true;
+
+        _saveData._skinLockInfos[name] = savableSkinData;
         Save();
     }
 
     public void ChangeStat(StatData.Key name, int level)
     {
-        Dictionary<StatData.Key, int> statLevelInfos = _saveData._statLevelInfos;
-        statLevelInfos[name] = level;
+        SavableStatData savableStatData = _saveData._statLevelInfos[name];
+        savableStatData._currentLevel = level;
+
+        _saveData._statLevelInfos[name] = savableStatData;
         Save();
     }
 
-    public void ChangeStageProgress(DungeonMode.Chapter chapter, int level)
+    public void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel)
     {
-        Dictionary<DungeonMode.Chapter, ChapterInfo> chapterInfos = _saveData._chapterInfos;
-        ChapterInfo chapterInfo = chapterInfos[chapter];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[type][level];
+        savableChapterInfo.CompleteLevel = completeLevel;
 
-        chapterInfo._completeLevel = level;
-        chapterInfos[chapter] = chapterInfo;
+        _saveData._levelTypeInfos[type][level] = savableChapterInfo;
         Save();
     }
 
+    public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration)
+    {
+        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[type][level];
+        savableChapterInfo.CompleteDuration = completeDuration;
+
+        _saveData._levelTypeInfos[type][level] = savableChapterInfo;
+        Save();
+    }
+
+    public void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level)
+    {
+        _saveData._selectedLevel[type] = level;
+        Save();
+    }
+   
     public void AddCoinCount(int cointCount)
     {
         _saveData._gold += cointCount;
@@ -155,19 +209,12 @@ public class SaveManager : ISaveable
         Save();
     }
 
-    public void UnlockChapter(DungeonMode.Chapter chapter) 
+    public void UnlockLevel(GameMode.Type type, GameMode.Level level) 
     {
-        Dictionary<DungeonMode.Chapter, ChapterInfo> chapterInfos = _saveData._chapterInfos;
-        ChapterInfo chapterInfo = chapterInfos[chapter];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[type][level];
+        savableChapterInfo.NowUnlock = true;
 
-        chapterInfo._nowLock = false;
-        chapterInfos[chapter] = chapterInfo;
-        Save();
-    }
-
-    public void ChangeCurrentStage(DungeonMode.Chapter chapter)
-    {
-        _saveData._chapter = chapter;
+        _saveData._levelTypeInfos[type][level] = savableChapterInfo;
         Save();
     }
 

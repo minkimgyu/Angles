@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 // 득보다 실이 크다 --> 생성자 사용
 
+[System.Serializable]
 public class StatikkUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
@@ -18,7 +20,6 @@ public class StatikkUpgrader : BaseSkillUpgrader, IUpgradeVisitor
             _range = range;
             _maxTargetCount = maxTargetCount;
             _maxStackCount = maxStackCount;
-
         }
 
         public float _damage;
@@ -27,12 +28,14 @@ public class StatikkUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public int _maxStackCount;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public StatikkUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
     }
+
+    public StatikkUpgrader() { }
 
     const int _upgradeOffset = 2;
 
@@ -52,14 +55,14 @@ public class StatikkUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._range += upgradeData._range;
-        data._maxTargetCount += upgradeData._maxTargetCount;
-        data._maxStackCount += upgradeData._maxStackCount;
+        data.Damage += upgradeData._damage;
+        data.Range += upgradeData._range;
+        data.MaxTargetCount += upgradeData._maxTargetCount;
+        data.MaxStackCount += upgradeData._maxStackCount;
 
-        Debug.Log("_damage: " + data._damage);
-        Debug.Log("_sizeMultiplier: " + data._range);
-        Debug.Log("_maxTargetCount: " + data._maxTargetCount);
-        Debug.Log("_maxStackCount: " + data._maxStackCount);
+        Debug.Log("_damage: " + data.Damage);
+        Debug.Log("_sizeMultiplier: " + data.Range);
+        Debug.Log("_maxTargetCount: " + data.MaxTargetCount);
+        Debug.Log("_maxStackCount: " + data.MaxStackCount);
     }
 }

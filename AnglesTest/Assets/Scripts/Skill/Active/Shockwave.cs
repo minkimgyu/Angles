@@ -11,7 +11,7 @@ public class Shockwave : BaseSkill
     Timer _delayTimer;
     List<ITarget> _targets;
 
-    public Shockwave(ShockwaveData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public Shockwave(ShockwaveData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Basic, data.MaxUpgradePoint)
     {
         _data = data;
         _delayTimer = new Timer();
@@ -37,9 +37,9 @@ public class Shockwave : BaseSkill
                 if (_targets.Count == 0) return;
 
                 CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
-                if (castingComponent != null) castingComponent.CastSkill(_data._delay);
+                if (castingComponent != null) castingComponent.CastSkill(_data.Delay);
 
-                _delayTimer.Start(_data._delay);
+                _delayTimer.Start(_data.Delay);
                 break;
             case Timer.State.Finish:
 
@@ -54,15 +54,15 @@ public class Shockwave : BaseSkill
                 (
                     _caster,
                     new DamageStat(
-                        _data._damage,
+                        _data.Damage,
                         _upgradeableRatio.AttackDamage,
-                        _data._adRatio,
+                        _data.AdRatio,
                         _upgradeableRatio.TotalDamageRatio
                     ),
-                    _data._targetTypes
+                    _data.TargetTypes
                 );
 
-                Damage.HitCircleRange(damageData, casterTransform.position, _data._range, true, Color.red, 3);
+                Damage.HitCircleRange(damageData, casterTransform.position, _data.Range, true, Color.red, 3);
 
                 _delayTimer.Reset();
                 break;
@@ -73,7 +73,7 @@ public class Shockwave : BaseSkill
 
     public override void OnCaptureEnter(ITarget target)
     {
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         _targets.Add(target);
@@ -81,7 +81,7 @@ public class Shockwave : BaseSkill
 
     public override void OnCaptureExit(ITarget target)
     {
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         _targets.Remove(target);

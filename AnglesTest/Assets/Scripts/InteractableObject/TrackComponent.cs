@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// BaseTrackComponent
+// EventTrackComponent
+// OffsetTrackComponent
+// --> 분리해서 다르게 사용하기
+
 public class TrackComponent : MoveComponent
 {
     IFollowable _followableTarget;
@@ -14,6 +19,8 @@ public class TrackComponent : MoveComponent
 
     const float _maxDictance = 1000000;
 
+    Vector2 _followOffsetDirection;
+
     public void ResetFollower(IFollowable followable)
     {
         _followableTarget = followable;
@@ -22,15 +29,21 @@ public class TrackComponent : MoveComponent
     public void Initialize(float moveSpeed)
     {
         _moveSpeed = moveSpeed;
+
         _followOffset = 0;
+        _followOffsetDirection = Vector2.zero;
+
         _maxDistanceFromPlayer = _maxDictance;
         Initialize();
     }
 
-    public void Initialize(float moveSpeed, float followOffset, float maxDistanceFromPlayer)
+    public void Initialize(float moveSpeed, float followOffset, Vector2 followOffsetDirection, float maxDistanceFromPlayer)
     {
         _moveSpeed = moveSpeed;
+
         _followOffset = followOffset;
+        _followOffsetDirection = followOffsetDirection.normalized;
+
         _maxDistanceFromPlayer = maxDistanceFromPlayer;
         Initialize();
     }
@@ -47,11 +60,9 @@ public class TrackComponent : MoveComponent
         if ((_followableTarget as UnityEngine.Object) == null) return;
 
         Vector2 pos = _followableTarget.ReturnPosition();
-        Vector2 foward = _followableTarget.ReturnFowardDirection();
+        Vector2 offset = -_followOffsetDirection * _followOffset;
 
-        Vector2 offset = -foward * _followOffset;
-
-        if (Vector2.Distance(pos, transform.position) > _maxDistanceFromPlayer)
+        if (Vector2.Distance(pos, transform.position) > _maxDistanceFromPlayer) // 플레이어의 거리가 더 멀다면
         {
             _followPos = pos + offset;
         }

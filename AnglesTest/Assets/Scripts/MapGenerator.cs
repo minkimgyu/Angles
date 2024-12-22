@@ -21,7 +21,7 @@ public class MapGenerator
         _stageFactory = stageFactory;
     }
 
-    public Dictionary<BaseStage.Name, BaseStage> CreateMap(DungeonMode.Chapter chapter)
+    public Dictionary<BaseStage.Name, BaseStage> CreateMap(ChapterMode.Level chapter)
     {
         Dictionary<BaseStage.Name, BaseStage> stages = new Dictionary<BaseStage.Name, BaseStage>();
 

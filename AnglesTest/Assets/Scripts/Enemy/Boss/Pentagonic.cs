@@ -6,16 +6,16 @@ public class Pentagonic : BasicMob
 {
     [SerializeField] TargetCaptureComponent _rangeSkillTargetCaptureComponent;
 
-    public override void ResetData(PentagonicData data)
+    public override void ResetData(PentagonicData data, DropData dropData)
     {
-        base.ResetData(data);
-        _size = data._size;
-        _targetType = data._targetType;
-        _moveSpeed = data._moveSpeed;
-        _dropData = data._dropData;
+        base.ResetData(data, dropData);
+        _size = data.Size;
+        _targetType = data.TargetType;
+        _moveSpeed = data.MoveSpeed;
+        _dropData = dropData;
 
-        _stopDistance = data._stopDistance;
-        _gap = data._gap;
+        _stopDistance = data.StopDistance;
+        _gap = data.Gap;
 
         _destoryEffect = BaseEffect.Name.HexagonDestroyEffect;
     }

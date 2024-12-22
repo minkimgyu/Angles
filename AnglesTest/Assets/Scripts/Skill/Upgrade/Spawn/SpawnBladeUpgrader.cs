@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,15 @@ public class SpawnBladeUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public float _range;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public SpawnBladeUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public SpawnBladeUpgrader()
+    {
     }
 
     const int _upgradeOffset = 2;
@@ -33,8 +38,8 @@ public class SpawnBladeUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._sizeMultiplier += upgradeData._range;
-        data._lifetime += upgradeData._lifetime;
+        data.Damage += upgradeData._damage;
+        data.SizeMultiplier += upgradeData._range;
+        data.Lifetime += upgradeData._lifetime;
     }
 }

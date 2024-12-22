@@ -9,7 +9,7 @@ public class Statikk : BaseSkill
     BaseFactory _effectFactory;
     StatikkData _data;
 
-    public Statikk(StatikkData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
+    public Statikk(StatikkData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data.MaxUpgradePoint)
     {
         _data = data;
         _upgrader = upgrader; // 이건 생성자에서 받아서 쓰기
@@ -27,12 +27,12 @@ public class Statikk : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(Collision2D collision)
+    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
     {
-        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        ITarget target = targetObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Statikk);
@@ -44,20 +44,20 @@ public class Statikk : BaseSkill
             _caster,
             new DamageStat
             (
-                _data._damage,
+                _data.Damage,
                 _upgradeableRatio.AttackDamage,
-                _data._adRatio,
+                _data.AdRatio,
                 _upgradeableRatio.TotalDamageRatio
             ),
-            _data._targetTypes,
-            _data._groggyDuration
+            _data.TargetTypes,
+            _data.GroggyDuration
         );
-        Damage.HitRaycast(damageData, _data._maxTargetCount, collision.transform.position, _data._range, out hitPoints, true, Color.red, 3);
+        Damage.HitRaycast(damageData, _data.MaxTargetCount, targetObject.transform.position, _data.Range, out hitPoints, true, Color.red, 3);
 
         for (int i = 0; i < hitPoints.Count; i++)
         {
             BaseEffect effect = _effectFactory.Create(BaseEffect.Name.LaserEffect);
-            effect.ResetPosition(collision.transform.position);
+            effect.ResetPosition(targetObject.transform.position);
             effect.ResetLine(hitPoints[i]);
 
             effect.Play();

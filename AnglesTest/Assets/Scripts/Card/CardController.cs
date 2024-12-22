@@ -129,8 +129,8 @@ public class CardController : MonoBehaviour
             int maxUpgradeCount = upgradeDatas[i].MaxUpgradeCount;
 
             CardInfoData cardInfoData = _cardDatas[skillName];
-            Sprite cardIcon = _skillIcons[cardInfoData.Key];
-            string info = cardInfoData.Info;
+            Sprite cardIcon = _skillIcons[skillName];
+            string info = cardInfoData.Description;
             string name = cardInfoData.Name;
 
             SKillCardData cardData = new SKillCardData(
@@ -169,8 +169,8 @@ public class CardController : MonoBehaviour
             int maxUpgradeCount = upgradeDatas[i].MaxUpgradeCount; // 5
 
             CardInfoData cardInfoData = _cardDatas[skillName];
-            Sprite cardIcon = _skillIcons[cardInfoData.Key];
-            string info = cardInfoData.Info;
+            Sprite cardIcon = _skillIcons[skillName];
+            string info = cardInfoData.Description;
             string name = cardInfoData.Name;
 
             SKillCardData cardData = new SKillCardData(
@@ -256,7 +256,7 @@ public class CardController : MonoBehaviour
             else if (alreadyHave == false)
             {
                 // 다음 레벨은 1이기 떄문
-                SkillUpgradeData upgradeData = new SkillUpgradeData(skillName, 1, CopySkillDatas[skillName]._maxUpgradePoint);
+                SkillUpgradeData upgradeData = new SkillUpgradeData(skillName, 1, CopySkillDatas[skillName].MaxUpgradePoint);
                 skillUpgradeDatas.Add(upgradeData);
             }
         }
@@ -316,7 +316,7 @@ public class CardController : MonoBehaviour
 
     void AddCard(ICaster caster, SKillCardData skillCardData, BaseViewer.Name type)
     {
-        BaseViewer viewer = _viewerFactory.Create(type);
+        CardViewer viewer = (CardViewer)_viewerFactory.Create(type);
         viewer.transform.SetParent(_cardParent);
 
         viewer.Initialize

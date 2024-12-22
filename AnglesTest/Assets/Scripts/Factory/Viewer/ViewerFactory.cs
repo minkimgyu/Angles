@@ -2,19 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class BaseViewerCreater
+public class ViewerCreater
 {
     protected BaseViewer _viewerPrefab;
-    public BaseViewerCreater(BaseViewer viewerPrefab) { _viewerPrefab = viewerPrefab; }
+    public ViewerCreater(BaseViewer viewerPrefab) { _viewerPrefab = viewerPrefab; }
 
-    public virtual BaseViewer Create() { return default; }
-}
-
-public class ViewerCreater : BaseViewerCreater
-{
-    public ViewerCreater(BaseViewer viewerPrefab) : base(viewerPrefab) { }
-
-    public override BaseViewer Create()
+    public BaseViewer Create()
     {
         BaseViewer viewer = Object.Instantiate(_viewerPrefab);
         return viewer;

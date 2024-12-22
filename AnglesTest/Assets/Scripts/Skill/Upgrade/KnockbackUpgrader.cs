@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class KnockbackUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
@@ -12,15 +13,22 @@ public class KnockbackUpgrader : BaseSkillUpgrader, IUpgradeVisitor
             _sizeMultiplier = sizeMultiplier;
         }
 
-        public float _damage;
-        public float _sizeMultiplier;
+        [JsonProperty] private float _damage;
+        [JsonProperty] private float _sizeMultiplier;
+
+        [JsonIgnore] public float Damage { get => _damage; }
+        [JsonIgnore] public float SizeMultiplier { get => _sizeMultiplier; }
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public KnockbackUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public KnockbackUpgrader()
+    {
     }
 
     const int _upgradeOffset = 2;
@@ -31,10 +39,10 @@ public class KnockbackUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._rangeMultiplier += upgradeData._sizeMultiplier;
+        data.Damage += upgradeData.Damage;
+        data.RangeMultiplier += upgradeData.SizeMultiplier;
 
-        Debug.Log("_damage: " + data._damage);
-        Debug.Log("_rangeMultiplier: " + data._rangeMultiplier);
+        Debug.Log("_damage: " + data.Damage);
+        Debug.Log("_rangeMultiplier: " + data.RangeMultiplier);
     }
 }

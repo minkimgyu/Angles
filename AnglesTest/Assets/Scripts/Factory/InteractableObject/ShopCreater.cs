@@ -1,11 +1,15 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopData : BaseInteractableObjectData
 {
-    public int _cardCount;
-    public int _recreateCount;
+    [JsonProperty] private int _cardCount;
+    [JsonProperty] private int _recreateCount;
+
+    [JsonIgnore] public int CardCount { get => _cardCount; }
+    [JsonIgnore] public int RecreateCount { get => _recreateCount; }
 
     public ShopData(int cardCount, int recreateCount)
     {

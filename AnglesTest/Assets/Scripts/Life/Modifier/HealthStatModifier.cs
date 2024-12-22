@@ -1,29 +1,33 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class HealthStatModifier : IStatModifier
 {
-    List<float> _additionalDamageReductions;
-    float _additionalDamageReduction;
+    [JsonProperty] List<float> _additionalHealths;
+    [JsonProperty] float _additionalHealth;
+
+    public HealthStatModifier() { }
 
     public HealthStatModifier(List<float> additionalDamageReductions)
     {
-        _additionalDamageReductions = additionalDamageReductions;
+        _additionalHealths = additionalDamageReductions;
     }
 
     public HealthStatModifier(float additionalDamageReduction)
     {
-        _additionalDamageReduction = additionalDamageReduction;
+        _additionalHealth = additionalDamageReduction;
     }
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data.MaxHp += _additionalDamageReductions[level];
+        data.MaxHp += _additionalHealths[level];
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data.MaxHp += _additionalDamageReduction;
+        data.MaxHp += _additionalHealth;
     }
 }

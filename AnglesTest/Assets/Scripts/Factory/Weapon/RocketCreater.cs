@@ -1,4 +1,5 @@
 using DamageUtility;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,9 @@ using UnityEngine;
 [System.Serializable]
 public class RocketData : WeaponData, ILifetimeStat
 {
-    public float _range;
+    [JsonProperty] private float _range;
+    [JsonIgnore] public float Range { get => _range; set => _range = value; }
+
     public float Lifetime { get; set; }
 
     public RocketData(float range, float lifeTime)

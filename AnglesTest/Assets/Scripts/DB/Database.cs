@@ -1,29 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 public class Database
 {
     #region INFO 데이터
 
     // lock, description
-    Dictionary<SkinInfoModel.State, string> _btnInfo = new Dictionary<SkinInfoModel.State, string>
+    Dictionary<SkinInfoModel.State, string> _buyInfo = new Dictionary<SkinInfoModel.State, string>
     {
         { SkinInfoModel.State.Lock, "구매하기" },
         { SkinInfoModel.State.UnSelected, "장착하기" },
         { SkinInfoModel.State.Selected, "장착 중" },
     };
+    public Dictionary<SkinInfoModel.State, string> BuyInfos { get { return _buyInfo; } }
 
-    public Dictionary<SkinInfoModel.State, string> BtnInfos { get { return _btnInfo; } }
-
-    Dictionary<PopUpViewer.State, string> _alarmInfos = new Dictionary<PopUpViewer.State, string>
+    Dictionary<PopUpViewer.State, string> _popUpInfos = new Dictionary<PopUpViewer.State, string>
     {
         { PopUpViewer.State.ShortOfGold, "골드가 부족합니다." },
         { PopUpViewer.State.NowMaxUpgrade, "최대 업그레이드 상태입니다." },
     };
-
-    public Dictionary<PopUpViewer.State, string> AlarmInfos { get { return _alarmInfos; } }
+    public Dictionary<PopUpViewer.State, string> PopUpInfos { get { return _popUpInfos; } }
 
     #endregion
 
@@ -67,7 +65,7 @@ public class Database
             SkinData.Key.BloodEater, new SkinData(
             "블러드 이터",
             300,
-            "흡혈 10%")
+            "일정 확률로 흡혈 10%")
         },
 
         {
@@ -102,14 +100,6 @@ public class Database
         },
 
         {
-            StatData.Key.AutoHpRecovery,
-             new AutoHpRecoveryStatModifier
-            (
-                new List<float>{ 2, 3, 2, 3, 5 }
-            )
-        },
-
-        {
             StatData.Key.MaxHp,
              new HealthStatModifier
             (
@@ -132,47 +122,31 @@ public class Database
         {
             StatData.Key.AttackDamage, new StatData(
             "공격력",
-            new List<int>{ 100, 200, 300, 400, 500},
             5,
+            new List<int>{ 100, 200, 300, 400, 500},
             new List<string>{ "공격력 5 증가", "공격력 10 증가", "공격력 15 증가", "공격력 20 증가", "공격력 30 증가"})
         },
 
         { 
             StatData.Key.MoveSpeed, new StatData(
             "이동 속도",
-            new List<int>{ 100, 200, 300},
             3,
+            new List<int>{ 100, 200, 300 },
             new List<string>{ "이동 속도 1 증가", "이동 속도 2 증가", "이동 속도 3 증가"}) 
         },
-
-        {
-            StatData.Key.AutoHpRecovery, new StatData(
-            "체력 회복",
-            new List<int>{ 100, 200, 300, 400, 500 },
-            5,
-            new List<string>
-            { 
-                "일정 시간마다 체력 2 회복", 
-                "일정 시간마다 체력 5 회복", 
-                "일정 시간마다 체력 7 회복", 
-                "일정 시간마다 체력 10 회복", 
-                "일정 시간마다 체력 15 회복" 
-            })
-        },
-
         {
             StatData.Key.MaxHp, new StatData(
             "최대 체력",
-            new List<int>{ 100, 200, 300, 400, 500 },
             5,
+            new List<int>{ 100, 200, 300, 400, 500 },
             new List<string>{ "체력 10 증가", "체력 15 증가", "체력 25 증가", "체력 35 증가", "체력 50 증가" })
         },
 
         {
             StatData.Key.DamageReduction, new StatData(
             "받는 피해 감소",
-            new List<int>{ 100, 200, 300, 400, 500 },
             5,
+            new List<int>{ 100, 200, 300, 400, 500 },
             new List<string>{ "받는 피해 감소 5%", "받는 피해 감소 10%", "받는 피해 감소 15%", "받는 피해 감소 20%", "받는 피해 감소 30%" })
         },
     };
@@ -181,7 +155,6 @@ public class Database
     #endregion
 
     #region SKILL 데이터
-
     List<BaseSkill.Name> _upgradeableSkills = new List<BaseSkill.Name>
     {
         BaseSkill.Name.Statikk,
@@ -199,6 +172,7 @@ public class Database
         BaseSkill.Name.UpgradeShooting,
     };
 
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
     public List<BaseSkill.Name> UpgradeableSkills { get { return _upgradeableSkills; } }
 
     Dictionary<BaseSkill.Name, IUpgradeVisitor> _upgrader = new Dictionary<BaseSkill.Name, IUpgradeVisitor>
@@ -321,7 +295,6 @@ public class Database
                 {
                     new SpreadBulletsUpgrader.UpgradableData(-1, 5, 2),
                     new SpreadBulletsUpgrader.UpgradableData(-1, 5, 2),
-   
                 }
             )
         },
@@ -372,9 +345,9 @@ public class Database
 
         { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 0.1f, 0, 1, 0.3f, 3, new List<ITarget.Type> { ITarget.Type.Red })},
 
-        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 10, 1, 1, 1, BaseWeapon.Name.ShooterBullet, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 1, 0.1f, 0, 0.3f, BaseWeapon.Name.ShooterBullet, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 20, 1, 1, 3, BaseWeapon.Name.Rocket, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 10, 0.1f, 0, 3, BaseWeapon.Name.Rocket, new List<ITarget.Type> { ITarget.Type.Red }) },
 
         { BaseSkill.Name.SpawnBlade, new SpawnBladeData(5, 0.3f, 10, 1, 1, 3f, 8f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
@@ -432,7 +405,7 @@ public class Database
 
         { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(3, 10, 1, 1, 4f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
         { BaseSkill.Name.Shockwave, new ShockwaveData(3, 30f, 1f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
-        { BaseSkill.Name.MagneticField, new MagneticFieldData(3, 5f, 1f, 1f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+        { BaseSkill.Name.MagneticField, new MagneticFieldData(3, 2f, 1f, 0.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.SelfDestruction, new SelfDestructionData(3, 20f, 1f, 5f, 3f, 0.7f, new List<ITarget.Type>(){ITarget.Type.Red, ITarget.Type.Blue}) },
     };
 
@@ -454,13 +427,139 @@ public class Database
         { BaseWeapon.Name.Blackhole, new BlackholeData(-100, 0.1f)},
         { BaseWeapon.Name.StickyBomb, new StickyBombData(3, 3)},
 
-        { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 18, 4.0f, 10.0f)},
-        { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 18, 4.0f, 10.0f)},
+        { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 18, 1.5f, new SerializableVector2(1, 1), 10.0f)},
+        { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 18, 1.5f, new SerializableVector2(-1, 1),10.0f)},
 
     };
     public Dictionary<BaseWeapon.Name, WeaponData> WeaponDatas { get { return CopyWeaponDatas; } }
 
     #endregion
+
+    #region DROP 데이터
+
+    Dictionary<BaseLife.Name, DropData> chapterDropDatas = new Dictionary<BaseLife.Name, DropData>
+    {
+        { 
+            BaseLife.Name.YellowTriangle,  
+            new DropData(
+                3, 
+                new Dictionary<IInteractable.Name, float> 
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                } 
+            ) 
+        },
+        {
+            BaseLife.Name.YellowRectangle,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.YellowPentagon,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f },
+                    { IInteractable.Name.Heart, 0.1f },
+                }
+            )
+        },
+        {
+            BaseLife.Name.YellowHexagon,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f },
+                    { IInteractable.Name.Heart, 0.1f },
+                }
+            )
+        },
+
+        {
+            BaseLife.Name.RedTriangle,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.RedRectangle,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.RedPentagon,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f },
+                    { IInteractable.Name.Heart, 0.1f },
+                }
+            )
+        },
+        {
+            BaseLife.Name.RedHexagon,
+            new DropData(
+                3,
+               new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f },
+                    { IInteractable.Name.Heart, 0.1f },
+                }
+            )
+        },
+
+        {
+            BaseLife.Name.Tricon,
+            new DropData(
+                1,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.Rhombus,
+            new DropData(
+                1,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.Pentagonic,
+            new DropData(
+                1,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        }
+    };
+    public Dictionary<BaseLife.Name, DropData> ChapterDropDatas { get { return chapterDropDatas; } }
+
+    #endregion
+
 
     #region LIFE 데이터
 
@@ -479,6 +578,7 @@ public class Database
                 1,
 
                 0f,
+                0.3f,
                 10f,
 
                 1.1f,
@@ -504,17 +604,7 @@ public class Database
         { 
             BaseLife.Name.YellowTriangle, new TriangleData(10, ITarget.Type.Red, BaseLife.Size.Small,
                 
-            new Dictionary<BaseSkill.Name, int>
-            {
-                { BaseSkill.Name.MagneticField, 0 }
-            },
-
-            new DropData(3, 
-                new List<Tuple<IInteractable.Name, float>>
-                { 
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
-                }
-            ), 8) 
+            new Dictionary<BaseSkill.Name, int>{{BaseSkill.Name.MagneticField, 0 }}, 8) 
         },
 
         { 
@@ -523,14 +613,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.MagneticField, 0 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
-                }
-            ), 6)
+            }, 6)
         },
 
         { 
@@ -539,15 +622,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.SpreadBullets, 0 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
-                }
-            ), 4f, 3f, 1f)
+            }, 4f, 3f, 1f)
         },
 
         { 
@@ -556,15 +631,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.Shockwave, 0 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
-                }
-            ), 4f, 3f, 1f)
+            }, 4f, 3f, 1f)
         },
 
 
@@ -576,14 +643,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.MagneticField, 1 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
-                }
-            ), 11)
+            }, 11)
         },
 
         {
@@ -593,14 +653,7 @@ public class Database
             {
                 { BaseSkill.Name.MagneticField, 1 },
                 { BaseSkill.Name.SelfDestruction, 0 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
-                }
-            ), 6)
+            }, 6)
         },
 
         {
@@ -609,15 +662,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.SpreadBullets, 1 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
-                }
-            ), 4f, 3f, 1f)
+            }, 4f, 3f, 1f)
         },
 
         {
@@ -626,15 +671,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.Shockwave, 1 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f),
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Heart, 0.1f),
-                }
-            ), 6f, 3f, 1f)
+            }, 6f, 3f, 1f)
         },
 
          {
@@ -643,14 +680,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.MagneticField, 2 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
-                }
-            ), 15f, 3f, 1f, 2f, 4f)
+            }, 15f, 3f, 1f, 2f, 4f)
         },
 
          {
@@ -660,14 +690,7 @@ public class Database
             {
                 { BaseSkill.Name.MultipleShockwave, 0 },
                 { BaseSkill.Name.MagneticField, 2 }
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
-                }
-            ), 6f, 3f, 1f)
+            }, 6f, 3f, 1f)
         },
 
          {
@@ -676,14 +699,7 @@ public class Database
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.SpreadMultipleBullets, 0 },
-            },
-
-            new DropData(3,
-                new List<Tuple<IInteractable.Name, float>>
-                {
-                    new Tuple<IInteractable.Name, float>( IInteractable.Name.Coin, 0.3f)
-                }
-            ), 6f, 3f, 1f)
+            }, 6f, 3f, 1f)
         },
 
     };
@@ -695,20 +711,20 @@ public class Database
 
     Dictionary<BaseSkill.Name, CardInfoData> _cardDatas = new Dictionary<BaseSkill.Name, CardInfoData>
     {
-        { BaseSkill.Name.SpawnBlackhole, new CardInfoData(BaseSkill.Name.SpawnBlackhole, "블랙홀", "적을 빨아들이는 공간을 생성한다", 30) },
-        { BaseSkill.Name.SpawnBlade, new CardInfoData(BaseSkill.Name.SpawnBlade, "블레이드", "벽을 튕겨다니며 공격하는 칼날을 발사한다", 30) },
-        { BaseSkill.Name.Impact, new CardInfoData(BaseSkill.Name.Impact, "충격파", "폭발을 일으켜 적을 튕겨내고 경직시킨다", 30) },
-        { BaseSkill.Name.Knockback, new CardInfoData(BaseSkill.Name.Knockback, "넉백", "적을 멀리 밀쳐내며 공격한다", 30) },
+        { BaseSkill.Name.SpawnBlackhole, new CardInfoData("블랙홀", "적을 빨아들이는 공간을 생성한다.", 30) },
+        { BaseSkill.Name.SpawnBlade, new CardInfoData("블레이드", "벽을 튕겨다니며 공격하는 칼날을 발사한다.", 30) },
+        { BaseSkill.Name.Impact, new CardInfoData("충격파", "폭발을 일으켜 적을 튕겨내고 경직시킨다.", 30) },
+        { BaseSkill.Name.Knockback, new CardInfoData("넉백", "적을 멀리 밀쳐내며 공격한다.", 30) },
 
-        { BaseSkill.Name.SpawnRifleShooter, new CardInfoData(BaseSkill.Name.SpawnRifleShooter, "펫:슈터", "탄을 발사하는 펫을 소환한다", 20) },
-        { BaseSkill.Name.SpawnRocketShooter, new CardInfoData(BaseSkill.Name.SpawnRocketShooter, "펫:붐버", "포탄을 발포하는 펫을 소환한다", 20) },
+        { BaseSkill.Name.SpawnRifleShooter, new CardInfoData("펫:슈터", "탄을 발사하는 펫을 소환한다.", 20) },
+        { BaseSkill.Name.SpawnRocketShooter, new CardInfoData("펫:붐버", "포탄을 발포하는 펫을 소환한다.", 20) },
 
-        { BaseSkill.Name.Statikk, new CardInfoData(BaseSkill.Name.Statikk, "유도 레이저", "근처의 적을 타격하는 레이저를 발사한다", 30) },
-        { BaseSkill.Name.SpawnStickyBomb, new CardInfoData(BaseSkill.Name.SpawnStickyBomb, "시한 폭탄", "적에게 폭탄을 붙여 일정시간 이후 폭발시킨다", 20) },
+        { BaseSkill.Name.Statikk, new CardInfoData("유도 레이저", "근처의 적을 타격하는 레이저를 발사한다.", 30) },
+        { BaseSkill.Name.SpawnStickyBomb, new CardInfoData("시한 폭탄", "적에게 폭탄을 붙여 일정시간 이후 폭발시킨다.", 20) },
 
-        { BaseSkill.Name.UpgradeShooting, new CardInfoData(BaseSkill.Name.UpgradeShooting, "슈팅 강화", "슈팅의 차징 속도를 감소시키고 무적시간을 증가시킨다", 10) },
-        { BaseSkill.Name.UpgradeDamage, new CardInfoData(BaseSkill.Name.UpgradeDamage, "최종 데미지 증가", "데미지를 상승시킨다", 10) },
-        { BaseSkill.Name.UpgradeCooltime, new CardInfoData(BaseSkill.Name.UpgradeCooltime, "스킬 쿨타임 감소", "쿨타임 스킬의 재사용 대기시간을 감소시킨다.", 10) },
+        { BaseSkill.Name.UpgradeShooting, new CardInfoData("슈팅 강화", "슈팅의 차징 속도를 감소시키고 무적시간을 증가시킨다.", 10) },
+        { BaseSkill.Name.UpgradeDamage, new CardInfoData("최종 데미지 증가", "데미지를 상승시킨다.", 10) },
+        { BaseSkill.Name.UpgradeCooltime, new CardInfoData("스킬 쿨타임 감소", "쿨타임 스킬의 재사용 대기시간을 감소시킨다.", 10) },
     };
     public Dictionary<BaseSkill.Name, CardInfoData> CardDatas { get { return _cardDatas; } }
 
@@ -729,38 +745,31 @@ public class Database
 
     #endregion
 
-    #region SAVE 데이터
 
-    SaveData _defaultSaveData = new SaveData
-    (
-        0,
-        DungeonMode.Chapter.TriconChapter,
-        new Dictionary<DungeonMode.Chapter, ChapterInfo>
+    #region LEVEL 데이터
+
+    Dictionary<GameMode.Type, Dictionary<GameMode.Level, ILevelInfo>> _levelDatas = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, ILevelInfo>>()
+    {
         {
-            { DungeonMode.Chapter.TriconChapter, new ChapterInfo("Tricon", "첫 발걸음", 0, 20, false) },
-            { DungeonMode.Chapter.RhombusChapter, new ChapterInfo("Rhombus", "오르막길", 0, 20, true) },
-            { DungeonMode.Chapter.PentagonicChapter, new ChapterInfo("Pentagonic", "시련", 0, 20, true) },
+            GameMode.Type.Chapter,
+            new Dictionary<GameMode.Level, ILevelInfo>()
+            {
+                { GameMode.Level.TriconChapter, new ChapterInfo("Tricon", "첫 발걸음", 20, GameMode.Level.RhombusChapter) },
+                { GameMode.Level.RhombusChapter, new ChapterInfo("Rhombus", "오르막길", 20, GameMode.Level.PentagonicChapter) },
+                { GameMode.Level.PentagonicChapter, new ChapterInfo("Pentagonic", "시련", 20) },
+            }
         },
-
-        new Dictionary<StatData.Key, int>
         {
-            { StatData.Key.AttackDamage, 0 },
-            { StatData.Key.MaxHp, 0 },
-            { StatData.Key.AutoHpRecovery, 0 },
-            { StatData.Key.MoveSpeed, 0 },
-            { StatData.Key.DamageReduction, 0 },
-        },
-
-        SkinData.Key.Normal,
-        new Dictionary<SkinData.Key, bool>
-        {
-            { SkinData.Key.Normal, false },
-            { SkinData.Key.BloodEater, true },
-            { SkinData.Key.Guard, true },
+            GameMode.Type.Survival,
+            new Dictionary<GameMode.Level, ILevelInfo>()
+            {
+                { GameMode.Level.CubeSurvival, new SurvivalInfo("Cube", "첫 발걸음", 300, GameMode.Level.PyramidSurvival) },
+                { GameMode.Level.PyramidSurvival, new SurvivalInfo("Pyramid", "오르막길", 300, GameMode.Level.PrismSurvival) },
+                { GameMode.Level.PrismSurvival, new SurvivalInfo("Prism", "시련", 300) },
+            }
         }
-    );
-
-    public SaveData DefaultSaveData { get { return _defaultSaveData; } }
+    };
+    public Dictionary<GameMode.Type, Dictionary<GameMode.Level, ILevelInfo>> LevelDatas { get { return _levelDatas; } }
 
     #endregion
 }

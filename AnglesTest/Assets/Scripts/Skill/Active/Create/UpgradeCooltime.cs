@@ -6,7 +6,7 @@ public class UpgradeCooltime : BaseSkill
 {
     UpgradeCooltimeData _data;
 
-    public UpgradeCooltime(UpgradeCooltimeData data) : base(Type.Passive, data._maxUpgradePoint)
+    public UpgradeCooltime(UpgradeCooltimeData data) : base(Type.Passive, data.MaxUpgradePoint)
     {
         _data = data;
     }
@@ -27,6 +27,6 @@ public class UpgradeCooltime : BaseSkill
         IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._cooltimeStatModifier, UpgradePoint - 1);
+        visitor.Upgrade(_data.CooltimeStatModifier, UpgradePoint - 1);
     }
 }

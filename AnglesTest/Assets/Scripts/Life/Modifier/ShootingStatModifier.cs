@@ -29,15 +29,19 @@ public class ShootingStatModifier : IStatModifier
         _shootingStat = shootingStat;
     }
 
+    public ShootingStatModifier()
+    {
+    }
+
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data._shootDuration += _shootingStats[level]._additionalDuration;
-        data._chargeDuration += _shootingStats[level]._additionalChargeDuration;
+        data.ShootDuration += _shootingStats[level]._additionalDuration;
+        data.ChargeDuration += _shootingStats[level]._additionalChargeDuration;
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data._shootDuration += _shootingStat._additionalDuration;
-        data._chargeDuration += _shootingStat._additionalChargeDuration;
+        data.ShootDuration += _shootingStat._additionalDuration;
+        data.ChargeDuration += _shootingStat._additionalChargeDuration;
     }
 }

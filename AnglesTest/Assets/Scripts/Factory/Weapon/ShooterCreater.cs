@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,15 +7,23 @@ using UnityEngine;
 [System.Serializable]
 public class ShooterData : WeaponData
 {
-    public float _shootForce;
-    public float _fireDelay;
-    public BaseWeapon.Name _fireWeaponName; // --> 생성자가 아닌 스킬에서 설정해준다.
+    private float _shootForce;
+    private float _fireDelay;
+    [JsonConverter(typeof(StringEnumConverter))]  private BaseWeapon.Name _fireWeaponName; // --> 생성자가 아닌 스킬에서 설정해준다.
+    private float _moveSpeed;
+    private float _followOffset;
+    private SerializableVector2 _followOffsetDirection;
+    private float _maxDistanceFromPlayer;
 
-    public float _moveSpeed;
-    public float _followOffset;
-    public float _maxDistanceFromPlayer;
+    public float ShootForce { get => _shootForce; set => _shootForce = value; }
+    public float FireDelay { get => _fireDelay; set => _fireDelay = value; }
+    public BaseWeapon.Name FireWeaponName { get => _fireWeaponName; set => _fireWeaponName = value; }
+    public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
+    public float FollowOffset { get => _followOffset; set => _followOffset = value; }
+    public SerializableVector2 FollowOffsetDirection { get => _followOffsetDirection; set => _followOffsetDirection = value; }
+    public float MaxDistanceFromPlayer { get => _maxDistanceFromPlayer; set => _maxDistanceFromPlayer = value; }
 
-    public ShooterData(float shootForce, float fireDelay, float moveSpeed, float followOffset, float maxDistanceFromPlayer)
+    public ShooterData(float shootForce, float fireDelay, float moveSpeed, float followOffset, SerializableVector2 followOffsetDirection, float maxDistanceFromPlayer)
     {
         _shootForce = shootForce;
         _fireDelay = fireDelay;
@@ -22,6 +32,7 @@ public class ShooterData : WeaponData
 
         _moveSpeed = moveSpeed;
         _followOffset = followOffset;
+        _followOffsetDirection = followOffsetDirection;
         _maxDistanceFromPlayer = maxDistanceFromPlayer;
     }
 
@@ -35,6 +46,7 @@ public class ShooterData : WeaponData
             _fireDelay,
             _moveSpeed,
             _followOffset,
+            _followOffsetDirection,
             _maxDistanceFromPlayer
         );
     }

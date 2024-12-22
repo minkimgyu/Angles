@@ -2,17 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 [Serializable]
 public class KnockbackData : CooltimeSkillData
 {
-    public float _damage;
-    public float _adRatio;
-    public float _rangeMultiplier;
-    public SerializableVector2 _size;
-    public SerializableVector2 _offset;
-    public List<ITarget.Type> _targetTypes;
-    public float _groggyDuration;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _rangeMultiplier;
+    [JsonProperty] private SerializableVector2 _size;
+    [JsonProperty] private SerializableVector2 _offset;
+
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
+    [JsonProperty] private float _groggyDuration;
+
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; }
+    [JsonIgnore] public float RangeMultiplier { get => _rangeMultiplier; set => _rangeMultiplier = value; }
+    [JsonIgnore] public SerializableVector2 Size { get => _size; }
+    [JsonIgnore] public SerializableVector2 Offset { get => _offset; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; }
+    [JsonIgnore] public float GroggyDuration { get => _groggyDuration; }
 
     public KnockbackData(
         int maxUpgradePoint,

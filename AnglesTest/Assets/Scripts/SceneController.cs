@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static ISceneControllable;
 
 public class SceneController : ISceneControllable
 {
-    public void ChangeScene(string sceneName)
+    public void ChangeScene(SceneName sceneName)
     {
         ServiceLocater.ReturnSoundPlayer().StopBGM(); // ∫Í±› ∏ÿ√Á¡ÿ¥Ÿ.
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(sceneName.ToString());
     }
 
-    public string GetCurrentSceneName()
+    public SceneName GetCurrentSceneName()
     {
-        return SceneManager.GetActiveScene().name;
+        return (SceneName)Enum.Parse(typeof(SceneName), SceneManager.GetActiveScene().name);
     }
 }

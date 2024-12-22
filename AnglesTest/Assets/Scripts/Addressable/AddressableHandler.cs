@@ -19,6 +19,7 @@ public class AddressableHandler : MonoBehaviour
         InteractableObject,
         Viewer,
         Sound,
+        Database,
 
         TriconChapterMap,
         RhombusChapterMap,
@@ -29,6 +30,8 @@ public class AddressableHandler : MonoBehaviour
         PentagonicChapterData,
 
         ChapterIcon,
+        SurvivalIcon,
+
         StatIcon,
         SkinIcon
     }
@@ -50,14 +53,14 @@ public class AddressableHandler : MonoBehaviour
         _successCount = 0;
         _totalCount = 0;
 
-        ChapterMapAsset = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, BaseStage>>();
-        foreach (DungeonMode.Chapter chapter in Enum.GetValues(typeof(DungeonMode.Chapter)))
+        ChapterMapAsset = new Dictionary<ChapterMode.Level, Dictionary<BaseStage.Name, BaseStage>>();
+        foreach (ChapterMode.Level chapter in Enum.GetValues(typeof(ChapterMode.Level)))
         {
             ChapterMapAsset[chapter] = new Dictionary<BaseStage.Name, BaseStage>();
         }
 
-        ChapterMapLevelDesignAsset = new Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, IStageData>>();
-        foreach (DungeonMode.Chapter chapter in Enum.GetValues(typeof(DungeonMode.Chapter)))
+        ChapterMapLevelDesignAsset = new Dictionary<ChapterMode.Level, Dictionary<BaseStage.Name, IStageData>>();
+        foreach (ChapterMode.Level chapter in Enum.GetValues(typeof(ChapterMode.Level)))
         {
             ChapterMapLevelDesignAsset[chapter] = new Dictionary<BaseStage.Name, IStageData>();
         }
@@ -65,7 +68,22 @@ public class AddressableHandler : MonoBehaviour
 
     public Dictionary<SkinData.Key, Sprite> SkinIconAsset { get; private set; }
     public Dictionary<StatData.Key, Sprite> StatIconAsset { get; private set; }
-    public Dictionary<DungeonMode.Chapter, Sprite> ChapterIconAsset { get; private set; }
+
+    public Dictionary<GameMode.Level, Sprite> ChapterIconAsset { get; private set; }
+    public Dictionary<GameMode.Level, Sprite> SurvivalIconAsset { get; private set; }
+
+    public Dictionary<GameMode.Type, Dictionary<GameMode.Level, Sprite>> LevelIconAsset 
+    { 
+        get 
+        {
+            Dictionary<GameMode.Type, Dictionary<GameMode.Level, Sprite>> dic = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, Sprite>>();
+            dic.Add(GameMode.Type.Chapter, ChapterIconAsset);
+            dic.Add(GameMode.Type.Survival, SurvivalIconAsset);
+
+            return dic;
+        } 
+    }
+
     public Dictionary<BaseSkill.Name, Sprite> SkillIconAsset { get; private set; }
     public Dictionary<BaseWeapon.Name, BaseWeapon> WeaponPrefabAsset { get; private set; }
     public Dictionary<BaseEffect.Name, BaseEffect> EffectPrefabAsset { get; private set; }
@@ -74,18 +92,24 @@ public class AddressableHandler : MonoBehaviour
     public Dictionary<IInteractable.Name, IInteractable> InteractableAsset { get; private set; }
     public Dictionary<ISoundPlayable.SoundName, AudioClip> SoundAsset { get; private set; }
 
-    public Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, BaseStage>> ChapterMapAsset { get; private set; }
-    public Dictionary<DungeonMode.Chapter, Dictionary<BaseStage.Name, IStageData>> ChapterMapLevelDesignAsset { get; private set; }
+    public Dictionary<GameMode.Level, Dictionary<BaseStage.Name, BaseStage>> ChapterMapAsset { get; private set; }
+    public Dictionary<GameMode.Level, Dictionary<BaseStage.Name, IStageData>> ChapterMapLevelDesignAsset { get; private set; }
+
+
+
+    public Database Database { get; private set; }
 
     public void Load(Action OnCompleted)
     {
         _assetLoaders = new HashSet<BaseLoader>();
 
 
-
         _assetLoaders.Add(new SkinIconAssetLoader(Label.SkinIcon, (value, label) => { SkinIconAsset = value; OnSuccess(label); }));
         _assetLoaders.Add(new StatIconAssetLoader(Label.StatIcon, (value, label) => { StatIconAsset = value; OnSuccess(label); }));
-        _assetLoaders.Add(new ChapterIconAssetLoader(Label.ChapterIcon, (value, label) => { ChapterIconAsset = value; OnSuccess(label); }));
+
+        _assetLoaders.Add(new LevelIconAssetLoader(Label.ChapterIcon, (value, label) => { ChapterIconAsset = value; OnSuccess(label); }));
+        _assetLoaders.Add(new LevelIconAssetLoader(Label.SurvivalIcon, (value, label) => { SurvivalIconAsset = value; OnSuccess(label); }));
+
         _assetLoaders.Add(new SkillIconAssetLoader(Label.SkillIcon, (value, label) => { SkillIconAsset = value; OnSuccess(Label.SkillIcon); }));
         _assetLoaders.Add(new WeaponAssetLoader(Label.Weapon, (value, label) => { WeaponPrefabAsset = value; OnSuccess(Label.Weapon); }));
         _assetLoaders.Add(new EffectAssetLoader(Label.Effect, (value, label) => { EffectPrefabAsset = value; OnSuccess(Label.Effect); }));
@@ -93,13 +117,12 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new ViewerAssetLoader(Label.Viewer, (value, label) => { ViewerPrefabAsset = value; OnSuccess(Label.Viewer); }));
         _assetLoaders.Add(new InteractableAssetLoader(Label.InteractableObject, (value, label) => { InteractableAsset = value; OnSuccess(Label.InteractableObject); }));
         _assetLoaders.Add(new SoundAssetLoader(Label.Sound, (value, label) => { SoundAsset = value; OnSuccess(Label.Sound); }));
-
-
+        _assetLoaders.Add(new JsonAssetLoader<Database>(Label.Database, (value, label) => { Database = value; OnSuccess(Label.Database); }));
 
         _assetLoaders.Add(new ChapterMapJsonAssetLoader(
             Label.TriconChapterData,
             (value, label) => {
-                ChapterMapLevelDesignAsset[DungeonMode.Chapter.TriconChapter] = value; 
+                ChapterMapLevelDesignAsset[ChapterMode.Level.TriconChapter] = value; 
                 OnSuccess(Label.TriconChapterData); 
             }
         ));
@@ -107,7 +130,7 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new ChapterMapJsonAssetLoader(
             Label.RhombusChapterData,
             (value, label) => {
-                ChapterMapLevelDesignAsset[DungeonMode.Chapter.RhombusChapter] = value;
+                ChapterMapLevelDesignAsset[ChapterMode.Level.RhombusChapter] = value;
                 OnSuccess(Label.RhombusChapterData);
             }
         ));
@@ -115,7 +138,7 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new ChapterMapJsonAssetLoader(
             Label.PentagonicChapterData,
             (value, label) => {
-                ChapterMapLevelDesignAsset[DungeonMode.Chapter.PentagonicChapter] = value;
+                ChapterMapLevelDesignAsset[ChapterMode.Level.PentagonicChapter] = value;
                 OnSuccess(Label.PentagonicChapterData);
             }
         ));
@@ -126,14 +149,14 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new ChapterMapAssetLoader(
             Label.TriconChapterMap,
             (value, label) => {
-                ChapterMapAsset[DungeonMode.Chapter.TriconChapter] = value;
+                ChapterMapAsset[ChapterMode.Level.TriconChapter] = value;
                 OnSuccess(label);
             }
         ));
 
         _assetLoaders.Add(new ChapterMapAssetLoader(
             Label.RhombusChapterMap, 
-            (value, label) => { ChapterMapAsset[DungeonMode.Chapter.RhombusChapter] = value; 
+            (value, label) => { ChapterMapAsset[ChapterMode.Level.RhombusChapter] = value; 
             OnSuccess(Label.RhombusChapterMap); 
             }
         ));
@@ -141,7 +164,7 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new ChapterMapAssetLoader(
             Label.PentagonicChapterMap,
             (value, label) => {
-                ChapterMapAsset[DungeonMode.Chapter.PentagonicChapter] = value;
+                ChapterMapAsset[ChapterMode.Level.PentagonicChapter] = value;
                 OnSuccess(label);
             }
         ));

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,15 @@ public class SelfDestructionUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public float _range;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public SelfDestructionUpgrader(List<UpgradableData> upgradeDatas)
     {
         _upgradeDatas = upgradeDatas;
+    }
+
+    public SelfDestructionUpgrader()
+    {
     }
 
     public void Visit(ISkillUpgradable upgradable, SelfDestructionData data)
@@ -30,8 +35,8 @@ public class SelfDestructionUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._damage += upgradeData._damage;
-        data._range += upgradeData._range;
-        data._delay += upgradeData._delay;
+        data.Damage += upgradeData._damage;
+        data.Range += upgradeData._range;
+        data.Delay += upgradeData._delay;
     }
 }

@@ -15,6 +15,7 @@ public class PopUpViewer : MonoBehaviour
     }
 
     Dictionary<State, string> _alarmInfos;
+    [SerializeField] GameObject _content;
     [SerializeField] TMP_Text _infoText;
     [SerializeField] Button _confirmBtn;
 
@@ -25,7 +26,7 @@ public class PopUpViewer : MonoBehaviour
         Activate(false);
     }
 
-    void Activate(bool on) => gameObject.SetActive(on);
+    void Activate(bool on) => _content.SetActive(on);
 
     public void UpdateInfo(State state)
     {

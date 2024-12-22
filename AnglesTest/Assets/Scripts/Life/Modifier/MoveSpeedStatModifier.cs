@@ -1,11 +1,15 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class MoveSpeedStatModifier : IStatModifier
 {
-    List<float> _additionalMoveSpeeds;
-    float _additionalMoveSpeed;
+    [JsonProperty] List<float> _additionalMoveSpeeds;
+    [JsonProperty] float _additionalMoveSpeed;
+
+    public MoveSpeedStatModifier() { }
 
     public MoveSpeedStatModifier(List<float> additionalMoveSpeeds)
     {
@@ -19,11 +23,11 @@ public class MoveSpeedStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data._moveSpeed += _additionalMoveSpeeds[level];
+        data.MoveSpeed += _additionalMoveSpeeds[level];
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data._moveSpeed += _additionalMoveSpeed;
+        data.MoveSpeed += _additionalMoveSpeed;
     }
 }

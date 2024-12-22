@@ -2,16 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 [Serializable]
 public class SelfDestructionData : SkillData
 {
-    public float _delay;
-    public float _hpRatioOnInvoke;
-    public float _damage;
-    public float _adRatio;
-    public float _range;
-    public List<ITarget.Type> _targetTypes;
+    [JsonProperty] private float _delay;
+    [JsonProperty] private float _hpRatioOnInvoke;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _range;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
+
+    [JsonIgnore] public float Delay { get => _delay; set => _delay = value; }
+    [JsonIgnore] public float HpRatioOnInvoke { get => _hpRatioOnInvoke; set => _hpRatioOnInvoke = value; }
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float Range { get => _range; set => _range = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public SelfDestructionData(int maxUpgradePoint, float damage, float adRatio, float range, float delay, float hpRatioOnInvoke, List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {

@@ -37,12 +37,16 @@ public class MoveComponent : MonoBehaviour
 
     public void FreezeRotation(bool freeze)
     {
+        if (_rigid == null) return;
+
         if(freeze) _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else _rigid.constraints = RigidbodyConstraints2D.None;
     }
 
     public void FreezePosition(bool freeze)
     {
+        if (_rigid == null) return;
+
         if (freeze) _rigid.constraints = RigidbodyConstraints2D.FreezePosition;
         else _rigid.constraints = RigidbodyConstraints2D.None;
     }

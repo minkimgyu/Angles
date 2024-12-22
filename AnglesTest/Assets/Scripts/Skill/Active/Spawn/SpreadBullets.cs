@@ -11,7 +11,7 @@ public class SpreadBullets : BaseSkill
     BaseFactory _weaponFactory;
     SpreadBulletsData _data;
 
-    public SpreadBullets(SpreadBulletsData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public SpreadBullets(SpreadBulletsData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(Type.Basic, data.MaxUpgradePoint)
     {
         _data = data;
         _delayTimer = new Timer();
@@ -35,7 +35,7 @@ public class SpreadBullets : BaseSkill
         float x = Mathf.Sin(angle * Mathf.Deg2Rad);
         float y = Mathf.Cos(angle * Mathf.Deg2Rad);
         Vector3 direction = new Vector3(x, y, 0);
-        Vector3 spawnPosition = casterTransform.position + direction * _data._distanceFromCaster;
+        Vector3 spawnPosition = casterTransform.position + direction * _data.DistanceFromCaster;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.PentagonBullet);
         if (weapon == null) return;
@@ -44,13 +44,13 @@ public class SpreadBullets : BaseSkill
         (
             _caster,
             new DamageStat(
-                _data._damage,
+                _data.Damage,
                 _upgradeableRatio.AttackDamage,
-                _data._adRatio,
+                _data.AdRatio,
                 _upgradeableRatio.TotalDamageRatio
             ),
-            _data._targetTypes,
-            _data._groggyDuration
+            _data.TargetTypes,
+            _data.GroggyDuration
         );
 
         List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
@@ -64,7 +64,7 @@ public class SpreadBullets : BaseSkill
         IProjectable projectile = weapon.GetComponent<IProjectable>();
         if (projectile == null) return;
 
-        projectile.Shoot(direction, _data._force);
+        projectile.Shoot(direction, _data.Force);
     }
 
     public override void OnUpdate()
@@ -74,13 +74,13 @@ public class SpreadBullets : BaseSkill
         {
             case Timer.State.Ready:
                 if (_targets.Count == 0) return;
-                _delayTimer.Start(_data._delay);
+                _delayTimer.Start(_data.Delay);
                 break;
             case Timer.State.Finish:
 
-                for (int i = 1; i <= _data._bulletCount; i++)
+                for (int i = 1; i <= _data.BulletCount; i++)
                 {
-                    float angle = 360f / _data._bulletCount * i; 
+                    float angle = 360f / _data.BulletCount * i; 
                     ShootBullet(angle);
                 }
                 _delayTimer.Reset();
@@ -92,7 +92,7 @@ public class SpreadBullets : BaseSkill
 
     public override void OnCaptureEnter(ITarget target)
     {
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         _targets.Add(target);
@@ -100,7 +100,7 @@ public class SpreadBullets : BaseSkill
 
     public override void OnCaptureExit(ITarget target)
     {
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         _targets.Remove(target);

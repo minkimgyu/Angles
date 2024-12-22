@@ -15,12 +15,12 @@ public class Bullet : ProjectileWeapon
             return;
         }
 
-        if(target.IsTarget(_data._damageableData._targetType) == true)
+        if(target.IsTarget(_data.DamageableData._targetType) == true)
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                Damage.Hit(_data._damageableData, damageable);
+                Damage.Hit(_data.DamageableData, damageable);
                 SpawnHitEffect();
                 Destroy(gameObject);
                 return;

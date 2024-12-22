@@ -18,6 +18,15 @@ public class SettingController : MonoBehaviour, ISettable
 
     public void Activate(bool on)
     {
+        if(on)
+        {
+            ServiceLocater.ReturnTimeController().Stop();
+        }
+        else
+        {
+            ServiceLocater.ReturnTimeController().Restart();
+        }
+
         // 세이브 데이터 불러와서 적용
         SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
         ISoundPlayable playable = ServiceLocater.ReturnSoundPlayer();
@@ -76,14 +85,14 @@ public class SettingController : MonoBehaviour, ISettable
         (
             () => 
             {
-                string sceneName = ServiceLocater.ReturnSceneController().GetCurrentSceneName();
+                ISceneControllable.SceneName sceneName = ServiceLocater.ReturnSceneController().GetCurrentSceneName();
                 switch (sceneName)
                 {
-                    case "LobbyScene": // 로비 씬의 경우
-                        ServiceLocater.ReturnSceneController().ChangeScene("MenuScene");
+                    case ISceneControllable.SceneName.LobbyScene: // 로비 씬의 경우
+                        ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.MenuScene);
                         break;
                     default: // 플레이 씬의 경우
-                        ServiceLocater.ReturnSceneController().ChangeScene("LobbyScene");
+                        ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.LobbyScene);
                         break;
                 }
                 Activate(false);

@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
 
 [Serializable]
 public class TriangleData : EnemyData
 {
-    public float _moveSpeed;
+    [JsonProperty] private float _moveSpeed;
 
-    public TriangleData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
-        DropData dropData, float moveSpeed) : base(maxHp, targetType, size, skillDataToAdd, dropData)
+    public TriangleData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, float moveSpeed) 
+        : base(maxHp, targetType, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
-        CopySkillDataToAdd = skillDataToAdd;
+        _skillData = skillDataToAdd;
     }
+
+    [JsonIgnore] public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
 
     public override LifeData Copy()
     {
@@ -21,8 +24,7 @@ public class TriangleData : EnemyData
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _size, // EnemyData에서 상속된 값
-            new Dictionary<BaseSkill.Name, int>(CopySkillDataToAdd), // 딕셔너리 깊은 복사
-            _dropData, // EnemyData에서 상속된 값
+            new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed // TriangleData 고유 값
         );
     }
@@ -31,11 +33,13 @@ public class TriangleData : EnemyData
 public class TriangleCreater : LifeCreater
 {
     BaseFactory _skillFactory;
+    DropData _dropData;
 
-    public TriangleCreater(BaseLife lifePrefab, LifeData lifeData, BaseFactory effectFactory,
+    public TriangleCreater(BaseLife lifePrefab, LifeData lifeData, DropData dropData, BaseFactory effectFactory,
         BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
         _skillFactory = skillFactory;
+        _dropData = dropData;
     }
 
     public override BaseLife Create()
@@ -48,7 +52,7 @@ public class TriangleCreater : LifeCreater
         // 여기에 Upgrader를 넣어서 데이터를 업데이트 시켜주고
         // 아래에서 초기화해주면 어떨까?
 
-        life.ResetData(data);
+        life.ResetData(data, _dropData);
         life.AddEffectFactory(_effectFactory);
 
         life.Initialize();
@@ -56,7 +60,7 @@ public class TriangleCreater : LifeCreater
         ICaster caster = life.GetComponent<ICaster>();
         if (caster == null) return life;
 
-        foreach (var item in data.CopySkillDataToAdd)
+        foreach (var item in data.SkillData)
         {
             BaseSkill skill = _skillFactory.Create(item.Key);
             skill.Upgrade(item.Value);

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] Scrollbar scrollbar;
-    [SerializeField] protected Transform contentTr;
+    [SerializeField] Scrollbar _scrollbar;
+    [SerializeField] protected Transform _contentTr;
 
     protected int _menuSize;
 
@@ -34,7 +34,7 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (!_isDrag)
         {
-            scrollbar.value = Mathf.Lerp(scrollbar.value, _targetPos, 0.1f);
+            _scrollbar.value = Mathf.Lerp(_scrollbar.value, _targetPos, 0.1f);
         }
     }
 
@@ -77,7 +77,7 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         // 절반거리를 기준으로 가까운 위치를 반환
         for (int i = 0; i < _menuSize; i++)
         {
-            if (scrollbar.value < _points[i] + _distance * 0.5f && scrollbar.value > _points[i] - _distance * 0.5f)
+            if (_scrollbar.value < _points[i] + _distance * 0.5f && _scrollbar.value > _points[i] - _distance * 0.5f)
             {
                 _targetIndex = i;
                 return _points[i];

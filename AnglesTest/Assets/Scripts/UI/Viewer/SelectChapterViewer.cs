@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
+using Unity.VisualScripting;
 
 public class SelectChapterModel
 {
@@ -23,25 +25,33 @@ public class SelectChapterModel
         }
     }
 
-    int _level;
-    public int Level
+    string _description;
+    public string Description
     {
-        get { return _level; }
+        get { return _description; }
         set
         {
-            _level = value;
-            _selectChapterViewer.ChangeLevel(_level);
+            _description = value;
+            _selectChapterViewer.ChangeInfo(_description);
         }
     }
 
-    string _info;
-    public string Info
+    Tuple<GameMode.Type, ILevelInfo> _levelInfo;
+    public Tuple<GameMode.Type, ILevelInfo> LevelInfo
     {
-        get { return _info; }
+        get { return _levelInfo; }
         set
         {
-            _info = value;
-            _selectChapterViewer.ChangeInfo(_info);
+            _levelInfo = value;
+            switch (_levelInfo.Item1)
+            {
+                case GameMode.Type.Chapter:
+                    _selectChapterViewer.ChangeChapterStageProgress(_levelInfo.Item2.MaxLevel);
+                    break;
+                case GameMode.Type.Survival:
+                    _selectChapterViewer.ChangeSurvivalStageProgress(_levelInfo.Item2.TotalDuration);
+                    break;
+            }
         }
     }
 }
@@ -57,9 +67,14 @@ public class SelectChapterViewer : MonoBehaviour
         _titleTxt.text = title;
     }
 
-    public void ChangeLevel(int level)
+    public void ChangeChapterStageProgress(int level)
     {
         _levelTxt.text = $"스테이지 수 : {level}";
+    }
+
+    public void ChangeSurvivalStageProgress(int survivalTime)
+    {
+        _levelTxt.text = $"생존 시간 : {survivalTime / 60}:{(survivalTime % 60).ToString("D2")}";
     }
 
     public void ChangeInfo(string info)

@@ -1,14 +1,18 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class UpgradeCooltimeData : SkillData
 {
-    public CooltimeStatModifier _cooltimeStatModifier;
+    [JsonProperty] private CooltimeStatModifier _cooltimeStatModifier;
     public UpgradeCooltimeData(int maxUpgradePoint, CooltimeStatModifier cooltimeStatModifier) : base(maxUpgradePoint)
     {
         _cooltimeStatModifier = cooltimeStatModifier;
     }
+
+    [JsonIgnore] public CooltimeStatModifier CooltimeStatModifier { get => _cooltimeStatModifier; set => _cooltimeStatModifier = value; }
 
     public override SkillData Copy()
     {

@@ -9,7 +9,7 @@ public class Knockback : BaseSkill
     BaseFactory _effectFactory;
     KnockbackData _data;
 
-    public Knockback(KnockbackData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data._maxUpgradePoint)
+    public Knockback(KnockbackData data, IUpgradeVisitor upgrader, BaseFactory effectFactory) : base(Type.Active, data.MaxUpgradePoint)
     {
         _data = data;
         _effectFactory = effectFactory;
@@ -27,12 +27,12 @@ public class Knockback : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(Collision2D collision) 
+    public override void OnReflect(GameObject targetObject, Vector3 contactPos) 
     {
-        ITarget target = collision.gameObject.GetComponent<ITarget>();
+        ITarget target = targetObject.GetComponent<ITarget>();
         if (target == null) return;
 
-        bool isTarget = target.IsTarget(_data._targetTypes);
+        bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
         Transform casterTransform = _caster.GetComponent<Transform>();
@@ -41,7 +41,7 @@ public class Knockback : BaseSkill
         Debug.Log("Knockback");
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.KnockbackEffect);
-        effect.ResetSize(_data._rangeMultiplier);
+        effect.ResetSize(_data.RangeMultiplier);
         effect.ResetPosition(casterTransform.position, casterTransform.right);
         effect.Play();
 
@@ -49,17 +49,17 @@ public class Knockback : BaseSkill
         (
             _caster,
             new DamageStat(
-                _data._damage,
+                _data.Damage,
                 _upgradeableRatio.AttackDamage,
-                _data._adRatio,
+                _data.AdRatio,
                 _upgradeableRatio.TotalDamageRatio
             ),
-            _data._targetTypes,
-            _data._groggyDuration
+            _data.TargetTypes,
+            _data.GroggyDuration
         );
 
 
-        Damage.HitBoxRange(damageData, casterTransform.position, _data._offset.V2, casterTransform.right,
-            _data._size.V2 * _data._rangeMultiplier, true, Color.red);
+        Damage.HitBoxRange(damageData, casterTransform.position, _data.Offset.V2, casterTransform.right,
+            _data.Size.V2 * _data.RangeMultiplier, true, Color.red);
     }
 }

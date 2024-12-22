@@ -35,13 +35,13 @@ public class SkinInfoModel
         }
     }
 
-    public bool NowLock
+    public bool NowUnlock
     {
         set 
         {
-            if(value == true) _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.Lock]);
+            if(value == false) _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.Lock]);
             else _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.UnSelected]);
-            _skinInfoViewer.ActivateLockImg(value);
+            _skinInfoViewer.ActivateLockImg(!value);
         }
     }
 
@@ -113,19 +113,19 @@ public class SkinInfoController
 
     public void BuySkin()
     {
-        _skinInfoModel.NowLock = false;
+        _skinInfoModel.NowUnlock = true;
         _skinInfoModel.Cost = 0;
     }
 
     // dk
-    public void PickSkin(Sprite statSprite, bool nowLock, bool nowSelect, string name, int cost, string description)
+    public void PickSkin(Sprite statSprite, bool nowUnlock, bool nowSelect, string name, int cost, string description)
     {
         _skinInfoModel.StatSprite = statSprite;
         _skinInfoModel.Name = name;
         _skinInfoModel.Description = description;
 
-        _skinInfoModel.NowLock = nowLock;
-        if (nowLock)
+        _skinInfoModel.NowUnlock = nowUnlock;
+        if (!nowUnlock)
         {
             _skinInfoModel.Cost = cost;
         }

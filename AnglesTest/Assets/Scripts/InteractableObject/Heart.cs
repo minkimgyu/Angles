@@ -32,8 +32,8 @@ public class Heart : MonoBehaviour, IInteractable
 
     public void Initialize(HeartData data)
     {
-        _moveSpeed = data._moveSpeed;
-        _healPoint = data._healPoint;
+        _moveSpeed = data.MoveSpeed;
+        _healPoint = data.HealPoint;
 
         _trackComponent = GetComponent<TrackComponent>();
         _trackComponent.Initialize(_moveSpeed);

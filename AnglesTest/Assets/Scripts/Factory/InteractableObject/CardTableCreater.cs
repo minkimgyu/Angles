@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
 
 public class CardTableData : BaseInteractableObjectData
 {
-    public int _cardCount;
+    [JsonProperty] private int _cardCount;
+    [JsonIgnore] public int CardCount { get => _cardCount; }
 
     public CardTableData(int cardCount)
     {

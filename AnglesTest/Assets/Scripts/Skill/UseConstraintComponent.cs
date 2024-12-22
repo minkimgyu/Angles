@@ -52,9 +52,9 @@ public class CooltimeConstraint : UseConstraintComponent
         switch (_cooltimer.CurrentState)
         {
             case Timer.State.Ready:
-                if (_stackCount >= _cooltimeSkillData._maxStackCount) return;
+                if (_stackCount >= _cooltimeSkillData.MaxStackCount) return;
 
-                _cooltimer.Start(_cooltimeSkillData._coolTime * _upgradeableRatio.TotalCooltimeRatio);
+                _cooltimer.Start(_cooltimeSkillData.CoolTime * _upgradeableRatio.TotalCooltimeRatio);
                 break;
             case Timer.State.Running:
                 ViewerEvent?.Invoke(1 - _cooltimer.Ratio, _stackCount, showStack);
@@ -63,13 +63,13 @@ public class CooltimeConstraint : UseConstraintComponent
                 _cooltimer.Reset();
                 _stackCount++;
 
-                if (_stackCount >= _cooltimeSkillData._maxStackCount)
+                if (_stackCount >= _cooltimeSkillData.MaxStackCount)
                 {
                     ViewerEvent?.Invoke(0, _stackCount, showStack);
                     return;
                 }
 
-                _cooltimer.Start(_cooltimeSkillData._coolTime * _upgradeableRatio.TotalCooltimeRatio);
+                _cooltimer.Start(_cooltimeSkillData.CoolTime * _upgradeableRatio.TotalCooltimeRatio);
                 break;
             default:
                 break;
@@ -91,7 +91,7 @@ public class RandomConstraintComponent : UseConstraintComponent
     public override bool CanUse()
     {
         float random = Random.Range(0.0f, 1.0f);
-        return random <= _randomSkillData._probability * _upgradeableRatio.TotalRandomRatio;
+        return random <= _randomSkillData.Probability * _upgradeableRatio.TotalRandomRatio;
 
         // 0.7 * 1.2
         // 0.7 * 0.8

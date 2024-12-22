@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: ChapterIcons
   m_Data:
     m_SerializedData: []
-  m_GUID: 84ea4b950cb79e242aa13bb8bf0ec731
+  m_GUID: 16c06a5f13dde8742b22d9c04a27c193
   m_SerializeEntries:
   - m_GUID: 8f5b2a674e297594e9064eb12943fdeb
     m_Address: TriconChapter
@@ -39,5 +39,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 9049b7ac1c442be449628f7ed9352cf8, type: 2}
-    - {fileID: 11400000, guid: cf857bc21500d8440b8b07ba9996bea4, type: 2}
+    - {fileID: 11400000, guid: c4ee001a26a1f214ba78a278b6aee500, type: 2}
+    - {fileID: 11400000, guid: 7a8cf8a29296a1541b46a7d025dfb256, type: 2}

@@ -30,7 +30,7 @@ public class Rocket : ProjectileWeapon
         SpawnExplosionEffect();
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, transform.position, 0.4f);
-        Damage.HitCircleRange(_data._damageableData, transform.position, _data._range, true, Color.red, 3);
+        Damage.HitCircleRange(_data.DamageableData, transform.position, _data.Range, true, Color.red, 3);
         Destroy(gameObject);
     }
 

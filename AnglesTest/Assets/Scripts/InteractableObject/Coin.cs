@@ -35,8 +35,8 @@ public class Coin : MonoBehaviour, IInteractable
 
     public void Initialize(CoinData data) 
     {
-        _upCount = data._upCount;
-        _moveSpeed = data._moveSpeed;
+        _upCount = data.UpCount;
+        _moveSpeed = data.MoveSpeed;
 
         _trackComponent = GetComponent<TrackComponent>();
         _trackComponent.Initialize(_moveSpeed);

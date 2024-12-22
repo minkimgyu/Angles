@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using DamageUtility;
 
+[Serializable]
 public struct DamageableData
 {
     public ICaster _caster; // 공격을 적용한 대상

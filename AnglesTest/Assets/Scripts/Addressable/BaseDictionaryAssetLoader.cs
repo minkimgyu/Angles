@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using System;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 abstract public class BaseLoader
 {
@@ -20,6 +21,53 @@ abstract public class BaseLoader
     public abstract void Release();
 }
 
+abstract public class BaseAssetLoader<Value, Type> : BaseLoader
+{
+    Action<Value, AddressableHandler.Label> OnComplete;
+    protected Value _asset;
+
+    public BaseAssetLoader(AddressableHandler.Label label, Action<Value, AddressableHandler.Label> OnComplete)
+    {
+        _label = label;
+        this.OnComplete = OnComplete;
+    }
+
+    public override void Load()
+    {
+        Addressables.LoadAssetAsync<Type>(_label.ToString()).Completed +=
+        (handle) =>
+        {
+            switch (handle.Status)
+            {
+                case AsyncOperationStatus.Succeeded:
+                    LoadAsset(handle.Result);
+                    OnComplete?.Invoke(_asset, _label);
+                    break;
+                case AsyncOperationStatus.Failed:
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
+    protected override void OnSuccess()
+    {
+        base.OnSuccess();
+        if (_successCount == 1)
+        {
+            Debug.Log("Success");
+            OnComplete?.Invoke(_asset, _label);
+        }
+    }
+
+    abstract protected void LoadAsset(Type value);
+
+    public override void Release()
+    {
+        Addressables.Release(_asset);
+    }
+}
 abstract public class BaseDictionaryAssetLoader<Key, Value, Type> : BaseLoader
 {
     protected Dictionary<Key, Value> _assetDictionary;
@@ -32,7 +80,6 @@ abstract public class BaseDictionaryAssetLoader<Key, Value, Type> : BaseLoader
         _assetDictionary = new Dictionary<Key, Value>();
         _successCount = 0;
     }
-
 
     public override void Load()
     {

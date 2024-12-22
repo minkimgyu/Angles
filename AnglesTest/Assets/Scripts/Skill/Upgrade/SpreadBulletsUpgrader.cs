@@ -1,4 +1,5 @@
 using DamageUtility;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,11 +21,15 @@ public class SpreadBulletsUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         public float _force;
     }
 
-    List<UpgradableData> _upgradeDatas;
+    [JsonProperty] List<UpgradableData> _upgradeDatas;
 
     public SpreadBulletsUpgrader(List<UpgradableData> datas)
     {
         _upgradeDatas = datas;
+    }
+
+    public SpreadBulletsUpgrader()
+    {
     }
 
     public void Visit(ISkillUpgradable upgradable, SpreadBulletsData data) 
@@ -32,8 +37,8 @@ public class SpreadBulletsUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
-        data._delay += upgradeData._delay;
-        data._damage += upgradeData._damage;
-        data._force += upgradeData._force;
+        data.Delay += upgradeData._delay;
+        data.Damage += upgradeData._damage;
+        data.Force += upgradeData._force;
     }
 }

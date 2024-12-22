@@ -7,6 +7,10 @@ public class CooltimeStatModifier : IStatModifier
     List<float> _additionalCooltimeRatios;
     float _additionalCooltimeRatio;
 
+    public CooltimeStatModifier()
+    {
+    }
+
     public CooltimeStatModifier(List<float> additionalCooltimeRatios)
     {
         _additionalCooltimeRatios = additionalCooltimeRatios;

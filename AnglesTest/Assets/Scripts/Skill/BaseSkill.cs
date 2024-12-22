@@ -100,7 +100,7 @@ abstract public class BaseSkill : ISkillUpgradable
         return canUse; 
     }
     public virtual void OnAdd() { }
-    public virtual void OnReflect(Collision2D collision) { }
+    public virtual void OnReflect(GameObject targetObject, Vector3 contactPos) { }
     public virtual void OnDamaged(float ratio) { }
 
     public virtual void OnCaptureEnter(ITarget target) { }

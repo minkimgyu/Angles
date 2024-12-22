@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,14 +7,11 @@ using UnityEngine;
 public class StickyBombData : WeaponData, ILifetimeStat
 {
     /// <summary>
-    /// 적용되는 데미지
-    /// </summary>
-    public float _groggyDuration;
-
-    /// <summary>
     /// 시전 범위
     /// </summary>
-    public float _range;
+    [JsonProperty] private float _range;
+    [JsonIgnore] public float Range { get => _range; set => _range = value; }
+
     public float Lifetime { get; set; }
 
     public StickyBombData(float range, float lifetime)

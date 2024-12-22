@@ -15,7 +15,7 @@ public class GameResultViewer : BaseViewer, IPointerClickHandler
 
     Action OnReturnToMenuRequested;
 
-    public override void Initialize(Action OnReturnToMenuRequested) 
+    public void Initialize(Action OnReturnToMenuRequested) 
     {
         this.OnReturnToMenuRequested = OnReturnToMenuRequested;
         TurnOnViewer(false);

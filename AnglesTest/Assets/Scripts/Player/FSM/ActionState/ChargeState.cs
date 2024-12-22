@@ -50,13 +50,13 @@ public class ChargeState : State<Player.ActionState>
 
     bool CanShoot(Vector2 input)
     {
-        return input.magnitude >= _playerData._minJoystickLength;
+        return input.magnitude >= _playerData.MinJoystickLength;
     }
 
     public override void OnStateEnter()
     {
         _moveComponent.MoveSpeedRatio = _chargeMoveSpeedRatio;
-        _chargeTimer.Start(_playerData._chargeDuration);
+        _chargeTimer.Start(_playerData.ChargeDuration);
 
         EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnTurnOnOffDirection, true);
         //ShowShootDirection?.Invoke(true);

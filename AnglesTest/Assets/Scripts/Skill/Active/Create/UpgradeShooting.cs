@@ -6,7 +6,7 @@ public class UpgradeShooting : BaseSkill
 {
     UpgradeShootingData _data;
 
-    public UpgradeShooting(UpgradeShootingData data) : base(Type.Passive, data._maxUpgradePoint)
+    public UpgradeShooting(UpgradeShootingData data) : base(Type.Passive, data.MaxUpgradePoint)
     {
         _data = data;
     }
@@ -27,6 +27,6 @@ public class UpgradeShooting : BaseSkill
         IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
         if (visitor == null) return;
 
-        visitor.Upgrade(_data._shootingStatModifier, UpgradePoint - 1);
+        visitor.Upgrade(_data.ShootingStatModifier, UpgradePoint - 1);
     }
 }

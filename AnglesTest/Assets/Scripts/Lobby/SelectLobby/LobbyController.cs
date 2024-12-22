@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,13 +12,39 @@ public class LobbyController : MonoBehaviour
 
     [SerializeField] PopUpViewer _popUpViewer;
 
-    [SerializeField] LevelSelectPage _levelSelectPage;
+    [SerializeField] LevelSelectPage _chapterLevelSelectPage;
+
+
     [SerializeField] StatSelectPage _statSelectPage;
     [SerializeField] SkinSelectPage _skinSelectPage;
 
+    Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> GetTypeDatas(AddressableHandler addressableHandler, SaveData saveData)
+    {
+        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeDatas = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>>();
+
+        foreach (GameMode.Type type in Enum.GetValues(typeof(GameMode.Type)))
+        {
+            Dictionary<GameMode.Level, LevelData> levelDatas = new Dictionary<GameMode.Level, LevelData>();
+
+            Dictionary<GameMode.Level, ILevelInfo> info = addressableHandler.Database.LevelDatas[type];
+            Dictionary<GameMode.Level, ISavableLevelInfo> savableInfo = saveData._levelTypeInfos[type];
+            Dictionary<GameMode.Level, Sprite> levelSprite = addressableHandler.LevelIconAsset[type];
+
+            foreach (KeyValuePair<GameMode.Level, ILevelInfo> item1 in info)
+            {
+                LevelData levelData = new LevelData(info[item1.Key], savableInfo[item1.Key], levelSprite[item1.Key]);
+                levelDatas.Add(item1.Key, levelData);
+            }
+
+            typeDatas.Add(type, levelDatas);
+        }
+
+        return typeDatas;
+    }
+
     private void Start()
     {
-        CoreSystem gameSystem = FindObjectOfType<CoreSystem>();
+        AddressableHandler addressableHandler = FindObjectOfType<AddressableHandler>();
         ServiceLocater.ReturnSoundPlayer().PlayBGM(ISoundPlayable.SoundName.LobbyBGM);
 
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
@@ -25,32 +52,33 @@ public class LobbyController : MonoBehaviour
 
         _lobbyScrollController.Initialize();
 
-        _popUpViewer.Initialize(gameSystem.Database.AlarmInfos);
+        _popUpViewer.Initialize(addressableHandler.Database.PopUpInfos);
 
         _lobbyTopViewer.Initialize(() => { ServiceLocater.ReturnSettingController().Activate(true); });
         _lobbyTopModel = new LobbyTopModel(_lobbyTopViewer);
         _lobbyTopModel.GoldCount = saveData._gold;
 
-        _levelSelectPage.Initialize(
-            saveData._chapter,
-            saveData._chapterInfos,
-            gameSystem.AddressableHandler.ChapterIconAsset,
-            gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer)
+        LobbyViewerFactory lobbyViewerFactory = new LobbyViewerFactory(addressableHandler.ViewerPrefabAsset);
+        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeDatas = GetTypeDatas(addressableHandler, saveData);
+
+        _chapterLevelSelectPage.Initialize(
+            typeDatas,
+            lobbyViewerFactory
         );
 
         _statSelectPage.Initialize(
-            gameSystem.AddressableHandler.StatIconAsset,
-            gameSystem.Database.StatDatas,
-            gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer),
+            addressableHandler.StatIconAsset,
+            addressableHandler.Database.StatDatas,
+            lobbyViewerFactory,
             _popUpViewer.UpdateInfo,
             _lobbyTopModel
         );
 
         _skinSelectPage.Initialize(
-           gameSystem.AddressableHandler.SkinIconAsset,
-           gameSystem.Database.SkinDatas,
-           gameSystem.Database.BtnInfos,
-           gameSystem.FactoryCollection.ReturnFactory(FactoryCollection.Type.Viewer),
+           addressableHandler.SkinIconAsset,
+           addressableHandler.Database.SkinDatas,
+           addressableHandler.Database.BuyInfos,
+           lobbyViewerFactory,
            _popUpViewer.UpdateInfo,
            _lobbyTopModel
        );

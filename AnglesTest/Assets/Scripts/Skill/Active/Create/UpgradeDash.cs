@@ -6,7 +6,7 @@ public class UpgradeDash : BaseSkill
 {
     UpgradeDashData _data;
 
-    public UpgradeDash(UpgradeDashData data) : base(Type.Passive, data._maxUpgradePoint)
+    public UpgradeDash(UpgradeDashData data) : base(Type.Passive, data.MaxUpgradePoint)
     {
         _data = data;
     }

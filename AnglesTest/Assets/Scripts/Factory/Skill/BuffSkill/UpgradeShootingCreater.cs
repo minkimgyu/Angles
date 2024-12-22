@@ -1,15 +1,19 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class UpgradeShootingData : SkillData
 {
-    public ShootingStatModifier _shootingStatModifier;
+    [JsonProperty] private ShootingStatModifier _shootingStatModifier;
 
     public UpgradeShootingData(int maxUpgradePoint, ShootingStatModifier shootingStatModifier) : base(maxUpgradePoint)
     {
         _shootingStatModifier = shootingStatModifier;
     }
+
+    [JsonIgnore] public ShootingStatModifier ShootingStatModifier { get => _shootingStatModifier; set => _shootingStatModifier = value; }
 
     public override SkillData Copy()
     {

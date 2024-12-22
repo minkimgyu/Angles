@@ -2,18 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 [Serializable]
 public class SpawnBlackholeData : RandomSkillData
 {
-    public float _damage;
-    public float _adRatio;
-    public float _groggyDuration;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _groggyDuration;
+    [JsonProperty] private float _sizeMultiplier;
+    [JsonProperty] private float _lifetime;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
 
-    public float _sizeMultiplier;
-    public float _lifetime;
-
-    public List<ITarget.Type> _targetTypes;
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
+    [JsonIgnore] public float SizeMultiplier { get => _sizeMultiplier; set => _sizeMultiplier = value; }
+    [JsonIgnore] public float Lifetime { get => _lifetime; set => _lifetime = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public SpawnBlackholeData(
         int maxUpgradePoint,

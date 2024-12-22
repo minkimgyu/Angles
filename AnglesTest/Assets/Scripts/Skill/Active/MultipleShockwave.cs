@@ -20,11 +20,11 @@ public class MultipleShockwave : BaseSkill
     MultipleShockwaveData _data;
     BaseFactory _effectFactory;
 
-    public MultipleShockwave(MultipleShockwaveData data, BaseFactory effectFactory) : base(Type.Basic, data._maxUpgradePoint)
+    public MultipleShockwave(MultipleShockwaveData data, BaseFactory effectFactory) : base(Type.Basic, data.MaxUpgradePoint)
     {
         _data = data;
         _waveCount = 0;
-        _targetTypes = data._targetTypes;
+        _targetTypes = data.TargetTypes;
 
         _delayTimer = new Timer();
         _waveTimer = new Timer();
@@ -41,7 +41,7 @@ public class MultipleShockwave : BaseSkill
                 if (_targets.Count == 0) return;
 
                 _waveSize = _originWaveSize;
-                _delayTimer.Start(_data._delay);
+                _delayTimer.Start(_data.Delay);
                 break;
             case Timer.State.Finish:
 
@@ -57,30 +57,30 @@ public class MultipleShockwave : BaseSkill
                     ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, casterTransform.position);
 
                     Debug.Log("MultipleShockwave " + _waveSize);
-                    Debug.Log("MultipleShockwave " + _data._range);
+                    Debug.Log("MultipleShockwave " + _data.Range);
 
                     DamageableData damageData = new DamageableData
                     (
                         _caster,
                         new DamageStat(
-                            _data._damage,
+                            _data.Damage,
                             _upgradeableRatio.AttackDamage,
-                            _data._adRatio,
+                            _data.AdRatio,
                             _upgradeableRatio.TotalDamageRatio
                         ),
-                        _data._targetTypes
+                        _data.TargetTypes
                     );
 
 
-                    Damage.HitCircleRange(damageData, casterTransform.position, _data._range * _waveSize, true, Color.red, 3);
+                    Damage.HitCircleRange(damageData, casterTransform.position, _data.Range * _waveSize, true, Color.red, 3);
 
                     _waveTimer.Reset();
-                    _waveTimer.Start(_data._waveDelay);
-                    _waveSize += _data._waveSizeMultiply;
+                    _waveTimer.Start(_data.WaveDelay);
+                    _waveSize += _data.WaveSizeMultiply;
                     _waveCount++;
 
                     Debug.Log(_waveCount);
-                    if (_waveCount == _data._maxWaveCount)
+                    if (_waveCount == _data.MaxWaveCount)
                     {
                         _waveCount = 0;
                         _waveTimer.Reset();

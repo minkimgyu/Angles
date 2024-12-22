@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerSpawner
 {
-    FactoryCollection _factoryCollection;
+    InGameFactory _factoryCollection;
     InputController _inputController;
 
     Dictionary<SkinData.Key, Sprite> _skinIconAsset;
@@ -17,7 +17,7 @@ public class PlayerSpawner
     Dictionary<StatData.Key, IStatModifier> _statModifiers;
 
     public PlayerSpawner(
-        FactoryCollection factoryCollection,
+        InGameFactory factoryCollection,
         InputController inputController,
         Dictionary<SkinData.Key, Sprite> skinIconAsset,
 
@@ -65,7 +65,7 @@ public class PlayerSpawner
         {
             if(_statModifiers.ContainsKey(stat.Key) == false) continue;
 
-            int level = stat.Value;
+            int level = stat.Value._currentLevel;
             IStatModifier modifier = _statModifiers[stat.Key];
             for (int i = 0; i < level; i++)
             {
@@ -76,7 +76,7 @@ public class PlayerSpawner
 
     public void Spawn(Vector3 spawnPos)
     {
-        Player player = (Player)_factoryCollection.ReturnFactory(FactoryCollection.Type.Life).Create(BaseLife.Name.Player);
+        Player player = (Player)_factoryCollection.GetFactory(InGameFactory.Type.Life).Create(BaseLife.Name.Player);
         player.transform.position = spawnPos;
 
         ApplySkin(player);
@@ -101,7 +101,7 @@ public class PlayerSpawner
         IFollowable followable = player.GetComponent<IFollowable>();
         if (followable != null) EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.AddFollableCamera, followable);
 
-        BaseFactory viewerFactory = _factoryCollection.ReturnFactory(FactoryCollection.Type.Viewer);
+        BaseFactory viewerFactory = _factoryCollection.GetFactory(InGameFactory.Type.Viewer);
 
         BaseViewer hpViewer = viewerFactory.Create(BaseViewer.Name.HpViewer);
         hpViewer.Initialize();

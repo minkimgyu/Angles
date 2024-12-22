@@ -2,18 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 [Serializable]
 public class SpawnShooterData : SkillData
 {
-    public float _damage;
-    public float _adRatio;
-    public float _groggyDuration;
+    [JsonProperty] private float _damage;
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _groggyDuration;
+    [JsonProperty] private float _delay;
+    [JsonConverter(typeof(StringEnumConverter))] private BaseWeapon.Name _shooterName;
+    [JsonConverter(typeof(StringEnumConverter))] private BaseWeapon.Name _projectileName;
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
 
-    public float _delay;
-    public BaseWeapon.Name _shooterName;
-    public BaseWeapon.Name _projectileName;
-    public List<ITarget.Type> _targetTypes;
+    [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
+    [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
+    [JsonIgnore] public float Delay { get => _delay; set => _delay = value; }
+    [JsonIgnore] public BaseWeapon.Name ShooterName { get => _shooterName; set => _shooterName = value; }
+    [JsonIgnore] public BaseWeapon.Name ProjectileName { get => _projectileName; set => _projectileName = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public SpawnShooterData(
         int maxUpgradePoint,
