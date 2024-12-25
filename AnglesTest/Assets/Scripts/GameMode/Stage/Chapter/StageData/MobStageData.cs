@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using UnityEngine;
 
 [Serializable]
-public struct MobStageData : IStageData
+public struct MobStageData
 {
-    [SerializeField] public SpawnData[] easySpawnDatas;
-    [SerializeField] public SpawnData[] normalSpawnDatas;
-    [SerializeField] public SpawnData[] hardSpawnDatas;
+    [JsonProperty] SpawnData[] easySpawnDatas;
+    [JsonProperty] SpawnData[] normalSpawnDatas;
+    [JsonProperty] SpawnData[] hardSpawnDatas;
 
     public MobStageData(
         SpawnData[] easySpawnDatas,

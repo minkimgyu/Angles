@@ -12,6 +12,7 @@ abstract public class BaseFactory
     public virtual BaseLife Create(BaseLife.Name name) { return default; }
     public virtual IInteractable Create(IInteractable.Name name) { return default; }
     public virtual BaseStage Create(GameMode.Level level, BaseStage.Name name) { return default; }
+    public virtual BaseStage Create(GameMode.Level level) { return default; }
 }
 
 public class InGameFactory
@@ -29,7 +30,7 @@ public class InGameFactory
 
     Dictionary<Type, BaseFactory> _factories = new Dictionary<Type, BaseFactory>();
 
-    public InGameFactory(AddressableHandler addressableHandler, )
+    public InGameFactory(AddressableHandler addressableHandler, BaseFactory stageFactory)
     {
         //_factories.Add(Type.Viewer, new ViewerFactory(addressableHandler.ViewerPrefabAsset));
         // --> 로비 UI 전용 팩토리 하나 만들기
@@ -46,7 +47,7 @@ public class InGameFactory
 
         _factories.Add(Type.Interactable, new InteractableObjectFactory(addressableHandler.InteractableAsset, addressableHandler.Database.InteractableObjectDatas));
 
-        _factories.Add(Type.Stage, new ChapterStageFactory(addressableHandler.ChapterMapAsset, addressableHandler.ChapterMapLevelDesignAsset));
+        _factories.Add(Type.Stage, stageFactory); // new ChapterStageFactory(addressableHandler.ChapterMapAsset, addressableHandler.ChapterMapLevelDesignAsset));
     }
 
     public BaseFactory GetFactory(Type type) { return _factories[type]; }

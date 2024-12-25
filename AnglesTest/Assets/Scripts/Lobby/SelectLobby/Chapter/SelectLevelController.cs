@@ -13,8 +13,16 @@ public class SelectLevelController : MonoBehaviour
     [SerializeField] SelectChapterViewer _selectChapterViewer;
     SelectChapterModel _selectChapterModel;
 
-    Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> _typeDatas;
+    Dictionary<GameMode.Level, LevelData> _levelDatas;
     Action<GameMode.Level> OnSelectLevel;
+
+
+
+
+
+
+
+
 
     public void Activate(bool on, GameMode.Type levelType = default)
     {
@@ -30,7 +38,7 @@ public class SelectLevelController : MonoBehaviour
     {
         _storedLevelType = type;
         _selectScrollHandler.ScrollUsingChapter((level));
-        ChangeChapterModel(type, level);
+        ChangeChapterModel(level);
     }
 
     /// <summary>
@@ -39,30 +47,30 @@ public class SelectLevelController : MonoBehaviour
     void OnChooseLevel()
     {
         GameMode.Level level = _selectScrollHandler.CurrentLevel;
-        if (_typeDatas[_storedLevelType][level].SavableLevelInfos.NowUnlock == false) return; // 해금되지 않았다면 진행 X
+        if (_levelDatas[level].SavableLevelInfos.NowUnlock == false) return; // 해금되지 않았다면 진행 X
 
         Activate(false);
         OnSelectLevel?.Invoke(level);
     }
 
-    void ChangeChapterModel(GameMode.Type type, GameMode.Level level)
+    void ChangeChapterModel(GameMode.Level level)
     {
-        _selectChapterModel.Title = _typeDatas[type][level].LevelInfos.Title;
-        _selectChapterModel.Description = _typeDatas[type][level].LevelInfos.Description;
+        _selectChapterModel.Title = _levelDatas[level].LevelInfos.Title;
+        _selectChapterModel.Description = _levelDatas[level].LevelInfos.Description;
 
         _selectChapterModel.LevelInfo = new Tuple<GameMode.Type, ILevelInfo>
         (
-            _typeDatas[type][level].LevelInfos.Type,
-            _typeDatas[type][level].LevelInfos
+            _levelDatas[level].LevelInfos.Type,
+            _levelDatas[level].LevelInfos
         );
     }
 
     public void Initialize(
-        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeDatas,
+        Dictionary<GameMode.Level, LevelData> typeDatas,
         BaseFactory viewerFactory,
         Action<GameMode.Level> OnSelectLevel)
     {
-        _typeDatas = typeDatas;
+        _levelDatas = typeDatas;
         this.OnSelectLevel = OnSelectLevel;
 
         _selectChapterModel = new SelectChapterModel(_selectChapterViewer);

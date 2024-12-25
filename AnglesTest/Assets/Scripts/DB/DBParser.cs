@@ -84,7 +84,7 @@ public class DBParser : MonoBehaviour
         FileIO fileIO = new FileIO(jsonParser, ".txt");
 
         string fileName = "Database";
-        string fileLocation = "Scripts/DB";
+        string fileLocation = "JsonData";
 
         Database database = new Database();
         fileIO.SaveData(database, fileLocation, fileName);

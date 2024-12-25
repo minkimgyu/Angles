@@ -65,30 +65,11 @@ public class MobStageCreater : StageCreater
     }
 }
 
-public class SurvivalStageCreater : StageCreater
-{
-    MobStageData _mobStageData;
-
-    public SurvivalStageCreater(BaseStage stagePrefab, MobStageData mobStageData) : base(stagePrefab)
-    {
-        _mobStageData = mobStageData;
-    }
-
-    public override BaseStage Create()
-    {
-        BaseStage stage = Object.Instantiate(_stagePrefab);
-        if (stage == null) return null;
-
-        stage.ResetData(_mobStageData);
-        return stage;
-    }
-}
-
 public class ChapterStageFactory : BaseFactory
 {
     Dictionary<GameMode.Level, Dictionary<BaseStage.Name, StageCreater>> _stageCreaters;
 
-    public ChapterStageFactory(Dictionary<GameMode.Level, Dictionary<BaseStage.Name, BaseStage>> stagePrefab, Dictionary<GameMode.Level, Dictionary<BaseStage.Name, IStageData>> stageData)
+    public ChapterStageFactory(Dictionary<GameMode.Level, ILevel> stagePrefab, Dictionary<GameMode.Level, ILevelData> stageData)
     {
         _stageCreaters = new Dictionary<GameMode.Level, Dictionary<BaseStage.Name, StageCreater>>();
 
@@ -100,17 +81,17 @@ public class ChapterStageFactory : BaseFactory
 
         for (int i = 0; i < levels.Count; i++)
         {
-            GameMode.Level chapter = levels[i];
-            _stageCreaters[chapter][BaseStage.Name.StartStage] = new NormalStageCreater(stagePrefab[chapter][BaseStage.Name.StartStage]);
-            _stageCreaters[chapter][BaseStage.Name.BonusStage] = new NormalStageCreater(stagePrefab[chapter][BaseStage.Name.BonusStage]);
+            GameMode.Level level = levels[i];
+            _stageCreaters[level][BaseStage.Name.StartStage] = new NormalStageCreater(stagePrefab[level].StartStage);
+            _stageCreaters[level][BaseStage.Name.BonusStage] = new NormalStageCreater(stagePrefab[level].BonusStage);
 
-            _stageCreaters[chapter][BaseStage.Name.BossStage] = new BossStageCreater(stagePrefab[chapter][BaseStage.Name.BossStage], (BossStageData)stageData[chapter][BaseStage.Name.BossStage]);
+            _stageCreaters[level][BaseStage.Name.BossStage] = new BossStageCreater(stagePrefab[level].BossStage, stageData[level].BossStageData);
 
-            _stageCreaters[chapter][BaseStage.Name.MobStage1] = new MobStageCreater(stagePrefab[chapter][BaseStage.Name.MobStage1], (MobStageData)stageData[chapter][BaseStage.Name.MobStage1]);
-            _stageCreaters[chapter][BaseStage.Name.MobStage2] = new MobStageCreater(stagePrefab[chapter][BaseStage.Name.MobStage2], (MobStageData)stageData[chapter][BaseStage.Name.MobStage2]);
-            _stageCreaters[chapter][BaseStage.Name.MobStage3] = new MobStageCreater(stagePrefab[chapter][BaseStage.Name.MobStage3], (MobStageData)stageData[chapter][BaseStage.Name.MobStage3]);
-            _stageCreaters[chapter][BaseStage.Name.MobStage4] = new MobStageCreater(stagePrefab[chapter][BaseStage.Name.MobStage4], (MobStageData)stageData[chapter][BaseStage.Name.MobStage4]);
-            _stageCreaters[chapter][BaseStage.Name.MobStage5] = new MobStageCreater(stagePrefab[chapter][BaseStage.Name.MobStage5], (MobStageData)stageData[chapter][BaseStage.Name.MobStage5]);
+            _stageCreaters[level][BaseStage.Name.MobStage1] = new MobStageCreater(stagePrefab[level].MobStages[0], stageData[level].MobStageDatas[0]);
+            _stageCreaters[level][BaseStage.Name.MobStage2] = new MobStageCreater(stagePrefab[level].MobStages[1], stageData[level].MobStageDatas[1]);
+            _stageCreaters[level][BaseStage.Name.MobStage3] = new MobStageCreater(stagePrefab[level].MobStages[2], stageData[level].MobStageDatas[2]);
+            _stageCreaters[level][BaseStage.Name.MobStage4] = new MobStageCreater(stagePrefab[level].MobStages[3], stageData[level].MobStageDatas[3]);
+            _stageCreaters[level][BaseStage.Name.MobStage5] = new MobStageCreater(stagePrefab[level].MobStages[4], stageData[level].MobStageDatas[4]);
         }
 
     }

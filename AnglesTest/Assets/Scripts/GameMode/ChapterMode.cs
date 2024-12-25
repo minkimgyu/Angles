@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
-using static GameMode;
 
 public class ChapterMode : GameMode
 {
@@ -22,7 +21,6 @@ public class ChapterMode : GameMode
     [SerializeField] Button _settingBtn;
 
     DropController _dropController;
-
     Stopwatch _dungeonStopwatch;
 
     // Start is called before the first frame update
@@ -92,7 +90,8 @@ public class ChapterMode : GameMode
         GameState gameState = new GameState(_coinViewer);
         GameStateManager.Instance.Initialize(gameState);
 
-        InGameFactory inGameFactory = new InGameFactory(addressableHandler);
+        BaseFactory stageFactory = new ChapterStageFactory(addressableHandler.LevelAsset, addressableHandler.LevelDesignAsset);
+        InGameFactory inGameFactory = new InGameFactory(addressableHandler, stageFactory);
 
 
         BaseFactory viewerFactory = inGameFactory.GetFactory(InGameFactory.Type.Viewer);
@@ -121,15 +120,18 @@ public class ChapterMode : GameMode
         SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
 
         Level level = saveData._selectedLevel[Type.Chapter];
-        _unlockLevel = addressableHandler.Database.LevelDatas[Type.Chapter][level].UnlockLevel;
-        _canUnlock = addressableHandler.Database.LevelDatas[Type.Chapter][level].CanUnlockLevel;
+
+
+
+        _unlockLevel = addressableHandler.Database.LevelDatas[level].UnlockLevel;
+        _canUnlock = addressableHandler.Database.LevelDatas[level].CanUnlockLevel;
 
         ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{level.ToString()}BGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
         _stageController = GetComponent<ChapterStageController>();
 
-        ILevelInfo levelInfo = addressableHandler.Database.LevelDatas[Type.Chapter][level];
+        ILevelInfo levelInfo = addressableHandler.Database.LevelDatas[level];
         _stageController.Initialize(levelInfo.MaxLevel, addressableHandler, inGameFactory);
         _stageController.CreateRandomStage(level);
     }

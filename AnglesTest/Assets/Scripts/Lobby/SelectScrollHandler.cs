@@ -23,16 +23,16 @@ public class SelectScrollHandler : ScrollUI
 
     RectTransform _rectTransform;
 
-    Action<GameMode.Type, GameMode.Level> OnLevelSelected;
+    Action<GameMode.Level> OnLevelSelected;
     List<ChapterViewer> _spawnedChapterViewers;
 
-    Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> _typeDatas;
+    Dictionary<GameMode.Level, LevelData> _levelDatas;
 
     // Initialize를 2개 만들어서 사용하자
     public void Initialize(
-        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeData,
+        Dictionary<GameMode.Level, LevelData> levelData,
         BaseFactory viewerFactory,
-        Action<GameMode.Type, GameMode.Level> OnLevelSelected)
+        Action<GameMode.Level> OnLevelSelected)
     {
         int chapterRectHalfSize = (int)(350 * 1.3 / 2);
         int offset = (Screen.width / 2) - chapterRectHalfSize;
@@ -41,7 +41,7 @@ public class SelectScrollHandler : ScrollUI
         _horizontalLayoutGroup.padding.left = offset;
         _horizontalLayoutGroup.padding.right = offset;
 
-        _typeDatas = typeData;
+        _levelDatas = levelData;
 
         this.OnLevelSelected = OnLevelSelected;
         _rectTransform = GetComponent<RectTransform>();
@@ -60,13 +60,14 @@ public class SelectScrollHandler : ScrollUI
     {
         _storedLevelType = levelType;
 
-        int chapterCount = _typeDatas[levelType].Count;
+        int chapterCount = _levelDatas.Count;
         SetUp(chapterCount);
 
-        foreach (KeyValuePair<GameMode.Level, LevelData> pair in _typeDatas[levelType])
+        List<GameMode.Level> levels = GameMode.GetLevels(levelType);
+        for (int i = 0; i < levels.Count; i++)
         {
             ChapterViewer viewer = (ChapterViewer)_viewerFactory.Create(BaseViewer.Name.ChapterSelectViewer);
-            viewer.Initialize(pair.Value.LevelSprite, pair.Value.SavableLevelInfos.NowUnlock);
+            viewer.Initialize(_levelDatas[levels[i]].LevelSprite, _levelDatas[levels[i]].SavableLevelInfos.NowUnlock);
             viewer.transform.SetParent(_contentTr);
 
             _spawnedChapterViewers.Add(viewer);
@@ -90,7 +91,7 @@ public class SelectScrollHandler : ScrollUI
        base.OnEndDrag(eventData);
 
         GameMode.Level level = GameMode.GetLevel(_storedLevelType, _targetIndex);
-        OnLevelSelected?.Invoke(_storedLevelType, level);
+        OnLevelSelected?.Invoke(level);
 
         _scaleChangeTimer.Reset();
         _scaleChangeTimer.Start(1f);

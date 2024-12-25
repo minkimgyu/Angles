@@ -77,8 +77,8 @@ public class MobStage : BattleStage
         SpawnData[] spawnDatas = _mobStageData.GetSpawnData(difficulty);
         for (int i = 0; i < spawnDatas.Length; i++)
         {
-            BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(spawnDatas[i].name);
-            enemy.transform.position = transform.position + new Vector3(spawnDatas[i].spawnPosition.x, spawnDatas[i].spawnPosition.y);
+            BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(spawnDatas[i].Name);
+            enemy.transform.position = transform.position + new Vector3(spawnDatas[i].SpawnPosition.x, spawnDatas[i].SpawnPosition.y);
 
             enemy.AddObserverEvent(OnEnemyDieRequested);
             enemy.InitializeFSM(_pathfinder.FindPath);

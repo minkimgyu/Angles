@@ -8,11 +8,13 @@ public class BonusStage : BaseStage
     [SerializeField] Transform _bonusPostion;
 
     Portal _portal;
+    BaseStageController _baseStageController;
 
     public override void Initialize(BaseStageController baseStageController, AddressableHandler addressableHandler, InGameFactory inGameFactory)
     {
         base.Initialize(baseStageController, addressableHandler, inGameFactory);
 
+        _baseStageController = baseStageController;
         _portal = GetComponentInChildren<Portal>();
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
     }

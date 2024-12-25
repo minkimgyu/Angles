@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class LobbyController : MonoBehaviour
 {
@@ -18,28 +19,20 @@ public class LobbyController : MonoBehaviour
     [SerializeField] StatSelectPage _statSelectPage;
     [SerializeField] SkinSelectPage _skinSelectPage;
 
-    Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> GetTypeDatas(AddressableHandler addressableHandler, SaveData saveData)
+    Dictionary<GameMode.Level, LevelData> GetLevelDatas(AddressableHandler addressableHandler, SaveData saveData)
     {
-        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeDatas = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>>();
+        Dictionary<GameMode.Level, LevelData> levelDatas = new Dictionary<GameMode.Level, LevelData>();
 
-        foreach (GameMode.Type type in Enum.GetValues(typeof(GameMode.Type)))
+        Dictionary<GameMode.Level, ILevelInfo> info = addressableHandler.Database.LevelDatas;
+        Dictionary<GameMode.Level, ISavableLevelInfo> savableInfo = saveData._levelTypeInfos;
+
+        foreach (GameMode.Level level in Enum.GetValues(typeof(GameMode.Level)))
         {
-            Dictionary<GameMode.Level, LevelData> levelDatas = new Dictionary<GameMode.Level, LevelData>();
-
-            Dictionary<GameMode.Level, ILevelInfo> info = addressableHandler.Database.LevelDatas[type];
-            Dictionary<GameMode.Level, ISavableLevelInfo> savableInfo = saveData._levelTypeInfos[type];
-            Dictionary<GameMode.Level, Sprite> levelSprite = addressableHandler.LevelIconAsset[type];
-
-            foreach (KeyValuePair<GameMode.Level, ILevelInfo> item1 in info)
-            {
-                LevelData levelData = new LevelData(info[item1.Key], savableInfo[item1.Key], levelSprite[item1.Key]);
-                levelDatas.Add(item1.Key, levelData);
-            }
-
-            typeDatas.Add(type, levelDatas);
+            LevelData levelData = new LevelData(info[level], savableInfo[level], addressableHandler.LevelIconAsset[level]);
+            levelDatas.Add(level, levelData);
         }
 
-        return typeDatas;
+        return levelDatas;
     }
 
     private void Start()
@@ -59,7 +52,7 @@ public class LobbyController : MonoBehaviour
         _lobbyTopModel.GoldCount = saveData._gold;
 
         LobbyViewerFactory lobbyViewerFactory = new LobbyViewerFactory(addressableHandler.ViewerPrefabAsset);
-        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeDatas = GetTypeDatas(addressableHandler, saveData);
+        Dictionary<GameMode.Level, LevelData> typeDatas = GetLevelDatas(addressableHandler, saveData);
 
         _chapterLevelSelectPage.Initialize(
             typeDatas,

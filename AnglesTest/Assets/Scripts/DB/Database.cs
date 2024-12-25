@@ -745,31 +745,20 @@ public class Database
 
     #endregion
 
-
     #region LEVEL 데이터
 
-    Dictionary<GameMode.Type, Dictionary<GameMode.Level, ILevelInfo>> _levelDatas = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, ILevelInfo>>()
+    Dictionary<GameMode.Level, ILevelInfo> _levelDatas = new Dictionary<GameMode.Level, ILevelInfo>()
     {
-        {
-            GameMode.Type.Chapter,
-            new Dictionary<GameMode.Level, ILevelInfo>()
-            {
-                { GameMode.Level.TriconChapter, new ChapterInfo("Tricon", "첫 발걸음", 20, GameMode.Level.RhombusChapter) },
-                { GameMode.Level.RhombusChapter, new ChapterInfo("Rhombus", "오르막길", 20, GameMode.Level.PentagonicChapter) },
-                { GameMode.Level.PentagonicChapter, new ChapterInfo("Pentagonic", "시련", 20) },
-            }
-        },
-        {
-            GameMode.Type.Survival,
-            new Dictionary<GameMode.Level, ILevelInfo>()
-            {
-                { GameMode.Level.CubeSurvival, new SurvivalInfo("Cube", "첫 발걸음", 300, GameMode.Level.PyramidSurvival) },
-                { GameMode.Level.PyramidSurvival, new SurvivalInfo("Pyramid", "오르막길", 300, GameMode.Level.PrismSurvival) },
-                { GameMode.Level.PrismSurvival, new SurvivalInfo("Prism", "시련", 300) },
-            }
-        }
+        { GameMode.Level.TriconChapter, new ChapterInfo("Tricon", "첫 발걸음", 20, GameMode.Level.RhombusChapter) },
+        { GameMode.Level.RhombusChapter, new ChapterInfo("Rhombus", "오르막길", 20, GameMode.Level.PentagonicChapter) },
+        { GameMode.Level.PentagonicChapter, new ChapterInfo("Pentagonic", "시련", 20) },
+
+        { GameMode.Level.CubeSurvival, new SurvivalInfo("Cube", "첫 발걸음", 300, GameMode.Level.PyramidSurvival) },
+        { GameMode.Level.PyramidSurvival, new SurvivalInfo("Pyramid", "오르막길", 300, GameMode.Level.PrismSurvival) },
+        { GameMode.Level.PrismSurvival, new SurvivalInfo("Prism", "시련", 300) },
     };
-    public Dictionary<GameMode.Type, Dictionary<GameMode.Level, ILevelInfo>> LevelDatas { get { return _levelDatas; } }
+
+    public Dictionary<GameMode.Level, ILevelInfo> LevelDatas { get { return _levelDatas; } }
 
     #endregion
 }

@@ -71,14 +71,14 @@ public class BossStage : BattleStage
 
     void SpawnMob()
     {
-        for (int i = 0; i < _bossStageData.mobSpawnDatas.Length; i++)
+        for (int i = 0; i < _bossStageData.MobSpawnDatas.Length; i++)
         {
             if (_spawnCount >= _maxSpawnCount) return;
 
-            BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_bossStageData.mobSpawnDatas[i].name);
+            BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_bossStageData.MobSpawnDatas[i].Name);
             _spawnCount++;
 
-            enemy.transform.position = transform.position + new Vector3(_bossStageData.mobSpawnDatas[i].spawnPosition.x, _bossStageData.mobSpawnDatas[i].spawnPosition.y);
+            enemy.transform.position = transform.position + new Vector3(_bossStageData.MobSpawnDatas[i].SpawnPosition.x, _bossStageData.MobSpawnDatas[i].SpawnPosition.y);
             enemy.InitializeFSM(_pathfinder.FindPath);
             enemy.AddObserverEvent(() => { _spawnCount--; });
 
@@ -90,12 +90,12 @@ public class BossStage : BattleStage
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
         _isActive = true;
-        BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_bossStageData.bossSpawnData.name);
+        BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_bossStageData.BossSpawnData.Name);
 
         enemy.AddObserverEvent(OnHPChange);
         enemy.AddObserverEvent(OnEnemyDieRequested);
         enemy.InitializeFSM(_pathfinder.FindPath);
-        enemy.transform.position = transform.position + new Vector3(_bossStageData.bossSpawnData.spawnPosition.x, _bossStageData.bossSpawnData.spawnPosition.y);
+        enemy.transform.position = transform.position + new Vector3(_bossStageData.BossSpawnData.SpawnPosition.x, _bossStageData.BossSpawnData.SpawnPosition.y);
         _enemyCount++;
 
         GameMode.Level level = ServiceLocater.ReturnSaveManager().GetSaveData()._selectedLevel[GameMode.Type.Chapter];

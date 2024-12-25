@@ -113,9 +113,9 @@ public class ChapterStageController : BaseStageController
 
     MapGenerator _mapGenerator;
 
-    public void CreateRandomStage(ChapterMode.Level chapter)
+    public void CreateRandomStage(GameMode.Level level)
     {
-        Dictionary<BaseStage.Name, BaseStage> stageObjects = _mapGenerator.CreateMap(chapter);
+        Dictionary<BaseStage.Name, BaseStage> stageObjects = _mapGenerator.CreateMap(level);
 
         foreach (var item in stageObjects)
         {

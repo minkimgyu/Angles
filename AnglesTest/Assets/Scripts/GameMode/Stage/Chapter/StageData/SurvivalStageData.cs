@@ -1,25 +1,30 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class PhaseData
+public struct PhaseData
 {
-    [SerializeField] public float spawnTime;
-    [SerializeField] public SpawnData[] spawnDatas;
+    [JsonProperty] float spawnTime;
+    [JsonProperty] SpawnData[] spawnDatas;
 
     public PhaseData(float spawnTime, SpawnData[] mobSpawnDatas)
     {
         this.spawnTime = spawnTime;
         this.spawnDatas = mobSpawnDatas;
     }
+
+    [JsonIgnore] public float SpawnTime { get => spawnTime; }
+    [JsonIgnore] public SpawnData[] SpawnDatas { get => spawnDatas; }
 }
 
 [Serializable]
-public class SurvivalStageData
+public struct SurvivalStageData : ILevelData
 {
-    [SerializeField] public PhaseData[] phaseDatas;
+    [JsonProperty] PhaseData[] phaseDatas;
+    [JsonIgnore] public PhaseData[] PhaseDatas { get { return phaseDatas; } }
 
     public SurvivalStageData(PhaseData[] phaseDatas)
     {

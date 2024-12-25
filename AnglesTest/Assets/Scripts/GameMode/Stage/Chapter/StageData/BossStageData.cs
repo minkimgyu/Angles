@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using UnityEngine;
 
 [Serializable]
-public struct BossStageData : IStageData
+public struct BossStageData
 {
-    [SerializeField] public SpawnData bossSpawnData;
-    [SerializeField] public SpawnData[] mobSpawnDatas;
+    [JsonProperty] SpawnData bossSpawnData;
+    [JsonProperty] SpawnData[] mobSpawnDatas;
 
     public BossStageData(SpawnData bosssSpawnData, SpawnData[] mobSpawnDatas)
     {
         this.bossSpawnData = bosssSpawnData;
         this.mobSpawnDatas = mobSpawnDatas;
     }
+
+    [JsonIgnore] public SpawnData[] MobSpawnDatas { get => mobSpawnDatas; }
+    [JsonIgnore] public SpawnData BossSpawnData { get => bossSpawnData; }
 }

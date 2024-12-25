@@ -20,20 +20,20 @@ public class LevelSelectPage : MonoBehaviour
 
     GameMode.Type _levelType;
 
-    Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> _typeDatas;
+    Dictionary<GameMode.Level, LevelData> _levelDatas;
 
     // 매뉴 UI 정보 보여주기
     void SelectLevel(GameMode.Level level)
     {
         ServiceLocater.ReturnSaveManager().ChangeCurrentLevel(_levelType, level);
 
-        _playChapterModel.Title = _typeDatas[_levelType][level].LevelInfos.Title;
-        _playChapterModel.LevelSprite = _typeDatas[_levelType][level].LevelSprite;
+        _playChapterModel.Title = _levelDatas[level].LevelInfos.Title;
+        _playChapterModel.LevelSprite = _levelDatas[level].LevelSprite;
         _playChapterModel.LevelInfo = new Tuple<GameMode.Type, ISavableLevelInfo, ILevelInfo>
         (
-            _typeDatas[_levelType][level].LevelInfos.Type,
-            _typeDatas[_levelType][level].SavableLevelInfos,
-            _typeDatas[_levelType][level].LevelInfos
+            _levelDatas[level].LevelInfos.Type,
+            _levelDatas[level].SavableLevelInfos,
+            _levelDatas[level].LevelInfos
         );
     }
 
@@ -46,13 +46,13 @@ public class LevelSelectPage : MonoBehaviour
     }
 
     public void Initialize(
-        Dictionary<GameMode.Type, Dictionary<GameMode.Level, LevelData>> typeDatas,
+        Dictionary<GameMode.Level, LevelData> levelDatas,
         BaseFactory viewerFactory)
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
 
-        _typeDatas = typeDatas;
+        _levelDatas = levelDatas;
         _playChapterModel = new PlayLevelModel(_playChapterViewer);
 
         _survivalToggle.onValueChanged.AddListener
@@ -84,7 +84,7 @@ public class LevelSelectPage : MonoBehaviour
         _chapterToggle.isOn = true;
 
         _selectChapterController.Initialize(
-            typeDatas,
+            levelDatas,
             viewerFactory,
             SelectLevel
         );

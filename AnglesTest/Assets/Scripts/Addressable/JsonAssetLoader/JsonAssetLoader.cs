@@ -6,17 +6,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using System;
 
-public class ChapterMapJsonAssetLoader : DictionaryJsonAssetLoader<BaseStage.Name, IStageData>
-{
-    public ChapterMapJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<BaseStage.Name, IStageData>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
-    {
-    }
-}
-
-public class JsonAssetLoader<Value> : BaseAssetLoader<Value, TextAsset>
+public class SingleJsonAssetLoader<Value> : SingleAssetLoader<Value, TextAsset>
 {
     JsonParser _parser;
-    public JsonAssetLoader(AddressableHandler.Label label, Action<Value, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    public SingleJsonAssetLoader(AddressableHandler.Label label, Action<Value, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
         _parser = new JsonParser();
     }
@@ -30,10 +23,10 @@ public class JsonAssetLoader<Value> : BaseAssetLoader<Value, TextAsset>
     }
 }
 
-abstract public class DictionaryJsonAssetLoader<Key, Value> : BaseDictionaryAssetLoader<Key, Value, TextAsset>
+public class MultipleJsonAssetLoader<Key, Value> : MultipleAssetLoader<Key, Value, TextAsset>
 {
     JsonParser _parser;
-    protected DictionaryJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<Key, Value>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    public MultipleJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<Key, Value>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
         _parser = new JsonParser();
     }
@@ -63,3 +56,16 @@ abstract public class DictionaryJsonAssetLoader<Key, Value> : BaseDictionaryAsse
     }
 }
 
+public class LevelJsonAssetLoader : MultipleJsonAssetLoader<GameMode.Level, ILevelData>
+{
+    public LevelJsonAssetLoader(AddressableHandler.Label label, Action<Dictionary<GameMode.Level, ILevelData>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+}
+
+public class DBJsonAssetLoader : SingleJsonAssetLoader<Database>
+{
+    public DBJsonAssetLoader(AddressableHandler.Label label, Action<Database, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+}

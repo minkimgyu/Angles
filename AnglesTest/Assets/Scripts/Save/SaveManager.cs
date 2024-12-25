@@ -73,7 +73,7 @@ public struct SaveData
     public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 선택된 스테이지 정보
 
     public SkinData.Key _skin;
-    public Dictionary<GameMode.Type, Dictionary<GameMode.Level, ISavableLevelInfo>> _levelTypeInfos; // 레벨 정보
+    public Dictionary<GameMode.Level, ISavableLevelInfo> _levelTypeInfos; // 레벨 정보
 
     public Dictionary<StatData.Key, SavableStatData> _statLevelInfos; // 스텟 레벨 정보
     public Dictionary<SkinData.Key, SavableSkinData> _skinLockInfos; // 스킨 해금 정보
@@ -95,27 +95,21 @@ public struct SaveData
 
         _skin = SkinData.Key.Normal;
 
-        _levelTypeInfos = new Dictionary<GameMode.Type, Dictionary<GameMode.Level, ISavableLevelInfo>>()
+        _levelTypeInfos = new Dictionary<GameMode.Level, ISavableLevelInfo>();
+
+        List<GameMode.Level> chapterLevels = GameMode.GetLevels(GameMode.Type.Chapter);
+        for (int i = 0; i < chapterLevels.Count; i++)
         {
-            {
-                GameMode.Type.Chapter,
-                new Dictionary<GameMode.Level, ISavableLevelInfo>()
-                {
-                    { GameMode.Level.TriconChapter, new SavableChapterInfo(0, true) },
-                    { GameMode.Level.RhombusChapter, new SavableChapterInfo(0, false) },
-                    { GameMode.Level.PentagonicChapter, new SavableChapterInfo(0, false) },
-                }
-            },
-            {
-                GameMode.Type.Survival,
-                new Dictionary<GameMode.Level, ISavableLevelInfo>()
-                {
-                    { GameMode.Level.CubeSurvival, new SavableSurvivalInfo(0, true) },
-                    { GameMode.Level.PyramidSurvival, new SavableSurvivalInfo(0, false) },
-                    { GameMode.Level.PrismSurvival, new SavableSurvivalInfo(0, false) },
-                }
-            }
-        };
+            if (i == 0) _levelTypeInfos[chapterLevels[i]] = new SavableChapterInfo(0, true);
+            else _levelTypeInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
+        }
+
+        List<GameMode.Level> survivalLevels = GameMode.GetLevels(GameMode.Type.Chapter);
+        for (int i = 0; i < survivalLevels.Count; i++)
+        {
+            if (i == 0) _levelTypeInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, true);
+            else _levelTypeInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
+        }
 
         _statLevelInfos = new Dictionary<StatData.Key, SavableStatData>();
         foreach (StatData.Key i in Enum.GetValues(typeof(StatData.Key)))
@@ -175,19 +169,21 @@ public class SaveManager : ISaveable
 
     public void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel)
     {
-        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[type][level];
+        GameMode.GetLevels(type);
+
+        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[level];
         savableChapterInfo.CompleteLevel = completeLevel;
 
-        _saveData._levelTypeInfos[type][level] = savableChapterInfo;
+        _saveData._levelTypeInfos[level] = savableChapterInfo;
         Save();
     }
 
     public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration)
     {
-        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[type][level];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[level];
         savableChapterInfo.CompleteDuration = completeDuration;
 
-        _saveData._levelTypeInfos[type][level] = savableChapterInfo;
+        _saveData._levelTypeInfos[level] = savableChapterInfo;
         Save();
     }
 
@@ -211,10 +207,10 @@ public class SaveManager : ISaveable
 
     public void UnlockLevel(GameMode.Type type, GameMode.Level level) 
     {
-        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[type][level];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[level];
         savableChapterInfo.NowUnlock = true;
 
-        _saveData._levelTypeInfos[type][level] = savableChapterInfo;
+        _saveData._levelTypeInfos[level] = savableChapterInfo;
         Save();
     }
 

@@ -2174,8 +2174,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 986343859}
-  - component: {fileID: 986343862}
-  - component: {fileID: 986343863}
+  - component: {fileID: 986343860}
   m_Layer: 0
   m_Name: SurvivalMode
   m_TagString: Untagged
@@ -2198,7 +2197,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &986343862
+--- !u!114 &986343860
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2207,7 +2206,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 986343857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42955efb1342a7748901e5c35bf54d83, type: 3}
+  m_Script: {fileID: 11500000, guid: cbbd35c50437a4e4283a869718e5e2da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraController: {fileID: 519420033}
@@ -2217,19 +2216,6 @@ MonoBehaviour:
   _chargeUIController: {fileID: 8170153793135343704}
   _coinViewer: {fileID: 824654363}
   _settingBtn: {fileID: 1502810848}
---- !u!114 &986343863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986343857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be700092e4f39fc4f93cd77782a4344c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stageUIController: {fileID: 1492042883}
 --- !u!1 &1004787112
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,7 +41,7 @@ public class SkillIconAssetLoader : AssetLoader<BaseSkill.Name, Sprite, Sprite>
     }
 }
 
-abstract public class AssetLoader<Key, Value, Type> : BaseDictionaryAssetLoader<Key, Value, Type>
+abstract public class AssetLoader<Key, Value, Type> : MultipleAssetLoader<Key, Value, Type>
 {
     protected AssetLoader(AddressableHandler.Label label, Action<Dictionary<Key, Value>, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
     {
