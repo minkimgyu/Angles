@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossHpViewer : HpViewer
+public class BossHpViewer : RatioViewer
 {
     public override void TurnOnViewer(bool show)
     {

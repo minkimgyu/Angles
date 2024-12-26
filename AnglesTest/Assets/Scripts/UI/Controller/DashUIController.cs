@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DashModel
 {
-    BaseViewer _dashViewer;
+    DashCountViewer _dashViewer;
 
-    public DashModel(BaseViewer dashViewer)
+    public DashModel(DashCountViewer dashViewer)
     {
         _dashViewer = dashViewer;
     }
@@ -18,7 +18,7 @@ public class DashModel
         set
         {
             _ratio = value;
-            _dashViewer.UpdateViewer(_ratio);
+            _dashViewer.UpdateDashRatio(_ratio);
         }
     }
 }
@@ -36,7 +36,7 @@ public class DashUIController : MonoBehaviour
 
         for (int i = 0; i < _maxDashCount; i++)
         {
-            BaseViewer viewer = viewerFactory.Create(BaseViewer.Name.DashViewer);
+            DashCountViewer viewer = (DashCountViewer)viewerFactory.Create(BaseViewer.Name.DashViewer);
             viewer.transform.SetParent(_dashViewerParent);
             _dashModels.Add(new DashModel(viewer));
         }

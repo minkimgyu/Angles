@@ -7,7 +7,7 @@ public class EnemyDieCountViewer : BaseViewer
 {
     [SerializeField] TMP_Text _dieCountTxt;
 
-    public override void UpdateViewer(int count)
+    public void UpdateDieCount(int count)
     {
         _dieCountTxt.text = count.ToString();
     }

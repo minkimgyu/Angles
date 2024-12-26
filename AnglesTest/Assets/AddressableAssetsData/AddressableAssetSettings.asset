@@ -52,19 +52,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7a43d66bd5ed81f4dbee0624b625c870, type: 2}
   - {fileID: 11400000, guid: 18b001d998107104990fe7cb0c482547, type: 2}
   - {fileID: 11400000, guid: 2d1d17dcb8fc94c4bb59cd35dcee9e01, type: 2}
-  - {fileID: 11400000, guid: 7be2f013107a49a4588f0b3b4f236f15, type: 2}
-  - {fileID: 11400000, guid: 4eeb24deb347dcd4c9d7ee5c32c14a4c, type: 2}
-  - {fileID: 11400000, guid: 7cf162e1f27b14f4b835849a5928677b, type: 2}
   - {fileID: 11400000, guid: 70617199122c8be4c9fb7f9a1f67690e, type: 2}
   - {fileID: 11400000, guid: 79a71ef61137a0f4b83a644f4779d261, type: 2}
   - {fileID: 11400000, guid: 6d79757fb5d9ae942a5caa5b0b022091, type: 2}
-  - {fileID: 11400000, guid: db87a5d18059b1340832835b72c88fdf, type: 2}
-  - {fileID: 11400000, guid: 8c42e5b4ce892b441b45e2343327f817, type: 2}
-  - {fileID: 11400000, guid: d3177b98eca08c943bdb3d55501c1b6f, type: 2}
   - {fileID: 11400000, guid: 4c7387ae1f376ce4eb7de5b866a8402f, type: 2}
   - {fileID: 11400000, guid: b561e3a59560aad478c309da23bd8dea, type: 2}
-  - {fileID: 11400000, guid: f349c609fec424e409e03f24aadfdf66, type: 2}
-  - {fileID: 11400000, guid: af6144af1a4b1cb4d8798068c19deccf, type: 2}
+  - {fileID: 11400000, guid: b4ac68bc2552c304b888d20756b1704b, type: 2}
+  - {fileID: 11400000, guid: d56d40f1eb546f44482c022d60101fbf, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -109,20 +103,15 @@ MonoBehaviour:
     - SkinIcon
     - SkillIcon
     - StatIcon
-    - ChapterIcon
-    - SurvivalIcon
+    - LevelIcon
     - Weapon
     - Effect
     - Life
     - Viewer
     - InteractableObject
     - Sound
-    - RhombusChapterMap
-    - PentagonicChapterMap
-    - TriconChapterMap
-    - RhombusChapterData
-    - PentagonicChapterData
-    - TriconChapterData
+    - LevelMap
+    - LevelData
     - Database
   m_SchemaTemplates: []
   m_GroupTemplateObjects:

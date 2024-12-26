@@ -24,7 +24,7 @@ public class LobbyController : MonoBehaviour
         Dictionary<GameMode.Level, LevelData> levelDatas = new Dictionary<GameMode.Level, LevelData>();
 
         Dictionary<GameMode.Level, ILevelInfo> info = addressableHandler.Database.LevelDatas;
-        Dictionary<GameMode.Level, ISavableLevelInfo> savableInfo = saveData._levelTypeInfos;
+        Dictionary<GameMode.Level, ISavableLevelInfo> savableInfo = saveData._levelInfos;
 
         foreach (GameMode.Level level in Enum.GetValues(typeof(GameMode.Level)))
         {

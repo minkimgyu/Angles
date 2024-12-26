@@ -8,7 +8,7 @@ public class DirectionViewer : BaseViewer
 
     IFollowable _followTarget;
 
-    public override void SetFollower(IFollowable followTarget)
+    public void SetFollower(IFollowable followTarget)
     {
         _followTarget = followTarget;
     }

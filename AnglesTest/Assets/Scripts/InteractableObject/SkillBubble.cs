@@ -5,7 +5,7 @@ using System;
 
 public class SkillBubble : MonoBehaviour, IInteractable
 {
-    TrackComponent _trackComponent;
+    FollowComponent _trackComponent;
     int _cardCount;
     float _moveSpeed;
 
@@ -14,7 +14,7 @@ public class SkillBubble : MonoBehaviour, IInteractable
         _cardCount = data.CardCount;
         _moveSpeed = data.MoveSpeed;
 
-        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent = GetComponent<FollowComponent>();
         _trackComponent.Initialize(_moveSpeed);
     }
 

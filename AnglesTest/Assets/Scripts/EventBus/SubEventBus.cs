@@ -84,7 +84,7 @@ public class SubEventBus : BaseEventBus<SubEventBus.State>
     {
         CreateCard,
         CreateReusableCard,
-
+        
         DropItem,
         AddFollableCamera,
         SetPlayerInvincible

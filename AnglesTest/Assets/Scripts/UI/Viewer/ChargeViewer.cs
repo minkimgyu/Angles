@@ -12,7 +12,7 @@ public class ChargeViewer : BaseViewer
         _fillImg.fillAmount = 0;
     }
 
-    public override void UpdateViewer(float ratio) 
+    public void UpdateChargeRatio(float ratio) 
     {
         _fillImg.fillAmount = ratio;
     }

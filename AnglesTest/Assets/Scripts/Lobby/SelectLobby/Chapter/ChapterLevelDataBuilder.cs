@@ -11,13 +11,9 @@ public class ChapterLevelDataBuilder : MonoBehaviour
 
     JsonParser jsonParser;
 
-
-    public ChapterLevelDataBuilder(TextAsset[] mobStageDataTxt, TextAsset bossStageDataTxt)
+    public ChapterLevelDataBuilder()
     {
         jsonParser = new JsonParser();
-
-        this.mobStageDataTxt = mobStageDataTxt;
-        this.bossStageDataTxt = bossStageDataTxt;
     }
 
     [ContextMenu("Build Data")]

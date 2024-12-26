@@ -45,6 +45,9 @@ public interface ISoundPlayable
         PentagonicChapterBGM,
         PentagonicChapterBossBGM,
 
+        CubeSurvivalBGM,
+        PyramidSurvivalBGM,
+
         Reroll,
         ChapterClear,
         ChapterFail,

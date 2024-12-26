@@ -11,8 +11,7 @@ abstract public class BaseFactory
     public virtual BaseSkill Create(BaseSkill.Name name) { return default; }
     public virtual BaseLife Create(BaseLife.Name name) { return default; }
     public virtual IInteractable Create(IInteractable.Name name) { return default; }
-    public virtual BaseStage Create(GameMode.Level level, BaseStage.Name name) { return default; }
-    public virtual BaseStage Create(GameMode.Level level) { return default; }
+    public virtual ILevel Create(GameMode.Level level) { return default; }
 }
 
 public class InGameFactory
@@ -25,7 +24,7 @@ public class InGameFactory
         Skill,
         Life,
         Interactable,
-        Stage,
+        Level,
     }
 
     Dictionary<Type, BaseFactory> _factories = new Dictionary<Type, BaseFactory>();
@@ -47,7 +46,7 @@ public class InGameFactory
 
         _factories.Add(Type.Interactable, new InteractableObjectFactory(addressableHandler.InteractableAsset, addressableHandler.Database.InteractableObjectDatas));
 
-        _factories.Add(Type.Stage, stageFactory); // new ChapterStageFactory(addressableHandler.ChapterMapAsset, addressableHandler.ChapterMapLevelDesignAsset));
+        _factories.Add(Type.Level, stageFactory); // new ChapterStageFactory(addressableHandler.ChapterMapAsset, addressableHandler.ChapterMapLevelDesignAsset));
     }
 
     public BaseFactory GetFactory(Type type) { return _factories[type]; }

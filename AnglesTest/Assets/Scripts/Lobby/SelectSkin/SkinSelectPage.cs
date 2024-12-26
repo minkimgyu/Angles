@@ -84,7 +84,7 @@ public class SkinSelectPage : MonoBehaviour
         int count = System.Enum.GetValues(typeof(SkinData.Key)).Length;
         for (int i = 0; i < count; i++)
         {
-            bool isUnlock = saveData._skinLockInfos[(SkinData.Key)i]._nowUnlock;
+            bool isUnlock = saveData._skinInfos[(SkinData.Key)i]._nowUnlock;
 
             SkinViewer skinViewer = (SkinViewer)viewerFactory.Create(BaseViewer.Name.SkinViewer);
             SkinData.Key skinType = (SkinData.Key)i;
@@ -116,7 +116,7 @@ public class SkinSelectPage : MonoBehaviour
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
 
         // 이미 구매한 경우
-        if (saveData._skinLockInfos[_selectedSkinKey]._nowUnlock == true)
+        if (saveData._skinInfos[_selectedSkinKey]._nowUnlock == true)
         {
             EquipSkin(_selectedSkinKey);
             return;
@@ -148,7 +148,7 @@ public class SkinSelectPage : MonoBehaviour
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
 
         bool isSelected = saveData._skin == key;
-        bool isUnlock = saveData._skinLockInfos[key]._nowUnlock;
+        bool isUnlock = saveData._skinInfos[key]._nowUnlock;
         SkinData statData = _skinData[key];
 
         int cost = 0;

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Unity.Mathematics;
 
 abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 {
@@ -13,9 +12,7 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
     Vector3 _dir;
 
     protected DropData _dropData;
-
     Action OnDieRequested;
-   
 
     public override void Initialize()
     {
@@ -29,9 +26,8 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
         OnHpChangeRequested += (float ratio) => _skillController.OnDamaged(ratio);
     }
 
-    protected override void Update()
+    protected override void UpdateOnIdle()
     {
-        base.Update();
         _skillController.OnUpdate();
     }
 

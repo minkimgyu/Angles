@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
-public class FreezeTrackingState : TrackingState
+public class FreezeTrackingComponent : TrackComponent
 {
     bool _nowFreeze;
 
@@ -14,8 +13,7 @@ public class FreezeTrackingState : TrackingState
     Timer _freezeTimer;
     float _freezeDuration;
 
-    public FreezeTrackingState(
-        FSM<TrackableEnemy.State> baseFSM,
+    public FreezeTrackingComponent(
         MoveComponent moveComponent,
         Transform myTransform,
         BaseLife.Size size,
@@ -26,7 +24,7 @@ public class FreezeTrackingState : TrackingState
         float freezeDuration,
         float movableDuration,
 
-        Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) : base(baseFSM, moveComponent, myTransform, size, moveSpeed, stopDistance, gap, FindPath)
+        Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) : base(moveComponent, myTransform, size, moveSpeed, stopDistance, gap, FindPath)
     {
         _nowFreeze = false;
 
@@ -37,16 +35,10 @@ public class FreezeTrackingState : TrackingState
         _moveTimer = new Timer();
     }
 
-    public override void OnStateEnter(ITarget target, string message)
+    public override void AddTarget(ITarget target)
     {
-       base.OnStateEnter(target, message);
+       base.AddTarget(target);
         _moveTimer.Start(_moveDuration);
-    }
-
-    public override void OnStateExit()
-    {
-        _moveTimer.Reset();
-        _freezeTimer.Reset();
     }
 
     public override void OnFixedUpdate()
@@ -60,7 +52,7 @@ public class FreezeTrackingState : TrackingState
         base.OnFixedUpdate();
     }
 
-    public override void OnStateUpdate()
+    public override void OnUpdate()
     {
         if(_moveTimer.CurrentState == Timer.State.Finish)
         {
@@ -77,6 +69,6 @@ public class FreezeTrackingState : TrackingState
         }
 
         if (_nowFreeze == true) return;
-        base.OnStateUpdate();
+        base.OnUpdate();
     }
 }

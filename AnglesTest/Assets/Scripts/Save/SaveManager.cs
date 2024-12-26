@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using System.Linq;
 public interface ISaveable
 {
     void Save();
@@ -73,10 +74,9 @@ public struct SaveData
     public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 선택된 스테이지 정보
 
     public SkinData.Key _skin;
-    public Dictionary<GameMode.Level, ISavableLevelInfo> _levelTypeInfos; // 레벨 정보
-
-    public Dictionary<StatData.Key, SavableStatData> _statLevelInfos; // 스텟 레벨 정보
-    public Dictionary<SkinData.Key, SavableSkinData> _skinLockInfos; // 스킨 해금 정보
+    public Dictionary<GameMode.Level, ISavableLevelInfo> _levelInfos; // 레벨 정보
+    public Dictionary<StatData.Key, SavableStatData> _statInfos; // 스텟 레벨 정보
+    public Dictionary<SkinData.Key, SavableSkinData> _skinInfos; // 스킨 해금 정보
 
     // 딕셔너리를 채워주는 코드 필요
     // --> 새로 생긴 데이터를 확인하는 과정에서 문제가 생김
@@ -95,33 +95,66 @@ public struct SaveData
 
         _skin = SkinData.Key.Normal;
 
-        _levelTypeInfos = new Dictionary<GameMode.Level, ISavableLevelInfo>();
+        _levelInfos = new Dictionary<GameMode.Level, ISavableLevelInfo>();
 
         List<GameMode.Level> chapterLevels = GameMode.GetLevels(GameMode.Type.Chapter);
         for (int i = 0; i < chapterLevels.Count; i++)
         {
-            if (i == 0) _levelTypeInfos[chapterLevels[i]] = new SavableChapterInfo(0, true);
-            else _levelTypeInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
+            if (i == 0) _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, true);
+            else _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
         }
 
-        List<GameMode.Level> survivalLevels = GameMode.GetLevels(GameMode.Type.Chapter);
+        List<GameMode.Level> survivalLevels = GameMode.GetLevels(GameMode.Type.Survival);
         for (int i = 0; i < survivalLevels.Count; i++)
         {
-            if (i == 0) _levelTypeInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, true);
-            else _levelTypeInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
+            if (i == 0) _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, true);
+            else _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
         }
 
-        _statLevelInfos = new Dictionary<StatData.Key, SavableStatData>();
+        _statInfos = new Dictionary<StatData.Key, SavableStatData>();
         foreach (StatData.Key i in Enum.GetValues(typeof(StatData.Key)))
         {
-            _statLevelInfos.Add(i, new SavableStatData(0));
+            _statInfos.Add(i, new SavableStatData(0));
         }
 
-        _skinLockInfos = new Dictionary<SkinData.Key, SavableSkinData>();
+        _skinInfos = new Dictionary<SkinData.Key, SavableSkinData>();
         foreach (SkinData.Key i in Enum.GetValues(typeof(SkinData.Key)))
         {
-            if (i == 0) _skinLockInfos.Add(i, new SavableSkinData(true));
-            else _skinLockInfos.Add(i, new SavableSkinData(false));
+            if (i == 0) _skinInfos.Add(i, new SavableSkinData(true));
+            else _skinInfos.Add(i, new SavableSkinData(false));
+        }
+    }
+
+    // Json 데이터 업데이트
+    public void Update()
+    {
+        _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
+        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.CubeSurvival;
+
+        List<GameMode.Level> chapterLevels = GameMode.GetLevels(GameMode.Type.Chapter);
+        for (int i = 0; i < chapterLevels.Count; i++)
+        {
+            if (_levelInfos.ContainsKey(chapterLevels[i]) == true) continue;
+
+            _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
+        }
+
+        List<GameMode.Level> survivalLevels = GameMode.GetLevels(GameMode.Type.Survival);
+        for (int i = 0; i < survivalLevels.Count; i++)
+        {
+            if (_levelInfos.ContainsKey(survivalLevels[i]) == true) continue;
+
+            _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
+        }
+
+        foreach (StatData.Key key in Enum.GetValues(typeof(StatData.Key)))
+        {
+            if(_statInfos.ContainsKey(key) == false) _statInfos.Add(key, new SavableStatData(0));
+        }
+
+        foreach (SkinData.Key key in Enum.GetValues(typeof(SkinData.Key)))
+        {
+            if (_skinInfos.ContainsKey(key) == false) _skinInfos.Add(key, new SavableSkinData(false));
         }
     }
 }
@@ -151,19 +184,19 @@ public class SaveManager : ISaveable
 
     public void UnlockSkin(SkinData.Key name)
     {
-        SavableSkinData savableSkinData = _saveData._skinLockInfos[name];
+        SavableSkinData savableSkinData = _saveData._skinInfos[name];
         savableSkinData._nowUnlock = true;
 
-        _saveData._skinLockInfos[name] = savableSkinData;
+        _saveData._skinInfos[name] = savableSkinData;
         Save();
     }
 
     public void ChangeStat(StatData.Key name, int level)
     {
-        SavableStatData savableStatData = _saveData._statLevelInfos[name];
+        SavableStatData savableStatData = _saveData._statInfos[name];
         savableStatData._currentLevel = level;
 
-        _saveData._statLevelInfos[name] = savableStatData;
+        _saveData._statInfos[name] = savableStatData;
         Save();
     }
 
@@ -171,19 +204,19 @@ public class SaveManager : ISaveable
     {
         GameMode.GetLevels(type);
 
-        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[level];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelInfos[level];
         savableChapterInfo.CompleteLevel = completeLevel;
 
-        _saveData._levelTypeInfos[level] = savableChapterInfo;
+        _saveData._levelInfos[level] = savableChapterInfo;
         Save();
     }
 
     public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration)
     {
-        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[level];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelInfos[level];
         savableChapterInfo.CompleteDuration = completeDuration;
 
-        _saveData._levelTypeInfos[level] = savableChapterInfo;
+        _saveData._levelInfos[level] = savableChapterInfo;
         Save();
     }
 
@@ -207,10 +240,10 @@ public class SaveManager : ISaveable
 
     public void UnlockLevel(GameMode.Type type, GameMode.Level level) 
     {
-        ISavableLevelInfo savableChapterInfo = _saveData._levelTypeInfos[level];
+        ISavableLevelInfo savableChapterInfo = _saveData._levelInfos[level];
         savableChapterInfo.NowUnlock = true;
 
-        _saveData._levelTypeInfos[level] = savableChapterInfo;
+        _saveData._levelInfos[level] = savableChapterInfo;
         Save();
     }
 
@@ -244,11 +277,12 @@ public class SaveManager : ISaveable
         try
         {
             _saveData = _parser.JsonToObject<SaveData>(json);
+            _saveData.Update(); // 저장한 데이터를 로드할 때 업데이트 필요
         }
         catch (System.Exception e)
         {
             Debug.Log(e);
-            _saveData = _defaultSaveData;
+            _saveData = _defaultSaveData; // 기본적으로 업데이트 되어있음
             Save();
         }
     }

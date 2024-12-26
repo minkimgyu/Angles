@@ -93,6 +93,8 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void AddEffectFactory(BaseFactory effectFactory) { _effectFactory = effectFactory; }
 
+    public virtual void AddTarget(ITarget target) { }
+
     protected virtual void SetImmunity(bool nowImmunity)
     {
         if (nowImmunity) _aliveState = AliveState.Immunity;
@@ -149,8 +151,13 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
                     _groggyTimer.Reset();
                 }
                 break;
+            case AliveState.Normal:
+                UpdateOnIdle();
+                break;
         }
     }
+
+    protected virtual void UpdateOnIdle() { }
 
     public virtual void GetDamage(DamageableData damageableData)
     {

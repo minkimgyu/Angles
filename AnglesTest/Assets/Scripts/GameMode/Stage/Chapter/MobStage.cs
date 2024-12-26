@@ -69,6 +69,12 @@ public class MobStage : BattleStage
         return Difficulty.Nomal;
     }
 
+    ITarget _target;
+    public override void AddPlayer(ITarget target)
+    {
+        _target = target;
+    }
+
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
         Difficulty difficulty = ReturnDifficultyByProgress((float)currentStageCount / totalStageCount);
@@ -82,6 +88,8 @@ public class MobStage : BattleStage
 
             enemy.AddObserverEvent(OnEnemyDieRequested);
             enemy.InitializeFSM(_pathfinder.FindPath);
+            enemy.AddTarget(_target);
+
             _enemyCount++;
         }
     }

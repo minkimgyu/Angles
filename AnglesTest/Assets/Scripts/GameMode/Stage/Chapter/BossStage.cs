@@ -6,6 +6,7 @@ using DamageUtility;
 
 public class BossStage : BattleStage
 {
+    Portal _portal;
     List<IDamageable> _mobs;
 
     bool _isActive = false;
@@ -17,9 +18,17 @@ public class BossStage : BattleStage
 
     System.Action<float> OnHPChange;
 
+    public override void ActivePortal(Vector2 movePos)
+    {
+        _portal.Active(movePos);
+    }
+
     public override void Initialize(BaseStageController baseStageController, AddressableHandler addressableHandler, InGameFactory inGameFactory)
     {
         base.Initialize(baseStageController, addressableHandler, inGameFactory);
+
+        _portal = GetComponentInChildren<Portal>();
+        _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
 
         _mobs = new List<IDamageable>();
         _timer = new Timer();
@@ -80,10 +89,18 @@ public class BossStage : BattleStage
 
             enemy.transform.position = transform.position + new Vector3(_bossStageData.MobSpawnDatas[i].SpawnPosition.x, _bossStageData.MobSpawnDatas[i].SpawnPosition.y);
             enemy.InitializeFSM(_pathfinder.FindPath);
+            enemy.AddTarget(_target);
+
             enemy.AddObserverEvent(() => { _spawnCount--; });
 
             _mobs.Add(enemy);
         }
+    }
+
+    ITarget _target;
+    public override void AddPlayer(ITarget target)
+    {
+        _target = target;
     }
 
     // 여기에 보스 생성
@@ -95,6 +112,7 @@ public class BossStage : BattleStage
         enemy.AddObserverEvent(OnHPChange);
         enemy.AddObserverEvent(OnEnemyDieRequested);
         enemy.InitializeFSM(_pathfinder.FindPath);
+        enemy.AddTarget(_target);
         enemy.transform.position = transform.position + new Vector3(_bossStageData.BossSpawnData.SpawnPosition.x, _bossStageData.BossSpawnData.SpawnPosition.y);
         _enemyCount++;
 

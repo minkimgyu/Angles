@@ -9,7 +9,7 @@ public class Coin : MonoBehaviour, IInteractable
     int _upCount;
     float _moveSpeed;
 
-    TrackComponent _trackComponent;
+    FollowComponent _trackComponent;
 
     public void OnInteractEnter(IInteracter interacter)
     {
@@ -38,7 +38,7 @@ public class Coin : MonoBehaviour, IInteractable
         _upCount = data.UpCount;
         _moveSpeed = data.MoveSpeed;
 
-        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent = GetComponent<FollowComponent>();
         _trackComponent.Initialize(_moveSpeed);
         _trackComponent.FreezePosition(true);
     }

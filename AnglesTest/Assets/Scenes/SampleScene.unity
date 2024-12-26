@@ -302,8 +302,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163dada895f322f499404a45d17c4e55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobStageDataTxt: []
-  bossStageDataTxt: {fileID: 0}
+  mobStageDataTxt:
+  - {fileID: 4900000, guid: f72000e9198a0dd4896360cd2a93177f, type: 3}
+  - {fileID: 4900000, guid: 25c7a21f24abd084c968435dc9e3c5b2, type: 3}
+  - {fileID: 4900000, guid: deedcb90df7f86b4d828f85c58b88c6b, type: 3}
+  - {fileID: 4900000, guid: 80473e307f96db8459644c835e7259c5, type: 3}
+  - {fileID: 4900000, guid: 6057a165c6d95cf4aa3f985f63ea2164, type: 3}
+  bossStageDataTxt: {fileID: 4900000, guid: fbde74280a3410640a25c62446ff075d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

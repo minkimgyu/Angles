@@ -8,7 +8,7 @@ using UnityEngine;
 public class Shooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
-    TrackComponent _trackComponent;
+    FollowComponent _trackComponent;
 
     void FireProjectile(Vector2 direction)
     {
@@ -55,7 +55,7 @@ public class Shooter : BaseWeapon
         _weaponFactory = weaponFactory;
         _waitFire = 0;
 
-        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent = GetComponent<FollowComponent>();
         _trackComponent.Initialize(
             _data.MoveSpeed,
             _data.FollowOffset,

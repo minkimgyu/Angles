@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class StageResultViewer : BaseViewer
 {
-    [SerializeField] Image _stageResult;
+    [SerializeField] TMP_Text _stageResult;
     float _fadeDuration = 2;
 
     private void OnDestroy()
@@ -29,8 +29,9 @@ public class StageResultViewer : BaseViewer
         }
     }
 
-    public override void UpdateViewer(string info)
+    public void UpdateResultInfo(string info)
     {
+        _stageResult.text = $"<{info}>";
         _stageResult.DOFade(1, _fadeDuration).OnComplete(() => { _stageResult.DOFade(0, _fadeDuration); });
     }
 }

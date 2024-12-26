@@ -7,9 +7,9 @@ public class StageCountViewer : BaseViewer
 {
     [SerializeField] TMP_Text _stageCountTxt;
 
-    public override void UpdateViewer(int currentStageCount) 
+    public void UpdateStaegCount(string currentStageCount) 
     {
-        _stageCountTxt.text = currentStageCount.ToString();
+        _stageCountTxt.text = currentStageCount;
     }
 
     public override void TurnOnViewer(bool show)

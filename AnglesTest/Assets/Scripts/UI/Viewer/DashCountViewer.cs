@@ -7,7 +7,7 @@ public class DashCountViewer : BaseViewer
 {
     [SerializeField] Image _fillContent;
 
-    public override void UpdateViewer(float ratio) 
+    public void UpdateDashRatio(float ratio) 
     {
         _fillContent.fillAmount = ratio;
     }

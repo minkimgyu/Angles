@@ -10,6 +10,17 @@ abstract public class GameMode : MonoBehaviour
         Survival
     }
 
+    public static int GetLevelCount(Type type)
+    {
+        int count = 0;
+        foreach (Level level in System.Enum.GetValues(typeof(Level)))
+        {
+            if (level.ToString().Contains(type.ToString())) count++;
+        }
+
+        return count;
+    }
+
     public static List<Level> GetLevels(Type type)
     {
         List<Level> levels = new List<Level>();
@@ -51,7 +62,6 @@ abstract public class GameMode : MonoBehaviour
 
         CubeSurvival,
         PyramidSurvival,
-        PrismSurvival,
     }
 
     protected abstract void Initialize(); // 게임이 시작될 떄 처리

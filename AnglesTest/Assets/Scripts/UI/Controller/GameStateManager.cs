@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // 인 게임 정보를 저장하는 클레스
+// Chapter, Survival 둘로 나누기
+
 public class GameState
 {
-    BaseViewer _coinViewer;
+    CoinViewer _coinViewer;
 
-    public GameState(BaseViewer coinViewer)
+    public GameState(CoinViewer coinViewer)
     {
         _coinViewer = coinViewer;
     }
@@ -19,7 +22,7 @@ public class GameState
         set
         {
             _coinCount = value;
-            _coinViewer.UpdateViewer(_coinCount);
+            _coinViewer.UpdateCoinCount(_coinCount);
         }
     }
 }
@@ -31,15 +34,18 @@ public class GameState
 public class GameStateManager : Singleton<GameStateManager>
 {
     GameState _gameState;
+    Action<int> OnGetCoin;
 
-    public void Initialize(GameState gameState)
+    public void Initialize(GameState gameState, Action<int> OnGetCoin = null)
     {
         _gameState = gameState;
+        this.OnGetCoin = OnGetCoin;
     }
 
     public void ChangeCoin(int coin)
     {
         _gameState.CoinCount += coin;
+        if(coin > 0) OnGetCoin?.Invoke(coin);
     }
 
     public int ReturnCoin()

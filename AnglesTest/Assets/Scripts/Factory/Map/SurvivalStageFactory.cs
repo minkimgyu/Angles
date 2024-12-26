@@ -5,18 +5,20 @@ using UnityEngine;
 public class SurvivalStageCreater : StageCreater
 {
     SurvivalStageData _survivalStageData;
+    ILevel _survivalStage;
 
-    public SurvivalStageCreater(BaseStage stagePrefab, SurvivalStageData survivalStageData) : base(stagePrefab)
+    public SurvivalStageCreater(SurvivalStage survivalStage, SurvivalStageData survivalStageData)
     {
+        _survivalStage = survivalStage;
         _survivalStageData = survivalStageData;
     }
 
-    public override BaseStage Create()
+    public override ILevel Create()
     {
-        BaseStage stage = Object.Instantiate(_stagePrefab);
+        ILevel stage = Object.Instantiate(_survivalStage as SurvivalStage);
         if (stage == null) return null;
 
-        stage.ResetData(_survivalStageData);
+        stage.SurvivalStageLevel.ResetData(_survivalStageData);
         return stage;
     }
 }
@@ -36,7 +38,7 @@ public class SurvivalStageFactory : BaseFactory
         }
     }
 
-    public override BaseStage Create(GameMode.Level level)
+    public override ILevel Create(GameMode.Level level)
     {
         return _stageCreaters[level].Create();
     }

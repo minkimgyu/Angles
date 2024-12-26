@@ -6,10 +6,12 @@ public class SurvivalStage : BaseStage, ILevel
 {
     protected Pathfinder _pathfinder;
     SurvivalStageData _survivalStageData;
-    float _passedTime = 0;
     int _spawnIndex = 0;
 
     GameMode _gameMode;
+
+    [SerializeField] Transform _bonusPostion;
+    PlayerSpawner _playerSpawner;
 
     public SurvivalStage SurvivalStageLevel { get { return this; } }
 
@@ -22,6 +24,27 @@ public class SurvivalStage : BaseStage, ILevel
     {
         base.Initialize(gameMode, addressableHandler, inGameFactory);
 
+        InputController inputController = FindObjectOfType<InputController>();
+        _playerSpawner = new PlayerSpawner(
+            inGameFactory,
+            inputController,
+            addressableHandler.SkinIconAsset,
+            addressableHandler.Database.SkinDatas,
+            addressableHandler.Database.SkinModifiers,
+            addressableHandler.Database.StatDatas,
+            addressableHandler.Database.StatModifiers
+        );
+
+        Vector3 entryPos = ReturnEntryPosition();
+        Player player = _playerSpawner.Spawn();
+        player.transform.position = entryPos;
+
+        _target = player;
+
+        IInteractable interactableObject = _inGameFactory.GetFactory(InGameFactory.Type.Interactable).Create(IInteractable.Name.CardTable);
+        _spawnedObjects.Add(interactableObject.ReturnGameObject());
+        interactableObject.ResetPosition(_bonusPostion.position);
+
         _gameMode = gameMode;
         _pathfinder = GetComponent<Pathfinder>();
 
@@ -29,12 +52,13 @@ public class SurvivalStage : BaseStage, ILevel
         gridComponent.Initialize(_pathfinder);
     }
 
+    ITarget _target;
+
     public override void Spawn(float passedTime)
     {
         if (_spawnIndex >= _survivalStageData.PhaseDatas.Length) return;
 
-        _passedTime += Time.deltaTime;
-        if (_survivalStageData.PhaseDatas[_spawnIndex].SpawnTime > _passedTime)
+        if (_survivalStageData.PhaseDatas[_spawnIndex].SpawnTime < passedTime)
         {
             _spawnIndex++;
 
@@ -49,6 +73,7 @@ public class SurvivalStage : BaseStage, ILevel
                 enemy.transform.position = transform.position + new Vector3(spawnPos.x, spawnPos.y);
                 if (isLastSpawn) enemy.AddObserverEvent(OnLastEnemyDie); // 마지막의 경우
                 enemy.InitializeFSM(_pathfinder.FindPath);
+                enemy.AddTarget(_target);
             }
         }
     }

@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using DG.Tweening;
 using TMPro;
+using System.Linq;
 
 // 여기에 코스트 추가하기 --> 만약 코스트가 따로 할당되지 않는다면 코인을 소모하지 않는다.
 public struct SKillCardData
@@ -76,14 +75,14 @@ public class CardController : MonoBehaviour
     Dictionary<BaseSkill.Name, CardInfoData> _cardDatas;
     Dictionary<BaseSkill.Name, SkillData> CopySkillDatas;
 
-    List<BaseSkill.Name> _upgradeableSkills;
+    HashSet<BaseSkill.Name> _upgradeableSkills;
 
     BaseFactory _viewerFactory;
     BaseFactory _skillFactory;
 
     public void Initialize(
         Dictionary<BaseSkill.Name, CardInfoData> cardDatas,
-        List<BaseSkill.Name> upgradeableSkills, 
+        HashSet<BaseSkill.Name> upgradeableSkills, 
         Dictionary<BaseSkill.Name, SkillData> skillDatas,
         Dictionary<BaseSkill.Name, Sprite> skillIcons,
 
@@ -227,9 +226,11 @@ public class CardController : MonoBehaviour
         List<SkillUpgradeData> containedSkillUpgradeDatas = upgradeable.ReturnSkillUpgradeDatas();
         List<SkillUpgradeData> skillUpgradeDatas = new List<SkillUpgradeData>();
 
-        for (int i = 0; i < _upgradeableSkills.Count; i++)
+        List<BaseSkill.Name> upgradeableSkills = _upgradeableSkills.ToList();
+
+        for (int i = 0; i < upgradeableSkills.Count; i++)
         {
-            BaseSkill.Name skillName = _upgradeableSkills[i];
+            BaseSkill.Name skillName = upgradeableSkills[i];
 
             bool nowMaxUpgrade = false;
             bool alreadyHave = false;

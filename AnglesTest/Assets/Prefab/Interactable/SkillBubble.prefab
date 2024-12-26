@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5984252955439483930}
   - component: {fileID: 6729492478359504632}
   - component: {fileID: 164152982439973258}
-  - component: {fileID: 5559957976009425097}
+  - component: {fileID: 6284665149731970379}
   m_Layer: 12
   m_Name: SkillBubble
   m_TagString: Untagged
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2034f30a2d4132543bcd2f0ddcefa998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5559957976009425097
+--- !u!114 &6284665149731970379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,6 +171,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8288892268903425293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eee8bcd21107fda4cbc4dd9a71d3fea2, type: 3}
+  m_Script: {fileID: 11500000, guid: 676a89bcf17d503428b6bb2b90b52b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -15,13 +15,22 @@ public class SurvivalMode : GameMode
     [SerializeField] GameResultUIController _gameResultUIController;
     [SerializeField] ChargeUIController _chargeUIController;
 
-    [SerializeField] BaseViewer _coinViewer;
+    [SerializeField] SurvivalLevelUIController _levelUIController;
+
+    [SerializeField] CoinViewer _coinViewer;
     [SerializeField] Button _settingBtn;
 
     DropController _dropController;
-    Stopwatch _dungeonStopwatch;
+    //Stopwatch _dungeonStopwatch;
 
-    BaseStage _survivalStage;
+    StopwatchTimer _stopwatchTimer;
+
+    ILevel _level;
+
+    List<int> _coinGaugeData;
+    int _maxCoinLevel = 0;
+    int _currentCoinLevel = 0;
+    int _totalCoinCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +43,7 @@ public class SurvivalMode : GameMode
         int coinCount = GameStateManager.Instance.ReturnCoin();
         ServiceLocater.ReturnSaveManager().AddCoinCount(coinCount);
 
-        int passedTime = (int)_dungeonStopwatch.Elapsed.TotalSeconds;
+        int passedTime = (int)_stopwatchTimer.Duration;
         SaveData data = ServiceLocater.ReturnSaveManager().GetSaveData();
         ServiceLocater.ReturnSaveManager().ChangeLevelDuration(Type.Chapter, data._selectedLevel[Type.Chapter], passedTime);
     }
@@ -56,8 +65,8 @@ public class SurvivalMode : GameMode
 
         UnlockNextChapter();
 
-        float passedTime = (float)_dungeonStopwatch.Elapsed.TotalSeconds;
-        _dungeonStopwatch.Stop();
+        float passedTime = _stopwatchTimer.Duration;
+        _stopwatchTimer.Stop();
         _gameResultUIController.OnClearRequested(passedTime, GameStateManager.Instance.ReturnCoin());
     }
 
@@ -65,9 +74,19 @@ public class SurvivalMode : GameMode
     {
         OnEnd();
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ChapterFail);
-        float passedTime = (float)_dungeonStopwatch.Elapsed.TotalSeconds;
-        _dungeonStopwatch.Stop();
+        float passedTime = _stopwatchTimer.Duration;
+        _stopwatchTimer.Stop();
         _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());
+    }
+
+    private void Update()
+    {
+        _stopwatchTimer.OnUpdate();
+
+        float passedTime = _stopwatchTimer.Duration;
+        _levelUIController.ChangePassedTime((int)passedTime);
+
+        _level.SurvivalStageLevel.Spawn(passedTime);
     }
 
     protected override void Initialize()
@@ -79,20 +98,51 @@ public class SurvivalMode : GameMode
             return;
         }
 
-        _settingBtn.onClick.AddListener(() => { Debug.Log("Setting"); ServiceLocater.ReturnSettingController().Activate(true); });
+        _stopwatchTimer = new StopwatchTimer();
+        _stopwatchTimer.Start();
 
-        _dungeonStopwatch = new Stopwatch();
-        _dungeonStopwatch.Start();
+        _settingBtn.onClick.AddListener(() => { Debug.Log("Setting"); ServiceLocater.ReturnSettingController().Activate(true); });
 
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameClear, new GameEndCommand(OnGameClearRequested));
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameOver, new GameEndCommand(OnGameOverRequested));
 
+        _levelUIController.Initialize();
+
+        _coinGaugeData = new List<int>(addressableHandler.Database.CoingaugeData);
+        _maxCoinLevel = _coinGaugeData.Count;
+
+        _levelUIController.ChangeNeedCoin(_totalCoinCount, _coinGaugeData[_currentCoinLevel]);
+
         GameState gameState = new GameState(_coinViewer);
-        GameStateManager.Instance.Initialize(gameState);
+        GameStateManager.Instance.Initialize(gameState, (changeCount) => 
+        { 
+            _totalCoinCount += changeCount; 
+            if(_currentCoinLevel < _maxCoinLevel && _totalCoinCount >= _coinGaugeData[_currentCoinLevel])
+            {
+                _currentCoinLevel++;
+                EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateReusableCard, FindObjectOfType<Player>().GetCaster(), 3, 3);
+            }
+
+            _levelUIController.ChangeCoinLevel(_currentCoinLevel);
+            _levelUIController.ChangeNeedCoin(_totalCoinCount,_coinGaugeData[_currentCoinLevel]);
+
+            int decreaseAmount = 0;
+            if(_currentCoinLevel == 0)
+            {
+                decreaseAmount = 0;
+            }
+            else
+            {
+                decreaseAmount = _coinGaugeData[_currentCoinLevel - 1];
+            }
+
+
+            float ratio = (float)(_totalCoinCount - decreaseAmount) / (_coinGaugeData[_currentCoinLevel] - decreaseAmount);
+            _levelUIController.ChangeCoinGauge(ratio);
+        });
 
         BaseFactory stageFactory = new SurvivalStageFactory(addressableHandler.LevelAsset, addressableHandler.LevelDesignAsset);
         InGameFactory inGameFactory = new InGameFactory(addressableHandler, stageFactory);
-
 
         BaseFactory viewerFactory = inGameFactory.GetFactory(InGameFactory.Type.Viewer);
         BaseFactory skillFactory = inGameFactory.GetFactory(InGameFactory.Type.Skill);
@@ -111,6 +161,7 @@ public class SurvivalMode : GameMode
 
         BaseFactory interactableFactory = inGameFactory.GetFactory(InGameFactory.Type.Interactable);
 
+
         // 이거는 StageController로 내려서 사용하자
         // 적이 죽은 경우 사용
         // StartStage에서 플레이어를 등록시키자
@@ -119,7 +170,7 @@ public class SurvivalMode : GameMode
 
         SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
 
-        Level level = saveData._selectedLevel[Type.Chapter];
+        Level level = saveData._selectedLevel[Type.Survival];
         _unlockLevel = addressableHandler.Database.LevelDatas[level].UnlockLevel;
         _canUnlock = addressableHandler.Database.LevelDatas[level].CanUnlockLevel;
 
@@ -127,9 +178,9 @@ public class SurvivalMode : GameMode
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
         ILevelInfo levelInfo = addressableHandler.Database.LevelDatas[level];
-        _survivalStage = inGameFactory.GetFactory(InGameFactory.Type.Stage).Create(level);
-        _survivalStage.transform.position = Vector2.zero;
 
-        _survivalStage.Initialize(this, addressableHandler, inGameFactory);
+        _level = inGameFactory.GetFactory(InGameFactory.Type.Level).Create(level);
+        _level.SurvivalStageLevel.transform.position = Vector2.zero;
+        _level.SurvivalStageLevel.Initialize(this, addressableHandler, inGameFactory);
     }
 }

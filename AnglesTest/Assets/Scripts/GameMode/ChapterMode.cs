@@ -8,7 +8,7 @@ using Debug = UnityEngine.Debug;
 
 public class ChapterMode : GameMode
 {
-    ChapterStageController _stageController;
+    ChapterLevelController _stageController;
 
     [SerializeField] CameraController _cameraController;
     [SerializeField] SkillUIController _skillUIController;
@@ -17,11 +17,11 @@ public class ChapterMode : GameMode
     [SerializeField] GameResultUIController _gameResultUIController;
     [SerializeField] ChargeUIController _chargeUIController;
 
-    [SerializeField] BaseViewer _coinViewer;
+    [SerializeField] CoinViewer _coinViewer;
     [SerializeField] Button _settingBtn;
 
     DropController _dropController;
-    Stopwatch _dungeonStopwatch;
+    StopwatchTimer _stopwatchTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -56,8 +56,8 @@ public class ChapterMode : GameMode
         
         UnlockNextChapter();
 
-        float passedTime = (float)_dungeonStopwatch.Elapsed.TotalSeconds;
-        _dungeonStopwatch.Stop();
+        float passedTime = _stopwatchTimer.Duration;
+        _stopwatchTimer.Stop();
         _gameResultUIController.OnClearRequested(passedTime, GameStateManager.Instance.ReturnCoin());
     }
 
@@ -65,8 +65,8 @@ public class ChapterMode : GameMode
     {
         OnEnd();
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ChapterFail);
-        float passedTime = (float)_dungeonStopwatch.Elapsed.TotalSeconds;
-        _dungeonStopwatch.Stop();
+        float passedTime = _stopwatchTimer.Duration;
+        _stopwatchTimer.Stop();
         _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());
     }
 
@@ -81,8 +81,8 @@ public class ChapterMode : GameMode
 
         _settingBtn.onClick.AddListener(() => { Debug.Log("Setting"); ServiceLocater.ReturnSettingController().Activate(true); });
 
-        _dungeonStopwatch = new Stopwatch();
-        _dungeonStopwatch.Start();
+        _stopwatchTimer = new StopwatchTimer();
+        _stopwatchTimer.Start();
 
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameClear, new GameEndCommand(OnGameClearRequested));
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameOver, new GameEndCommand(OnGameOverRequested));
@@ -129,7 +129,7 @@ public class ChapterMode : GameMode
         ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{level.ToString()}BGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
-        _stageController = GetComponent<ChapterStageController>();
+        _stageController = GetComponent<ChapterLevelController>();
 
         ILevelInfo levelInfo = addressableHandler.Database.LevelDatas[level];
         _stageController.Initialize(levelInfo.MaxLevel, addressableHandler, inGameFactory);

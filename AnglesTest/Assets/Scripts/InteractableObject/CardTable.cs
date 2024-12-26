@@ -37,10 +37,8 @@ public class CardTable : MonoBehaviour, IInteractable
 
     public void OnInteractExit(IInteracter interacter)
     {
-        //if (_isActive == false) return;
-
-        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
-        //Destroy(gameObject);
+        if (_isActive == false) return;
+        _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
     }
 
     public void ResetPosition(Vector3 pos)

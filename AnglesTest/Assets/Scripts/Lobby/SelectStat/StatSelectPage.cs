@@ -112,7 +112,7 @@ public class StatSelectPage : MonoBehaviour
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 历厘等 单捞磐
-        int currentStatLevel = saveData._statLevelInfos[_selectedStatKey]._currentLevel;
+        int currentStatLevel = saveData._statInfos[_selectedStatKey]._currentLevel;
 
         StatData statData = _statData[_selectedStatKey];
         int maxStatLevel = statData.MaxLevel;
@@ -148,7 +148,7 @@ public class StatSelectPage : MonoBehaviour
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 历厘等 单捞磐
-        int currentStatLevel = saveData._statLevelInfos[key]._currentLevel;
+        int currentStatLevel = saveData._statInfos[key]._currentLevel;
 
         StatData statData = _statData[key];
 

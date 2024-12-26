@@ -5,25 +5,24 @@ using UnityEngine;
 
 abstract public class TrackableEnemy : BaseEnemy
 {
-    public enum State
-    {
-        Wandering,
-        Tracking
-    }
-
-    protected FSM<State> _fsm;
+    protected TrackComponent _trackComponent;
     protected List<ITarget.Type> _followableTypes;
 
-    [SerializeField] TargetCaptureComponent _followTargetCaptureComponent;
     protected float _stopDistance;
     protected float _gap;
+
+    protected ITarget _followTarget;
+
+    public override void AddTarget(ITarget target)
+    {
+        _followTarget = target;
+        _trackComponent.AddTarget(target);
+    }
 
     public override void Initialize()
     {
         base.Initialize();
         _followableTypes = new List<ITarget.Type> { ITarget.Type.Blue };
-        _followTargetCaptureComponent.Initialize(OnTargetEnter, OnTargetExit);
-        _fsm = new FSM<State>();
     }
 
     protected override void Update()
@@ -31,22 +30,12 @@ abstract public class TrackableEnemy : BaseEnemy
         base.Update();
 
         if (_aliveState == AliveState.Groggy) return;
-        _fsm.OnUpdate();
+        _trackComponent.OnUpdate();
     }
 
     void FixedUpdate()
     {
         if (_aliveState == AliveState.Groggy) return;
-        _fsm.OnFixedUpdate();
-    }
-
-    protected virtual void OnTargetEnter(ITarget target)
-    {
-        _fsm.OnTargetEnter(target);
-    }
-
-    protected virtual void OnTargetExit(ITarget target)
-    {
-        _fsm.OnTargetExit(target);
+        _trackComponent.OnFixedUpdate();
     }
 }

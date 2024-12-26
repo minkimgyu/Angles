@@ -7,7 +7,7 @@ public class CoinViewer : BaseViewer
 {
     [SerializeField] TMP_Text _coinTxt;
 
-    public override void UpdateViewer(int coinCount)
+    public void UpdateCoinCount(int coinCount)
     {
         _coinTxt.text = coinCount.ToString();
     }

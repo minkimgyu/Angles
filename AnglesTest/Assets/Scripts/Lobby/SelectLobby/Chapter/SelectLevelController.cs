@@ -3,50 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public class SelectLevelController : MonoBehaviour
 {
     [SerializeField] GameObject _content;
-    [SerializeField] SelectScrollHandler _selectScrollHandler;
     [SerializeField] Button _selectBtn;
 
-    [SerializeField] SelectChapterViewer _selectChapterViewer;
-    SelectChapterModel _selectChapterModel;
+    [SerializeField] LevelScrollHandler _levelScrollHandler;
+    [SerializeField] SelectLevelViewer _selectChapterViewer;
+    SelectLevelModel _selectChapterModel;
 
     Dictionary<GameMode.Level, LevelData> _levelDatas;
     Action<GameMode.Level> OnSelectLevel;
-
-
-
-
-
-
-
-
 
     public void Activate(bool on, GameMode.Type levelType = default)
     {
         _content.SetActive(on);
 
-        if(on) _selectScrollHandler.CreateChapterViewer(levelType);
-        else _selectScrollHandler.DestroyChapterViewer();
+        if(on) _levelScrollHandler.CreateChapterViewer(levelType);
+        else _levelScrollHandler.DestroyChapterViewer();
     }
 
-    GameMode.Type _storedLevelType;
+    GameMode.Type _storedModeType;
 
     public void ChangeChapter(GameMode.Type type, GameMode.Level level)
     {
-        _storedLevelType = type;
-        _selectScrollHandler.ScrollUsingChapter((level));
+        _storedModeType = type;
+        _levelScrollHandler.ScrollToLevel((level));
         ChangeChapterModel(level);
     }
 
     /// <summary>
     /// 레벨 선택 시 작동
     /// </summary>
-    void OnChooseLevel()
+    void ChooseLevel()
     {
-        GameMode.Level level = _selectScrollHandler.CurrentLevel;
+        GameMode.Level level = _levelScrollHandler.CurrentLevel;
         if (_levelDatas[level].SavableLevelInfos.NowUnlock == false) return; // 해금되지 않았다면 진행 X
 
         Activate(false);
@@ -66,24 +59,25 @@ public class SelectLevelController : MonoBehaviour
     }
 
     public void Initialize(
-        Dictionary<GameMode.Level, LevelData> typeDatas,
+        Dictionary<GameMode.Level, LevelData> levelDatas,
         BaseFactory viewerFactory,
         Action<GameMode.Level> OnSelectLevel)
     {
-        _levelDatas = typeDatas;
+        _levelDatas = levelDatas;
         this.OnSelectLevel = OnSelectLevel;
 
-        _selectChapterModel = new SelectChapterModel(_selectChapterViewer);
-        _selectScrollHandler.Initialize
-        (
-            typeDatas,
-            viewerFactory,
-            ChangeChapterModel
-        );
+        _selectChapterModel = new SelectLevelModel(_selectChapterViewer);
+
+        _levelScrollHandler.Initialize
+       (
+           _levelDatas,
+           viewerFactory,
+           ChangeChapterModel
+       );
 
         _selectBtn.onClick.AddListener(() => { 
             ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Click); 
-            OnChooseLevel(); 
+            ChooseLevel(); 
         });
     }
 }

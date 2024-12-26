@@ -15,10 +15,10 @@ public class LobbyScrollController : ScrollUI
         _leftButton.onClick.AddListener(() => TabClick(true));
         _rightButton.onClick.AddListener(() => TabClick(false));
 
-        int childCount = _contentTr.childCount;
+        int childCount = _content.childCount;
         for (int i = 0; i < childCount; i++)
         {
-            RectTransform rectTransform = _contentTr.GetChild(i).GetComponent<RectTransform>();
+            RectTransform rectTransform = _content.GetChild(i).GetComponent<RectTransform>();
 
             // 현재 sizeDelta 값을 가져옴 (현재 크기의 높이는 유지하고 너비만 수정)
             Vector2 newSize = rectTransform.sizeDelta;
@@ -34,7 +34,7 @@ public class LobbyScrollController : ScrollUI
     public void TabClick(bool isLeft)
     {
         _currentPos = SetPos();
-        int childCount = _contentTr.childCount;
+        int childCount = _content.childCount;
 
         if (isLeft)
         {

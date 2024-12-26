@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] Scrollbar _scrollbar;
-    [SerializeField] protected Transform _contentTr;
+    [SerializeField] protected Transform _content;
 
     protected int _menuSize;
 

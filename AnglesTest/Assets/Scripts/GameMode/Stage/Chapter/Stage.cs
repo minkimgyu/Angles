@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class BaseStage : MonoBehaviour
 {
-    public enum Name
-    {
-        StartStage,
-        BonusStage,
-        BossStage,
+    //public enum Name
+    //{
+    //    StartStage,
+    //    BonusStage,
+    //    BossStage,
 
-        MobStage1,
-        MobStage2,
-        MobStage3,
-        MobStage4,
-        MobStage5,
-    }
+    //    MobStage1,
+    //    MobStage2,
+    //    MobStage3,
+    //    MobStage4,
+    //    MobStage5,
+    //}
 
     [SerializeField] protected Transform _entryPoint;
 
     protected List<GameObject> _spawnedObjects;
-
-    //protected BaseStageController _baseStageController;
     protected InGameFactory _inGameFactory;
 
     public virtual void ResetData(MobStageData mobStageData) { }
@@ -40,8 +38,9 @@ public class BaseStage : MonoBehaviour
         _inGameFactory = inGameFactory;
     }
 
-    public virtual void ActivePortal(Vector2 movePos) { }
+    public virtual void AddPlayer(ITarget target) { }
 
+    public virtual void ActivePortal(Vector2 movePos) { }
     public virtual void AddBossHPEvent(Action<float> OnHPChange) { }
 
     public virtual void Spawn(float passedTime) { }

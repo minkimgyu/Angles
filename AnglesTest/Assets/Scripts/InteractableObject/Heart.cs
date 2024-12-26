@@ -6,7 +6,7 @@ public class Heart : MonoBehaviour, IInteractable
 {
     float _healPoint;
     float _moveSpeed;
-    TrackComponent _trackComponent;
+    FollowComponent _trackComponent;
 
     public void OnInteractEnter(IInteracter interacter)
     {
@@ -35,7 +35,7 @@ public class Heart : MonoBehaviour, IInteractable
         _moveSpeed = data.MoveSpeed;
         _healPoint = data.HealPoint;
 
-        _trackComponent = GetComponent<TrackComponent>();
+        _trackComponent = GetComponent<FollowComponent>();
         _trackComponent.Initialize(_moveSpeed);
         _trackComponent.FreezePosition(true);
     }

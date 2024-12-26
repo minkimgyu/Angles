@@ -61,7 +61,7 @@ public class PlayerSpawner
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData();
 
-        foreach (var stat in saveData._statLevelInfos)
+        foreach (var stat in saveData._statInfos)
         {
             if(_statModifiers.ContainsKey(stat.Key) == false) continue;
 
@@ -74,10 +74,10 @@ public class PlayerSpawner
         }
     }
 
-    public void Spawn(Vector3 spawnPos)
+    public Player Spawn()
     {
         Player player = (Player)_factoryCollection.GetFactory(InGameFactory.Type.Life).Create(BaseLife.Name.Player);
-        player.transform.position = spawnPos;
+        //player.transform.position = spawnPos;
 
         ApplySkin(player);
         ApplyStat(player);
@@ -103,13 +103,15 @@ public class PlayerSpawner
 
         BaseFactory viewerFactory = _factoryCollection.GetFactory(InGameFactory.Type.Viewer);
 
-        BaseViewer hpViewer = viewerFactory.Create(BaseViewer.Name.HpViewer);
+        TrackableHpViewer hpViewer = (TrackableHpViewer)viewerFactory.Create(BaseViewer.Name.HpViewer);
         hpViewer.Initialize();
         hpViewer.SetFollower(followable);
-        player.AddObserverEvent(hpViewer.UpdateViewer);
+        player.AddObserverEvent(hpViewer.UpdateRatio);
 
-        BaseViewer directionViewer = viewerFactory.Create(BaseViewer.Name.DirectionViewer);
+        DirectionViewer directionViewer = (DirectionViewer)viewerFactory.Create(BaseViewer.Name.DirectionViewer);
         directionViewer.Initialize();
         directionViewer.SetFollower(followable);
+
+        return player;
     }
 }

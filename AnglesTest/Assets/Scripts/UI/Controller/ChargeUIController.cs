@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ChargeModel
 {
-    BaseViewer _chargeViewer;
+    ChargeViewer _chargeViewer;
 
-    public ChargeModel(BaseViewer dashViewer)
+    public ChargeModel(ChargeViewer dashViewer)
     {
         _chargeViewer = dashViewer;
     }
@@ -18,14 +18,14 @@ public class ChargeModel
         set
         {
             _ratio = value;
-            _chargeViewer.UpdateViewer(_ratio);
+            _chargeViewer.UpdateChargeRatio(_ratio);
         }
     }
 }
 
 public class ChargeUIController : MonoBehaviour
 {
-    [SerializeField] BaseViewer _chargeViewer;
+    [SerializeField] ChargeViewer _chargeViewer;
     ChargeModel _chargeModel;
 
     public void Initialize()

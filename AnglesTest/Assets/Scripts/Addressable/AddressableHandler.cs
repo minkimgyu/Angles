@@ -25,8 +25,6 @@ public class AddressableHandler : MonoBehaviour
         LevelData,
 
         LevelIcon,
-        SurvivalIcon,
-
         StatIcon,
         SkinIcon
     }

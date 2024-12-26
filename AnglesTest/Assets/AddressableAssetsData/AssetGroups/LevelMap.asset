@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: LevelMap
+  m_EditorClassIdentifier: 
+  m_GroupName: LevelMap
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f22f8cd37fc2ee34ea28ea637f574eb7
+  m_SerializeEntries:
+  - m_GUID: df7034aea578369499dd913b6640934f
+    m_Address: TriconChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 791dadc7a1c20e340a6f10cf63f86a60
+    m_Address: RhombusChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de759249808747343b75d89771e465a7
+    m_Address: PentagonicChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fee5137f04bb8b54c9c4ed1843cd43e8
+    m_Address: CubeSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e63d777eae3df1345883021af75f2a70
+    m_Address: PyramidSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b0462871151484f4993851747d4a2c30, type: 2}
+    - {fileID: 11400000, guid: 11e0b0f472a1ef04195b2badb14bdd9f, type: 2}

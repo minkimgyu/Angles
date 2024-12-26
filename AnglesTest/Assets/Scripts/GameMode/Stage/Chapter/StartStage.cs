@@ -8,8 +8,7 @@ public class StartStage : BaseStage
     [SerializeField] Transform _bonusPostion;
     Portal _portal;
     BaseStageController _baseStageController;
-
-    PlayerSpawner _playerSpawner;
+   
 
     public override void Initialize(BaseStageController baseStageController, AddressableHandler addressableHandler, InGameFactory inGameFactory)
     {
@@ -19,17 +18,6 @@ public class StartStage : BaseStage
 
         _portal = GetComponentInChildren<Portal>();
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
-
-        InputController inputController = FindObjectOfType<InputController>();
-        _playerSpawner = new PlayerSpawner(
-            inGameFactory,
-            inputController,
-            addressableHandler.SkinIconAsset,
-            addressableHandler.Database.SkinDatas,
-            addressableHandler.Database.SkinModifiers,
-            addressableHandler.Database.StatDatas,
-            addressableHandler.Database.StatModifiers
-        );
     }
 
     public override void ActivePortal(Vector2 movePos)
@@ -46,9 +34,6 @@ public class StartStage : BaseStage
     public override void Spawn(int totalStageCount, int currentStageCount)
     {
         _baseStageController.OnStageClearRequested();
-
-        Vector3 entryPos = ReturnEntryPosition();
-        _playerSpawner.Spawn(entryPos);
 
         IInteractable interactableObject = _inGameFactory.GetFactory(InGameFactory.Type.Interactable).Create(IInteractable.Name.CardTable);
         _spawnedObjects.Add(interactableObject.ReturnGameObject());

@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class TrackableHpViewer : HpViewer
+public class TrackableHpViewer : RatioViewer
 {
     [SerializeField] float _topOffset;
 
     IFollowable _followTarget;
 
-    public override void SetFollower(IFollowable followTarget)
+    public void SetFollower(IFollowable followTarget)
     {
         _followTarget = followTarget;
     }
