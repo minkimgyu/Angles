@@ -56,7 +56,7 @@ public class StickyBomb : BaseWeapon
         bool canAttach = _followable.CanFollow();
         if (canAttach == true)
         {
-            Vector3 pos = _followable.ReturnPosition();
+            Vector3 pos = _followable.GetPosition();
             transform.position = pos;
         }
     }

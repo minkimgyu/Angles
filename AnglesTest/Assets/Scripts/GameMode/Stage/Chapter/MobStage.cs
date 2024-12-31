@@ -21,7 +21,7 @@ public class MobStage : BattleStage
     Dictionary<Vector2, Difficulty> _difficultyRangeDictionary;
     Portal _portal;
 
-    public override void ActivePortal(Vector2 movePos)
+    public override void ActivePortal(Vector2 movePos = default)
     {
         _portal.Active(movePos);
     }

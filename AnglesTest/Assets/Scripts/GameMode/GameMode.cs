@@ -59,9 +59,21 @@ abstract public class GameMode : MonoBehaviour
         TriconChapter,
         RhombusChapter,
         PentagonicChapter,
+        HexahornChapter,
+        OctaviaChapter,
 
-        CubeSurvival,
         PyramidSurvival,
+        CubeSurvival,
+        PrismSurvival,
+    }
+
+    public enum LevelColor
+    {
+        Blue,
+        Red,
+        Green,
+        White,
+        Orange,
     }
 
     protected abstract void Initialize(); // 게임이 시작될 떄 처리

@@ -4,19 +4,6 @@ using UnityEngine;
 
 public class BaseStage : MonoBehaviour
 {
-    //public enum Name
-    //{
-    //    StartStage,
-    //    BonusStage,
-    //    BossStage,
-
-    //    MobStage1,
-    //    MobStage2,
-    //    MobStage3,
-    //    MobStage4,
-    //    MobStage5,
-    //}
-
     [SerializeField] protected Transform _entryPoint;
 
     protected List<GameObject> _spawnedObjects;
@@ -26,13 +13,21 @@ public class BaseStage : MonoBehaviour
     public virtual void ResetData(BossStageData bossStageData) { }
     public virtual void ResetData(SurvivalStageData survivalStageData) { }
 
-    public virtual void Initialize(GameMode gameMode, AddressableHandler addressableHandler, InGameFactory inGameFactory)
+    public virtual void Initialize(
+        GameMode gameMode,
+        AddressableHandler addressableHandler,
+        InGameFactory inGameFactory,
+        SurvivalLevelUIController levelUIController,
+        ArrowPointerController arrowPointerController)
     {
         _spawnedObjects = new List<GameObject>();
         _inGameFactory = inGameFactory;
     }
 
-    public virtual void Initialize(BaseStageController baseStageController, AddressableHandler addressableHandler, InGameFactory inGameFactory) 
+    public virtual void Initialize(
+        BaseStageController baseStageController,
+        AddressableHandler addressableHandler,
+        InGameFactory inGameFactory) 
     {
         _spawnedObjects = new List<GameObject>();
         _inGameFactory = inGameFactory;
@@ -40,7 +35,7 @@ public class BaseStage : MonoBehaviour
 
     public virtual void AddPlayer(ITarget target) { }
 
-    public virtual void ActivePortal(Vector2 movePos) { }
+    public virtual void ActivePortal(Vector2 movePos = default) { }
     public virtual void AddBossHPEvent(Action<float> OnHPChange) { }
 
     public virtual void Spawn(float passedTime) { }

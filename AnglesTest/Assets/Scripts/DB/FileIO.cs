@@ -33,10 +33,10 @@ public class FileIO
         return _parser.JsonToObject<T>(jData);
     }
 
-    public void SaveData(object objectToParse, string filePath, string fileName)
+    public void SaveData(object objectToParse, string filePath, string fileName, bool canOverwrite = false)
     {
         string path;
-        path = ReturnFilePath(filePath, fileName); // 겹치지 않는 이름을 찾음
+        path = ReturnFilePath(filePath, fileName, canOverwrite); // 겹치지 않는 이름을 찾음
 
         Debug.Log(path);
 
@@ -50,10 +50,10 @@ public class FileIO
         AssetDatabase.Refresh();
     }
 
-    string ReturnFilePath(string filePath, string fileName)
+    string ReturnFilePath(string filePath, string fileName, bool canOverwrite = false)
     {
         string path = ReturnPath(filePath, fileName);
-        if (File.Exists(path) == false) return path;
+        if (canOverwrite || File.Exists(path) == false) return path;
 
         Debug.LogError("이미 해당 경로에 파일이 존재함");
 

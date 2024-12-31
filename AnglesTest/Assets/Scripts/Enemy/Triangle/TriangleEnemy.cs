@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriangleEnemy : BasicMob
+public class TriangleEnemy : TrackableEnemy
 {
     [SerializeField] DamageableTargetCaptureComponent _skillTargetCaptureComponent;
 
@@ -17,6 +17,19 @@ public class TriangleEnemy : BasicMob
 
         _gap = 0.5f;
         _destoryEffect = BaseEffect.Name.TriangleDestroyEffect;
+    }
+
+    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _trackComponent = new TrackComponent(
+             _moveComponent,
+             transform,
+             _size,
+             _moveSpeed,
+             _stopDistance,
+             _gap,
+             FindPath
+        );
     }
 
     public override void Initialize()

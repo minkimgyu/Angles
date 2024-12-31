@@ -36,17 +36,20 @@ public interface ISoundPlayable
 
         LobbyBGM,
 
-        TriconChapterBGM,
-        TriconChapterBossBGM,
+        BlueBGM,
+        BlueBossBGM,
 
-        RhombusChapterBGM,
-        RhombusChapterBossBGM,
+        RedBGM,
+        RedBossBGM,
 
-        PentagonicChapterBGM,
-        PentagonicChapterBossBGM,
+        GreenBGM,
+        GreenBossBGM,
 
-        CubeSurvivalBGM,
-        PyramidSurvivalBGM,
+        WhiteBGM,
+        WhiteBossBGM,
+
+        OrangeBGM,
+        OrangeBossBGM,
 
         Reroll,
         ChapterClear,

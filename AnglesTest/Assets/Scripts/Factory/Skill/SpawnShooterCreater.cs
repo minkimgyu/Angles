@@ -12,8 +12,8 @@ public class SpawnShooterData : SkillData
     [JsonProperty] private float _adRatio;
     [JsonProperty] private float _groggyDuration;
     [JsonProperty] private float _delay;
-    [JsonConverter(typeof(StringEnumConverter))] private BaseWeapon.Name _shooterName;
-    [JsonConverter(typeof(StringEnumConverter))] private BaseWeapon.Name _projectileName;
+    [JsonProperty] [JsonConverter(typeof(StringEnumConverter))] private BaseWeapon.Name _shooterName;
+    [JsonProperty] [JsonConverter(typeof(StringEnumConverter))] private BaseWeapon.Name _projectileName;
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
 
     [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }

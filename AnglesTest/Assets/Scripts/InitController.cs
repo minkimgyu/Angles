@@ -41,7 +41,7 @@ public class InitController : MonoBehaviour
         SoundPlayer soundPlayer = FindObjectOfType<SoundPlayer>();
         soundPlayer.Initialize(addressableHandler.SoundAsset);
 
-        SaveManager saveController = new SaveManager(new SaveData(3000));
+        SaveManager saveController = new SaveManager(new SaveData(300000));
 
         ServiceLocater.Provide(timeController);
         ServiceLocater.Provide(sceneController);

@@ -18,7 +18,7 @@ public class BossStage : BattleStage
 
     System.Action<float> OnHPChange;
 
-    public override void ActivePortal(Vector2 movePos)
+    public override void ActivePortal(Vector2 movePos = default)
     {
         _portal.Active(movePos);
     }
@@ -117,7 +117,9 @@ public class BossStage : BattleStage
         _enemyCount++;
 
         GameMode.Level level = ServiceLocater.ReturnSaveManager().GetSaveData()._selectedLevel[GameMode.Type.Chapter];
-        ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{level.ToString()}BossBGM");
+        int levelIndex = GameMode.GetLevelIndex(GameMode.Type.Chapter, level);
+
+        ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{((GameMode.LevelColor)levelIndex).ToString()}BossBGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
     }
 }

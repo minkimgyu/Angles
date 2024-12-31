@@ -6,7 +6,7 @@ using System;
 public class TrackComponent
 {
     BaseLife.Size _size;
-    float _moveSpeed;
+    protected float _moveSpeed;
 
     Timer _pathfinderTimer;
     float _pathfindGap = 0.5f;
@@ -63,7 +63,7 @@ public class TrackComponent
             return 0;
         }
 
-        Vector3 targetPos = _target.ReturnPosition();
+        Vector3 targetPos = _target.GetPosition();
         return Vector2.Distance(_myTransform.position, targetPos);
     }
 
@@ -95,7 +95,7 @@ public class TrackComponent
 
                 if (_pathfinderTimer.CurrentState == Timer.State.Finish)
                 {
-                    _movePoints = FindPath(_myTransform.position, _target.ReturnPosition(), _size);
+                    _movePoints = FindPath(_myTransform.position, _target.GetPosition(), _size);
                     _index = 0;
 
                     _pathfinderTimer.Reset();

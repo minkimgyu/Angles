@@ -29,7 +29,7 @@ public class StatInfoViewer : MonoBehaviour
 
     public void ChangeStatLevel(int level)
     {
-        _levelTxt.text = $"Info: {level}";
+        _levelTxt.text = $"Lv.{level}";
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_levelTxt.transform.parent); // UI 레이아웃 즉시 강제 재설정
     }
 

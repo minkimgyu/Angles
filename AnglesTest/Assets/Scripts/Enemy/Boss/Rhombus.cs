@@ -1,11 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rhombus : BasicMob
+public class Rhombus : TrackableEnemy
 {
     [SerializeField] DamageableTargetCaptureComponent _meleeSkillTargetCaptureComponent;
     [SerializeField] TargetCaptureComponent _rangeSkillTargetCaptureComponent;
+
+    [SerializeField] Transform _bottomPoint;
+    public override Vector2 BottomPoint => _bottomPoint.localPosition;
 
     public override void ResetData(RhombusData data, DropData dropData)
     {
@@ -19,6 +23,19 @@ public class Rhombus : BasicMob
         _gap = data.Gap;
 
         _destoryEffect = BaseEffect.Name.HexagonDestroyEffect;
+    }
+
+    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _trackComponent = new TrackComponent(
+             _moveComponent,
+             transform,
+             _size,
+             _moveSpeed,
+             _stopDistance,
+             _gap,
+             FindPath
+        );
     }
 
     public override void Initialize()

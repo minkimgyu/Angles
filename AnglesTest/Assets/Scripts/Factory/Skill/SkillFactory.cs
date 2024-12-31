@@ -83,8 +83,8 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.UpgradeCooltime] = new UpgradeCooltimeCreater(skillDatas[BaseSkill.Name.UpgradeCooltime]);
         _skillCreaters[BaseSkill.Name.UpgradeShooting] = new UpgradeShootingCreater(skillDatas[BaseSkill.Name.UpgradeShooting]);
 
-
         _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], upgraders[BaseSkill.Name.SpreadBullets], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpreadReflectableBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadReflectableBullets], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater(skillDatas[BaseSkill.Name.Shockwave], upgraders[BaseSkill.Name.Shockwave], effectFactory);
 
@@ -95,6 +95,8 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.MultipleShockwave] = new MultipleShockwaveCreater(skillDatas[BaseSkill.Name.MultipleShockwave], effectFactory);
 
         _skillCreaters[BaseSkill.Name.SpreadMultipleBullets] = new SpreadMultipleBulletsCreater(skillDatas[BaseSkill.Name.SpreadMultipleBullets], weaponFactory);
+
+        _skillCreaters[BaseSkill.Name.ShootMultipleLaser] = new ShootMultipleLaserCreater(skillDatas[BaseSkill.Name.ShootMultipleLaser], effectFactory);
     }
 
     public override BaseSkill Create(BaseSkill.Name name)

@@ -106,16 +106,23 @@ public class LifeFactory : BaseFactory
         _lifeCreaters[BaseLife.Name.YellowTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.YellowTriangle], lifeDatas[BaseLife.Name.YellowTriangle], dropDatas[BaseLife.Name.YellowTriangle], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.YellowRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.YellowRectangle], lifeDatas[BaseLife.Name.YellowRectangle], dropDatas[BaseLife.Name.YellowRectangle], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.YellowPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.YellowPentagon], lifeDatas[BaseLife.Name.YellowPentagon], dropDatas[BaseLife.Name.YellowPentagon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.YellowHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.YellowHexagon], lifeDatas[BaseLife.Name.YellowHexagon], dropDatas[BaseLife.Name.YellowHexagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.YellowHexagon] = new NormalHexagonCreater(lifePrefabs[BaseLife.Name.YellowHexagon], lifeDatas[BaseLife.Name.YellowHexagon], dropDatas[BaseLife.Name.YellowHexagon], effectFactory, skillFactory);
 
         _lifeCreaters[BaseLife.Name.RedTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.RedTriangle], lifeDatas[BaseLife.Name.RedTriangle], dropDatas[BaseLife.Name.RedTriangle], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.RedRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.RedRectangle], lifeDatas[BaseLife.Name.RedRectangle], dropDatas[BaseLife.Name.RedRectangle], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.RedPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.RedPentagon], lifeDatas[BaseLife.Name.RedPentagon], dropDatas[BaseLife.Name.RedPentagon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.RedHexagon] = new HexagonCreater(lifePrefabs[BaseLife.Name.RedHexagon], lifeDatas[BaseLife.Name.RedHexagon], dropDatas[BaseLife.Name.RedHexagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.RedHexagon] = new NormalHexagonCreater(lifePrefabs[BaseLife.Name.RedHexagon], lifeDatas[BaseLife.Name.RedHexagon], dropDatas[BaseLife.Name.RedHexagon], effectFactory, skillFactory);
+
+        _lifeCreaters[BaseLife.Name.OperaTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.OperaTriangle], lifeDatas[BaseLife.Name.OperaTriangle], dropDatas[BaseLife.Name.OperaTriangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.OperaRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.OperaRectangle], lifeDatas[BaseLife.Name.OperaRectangle], dropDatas[BaseLife.Name.OperaRectangle], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.OperaPentagon] = new PentagonCreater(lifePrefabs[BaseLife.Name.OperaPentagon], lifeDatas[BaseLife.Name.OperaPentagon], dropDatas[BaseLife.Name.OperaPentagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.OperaHexagon] = new OperaHexagonCreater(lifePrefabs[BaseLife.Name.OperaHexagon], lifeDatas[BaseLife.Name.OperaHexagon], dropDatas[BaseLife.Name.OperaHexagon], effectFactory, skillFactory);
 
         _lifeCreaters[BaseLife.Name.Tricon] = new TriconCreater(lifePrefabs[BaseLife.Name.Tricon], lifeDatas[BaseLife.Name.Tricon], dropDatas[BaseLife.Name.Tricon], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.Rhombus] = new RhombusCreater(lifePrefabs[BaseLife.Name.Rhombus], lifeDatas[BaseLife.Name.Rhombus], dropDatas[BaseLife.Name.Rhombus], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.Pentagonic] = new PentagonicCreater(lifePrefabs[BaseLife.Name.Pentagonic], lifeDatas[BaseLife.Name.Pentagonic], dropDatas[BaseLife.Name.Pentagonic], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Hexahorn] = new HexahornCreater(lifePrefabs[BaseLife.Name.Hexahorn], lifeDatas[BaseLife.Name.Hexahorn], dropDatas[BaseLife.Name.Hexahorn], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.Octavia] = new OctaviaCreater(lifePrefabs[BaseLife.Name.Octavia], lifeDatas[BaseLife.Name.Octavia], dropDatas[BaseLife.Name.Octavia], effectFactory, skillFactory);
     }
 
     public override BaseLife Create(BaseLife.Name name)

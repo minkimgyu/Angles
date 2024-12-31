@@ -37,7 +37,7 @@ public class SpreadBullets : BaseSkill
         Vector3 direction = new Vector3(x, y, 0);
         Vector3 spawnPosition = casterTransform.position + direction * _data.DistanceFromCaster;
 
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.PentagonBullet);
+        BaseWeapon weapon = _weaponFactory.Create(_data.BulletName);
         if (weapon == null) return;
 
         DamageableData damageData = new DamageableData

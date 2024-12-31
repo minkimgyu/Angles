@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RectangleEnemy : BasicMob
+public class RectangleEnemy : TrackableEnemy
 {
     [SerializeField] DamageableTargetCaptureComponent _skillTargetCaptureComponent;
 
@@ -16,6 +17,19 @@ public class RectangleEnemy : BasicMob
 
         _gap = 0.5f;
         _destoryEffect = BaseEffect.Name.RectangleDestroyEffect;
+    }
+
+    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _trackComponent = new TrackComponent(
+             _moveComponent,
+             transform,
+             _size,
+             _moveSpeed,
+             _stopDistance,
+             _gap,
+             FindPath
+        );
     }
 
     public override void Initialize()

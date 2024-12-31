@@ -22,7 +22,7 @@ public class OutlineComponent : MonoBehaviour
     public void Initialize()
     {
         _outlineColorDictionary = new Dictionary<Condition, Color>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         _outlineColorDictionary.Add(Condition.OnIdle, _spriteRenderer.color);
 

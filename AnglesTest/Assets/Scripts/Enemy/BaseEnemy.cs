@@ -14,6 +14,8 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
     protected DropData _dropData;
     Action OnDieRequested;
 
+    public virtual Vector2 BottomPoint { get { return Vector2.zero; } }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -66,6 +68,6 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 
     public void AddSkill(BaseSkill.Name skillName, BaseSkill skill) { _skillController.AddSkill(skillName, skill); }
 
-    public bool CanFollow() { return true; }
+    public bool CanFollow() { return _lifeState == LifeState.Alive; }
     public Vector3 ReturnFowardDirection() { return transform.forward; }
 }

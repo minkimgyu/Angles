@@ -17,32 +17,50 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 16c06a5f13dde8742b22d9c04a27c193
   m_SerializeEntries:
-  - m_GUID: 8f5b2a674e297594e9064eb12943fdeb
+  - m_GUID: 73dc02e17592b584c9b37fd819d38365
     m_Address: TriconChapter
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 19ad1c367fe5a7a4789ae59e2d131148
+  - m_GUID: 152e9fec6b8684348b8be16b800db135
     m_Address: RhombusChapter
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b4d6e4beec602a94fa07314e4e634b17
+  - m_GUID: d5b6a85645e07f641b956072d1299324
     m_Address: PentagonicChapter
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3605290d03f8bc94d9112a45533e981d
+  - m_GUID: 0313be497e0e34448a1428b54a265507
     m_Address: CubeSurvival
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d699d847128627f49aabb82bfd80ba12
+  - m_GUID: 37cbf635358bcef4c9f2f8b526d4fb9b
     m_Address: PyramidSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e92ca3b4df949b842b0ed0e35e02e3b5
+    m_Address: PrismSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a216bae430657340bbb9289b4c0404f
+    m_Address: HexahornChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fea9fe4c5beb2345b0b34ab42318900
+    m_Address: OctaviaChapter
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelIcon

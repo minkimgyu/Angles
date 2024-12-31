@@ -9,7 +9,7 @@ public class ShooterData : WeaponData
 {
     private float _shootForce;
     private float _fireDelay;
-    [JsonConverter(typeof(StringEnumConverter))]  private BaseWeapon.Name _fireWeaponName; // --> 생성자가 아닌 스킬에서 설정해준다.
+    private BaseWeapon.Name _fireWeaponName; // --> 생성자가 아닌 스킬에서 설정해준다.
     private float _moveSpeed;
     private float _followOffset;
     private SerializableVector2 _followOffsetDirection;

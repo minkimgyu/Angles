@@ -38,15 +38,23 @@ public class DropController
 
     public void OnDropRequested(DropData data, Vector3 position)
     {
-        foreach (var item in data.ItemDatas)
+        try
         {
-            float random = UnityEngine.Random.Range(0, 1f);
-            if (random <= item.Value)
+            foreach (var item in data.ItemDatas)
             {
-                IInteractable interactableObject = _interactableFactory.Create(item.Key);
-                Vector3 pos = ReturnSpreadOffset(position, _spreadOffset);
-                interactableObject.ResetPosition(pos);
+                float random = UnityEngine.Random.Range(0, 1f);
+                if (random <= item.Value)
+                {
+                    IInteractable interactableObject = _interactableFactory.Create(item.Key);
+                    Vector3 pos = ReturnSpreadOffset(position, _spreadOffset);
+                    interactableObject.ResetPosition(pos);
+                }
             }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            throw;
         }
     }
 }

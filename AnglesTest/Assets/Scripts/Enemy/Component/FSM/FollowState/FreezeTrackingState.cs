@@ -3,30 +3,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FreezeTrackingComponent : TrackComponent
+public class FlexibleTrackingComponent : TrackComponent
 {
     bool _nowFreeze;
 
     Timer _moveTimer;
     float _moveDuration;
 
+    float _freezeSpeed;
+    float _normalSpeed;
+
     Timer _freezeTimer;
     float _freezeDuration;
 
-    public FreezeTrackingComponent(
+    public FlexibleTrackingComponent(
         MoveComponent moveComponent,
         Transform myTransform,
         BaseLife.Size size,
-        float moveSpeed,
+
+        float freezeSpeed,
+        float normalSpeed,
+
         float stopDistance,
         float gap,
 
         float freezeDuration,
         float movableDuration,
 
-        Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) : base(moveComponent, myTransform, size, moveSpeed, stopDistance, gap, FindPath)
+        Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) : base(moveComponent, myTransform, size, normalSpeed, stopDistance, gap, FindPath)
     {
         _nowFreeze = false;
+
+        _freezeSpeed = freezeSpeed;
+        _normalSpeed = normalSpeed;
 
         _freezeDuration = freezeDuration;
         _moveDuration = movableDuration;
@@ -45,8 +54,11 @@ public class FreezeTrackingComponent : TrackComponent
     {
         if (_nowFreeze == true)
         {
-            _moveComponent.Stop();
-            return;
+            _moveSpeed = _freezeSpeed;
+        }
+        else
+        {
+            _moveSpeed = _normalSpeed;
         }
 
         base.OnFixedUpdate();

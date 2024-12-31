@@ -20,7 +20,6 @@ public class RatioViewer : BaseViewer
     public void UpdateRatio(float ratio) 
     {
         _bar.DOFillAmount(ratio, _changeDuration);
-
         Color targetColor = Color.Lerp(_startColor, _endColor, 1f - ratio);
         _bar.DOColor(targetColor, _changeDuration);
     }

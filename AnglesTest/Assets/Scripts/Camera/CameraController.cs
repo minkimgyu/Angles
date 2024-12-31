@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
     void LateUpdate()
     {
         if ((_followTarget as UnityEngine.Object) == null) return;
-        Vector3 targetPos = _followTarget.ReturnPosition();
+        Vector3 targetPos = _followTarget.GetPosition();
 
         //float xPos = Mathf.Clamp(targetPos.x, MapMinPos.x + _cameraArea.width / 2, MapMaxPos.x - _cameraArea.width / 2);
         //float yPos = Mathf.Clamp(targetPos.y, MapMinPos.y + _cameraArea.height / 2, MapMaxPos.y - _cameraArea.height / 2);

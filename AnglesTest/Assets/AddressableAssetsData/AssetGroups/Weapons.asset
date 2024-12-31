@@ -71,6 +71,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Weapon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b44a62f7dcb844a458a84887106d151b
+    m_Address: HexahornBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

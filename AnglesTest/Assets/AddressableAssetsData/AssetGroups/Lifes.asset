@@ -89,6 +89,42 @@ MonoBehaviour:
     m_SerializedLabels:
     - Life
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 353ac6a2edbb98c438dada79aa235c55
+    m_Address: OperaHexagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2f7ac7615cd5a8449dba53ae44ccb7a
+    m_Address: OperaPentagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fecfba9ae4d5bd04ba23b7a23a864eb5
+    m_Address: OperaRectangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0c0cf541d4dcd040a99564a2276ce13
+    m_Address: OperaTriangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f3f63c21251e8d4a91cdc52d09ae8fe
+    m_Address: Hexahorn
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 126c2ff5723feba4d9053c08c5cdac42
+    m_Address: Octavia
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

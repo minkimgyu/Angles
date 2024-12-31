@@ -29,7 +29,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - Viewer
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9d1f22e11116d714ba8a93aa86d13d6b
+  - m_GUID: 709f4a50fec51d14ab639527e81f42c4
     m_Address: HpViewer
     m_ReadOnly: 0
     m_SerializedLabels:
@@ -67,6 +67,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6218a6ec00cd6fc448188549b7a3e3f0
     m_Address: SkinViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 295981441d381b14c90fe2740ba2c694
+    m_Address: ArrowPointViewer
     m_ReadOnly: 0
     m_SerializedLabels:
     - Viewer

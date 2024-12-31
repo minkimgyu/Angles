@@ -23,9 +23,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public enum Name
     {
-        Player,
+        Player, // 0
 
-        YellowTriangle,
+        YellowTriangle, // 1
         YellowRectangle,
         YellowPentagon,
         YellowHexagon,
@@ -35,9 +35,18 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         RedPentagon,
         RedHexagon,
 
+
+
+        OperaTriangle,
+        OperaRectangle,
+        OperaPentagon,
+        OperaHexagon,
+
         Tricon,
         Rhombus,
         Pentagonic,
+        Hexahorn,
+        Octavia,
 
         Bomb
     }
@@ -83,10 +92,15 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void ResetData(TriconData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(RhombusData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(PentagonicData data, DropData dropData) { SetUp(data); }
+    public virtual void ResetData(HexahornData data, DropData dropData) { SetUp(data); }
+    public virtual void ResetData(OctaviaData data, DropData dropData) { SetUp(data); }
+
+
     public virtual void ResetData(TriangleData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(RectangleData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(PentagonData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(HexagonData data, DropData dropData) { SetUp(data); }
+    public virtual void ResetData(OperaHexagonData data, DropData dropData) { SetUp(data); }
 
     public void AddObserverEvent(Action<float> OnHpChangeRequested) { this.OnHpChangeRequested = OnHpChangeRequested; }
     public virtual void AddObserverEvent(Action OnDieRequested) { }
@@ -190,10 +204,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         }
     }
 
-    public Vector3 ReturnPosition() 
-    { 
-        if (transform == null) return Vector3.zero;
-        else return transform.position;
+    public Vector3 GetPosition() 
+    {
+        return transform.position;
     }
 
     public bool IsTarget(List<ITarget.Type> types)

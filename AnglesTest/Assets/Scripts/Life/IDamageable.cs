@@ -110,7 +110,7 @@ public class DefaultTarget : ITarget
         return types.Contains(_type);
     }
 
-    public Vector3 ReturnPosition()
+    public Vector3 GetPosition()
     {
         return Vector3.zero;
     }

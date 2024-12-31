@@ -36,13 +36,31 @@ MonoBehaviour:
     - LevelMap
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fee5137f04bb8b54c9c4ed1843cd43e8
-    m_Address: CubeSurvival
+    m_Address: PyramidSurvival
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelMap
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e63d777eae3df1345883021af75f2a70
-    m_Address: PyramidSurvival
+    m_Address: CubeSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1337a27902f31e543be14a719068d0f2
+    m_Address: PrismSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98b5a0fbf4498034dbf5132ad5ce1cc2
+    m_Address: HexahornChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelMap
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 640117f222e1f2a418517fcbebefa18e
+    m_Address: OctaviaChapter
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelMap

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPos
 {
-    Vector3 ReturnPosition();
+    Vector3 GetPosition();
 }
 
 public interface IFlock : IPos

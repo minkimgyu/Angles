@@ -66,9 +66,16 @@ public class ChapterLevelController : BaseStageController
 
         _levelUIController.ChangeStageResultInfo(clearTxt);
 
-        _nextStage = _stageQueue.Dequeue();
-        Vector3 entryPos = _nextStage.ReturnEntryPosition();
-        _currentStage.ActivePortal(entryPos);
+        if(_stageQueue.Count == 0)
+        {
+            _currentStage.ActivePortal();
+        }
+        else
+        {
+            _nextStage = _stageQueue.Dequeue();
+            Vector3 entryPos = _nextStage.ReturnEntryPosition();
+            _currentStage.ActivePortal(entryPos);
+        }
     }
 
     public override void OnMoveToNextStageRequested()

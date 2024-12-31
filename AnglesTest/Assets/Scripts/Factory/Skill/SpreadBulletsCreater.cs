@@ -11,6 +11,8 @@ public class SpreadBulletsData : SkillData
     [JsonProperty] private float _adRatio;
     [JsonProperty] private float _groggyDuration;
 
+    [JsonProperty] private BaseWeapon.Name _bulletName;
+
     [JsonProperty] private float _delay;
     [JsonProperty] private float _force;
     [JsonProperty] private float _bulletCount;
@@ -25,12 +27,14 @@ public class SpreadBulletsData : SkillData
     [JsonIgnore] public float BulletCount { get => _bulletCount; set => _bulletCount = value; }
     [JsonIgnore] public float DistanceFromCaster { get => _distanceFromCaster; set => _distanceFromCaster = value; }
     [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
+    [JsonIgnore] public BaseWeapon.Name BulletName { get => _bulletName; set => _bulletName = value; }
 
     public SpreadBulletsData(
         int maxUpgradePoint,
         float damage,
         float adRatio,
-        float groggyDuration,
+
+        BaseWeapon.Name bulletName,
 
         float delay,
         float force,
@@ -40,7 +44,9 @@ public class SpreadBulletsData : SkillData
     {
         _damage = damage;
         _adRatio = adRatio;
-        _groggyDuration = groggyDuration;
+        _groggyDuration = 0;
+
+        _bulletName = bulletName;
 
         _delay = delay;
         _force = force;
@@ -55,7 +61,7 @@ public class SpreadBulletsData : SkillData
             _maxUpgradePoint,
             _damage,
             _adRatio,
-            _groggyDuration,
+            _bulletName,
             _delay,
             _force,
             _bulletCount,
@@ -69,6 +75,11 @@ public class SpreadBulletsCreater : SkillCreater
 {
     IUpgradeVisitor _upgrader;
     BaseFactory _weaponFactory;
+
+    public SpreadBulletsCreater(SkillData data, BaseFactory weaponFactory) : base(data)
+    {
+        _weaponFactory = weaponFactory;
+    }
 
     public SpreadBulletsCreater(SkillData data, IUpgradeVisitor upgrader, BaseFactory weaponFactory) : base(data)
     {

@@ -15,6 +15,8 @@ public class BaseViewer : MonoBehaviour
         DashViewer,
         DirectionViewer,
 
+        ArrowPointViewer,
+
         ChapterSelectViewer,
         StatViewer,
         SkinViewer

@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 [System.Serializable]
 public class HexagonData : EnemyData
 {
-    [JsonProperty] private float _moveSpeed;
-    [JsonProperty] private float _stopDistance;
-    [JsonProperty] private float _gap;
+    [JsonProperty] protected float _moveSpeed;
+    [JsonProperty] protected float _stopDistance;
+    [JsonProperty] protected float _gap;
 
     [JsonIgnore] public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
     [JsonIgnore] public float StopDistance { get => _stopDistance; set => _stopDistance = value; }
@@ -39,12 +39,16 @@ public class HexagonData : EnemyData
     }
 }
 
-public class HexagonCreater : LifeCreater
+public class NormalHexagonCreater : LifeCreater
 {
     BaseFactory _skillFactory;
     DropData _dropData;
 
-    public HexagonCreater(BaseLife lifePrefab, LifeData lifeData, DropData dropData, BaseFactory effectFactory,
+    public NormalHexagonCreater(
+        BaseLife lifePrefab,
+        LifeData lifeData,
+        DropData dropData,
+        BaseFactory effectFactory,
         BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
     {
         _skillFactory = skillFactory;
@@ -57,6 +61,51 @@ public class HexagonCreater : LifeCreater
         if (life == null) return null;
 
         HexagonData data = CopyLifeData as HexagonData;
+
+        life.ResetData(data, _dropData);
+        life.AddEffectFactory(_effectFactory);
+
+        life.Initialize();
+
+        ICaster caster = life.GetComponent<ICaster>();
+        if (caster == null) return life;
+
+        foreach (var item in data.SkillData)
+        {
+            BaseSkill skill = _skillFactory.Create(item.Key);
+            skill.Upgrade(item.Value);
+            caster.AddSkill(item.Key, skill);
+        }
+
+        return life;
+    }
+}
+
+
+public class OperaHexagonCreater : LifeCreater
+{
+    BaseFactory _skillFactory;
+    DropData _dropData;
+
+    public OperaHexagonCreater(
+        BaseLife lifePrefab,
+        LifeData lifeData,
+        DropData dropData,
+        BaseFactory effectFactory,
+        BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
+    {
+        _skillFactory = skillFactory;
+        _dropData = dropData;
+    }
+
+    public override BaseLife Create()
+    {
+        BaseLife life = UnityEngine.Object.Instantiate(_lifePrefab);
+        if (life == null) return null;
+
+
+
+        OperaHexagonData data = CopyLifeData as OperaHexagonData;
 
         life.ResetData(data, _dropData);
         life.AddEffectFactory(_effectFactory);

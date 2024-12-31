@@ -57,8 +57,9 @@ public class Statikk : BaseSkill
         for (int i = 0; i < hitPoints.Count; i++)
         {
             BaseEffect effect = _effectFactory.Create(BaseEffect.Name.LaserEffect);
-            effect.ResetPosition(targetObject.transform.position);
-            effect.ResetLine(hitPoints[i]);
+            effect.ResetColor(new Color(93f / 255f, 177f / 255f, 255f / 255f), new Color(255f / 255f, 255f / 255f, 255f / 255f));
+            effect.ResetPosition(Vector3.zero);
+            effect.ResetLine(targetObject.transform.position, hitPoints[i]);
 
             effect.Play();
         }

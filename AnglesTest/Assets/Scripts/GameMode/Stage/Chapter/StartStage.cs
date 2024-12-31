@@ -20,7 +20,7 @@ public class StartStage : BaseStage
         _portal.Initialize(_baseStageController.OnMoveToNextStageRequested);
     }
 
-    public override void ActivePortal(Vector2 movePos)
+    public override void ActivePortal(Vector2 movePos = default)
     {
         _portal.Active(movePos);
     }

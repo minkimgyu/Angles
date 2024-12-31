@@ -8,19 +8,11 @@ public class StartMenuController : MonoBehaviour
     [SerializeField] Button _startButton;
     [SerializeField] Button _exitButton;
 
-    [SerializeField] Button _saveClearButton;
-
     // Start is called before the first frame update
     void Start()
     {
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
-        _saveClearButton.onClick.AddListener(ClearSave);
-    }
-
-    void ClearSave()
-    {
-        ServiceLocater.ReturnSaveManager().ClearSave();
     }
 
     public void OnStartRequested()

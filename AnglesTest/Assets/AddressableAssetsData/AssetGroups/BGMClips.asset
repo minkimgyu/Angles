@@ -18,37 +18,37 @@ MonoBehaviour:
   m_GUID: 4a04d5654e0093d488a6569949fe22e9
   m_SerializeEntries:
   - m_GUID: 37f38a71a7a6c4445ba817eb342f0e30
-    m_Address: TriconChapterBGM
+    m_Address: BlueBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0139a162c6ecc8843b8ff119958cdd5e
-    m_Address: TriconChapterBossBGM
+    m_Address: BlueBossBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a6128f31ed8ed2b43a4ec473c4684caa
-    m_Address: PentagonicChapterBossBGM
+    m_Address: GreenBossBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 401c158e240326f4f9e188e47a0ac2de
-    m_Address: RhombusChapterBossBGM
+    m_Address: RedBossBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fb0f07505180aca43a480371ab8d0aed
-    m_Address: PentagonicChapterBGM
+    m_Address: GreenBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ccf73eba25796ac4d813401fe7148e76
-    m_Address: RhombusChapterBGM
+    m_Address: RedBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
@@ -59,14 +59,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e5f1b7862504dea428a0e9202c3ee62b
-    m_Address: PyramidSurvivalBGM
+  - m_GUID: bd2a81ddf920c18429bdafcc4f811786
+    m_Address: WhiteBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 33829b227c9fa354985f0e6ae4784f01
-    m_Address: CubeSurvivalBGM
+  - m_GUID: 82d38db6617db7049a31cd9eb6815b75
+    m_Address: WhiteBossBGM
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35f91acf5274d7f4994ba95a8e327e32
+    m_Address: OrangeBGM
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f317061f3a93dd648bec152b7b4fadd3
+    m_Address: OrangeBossBGM
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound

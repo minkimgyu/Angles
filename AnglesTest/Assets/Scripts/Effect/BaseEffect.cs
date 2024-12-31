@@ -42,7 +42,12 @@ abstract public class BaseEffect : MonoBehaviour
 
     public virtual void ResetText(float damage) { }
     public virtual void ResetColor(Color color) { }
-    public virtual void ResetLine(Vector3 endPoint) { }
+
+
+    public virtual void ResetColor(Color startColor, Color endColor) { }
+
+
+    public virtual void ResetLine(Vector3 startPoint, Vector3 endPoint) { }
 
     public virtual void AddFollower(IFollowable followable) { }
 

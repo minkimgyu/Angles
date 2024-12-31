@@ -10,6 +10,11 @@ public class Tricon : TrackableEnemy
     float _movableDuration;
     float _freezeDuration;
 
+    const float _noSpeed = 0;
+
+    [SerializeField] Transform _bottomPoint;
+    public override Vector2 BottomPoint => _bottomPoint.localPosition;
+
     public override void ResetData(TriconData data, DropData dropData)
     {
         base.ResetData(data, dropData);
@@ -32,10 +37,11 @@ public class Tricon : TrackableEnemy
 
     public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
     {
-        _trackComponent = new FreezeTrackingComponent(
+        _trackComponent = new FlexibleTrackingComponent(
             _moveComponent,
             transform,
             _size,
+            _noSpeed,
             _moveSpeed,
             _stopDistance,
             _gap,

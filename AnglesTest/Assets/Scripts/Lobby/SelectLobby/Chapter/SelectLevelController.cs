@@ -63,6 +63,7 @@ public class SelectLevelController : MonoBehaviour
         BaseFactory viewerFactory,
         Action<GameMode.Level> OnSelectLevel)
     {
+
         _levelDatas = levelDatas;
         this.OnSelectLevel = OnSelectLevel;
 
@@ -79,5 +80,7 @@ public class SelectLevelController : MonoBehaviour
             ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Click); 
             ChooseLevel(); 
         });
+
+        Activate(false);
     }
 }

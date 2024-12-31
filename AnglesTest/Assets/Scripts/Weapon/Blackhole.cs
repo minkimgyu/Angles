@@ -77,11 +77,15 @@ public class Blackhole : BaseWeapon
             float duration = Time.time - _targetDatas[i].CaptureTime;
             if(duration > _data.AbsorbForce)
             {
-                Vector3 direction = _targetDatas[i].AbsorbableTarget.ReturnPosition() - transform.position;
+                if (_targetDatas[i].AbsorbableTarget as UnityEngine.Object == null)
+                {
+                    _targetDatas.RemoveAt(i);
+                    continue;
+                }
+
+                Vector3 direction = _targetDatas[i].AbsorbableTarget.GetPosition() - transform.position;
                 _targetDatas[i].AbsorbableTarget.ApplyForce(direction, _data.AbsorbForce, ForceMode2D.Force);
                 Damage.Hit(_data.DamageableData, _targetDatas[i].DamageableTarget);
-
-                if (i < 0 || _targetDatas.Count - 1 < i) continue;
                 _targetDatas[i].CaptureTime = Time.time;
             }
         }

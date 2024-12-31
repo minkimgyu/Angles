@@ -109,7 +109,7 @@ public class Shooter : BaseWeapon
         ITarget target = ReturnCapturedTarget();
         if (target == null) return;
 
-        Vector3 targetPos = target.ReturnPosition();
+        Vector3 targetPos = target.GetPosition();
         Vector2 direction = (targetPos - transform.position).normalized;
         FireProjectile(direction);
     }

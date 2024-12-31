@@ -6,19 +6,20 @@ using UnityEngine;
 public class CastingComponent : MonoBehaviour
 {
     [SerializeField] Transform _castingTransform;
+    Vector3 _endScale;
 
     private void Start()
     {
+        _endScale = _castingTransform.localScale;
         _castingTransform.localScale = Vector3.zero;
     }
 
     public void CastSkill(float duration)
     {
         Vector3 startScale = Vector3.zero;
-        Vector3 endScale = Vector3.one;
 
         _castingTransform.localScale = startScale;
-        _castingTransform.DOScale(endScale, duration).OnComplete(() => { _castingTransform.localScale = Vector3.zero; });
+        _castingTransform.DOScale(_endScale, duration).OnComplete(() => { _castingTransform.localScale = Vector3.zero; });
     }
 
     private void OnDestroy()

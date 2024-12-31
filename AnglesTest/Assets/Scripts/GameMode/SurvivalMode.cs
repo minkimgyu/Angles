@@ -8,6 +8,7 @@ using Debug = UnityEngine.Debug;
 
 public class SurvivalMode : GameMode
 {
+    [SerializeField] ArrowPointerController _arrowPointerController;
     [SerializeField] CameraController _cameraController;
     [SerializeField] SkillUIController _skillUIController;
     [SerializeField] CardController _cardUIController;
@@ -21,8 +22,6 @@ public class SurvivalMode : GameMode
     [SerializeField] Button _settingBtn;
 
     DropController _dropController;
-    //Stopwatch _dungeonStopwatch;
-
     StopwatchTimer _stopwatchTimer;
 
     ILevel _level;
@@ -147,6 +146,7 @@ public class SurvivalMode : GameMode
         BaseFactory viewerFactory = inGameFactory.GetFactory(InGameFactory.Type.Viewer);
         BaseFactory skillFactory = inGameFactory.GetFactory(InGameFactory.Type.Skill);
 
+        _arrowPointerController.Initialize(inGameFactory);
         _chargeUIController.Initialize();
 
         _skillUIController.Initialize(new List<BaseSkill.Type> { BaseSkill.Type.Active },
@@ -174,13 +174,16 @@ public class SurvivalMode : GameMode
         _unlockLevel = addressableHandler.Database.LevelDatas[level].UnlockLevel;
         _canUnlock = addressableHandler.Database.LevelDatas[level].CanUnlockLevel;
 
-        ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{level.ToString()}BGM");
+        int levelIndex = GameMode.GetLevelIndex(Type.Survival, level);
+
+
+        ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{((GameMode.LevelColor)levelIndex).ToString()}BGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
         ILevelInfo levelInfo = addressableHandler.Database.LevelDatas[level];
 
         _level = inGameFactory.GetFactory(InGameFactory.Type.Level).Create(level);
         _level.SurvivalStageLevel.transform.position = Vector2.zero;
-        _level.SurvivalStageLevel.Initialize(this, addressableHandler, inGameFactory);
+        _level.SurvivalStageLevel.Initialize(this, addressableHandler, inGameFactory, _levelUIController, _arrowPointerController);
     }
 }

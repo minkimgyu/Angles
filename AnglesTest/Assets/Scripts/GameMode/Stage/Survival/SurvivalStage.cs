@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class SurvivalStage : BaseStage, ILevel
 
     [SerializeField] Transform _bonusPostion;
     PlayerSpawner _playerSpawner;
+    SurvivalLevelUIController _levelUIController;
+    ArrowPointerController _arrowPointerController;
 
     public SurvivalStage SurvivalStageLevel { get { return this; } }
 
@@ -20,9 +23,17 @@ public class SurvivalStage : BaseStage, ILevel
         _survivalStageData = survivalStageData;
     }
 
-    public override void Initialize(GameMode gameMode, AddressableHandler addressableHandler, InGameFactory inGameFactory)
+    public override void Initialize(
+        GameMode gameMode,
+        AddressableHandler addressableHandler,
+        InGameFactory inGameFactory,
+        SurvivalLevelUIController levelUIController,
+        ArrowPointerController arrowPointerController)
     {
-        base.Initialize(gameMode, addressableHandler, inGameFactory);
+        base.Initialize(gameMode, addressableHandler, inGameFactory, levelUIController, arrowPointerController);
+
+        _levelUIController = levelUIController;
+        _arrowPointerController = arrowPointerController;
 
         InputController inputController = FindObjectOfType<InputController>();
         _playerSpawner = new PlayerSpawner(
@@ -54,32 +65,61 @@ public class SurvivalStage : BaseStage, ILevel
 
     ITarget _target;
 
+    int _spawnCount = 0;
+    int _lastSpawnCount = 0;
+
     public override void Spawn(float passedTime)
     {
-        if (_spawnIndex >= _survivalStageData.PhaseDatas.Length) return;
-
-        if (_survivalStageData.PhaseDatas[_spawnIndex].SpawnTime < passedTime)
+        if (_spawnIndex < _survivalStageData.PhaseDatas.Length && _survivalStageData.PhaseDatas[_spawnIndex].SpawnTime < passedTime)
         {
-            _spawnIndex++;
-
-            bool isLastSpawn = _spawnIndex == _survivalStageData.PhaseDatas.Length;
-
+            bool isLastSpawn = _spawnIndex == _survivalStageData.PhaseDatas.Length - 1;
             int size = _survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas.Length;
+
+            if (isLastSpawn)
+            {
+                _lastSpawnCount = size;
+
+                GameMode.Level level = ServiceLocater.ReturnSaveManager().GetSaveData()._selectedLevel[GameMode.Type.Survival];
+                int levelIndex = GameMode.GetLevelIndex(GameMode.Type.Survival, level);
+
+                ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{((GameMode.LevelColor)levelIndex).ToString()}BossBGM");
+                ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
+
+                _levelUIController.ShowStageResult(true);
+                _levelUIController.ChangeStageResultInfo("Boss Incoming!");
+            }
+
             for (int i = 0; i < size; i++)
             {
                 BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas[i].Name);
                 Vector2 spawnPos = _survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas[i].SpawnPosition.V2;
 
+                if (isLastSpawn)
+                {
+                    TrackableHpViewer hpViewer = (TrackableHpViewer)_inGameFactory.GetFactory(InGameFactory.Type.Viewer).Create(BaseViewer.Name.HpViewer);
+
+                    hpViewer.Initialize();
+                    hpViewer.SetFollower(enemy.GetComponent<IFollowable>());
+
+                    enemy.AddObserverEvent(hpViewer.UpdateRatio);
+                    enemy.AddObserverEvent(OnLastEnemyDie); // 마지막의 경우
+                    _arrowPointerController.AddTarget(enemy);
+                }
                 enemy.transform.position = transform.position + new Vector3(spawnPos.x, spawnPos.y);
-                if (isLastSpawn) enemy.AddObserverEvent(OnLastEnemyDie); // 마지막의 경우
                 enemy.InitializeFSM(_pathfinder.FindPath);
                 enemy.AddTarget(_target);
             }
+
+            _spawnIndex++;
         }
     }
 
     void OnLastEnemyDie()
     {
-        _gameMode.OnGameClearRequested();
+        _spawnCount++;
+        if(_spawnCount == _lastSpawnCount)
+        {
+            _gameMode.OnGameClearRequested();
+        }
     }
 }

@@ -12,7 +12,7 @@ public class CohesionBehavior : BaseBehavior
         for (int i = behaviorData.NearAgents.Count - 1; i >= 0; i--)
         {
             if ((behaviorData.NearAgents[i] as UnityEngine.Object) == null) continue;
-            combinedPos += behaviorData.NearAgents[i].ReturnPosition();
+            combinedPos += behaviorData.NearAgents[i].GetPosition();
         }
 
         combinedPos /= behaviorData.NearAgents.Count;

@@ -16,6 +16,7 @@ public class InGameViewerFactory : BaseFactory
         _viewerCreaters[BaseViewer.Name.HpViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.HpViewer]);
         _viewerCreaters[BaseViewer.Name.DashViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.DashViewer]);
         _viewerCreaters[BaseViewer.Name.DirectionViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.DirectionViewer]);
+        _viewerCreaters[BaseViewer.Name.ArrowPointViewer] = new ViewerCreater(viewerPrefabs[BaseViewer.Name.ArrowPointViewer]);
     }
 
     public override BaseViewer Create(BaseViewer.Name name)

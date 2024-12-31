@@ -120,13 +120,11 @@ public class ChapterMode : GameMode
         SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
 
         Level level = saveData._selectedLevel[Type.Chapter];
-
-
-
         _unlockLevel = addressableHandler.Database.LevelDatas[level].UnlockLevel;
         _canUnlock = addressableHandler.Database.LevelDatas[level].CanUnlockLevel;
 
-        ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{level.ToString()}BGM");
+        int levelIndex = GameMode.GetLevelIndex(Type.Chapter, level);
+        ISoundPlayable.SoundName bgm = (ISoundPlayable.SoundName)Enum.Parse(typeof(ISoundPlayable.SoundName), $"{((GameMode.LevelColor)levelIndex).ToString()}BGM");
         ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
         _stageController = GetComponent<ChapterLevelController>();

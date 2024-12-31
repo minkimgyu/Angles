@@ -14,6 +14,6 @@ public class DBParser : MonoBehaviour
         string fileLocation = "JsonData";
 
         Database database = new Database();
-        fileIO.SaveData(database, fileLocation, fileName);
+        fileIO.SaveData(database, fileLocation, fileName, true);
     }
 }

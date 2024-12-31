@@ -74,14 +74,14 @@ public class Database
         {
             SkinData.Key.BloodEater, new SkinData(
             "블러드 이터",
-            300,
+            2000,
             "일정 확률로 흡혈 10%")
         },
 
         {
             SkinData.Key.Guard, new SkinData(
             "가드",
-            300,
+            500,
             "데미지 감소 10%")
         },
     };
@@ -139,7 +139,7 @@ public class Database
             StatData.Key.AttackDamage, new StatData(
             "공격력",
             5,
-            new List<int>{ 100, 200, 300, 400, 500},
+            new List<int>{ 100, 200, 400, 700, 1000},
             new List<string>{ "공격력 5 증가", "공격력 10 증가", "공격력 15 증가", "공격력 20 증가", "공격력 30 증가"})
         },
 
@@ -147,14 +147,14 @@ public class Database
             StatData.Key.MoveSpeed, new StatData(
             "이동 속도",
             3,
-            new List<int>{ 100, 200, 300 },
+            new List<int>{ 100, 500, 1000 },
             new List<string>{ "이동 속도 1 증가", "이동 속도 2 증가", "이동 속도 3 증가"}) 
         },
         {
             StatData.Key.MaxHp, new StatData(
             "최대 체력",
             5,
-            new List<int>{ 100, 200, 300, 400, 500 },
+            new List<int>{ 100, 200, 400, 700, 1000 },
             new List<string>{ "체력 10 증가", "체력 15 증가", "체력 25 증가", "체력 35 증가", "체력 50 증가" })
         },
 
@@ -162,7 +162,7 @@ public class Database
             StatData.Key.DamageReduction, new StatData(
             "받는 피해 감소",
             5,
-            new List<int>{ 100, 200, 300, 400, 500 },
+            new List<int>{ 100, 200, 400, 700, 1000 },
             new List<string>{ "받는 피해 감소 5%", "받는 피해 감소 10%", "받는 피해 감소 15%", "받는 피해 감소 20%", "받는 피해 감소 30%" })
         },
     };
@@ -175,7 +175,6 @@ public class Database
     #region SKILL 데이터
 
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
-    //[JsonProperty]
     HashSet<BaseSkill.Name> _upgradeableSkills = new HashSet<BaseSkill.Name>
     {
         BaseSkill.Name.Statikk,
@@ -315,8 +314,8 @@ public class Database
             (
                 new List<SpreadBulletsUpgrader.UpgradableData>
                 {
-                    new SpreadBulletsUpgrader.UpgradableData(-1, 5, 2),
-                    new SpreadBulletsUpgrader.UpgradableData(-1, 5, 2),
+                    new SpreadBulletsUpgrader.UpgradableData(-1, 5, 2), // Lv.2
+                    new SpreadBulletsUpgrader.UpgradableData(-1, 5, 2), // Lv.3
                 }
             )
         },
@@ -326,8 +325,8 @@ public class Database
             (
                 new List<ShockwaveUpgrader.UpgradableData>
                 {
-                    new ShockwaveUpgrader.UpgradableData(10, -0.5f, 0.2f),
-                    new ShockwaveUpgrader.UpgradableData(10, -0.5f, 0.3f),
+                    new ShockwaveUpgrader.UpgradableData(10, -0.5f, 0.2f), // Lv.2
+                    new ShockwaveUpgrader.UpgradableData(10, -0.5f, 0.3f), // Lv.3
                 }
             )
         },
@@ -337,8 +336,8 @@ public class Database
             (
                 new List<MagneticFieldUpgrader.UpgradableData>
                 {
-                    new MagneticFieldUpgrader.UpgradableData(5, 0),
-                    new MagneticFieldUpgrader.UpgradableData(5, 0),
+                    new MagneticFieldUpgrader.UpgradableData(5, 0), // Lv.2
+                    new MagneticFieldUpgrader.UpgradableData(5, 0), // Lv.3
                 }
             )
         },
@@ -348,8 +347,8 @@ public class Database
             (
                 new List<SelfDestructionUpgrader.UpgradableData>
                 {
-                    new SelfDestructionUpgrader.UpgradableData(1, 8, 3),
-                    new SelfDestructionUpgrader.UpgradableData(1, 8, 3),
+                    new SelfDestructionUpgrader.UpgradableData(10, 0, 0),
+                    new SelfDestructionUpgrader.UpgradableData(20, 10, 0),
                 }
             )
         },
@@ -424,10 +423,13 @@ public class Database
             )
         },
 
-        { BaseSkill.Name.MultipleShockwave, new MultipleShockwaveData(1, 0.5f, 0.7f, 3, 30f, 1f, 1.7f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
-        { BaseSkill.Name.SpreadMultipleBullets, new SpreadMultipleBulletsData(1, 0.3f, 4, 10, 1, 1, 2f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue }) },
+        { BaseSkill.Name.ShootMultipleLaser, new ShootMultipleLaserData(0, 20f, 1f, 30f, 1f, 8, 4, 2f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+        { BaseSkill.Name.MultipleShockwave, new MultipleShockwaveData(0, 0.5f, 0.7f, 3, 30f, 1f, 1.7f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+        { BaseSkill.Name.SpreadMultipleBullets, new SpreadMultipleBulletsData(0, 0.3f, 4, 10, 1, 1, 2f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue }) },
 
-        { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(3, 10, 1, 1, 4f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
+        { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(3, 10, 1, BaseWeapon.Name.PentagonBullet, 4f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
+        { BaseSkill.Name.SpreadReflectableBullets, new SpreadBulletsData(1, 10, 1, BaseWeapon.Name.HexahornBullet, 1f, 4f, 6f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
+
         { BaseSkill.Name.Shockwave, new ShockwaveData(3, 30f, 1f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.MagneticField, new MagneticFieldData(3, 2f, 1f, 0.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.SelfDestruction, new SelfDestructionData(3, 20f, 1f, 5f, 3f, 0.7f, new List<ITarget.Type>(){ITarget.Type.Red, ITarget.Type.Blue}) },
@@ -444,9 +446,11 @@ public class Database
     {
         { BaseWeapon.Name.Blade, new BladeData(1, 1)},
 
-        { BaseWeapon.Name.PentagonicBullet, new BulletData(5)},
         { BaseWeapon.Name.ShooterBullet, new BulletData(5)},
         { BaseWeapon.Name.PentagonBullet, new BulletData(5)},
+        { BaseWeapon.Name.PentagonicBullet, new BulletData(5)},
+        { BaseWeapon.Name.HexahornBullet, new BulletData(5)},
+
         { BaseWeapon.Name.Rocket, new RocketData(3, 5)},
 
         { BaseWeapon.Name.Blackhole, new BlackholeData(-10, 0.1f)},
@@ -553,6 +557,50 @@ public class Database
             )
         },
 
+
+        {
+            BaseLife.Name.OperaTriangle,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.OperaRectangle,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.OperaPentagon,
+            new DropData(
+                3,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f },
+                    { IInteractable.Name.Heart, 0.1f },
+                }
+            )
+        },
+        {
+            BaseLife.Name.OperaHexagon,
+            new DropData(
+                3,
+               new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f },
+                    { IInteractable.Name.Heart, 0.1f },
+                }
+            )
+        },
+
         {
             BaseLife.Name.Tricon,
             new DropData(
@@ -582,6 +630,26 @@ public class Database
                     { IInteractable.Name.Coin, 0.3f }
                 }
             )
+        },
+        {
+            BaseLife.Name.Hexahorn,
+            new DropData(
+                1,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
+        },
+        {
+            BaseLife.Name.Octavia,
+            new DropData(
+                1,
+                new Dictionary<IInteractable.Name, float>
+                {
+                    { IInteractable.Name.Coin, 0.3f }
+                }
+            )
         }
     };
 
@@ -589,7 +657,6 @@ public class Database
     public Dictionary<BaseLife.Name, DropData> ChapterDropDatas { get { return _chapterDropDatas; } }
 
     #endregion
-
 
     #region LIFE 데이터
 
@@ -627,8 +694,8 @@ public class Database
 
                 5f, 
 
-                0.15f,
-                0.25f,
+                0.6f,
+                1.0f,
             new List<BaseSkill.Name> { BaseSkill.Name.ContactAttack })
         },
 
@@ -705,6 +772,46 @@ public class Database
             }, 6f, 3f, 1f)
         },
 
+
+
+        {
+            BaseLife.Name.OperaTriangle, new TriangleData(25, ITarget.Type.Red, BaseEnemy.Size.Small,
+
+            new Dictionary<BaseSkill.Name, int>
+            {
+                { BaseSkill.Name.MagneticField, 2 }
+            }, 5)
+        },
+
+        {
+            BaseLife.Name.OperaRectangle, new RectangleData(45, ITarget.Type.Red, BaseEnemy.Size.Small,
+
+            new Dictionary<BaseSkill.Name, int>
+            {
+                { BaseSkill.Name.MagneticField, 1 },
+            }, 9)
+        },
+
+        {
+            BaseLife.Name.OperaPentagon, new PentagonData(100, ITarget.Type.Red, BaseEnemy.Size.Medium,
+
+            new Dictionary<BaseSkill.Name, int>
+            {
+                { BaseSkill.Name.SpreadBullets, 2 }
+            }, 3f, 3f, 1f)
+        },
+
+        {
+            BaseLife.Name.OperaHexagon, new OperaHexagonData(120, ITarget.Type.Red, BaseEnemy.Size.Medium,
+
+            new Dictionary<BaseSkill.Name, int>
+            {
+                { BaseSkill.Name.Shockwave, 2 }
+            }, 9f, 3f, 2f, 2f, 2f, 1f)
+        },
+
+
+
          {
             BaseLife.Name.Tricon, new TriconData(300, ITarget.Type.Red, BaseEnemy.Size.Medium,
 
@@ -725,13 +832,31 @@ public class Database
         },
 
          {
-            BaseLife.Name.Pentagonic, new PentagonicData(400, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Pentagonic, new PentagonicData(500, ITarget.Type.Red, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
                 { BaseSkill.Name.SpreadMultipleBullets, 0 },
             }, 6f, 3f, 1f)
         },
+
+         {
+            BaseLife.Name.Hexahorn, new HexahornData(600, ITarget.Type.Red, BaseEnemy.Size.Medium,
+
+            new Dictionary<BaseSkill.Name, int>
+            {
+                { BaseSkill.Name.SpreadReflectableBullets, 0 },
+            }, 6f, 3f, 1f)
+        },
+
+         {
+            BaseLife.Name.Octavia, new OctaviaData(800, ITarget.Type.Red, BaseEnemy.Size.Medium,
+
+            new Dictionary<BaseSkill.Name, int>
+            {
+                { BaseSkill.Name.ShootMultipleLaser, 0 },
+            }, 6f, 3f, 1f)
+        }
 
     };
 
@@ -782,15 +907,19 @@ public class Database
     #endregion
 
     #region LEVEL 데이터
+
     [JsonProperty]
     Dictionary<GameMode.Level, ILevelInfo> _levelDatas = new Dictionary<GameMode.Level, ILevelInfo>()
     {
         { GameMode.Level.TriconChapter, new ChapterInfo("Tricon", "첫 발걸음", 20, GameMode.Level.RhombusChapter) },
         { GameMode.Level.RhombusChapter, new ChapterInfo("Rhombus", "오르막길", 20, GameMode.Level.PentagonicChapter) },
-        { GameMode.Level.PentagonicChapter, new ChapterInfo("Pentagonic", "시련", 20) },
-
-        { GameMode.Level.CubeSurvival, new SurvivalInfo("Cube", "첫 발걸음", 300, GameMode.Level.PyramidSurvival) },
-        { GameMode.Level.PyramidSurvival, new SurvivalInfo("Pyramid", "오르막길", 300) },
+        { GameMode.Level.PentagonicChapter, new ChapterInfo("Pentagonic", "시련1", 20, GameMode.Level.HexahornChapter) },
+        { GameMode.Level.HexahornChapter, new ChapterInfo("Hexahorn", "시련2", 20, GameMode.Level.OctaviaChapter) },
+        { GameMode.Level.OctaviaChapter, new ChapterInfo("Octavia", "시련3", 2) },
+        
+        { GameMode.Level.PyramidSurvival, new SurvivalInfo("Pyramid", "첫 발걸음", 300, GameMode.Level.CubeSurvival) },
+        { GameMode.Level.CubeSurvival, new SurvivalInfo("Cube", "오르막길", 300, GameMode.Level.PrismSurvival) },
+        { GameMode.Level.PrismSurvival, new SurvivalInfo("Prism", "시련", 300) },
     };
 
     [JsonIgnore]

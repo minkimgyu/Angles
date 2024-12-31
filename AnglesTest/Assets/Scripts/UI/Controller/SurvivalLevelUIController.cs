@@ -19,6 +19,9 @@ public class SurvivalLevelModel
         CoinLevel = 0;
         NeedCoin = new Tuple<int, int>(0, 0);
         CoingaugeRatio = 0;
+
+        StageResultInfo = "";
+        ShowStageResult = false;
     }
 
     bool _showStageCountViewer = false;
@@ -111,7 +114,6 @@ public class SurvivalLevelUIController : MonoBehaviour
     public void Initialize()
     {
         _levelModel = new SurvivalLevelModel(_stageCountViewer, _coinGaugeViewer, _stageResultViewer);
-        ShowStageResult(false);
     }
 
     public void ShowStageCountViewer(bool nowShow)

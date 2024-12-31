@@ -27,6 +27,9 @@ abstract public class BaseSkill : ISkillUpgradable
         UpgradeCooltime,
 
         SpreadBullets,
+        SpreadReflectableBullets,
+        ShootMultipleLaser,
+
         MultipleShockwave,
         Shockwave,
         MagneticField,

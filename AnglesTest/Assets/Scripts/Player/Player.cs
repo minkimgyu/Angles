@@ -28,6 +28,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     PlayerData _playerData;
 
+    [SerializeField] Transform _bottomPoint;
+    public Vector2 BottomPoint => _bottomPoint.localPosition;
+
     private void OnGUI()
     {
 #if UNITY_ANDROID && UNITY_EDITOR
@@ -163,7 +166,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     {
         base.Initialize();
         _interactableObjects = new List<IInteractable>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
 

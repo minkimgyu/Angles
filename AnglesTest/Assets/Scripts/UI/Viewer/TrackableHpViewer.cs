@@ -6,8 +6,6 @@ using DG.Tweening;
 
 public class TrackableHpViewer : RatioViewer
 {
-    [SerializeField] float _topOffset;
-
     IFollowable _followTarget;
 
     public void SetFollower(IFollowable followTarget)
@@ -17,9 +15,16 @@ public class TrackableHpViewer : RatioViewer
 
     private void Update()
     {
-        if ((_followTarget as UnityEngine.Object) == null) return;
-
-        Vector3 offset = Vector2.down * _topOffset;
-        transform.position = _followTarget.ReturnPosition() + offset;
+        bool canAttach = _followTarget.CanFollow();
+        if (canAttach == true)
+        {
+            Vector3 pos = _followTarget.GetPosition();
+            transform.position = pos + (Vector3)_followTarget.BottomPoint;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 }

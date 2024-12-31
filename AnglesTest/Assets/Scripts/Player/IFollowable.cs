@@ -4,7 +4,8 @@ using UnityEngine;
 
 public interface IFollowable : IPos
 {
-    bool CanFollow();
+    Vector2 BottomPoint { get; }
 
+    bool CanFollow();
     Vector3 ReturnFowardDirection();
 }

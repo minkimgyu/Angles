@@ -27,7 +27,7 @@ public class DirectionViewer : BaseViewer
     {
         if ((_followTarget as UnityEngine.Object) == null) return;
 
-        transform.position = _followTarget.ReturnPosition();
+        transform.position = _followTarget.GetPosition();
         transform.right = _followTarget.ReturnFowardDirection();
     }
 }

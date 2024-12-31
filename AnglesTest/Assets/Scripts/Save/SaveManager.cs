@@ -91,7 +91,7 @@ public struct SaveData
 
         _selectedLevel = new Dictionary<GameMode.Type, GameMode.Level>();
         _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
-        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.CubeSurvival;
+        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
 
         _skin = SkinData.Key.Normal;
 
@@ -129,7 +129,7 @@ public struct SaveData
     public void Update()
     {
         _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
-        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.CubeSurvival;
+        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
 
         List<GameMode.Level> chapterLevels = GameMode.GetLevels(GameMode.Type.Chapter);
         for (int i = 0; i < chapterLevels.Count; i++)

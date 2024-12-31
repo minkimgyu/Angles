@@ -26,7 +26,7 @@ public class Spike : MonoBehaviour
             _groggyDuration
         );
 
-        Vector3 direction = forceTaret.ReturnPosition() - (Vector3)collision.contacts[0].point;
+        Vector3 direction = forceTaret.GetPosition() - (Vector3)collision.contacts[0].point;
         forceTaret.ApplyForce(direction, _force, ForceMode2D.Impulse);
         Damage.Hit(damageData, damageable);
     }

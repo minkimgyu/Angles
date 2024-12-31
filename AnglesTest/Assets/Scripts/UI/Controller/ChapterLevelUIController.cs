@@ -15,6 +15,9 @@ public class ChapterLevelModel
         _bossHpViewer = bossHpViewer;
 
         StageCount = 0;
+        StageResultInfo = "";
+        ShowStageResult = false;
+        ShowBossHPViewer = false;
     }
 
     bool _showStageCountViewer = false;
@@ -95,8 +98,6 @@ public class ChapterLevelUIController : MonoBehaviour
     public void Initialize()
     {
         _levelModel = new ChapterLevelModel(_stageCountViewer, _bossHpViewer, _stageResultViewer);
-        ShowBossHpViewer(false);
-        ShowStageResult(true);
     }
 
     public void ShowStageCountViewer(bool nowShow)

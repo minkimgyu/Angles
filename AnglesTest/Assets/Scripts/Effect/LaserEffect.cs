@@ -21,13 +21,21 @@ public class LaserEffect : BaseEffect
         _line = GetComponent<LineRenderer>();
     }
 
-    public override void ResetLine(Vector3 endPoint) 
+    public override void ResetLine(Vector3 startPoint, Vector3 endPoint) 
     {
+        // 라인렌더러의 색을 지정해준다.
         _line.startColor = _startColor;
         _line.endColor = _startColor;
 
         _line.positionCount = 2;
+        _line.SetPosition(0, startPoint);
         _line.SetPosition(1, endPoint);
+    }
+
+    public override void ResetColor(Color startColor, Color endColor) 
+    {
+        _startColor = startColor;
+        _endColor = endColor;
     }
 
     void ChangeWidth(float width, Color startColor, Color endColor, float duration, Action WhenCompleted)

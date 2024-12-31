@@ -22,6 +22,7 @@ public class SpreadMultipleBullets : BaseSkill
 
         _weaponFactory = weaponFactory;
     }
+
     void ShootBullet(float angle)
     {
         Transform casterTransform = _caster.GetComponent<Transform>();

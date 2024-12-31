@@ -73,7 +73,7 @@ namespace DamageUtility
 
                 damageable.GetDamage(damageData);
 
-                Vector2 endPoint = (Vector2)colliders[i].transform.position - pos;
+                Vector2 endPoint = (Vector2)colliders[i].transform.position;
                 if (drawDebug == true) Debug.DrawLine(pos, endPoint, color, duration);
 
                 hitPoints.Add(endPoint);

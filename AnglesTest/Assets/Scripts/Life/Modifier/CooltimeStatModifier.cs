@@ -1,11 +1,12 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CooltimeStatModifier : IStatModifier
 {
-    List<float> _additionalCooltimeRatios;
-    float _additionalCooltimeRatio;
+    [JsonProperty] List<float> _additionalCooltimeRatios;
+    [JsonProperty] float _additionalCooltimeRatio;
 
     public CooltimeStatModifier()
     {

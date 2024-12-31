@@ -1,9 +1,11 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootingStatModifier : IStatModifier
 {
+    [System.Serializable]
     public struct ShootingStat
     {
         public float _additionalDuration; // 날라가는 시간 증가
@@ -16,8 +18,8 @@ public class ShootingStatModifier : IStatModifier
         }
     }
 
-    List<ShootingStat> _shootingStats;
-    ShootingStat _shootingStat;
+    [JsonProperty] List<ShootingStat> _shootingStats;
+    [JsonProperty] ShootingStat _shootingStat;
 
     public ShootingStatModifier(List<ShootingStat> shootingStats)
     {

@@ -40,7 +40,7 @@ public class GameResultViewer : BaseViewer, IPointerClickHandler
         int minute = (int)recordTime / 60;
         int second = (int)recordTime % 60;
 
-        _recordTxt.text = $"Record : {minute}:{second}";
+        _recordTxt.text = $"Record : {minute}:{second.ToString("D2")}";
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PentagonEnemy : BasicMob
+public class PentagonEnemy : TrackableEnemy
 {
     [SerializeField] TargetCaptureComponent _skillTargetCaptureComponent;
 
@@ -18,6 +19,19 @@ public class PentagonEnemy : BasicMob
         _gap = data.Gap;
 
         _destoryEffect = BaseEffect.Name.PentagonDestroyEffect;
+    }
+
+    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _trackComponent = new TrackComponent(
+             _moveComponent,
+             transform,
+             _size,
+             _moveSpeed,
+             _stopDistance,
+             _gap,
+             FindPath
+        );
     }
 
     public override void Initialize()

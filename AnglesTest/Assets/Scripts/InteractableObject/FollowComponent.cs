@@ -59,7 +59,7 @@ public class FollowComponent : MoveComponent
     {
         if ((_followableTarget as UnityEngine.Object) == null) return;
 
-        Vector2 pos = _followableTarget.ReturnPosition();
+        Vector2 pos = _followableTarget.GetPosition();
         Vector2 offset = -_followOffsetDirection * _followOffset;
 
         if (Vector2.Distance(pos, transform.position) > _maxDistanceFromPlayer) // 플레이어의 거리가 더 멀다면
