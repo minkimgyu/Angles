@@ -20,6 +20,7 @@ public class AddressableHandler : MonoBehaviour
         Viewer,
         Sound,
         Database,
+        Localization,
 
         LevelMap,
         LevelData,
@@ -65,6 +66,7 @@ public class AddressableHandler : MonoBehaviour
 
 
     public Database Database { get; private set; }
+    public Localization LocalizationAsset { get; private set; }
 
     public void Load(Action OnCompleted)
     {
@@ -84,6 +86,7 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new InteractableAssetLoader(Label.InteractableObject, (value, label) => { InteractableAsset = value; OnSuccess(Label.InteractableObject); }));
         _assetLoaders.Add(new SoundAssetLoader(Label.Sound, (value, label) => { SoundAsset = value; OnSuccess(Label.Sound); }));
         _assetLoaders.Add(new DBJsonAssetLoader(Label.Database, (value, label) => { Database = value; OnSuccess(Label.Database); }));
+        _assetLoaders.Add(new LocalizationJsonAssetLoader(Label.Localization, (value, label) => { LocalizationAsset = value; OnSuccess(Label.Localization); }));
 
         // GetLevels로 가져와서 자동화 진행
         // 로드 성공을 Levels 개수 만큼 하면 됨

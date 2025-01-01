@@ -14,37 +14,42 @@ public struct StatData
         AttackDamage,
         MoveSpeed,
         MaxHp,
-        //AutoHpRecovery,
         DamageReduction,
     }
 
-    [JsonProperty] string _name;
     [JsonProperty] int _maxLevel;
 
-    [JsonProperty] List<int> _cost;
-    [JsonProperty] List<string> _description;
+    const string replaceString = "(R)";
 
-    [JsonIgnore] public string Name { get => _name; }
+    [JsonProperty] List<int> _cost;
     [JsonIgnore] public int MaxLevel { get => _maxLevel; }
 
-    public int ReturnCost(int level) 
+    public int GetCost(int level) 
     { 
         if(level == MaxLevel) return 0;
         return _cost[level]; 
     }
 
-    public string ReturnDescription(int level) 
+    public string GetDescription(int level, float ratio, string txt) 
     {
+        txt = txt.Replace(replaceString, (ratio * 100).ToString());
+
         if (level == 0) return string.Empty;
-        return _description[level - 1]; // 하나씩 앞선 값을 전달
+        return txt; // 하나씩 앞선 값을 전달
     }
 
-    public StatData(string name, int maxLevel, List<int> cost, List<string> description)
+    public string GetDescription(int level, int value, string txt)
     {
-        _name = name;
+        txt = txt.Replace(replaceString, value.ToString());
+
+        if (level == 0) return string.Empty;
+        return txt; // 하나씩 앞선 값을 전달
+    }
+
+    public StatData(int maxLevel, List<int> cost)
+    {
         _maxLevel = maxLevel;
         _cost = cost;
-        _description = description;
     }
 }
 
@@ -116,7 +121,7 @@ public class StatSelectPage : MonoBehaviour
 
         StatData statData = _statData[_selectedStatKey];
         int maxStatLevel = statData.MaxLevel;
-        int currentCost = statData.ReturnCost(currentStatLevel);
+        int currentCost = statData.GetCost(currentStatLevel);
 
         bool canUpgrade = saveData._gold >= currentCost;
         if(canUpgrade == false)
@@ -137,11 +142,12 @@ public class StatSelectPage : MonoBehaviour
         int nextLevel = currentStatLevel + 1; // 레벨 추가
         saveable.ChangeStat(_selectedStatKey, nextLevel); // 스텟을 적용시켜준다.
 
-        _statInfoController.UpdateStat(
-            nextLevel,
-            statData.ReturnCost(nextLevel),
-            statData.ReturnDescription(nextLevel)
-        );
+
+        //_statInfoController.UpdateStat(
+        //    nextLevel,
+        //    statData.GetCost(nextLevel),
+        //    statData.GetDescription(nextLevel)
+        //);
     }
 
     void OnClickViewer(StatData.Key key)
@@ -153,12 +159,12 @@ public class StatSelectPage : MonoBehaviour
         StatData statData = _statData[key];
 
         _selectedStatKey = key;
-        _statInfoController.UpdateStat(
-            _statSprite[key], 
-            _statData[key].Name,
-            currentStatLevel,
-            statData.ReturnCost(currentStatLevel),
-            statData.ReturnDescription(currentStatLevel)
-        );
+        //_statInfoController.UpdateStat(
+        //    _statSprite[key], 
+        //    _statData[key].Name,
+        //    currentStatLevel,
+        //    statData.GetCost(currentStatLevel),
+        //    statData.GetDescription(currentStatLevel)
+        //);
     }
 }

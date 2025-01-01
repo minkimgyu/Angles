@@ -47,7 +47,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - LevelData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ada14705ab092be43821fda05b6d2d4c
+  - m_GUID: 298c4fe8b58a36a43a89ed4b9541b052
     m_Address: CubeSurvival
     m_ReadOnly: 0
     m_SerializedLabels:
@@ -59,7 +59,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - LevelData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e857aee0f5914374aa5992c814665986
+  - m_GUID: 6840b85a08640e54b8409bae8230e1ae
     m_Address: PyramidSurvival
     m_ReadOnly: 0
     m_SerializedLabels:

@@ -15,19 +15,12 @@ public struct SkinData
         Guard,
     }
 
-    [JsonProperty] private string _name;
     [JsonProperty] private int _cost;
-    [JsonProperty] private string _description;
-
-    [JsonIgnore] public string Name { get => _name; }
     [JsonIgnore] public int Cost { get => _cost; }
-    [JsonIgnore] public string Description { get => _description; }
 
-    public SkinData(string name, int cost, string description)
+    public SkinData(int cost)
     {
-        _name = name;
         _cost = cost;
-        _description = description;
     }
 }
 
@@ -155,13 +148,13 @@ public class SkinSelectPage : MonoBehaviour
         if(!isUnlock) cost = _skinData[key].Cost;
         _selectedSkinKey = key;
 
-        _skinInfoController.PickSkin(
-            _skinSprite[key],
-            isUnlock,
-            isSelected,
-            _skinData[key].Name,
-            cost,
-            _skinData[key].Description
-        );
+        //_skinInfoController.PickSkin(
+        //    _skinSprite[key],
+        //    isUnlock,
+        //    isSelected,
+        //    _skinData[key].Name,
+        //    cost,
+        //    _skinData[key].Description
+        //);
     }
 }

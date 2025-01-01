@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class StartMenuController : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class StartMenuController : MonoBehaviour
     {
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
+
+
+        string startWord = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Start);
+        _startButton.GetComponentInChildren<TMP_Text>().text = startWord;
+
+        string endWord = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.End);
+        _exitButton.GetComponentInChildren<TMP_Text>().text = endWord;
     }
 
     public void OnStartRequested()

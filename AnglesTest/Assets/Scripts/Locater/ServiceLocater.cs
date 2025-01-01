@@ -19,6 +19,9 @@ public static class ServiceLocater
     static ISettable _settingController;
     static NULLSettingController _nullSettingController;
 
+    static ILocalization _localization;
+    static NULLLocalizationHandler _nullLocalizationHandler;
+
     static ServiceLocater()
     {
         _nullSoundPlayer = new NullSoundPlayer();
@@ -26,6 +29,7 @@ public static class ServiceLocater
         _nullTimeController = new NullTimeController();
         _nullSaveController = new NULLSaveManager();
         _nullSettingController = new NULLSettingController();
+        _nullLocalizationHandler = new NULLLocalizationHandler();
     }
 
     public static void Provide(ISoundPlayable soundPlayer)
@@ -53,6 +57,10 @@ public static class ServiceLocater
         _settingController = settable;
     }
 
+    public static void Provide(ILocalization localization)
+    {
+        _localization = localization;
+    }
 
 
     public static ISettable ReturnSettingController()
@@ -83,5 +91,11 @@ public static class ServiceLocater
     {
         if (_saveController == null) return _nullSaveController;
         return _saveController;
+    }
+
+    public static ILocalization ReturnLocalizationHandler()
+    {
+        if (_localization == null) return _nullLocalizationHandler;
+        return _localization;
     }
 }

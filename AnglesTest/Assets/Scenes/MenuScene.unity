@@ -1079,7 +1079,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startButton: {fileID: 590980804}
   _exitButton: {fileID: 1806578932}
-  _saveClearButton: {fileID: 0}
 --- !u!1 &2082193951
 GameObject:
   m_ObjectHideFlags: 0

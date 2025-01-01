@@ -47,7 +47,11 @@ public class FileIO
         //File.WriteAllText(path, encodedJson); // 이런 방식으로 생성시켜줌
 
         File.WriteAllText(path, jsonAsset); // 이런 방식으로 생성시켜줌
+
+#if UNITY_ANDROID && UNITY_EDITOR
         AssetDatabase.Refresh();
+#elif UNITY_ANDROID
+#endif
     }
 
     string ReturnFilePath(string filePath, string fileName, bool canOverwrite = false)

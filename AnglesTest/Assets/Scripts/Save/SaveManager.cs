@@ -70,6 +70,8 @@ public struct SaveData
     public bool _muteBGM;
     public bool _muteSFX;
 
+    public ILocalization.Language _language;
+
     public int _gold; // 골드
     public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 선택된 스테이지 정보
 
@@ -88,6 +90,8 @@ public struct SaveData
         _muteBGM = muteBGM;
         _muteSFX = muteSFX;
         _gold = gold;
+
+        _language = ILocalization.Language.Korean;
 
         _selectedLevel = new Dictionary<GameMode.Type, GameMode.Level>();
         _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;

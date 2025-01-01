@@ -69,3 +69,10 @@ public class DBJsonAssetLoader : SingleJsonAssetLoader<Database>
     {
     }
 }
+
+public class LocalizationJsonAssetLoader : SingleJsonAssetLoader<Localization>
+{
+    public LocalizationJsonAssetLoader(AddressableHandler.Label label, Action<Localization, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+}

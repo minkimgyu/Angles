@@ -33,8 +33,6 @@ public class InitController : MonoBehaviour
 
     public void Initialize(AddressableHandler addressableHandler)
     {
-        Database database = new Database();
-
         TimeController timeController = new TimeController();
         SceneController sceneController = new SceneController();
 
@@ -43,10 +41,13 @@ public class InitController : MonoBehaviour
 
         SaveManager saveController = new SaveManager(new SaveData(300000));
 
+        LocalizationHandler localizationHandler = new LocalizationHandler(addressableHandler.LocalizationAsset);
+
         ServiceLocater.Provide(timeController);
         ServiceLocater.Provide(sceneController);
         ServiceLocater.Provide(soundPlayer);
         ServiceLocater.Provide(saveController);
+        ServiceLocater.Provide(localizationHandler);
 
         // 위 내용을 전부 반영하고 SettingController 적용
         SettingController settingController = FindObjectOfType<SettingController>();
