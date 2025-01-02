@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyController : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class LobbyController : MonoBehaviour
 
     [SerializeField] StatSelectPage _statSelectPage;
     [SerializeField] SkinSelectPage _skinSelectPage;
+
+    [SerializeField] Scrollbar _horizontalScrollbar;
 
     Dictionary<GameMode.Level, LevelData> GetLevelDatas(AddressableHandler addressableHandler, SaveData saveData)
     {
@@ -41,6 +44,8 @@ public class LobbyController : MonoBehaviour
 
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
+
+        _horizontalScrollbar.value = 0; // 스크롤바 초기화
 
         _lobbyScrollController.Initialize();
         _popUpViewer.Initialize();
