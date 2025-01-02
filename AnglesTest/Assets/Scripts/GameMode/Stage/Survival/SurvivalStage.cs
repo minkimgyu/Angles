@@ -86,7 +86,9 @@ public class SurvivalStage : BaseStage, ILevel
                 ServiceLocater.ReturnSoundPlayer().PlayBGM(bgm);
 
                 _levelUIController.ShowStageResult(true);
-                _levelUIController.ChangeStageResultInfo("Boss Incoming!");
+
+                string bossIncoming = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.BossIncoming);
+                _levelUIController.ChangeStageResultInfo(bossIncoming);
             }
 
             for (int i = 0; i < size; i++)

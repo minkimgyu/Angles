@@ -27,7 +27,9 @@ public class LevelSelectPage : MonoBehaviour
     {
         ServiceLocater.ReturnSaveManager().ChangeCurrentLevel(_levelType, level);
 
-        _playChapterModel.Title = _levelDatas[level].LevelInfos.Title;
+        string title = ServiceLocater.ReturnLocalizationHandler().GetWord($"{level}Name");
+
+        _playChapterModel.Title = title;
         _playChapterModel.LevelSprite = _levelDatas[level].LevelSprite;
         _playChapterModel.LevelInfo = new Tuple<GameMode.Type, ISavableLevelInfo, ILevelInfo>
         (

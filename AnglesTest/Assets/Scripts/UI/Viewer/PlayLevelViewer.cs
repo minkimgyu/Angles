@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -74,11 +75,13 @@ public class PlayLevelViewer : MonoBehaviour
 
     public void ChangeChapterStageProgress(int currentLevel, int maxLevel)
     {
-        _progressTxt.text = $"진행 : {currentLevel} / {maxLevel}";
+        string progress = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Progress);
+        _progressTxt.text = $"{progress} : {currentLevel} / {maxLevel}";
     }
 
     public void ChangeSurvivalStageProgress(int survivalTime, int totalTime)
     {
-        _progressTxt.text = $"진행 : {survivalTime / 60}:{(survivalTime % 60).ToString("D2")} / {totalTime / 60}:{(totalTime % 60).ToString("D2")}";
+        string progress = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Progress);
+        _progressTxt.text = $"{progress} : {survivalTime / 60}:{(survivalTime % 60).ToString("D2")} / {totalTime / 60}:{(totalTime % 60).ToString("D2")}";
     }
 }

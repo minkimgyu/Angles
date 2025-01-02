@@ -1323,6 +1323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _content: {fileID: 940506421}
+  _titleText: {fileID: 1346143428}
   _bgmBtn: {fileID: 1265686585}
   _bgmXGo: {fileID: 478347157}
   _sfxBtn: {fileID: 983840585}
@@ -2211,8 +2212,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72.8
-  m_fontSizeBase: 72.8
+  m_fontSize: 54.73
+  m_fontSizeBase: 54.73
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

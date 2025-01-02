@@ -23,8 +23,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Database
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b9b1c2bd347d4094fa74c9246b112f60
-    m_Address: Localization
+  - m_GUID: 2115a6efac9ec114ab4d6c47d9f6b6a4
+    m_Address: LocalizationAsset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Localization

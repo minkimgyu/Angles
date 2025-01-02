@@ -22,6 +22,7 @@ public class GameResultViewer : BaseViewer, IPointerClickHandler
 
         _recordTxt.text = "";
         _coinTxt.text = "";
+        _tabTxt.text = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToContinue);
     }
 
     public void FadeInOutTabTxt()
@@ -40,7 +41,8 @@ public class GameResultViewer : BaseViewer, IPointerClickHandler
         int minute = (int)recordTime / 60;
         int second = (int)recordTime % 60;
 
-        _recordTxt.text = $"Record : {minute}:{second.ToString("D2")}";
+        string recordTimeLable = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.RecordTime);
+        _recordTxt.text = $"{recordTimeLable} : {minute}:{second.ToString("D2")}";
     }
 
     public void OnPointerClick(PointerEventData eventData)

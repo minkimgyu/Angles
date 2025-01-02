@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using System;
 
 // 여기에 코스트 추가하기 --> 만약 코스트가 따로 할당되지 않는다면 코인을 소모하지 않는다.
 public struct SKillCardData
@@ -66,6 +67,7 @@ public class CardController : MonoBehaviour
 
 
     [SerializeField] GameObject _recreateCountObject;
+    [SerializeField] TMP_Text _recreateInfoText;
     [SerializeField] TMP_Text _recreateCountText;
     [SerializeField] Button _recreateButton;
 
@@ -105,6 +107,13 @@ public class CardController : MonoBehaviour
         _viewerFactory = viewerFactory;
         _skillFactory = skillFactory;
         _backButton.onClick.AddListener(CloseTab);
+
+
+        _recreateButton.GetComponentInChildren<TMP_Text>().text = 
+            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.PickAgain);
+
+        _recreateInfoText.GetComponentInChildren<TMP_Text>().text =
+            $"{ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.LeftCount)}:";
     }
 
     void CloseTab()
@@ -129,15 +138,16 @@ public class CardController : MonoBehaviour
 
             CardInfoData cardInfoData = _cardDatas[skillName];
             Sprite cardIcon = _skillIcons[skillName];
-            string info = cardInfoData.Description;
-            string name = cardInfoData.Name;
+
+            string name = ServiceLocater.ReturnLocalizationHandler().GetWord($"{skillName.ToString()}CardName");
+            string description = ServiceLocater.ReturnLocalizationHandler().GetWord($"{skillName.ToString()}CardDescription");
 
             SKillCardData cardData = new SKillCardData(
                 skillName,
                 cardIcon,
 
                 name,
-                info,
+                description,
                 upgradeCount,
                 maxUpgradeCount
             );
@@ -169,15 +179,16 @@ public class CardController : MonoBehaviour
 
             CardInfoData cardInfoData = _cardDatas[skillName];
             Sprite cardIcon = _skillIcons[skillName];
-            string info = cardInfoData.Description;
-            string name = cardInfoData.Name;
+
+            string name = ServiceLocater.ReturnLocalizationHandler().GetWord($"{skillName.ToString()}CardName");
+            string description = ServiceLocater.ReturnLocalizationHandler().GetWord($"{skillName.ToString()}CardDescription");
 
             SKillCardData cardData = new SKillCardData(
                 skillName,
                 cardIcon,
 
                 name,
-                info,
+                description,
                 cardInfoData.Cost,
                 upgradeCount,
                 maxUpgradeCount

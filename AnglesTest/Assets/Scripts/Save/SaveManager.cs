@@ -4,6 +4,9 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Linq;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+
 public interface ISaveable
 {
     void Save();
@@ -13,6 +16,8 @@ public interface ISaveable
 
     void ChangeBGMMute(bool nowMute);
     void ChangeSFXMute(bool nowMute);
+
+    void ChangeLanguage(ILocalization.Language language);
 
     void ChangeSkin(SkinData.Key name);
     void UnlockSkin(SkinData.Key name);
@@ -63,6 +68,8 @@ public class NULLSaveManager : ISaveable
     public void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel) { }
     public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration) { }
     public void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level) { }
+
+    public void ChangeLanguage(ILocalization.Language language) { }
 }
 
 public struct SaveData
@@ -70,12 +77,12 @@ public struct SaveData
     public bool _muteBGM;
     public bool _muteSFX;
 
-    public ILocalization.Language _language;
+    [JsonConverter(typeof(StringEnumConverter))] public ILocalization.Language _language;
 
     public int _gold; // 골드
     public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 선택된 스테이지 정보
 
-    public SkinData.Key _skin;
+    [JsonConverter(typeof(StringEnumConverter))] public SkinData.Key _skin;
     public Dictionary<GameMode.Level, ISavableLevelInfo> _levelInfos; // 레벨 정보
     public Dictionary<StatData.Key, SavableStatData> _statInfos; // 스텟 레벨 정보
     public Dictionary<SkinData.Key, SavableSkinData> _skinInfos; // 스킨 해금 정보
@@ -178,6 +185,12 @@ public class SaveManager : ISaveable
         _filePath = Application.persistentDataPath + "/SaveData.txt";
         Debug.Log(_filePath);
         Load();
+    }
+
+    public void ChangeLanguage(ILocalization.Language language) 
+    { 
+        _saveData._language = language;
+        Save();
     }
 
     public void ChangeSkin(SkinData.Key name)

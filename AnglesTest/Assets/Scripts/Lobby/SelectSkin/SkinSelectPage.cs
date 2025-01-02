@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,16 +50,15 @@ public class SkinSelectPage : MonoBehaviour
     SkinInfoController _skinInfoController;
 
     SkinData.Key _selectedSkinKey;
-    Action<PopUpViewer.State> ActivatePopUp;
+    Action<string> ActivatePopUp;
 
     LobbyTopModel _lobbyTopModel;
 
     public void Initialize(
         Dictionary<SkinData.Key, Sprite> skinSprite,
         Dictionary<SkinData.Key, SkinData> skinData,
-        Dictionary<SkinInfoModel.State, string> btnInfos,
         BaseFactory viewerFactory,
-        Action<PopUpViewer.State> ActivatePopUp,
+        Action<string> ActivatePopUp,
         LobbyTopModel lobbyTopModel)
     {
         _skinViewers = new Dictionary<SkinData.Key, SkinViewer>();
@@ -69,7 +69,7 @@ public class SkinSelectPage : MonoBehaviour
         _lobbyTopModel = lobbyTopModel;
 
         _upgradeBtn.onClick.AddListener(() => { OnClickBtn(); });
-        _skinInfoController = new SkinInfoController(new SkinInfoModel(_skinInfoViewer, btnInfos));
+        _skinInfoController = new SkinInfoController(new SkinInfoModel(_skinInfoViewer));
 
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
@@ -121,7 +121,8 @@ public class SkinSelectPage : MonoBehaviour
         bool canBuy = saveData._gold >= currentCost;
         if (canBuy == false)
         {
-            ActivatePopUp?.Invoke(PopUpViewer.State.ShortOfGold);
+            string outOfGold = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.OutOfGold);
+            ActivatePopUp?.Invoke(outOfGold);
             return;
         }
 
@@ -148,13 +149,16 @@ public class SkinSelectPage : MonoBehaviour
         if(!isUnlock) cost = _skinData[key].Cost;
         _selectedSkinKey = key;
 
-        //_skinInfoController.PickSkin(
-        //    _skinSprite[key],
-        //    isUnlock,
-        //    isSelected,
-        //    _skinData[key].Name,
-        //    cost,
-        //    _skinData[key].Description
-        //);
+        string skinName =  ServiceLocater.ReturnLocalizationHandler().GetWord($"{key}SkinName");
+        string skinInfo = ServiceLocater.ReturnLocalizationHandler().GetWord($"{key}SkinDescription");
+
+        _skinInfoController.PickSkin(
+            _skinSprite[key],
+            isUnlock,
+            isSelected,
+            skinName,
+            cost,
+            skinInfo
+        );
     }
 }

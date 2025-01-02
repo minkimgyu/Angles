@@ -10,9 +10,6 @@ public interface ILevelInfo
     [JsonIgnore] bool CanUnlockLevel { get; } // 클리어 시 해금가능 여부
     [JsonIgnore] GameMode.Level UnlockLevel { get; } // 클리어 시 해금할 레벨 이름
 
-    [JsonIgnore] string Title { get; } // 레벨 이름
-    [JsonIgnore] string Description { get; } // 레벨 설명
-
     [JsonIgnore] virtual int MaxLevel { get { return -1; } }  // 최대 레벨
     [JsonIgnore] virtual int TotalDuration { get { return -1; } } // 최대 생존 시간
 }
@@ -49,38 +46,30 @@ public struct ChapterInfo : ILevelInfo
     [JsonProperty] bool _canUnlockLevel;
     [JsonProperty] GameMode.Level _unlockLevel;
 
-    [JsonProperty] private string _name;
-    [JsonProperty] private string _description;
     [JsonProperty] private int _maxLevel;
 
     [JsonIgnore] public GameMode.Type Type { get => _type; }
     [JsonIgnore] public bool CanUnlockLevel { get => _canUnlockLevel; }
     [JsonIgnore] public GameMode.Level UnlockLevel { get => _unlockLevel; }
 
-    [JsonIgnore] public string Title { get => _name; }
-    [JsonIgnore] public string Description { get => _description; }
     [JsonIgnore] public int MaxLevel { get => _maxLevel; }
 
 
-    public ChapterInfo(string name, string description, int maxLevel)
+    public ChapterInfo(int maxLevel)
     {
         _canUnlockLevel = false;
         _unlockLevel = default;
 
         _type = GameMode.Type.Chapter;
-        _name = name;
-        _description = description;
         _maxLevel = maxLevel;
     }
 
-    public ChapterInfo(string name, string description, int maxLevel, GameMode.Level unlockLevel)
+    public ChapterInfo(int maxLevel, GameMode.Level unlockLevel)
     {
         _canUnlockLevel = true;
         _unlockLevel = unlockLevel;
 
         _type = GameMode.Type.Chapter;
-        _name = name;
-        _description = description;
         _maxLevel = maxLevel;
     }
 }
@@ -114,37 +103,29 @@ public struct SurvivalInfo : ILevelInfo
     [JsonProperty] bool _canUnlockLevel;
     [JsonProperty] GameMode.Level _unlockLevel;
 
-    [JsonProperty] private string _title;
-    [JsonProperty] private string _description;
     [JsonProperty] private int _totalDuration;
 
     [JsonIgnore] public GameMode.Type Type { get => _type; }
     [JsonIgnore] public bool CanUnlockLevel { get => _canUnlockLevel; }
     [JsonIgnore] public GameMode.Level UnlockLevel { get => _unlockLevel; }
 
-    [JsonIgnore] public string Title { get => _title; }
-    [JsonIgnore] public string Description { get => _description; }
     [JsonIgnore] public int TotalDuration { get => _totalDuration; }
 
-    public SurvivalInfo(string title, string description, int maxDuration)
+    public SurvivalInfo(int maxDuration)
     {
         _canUnlockLevel = false;
         _unlockLevel = default;
 
         _type = GameMode.Type.Survival;
-        _title = title;
-        _description = description;
         _totalDuration = maxDuration;
     }
 
-    public SurvivalInfo(string title, string description, int maxDuration, GameMode.Level unlockLevel)
+    public SurvivalInfo(int maxDuration, GameMode.Level unlockLevel)
     {
         _canUnlockLevel = true;
         _unlockLevel = unlockLevel;
         _type = GameMode.Type.Survival;
 
-        _title = title;
-        _description = description;
         _totalDuration = maxDuration;
     }
 }

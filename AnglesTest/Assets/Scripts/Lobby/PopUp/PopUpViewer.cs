@@ -19,20 +19,17 @@ public class PopUpViewer : MonoBehaviour
     [SerializeField] TMP_Text _infoText;
     [SerializeField] Button _confirmBtn;
 
-    public void Initialize(Dictionary<State, string> alarmInfo)
+    public void Initialize()
     {
-        _alarmInfos = alarmInfo;
         _confirmBtn.onClick.AddListener(() => Activate(false));
         Activate(false);
     }
 
     void Activate(bool on) => _content.SetActive(on);
 
-    public void UpdateInfo(State state)
+    public void UpdateInfo(string state)
     {
-        if (_alarmInfos.ContainsKey(state) == false) return;
-
         Activate(true);
-        _infoText.text = _alarmInfos[state];
+        _infoText.text = state;
     }
 }

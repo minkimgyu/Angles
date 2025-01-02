@@ -13,12 +13,10 @@ public class SkinInfoModel
     }
 
     SkinInfoViewer _skinInfoViewer;
-    Dictionary<State, string> _btnInfos;
 
-    public SkinInfoModel(SkinInfoViewer skinInfoViewer, Dictionary<State, string> btnInfos)
+    public SkinInfoModel(SkinInfoViewer skinInfoViewer)
     {
         _skinInfoViewer = skinInfoViewer;
-        _btnInfos = btnInfos;
     }
 
     public string UpgradeBtnTxt
@@ -30,8 +28,11 @@ public class SkinInfoModel
     {
         set
         {
-            if (value == true) _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.Selected]);
-            else _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.UnSelected]);
+            string equipped = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Equipped);
+            string equip = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Equip);
+
+            if (value == true) _skinInfoViewer.ChangeUpgradeBtnText(equipped);
+            else _skinInfoViewer.ChangeUpgradeBtnText(equip);
         }
     }
 
@@ -39,8 +40,11 @@ public class SkinInfoModel
     {
         set 
         {
-            if(value == false) _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.Lock]);
-            else _skinInfoViewer.ChangeUpgradeBtnText(_btnInfos[State.UnSelected]);
+            string buy = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Buy);
+            string equip = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Equip);
+
+            if (value == false) _skinInfoViewer.ChangeUpgradeBtnText(buy);
+            else _skinInfoViewer.ChangeUpgradeBtnText(equip);
             _skinInfoViewer.ActivateLockImg(!value);
         }
     }

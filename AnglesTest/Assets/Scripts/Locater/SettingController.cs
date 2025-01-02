@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class SettingController : MonoBehaviour, ISettable
 {
     [SerializeField] GameObject _content;
+    [SerializeField] TMP_Text _titleText;
+
     [SerializeField] Button _bgmBtn;
     [SerializeField] GameObject _bgmXGo;
 
@@ -39,9 +42,29 @@ public class SettingController : MonoBehaviour, ISettable
         _content.SetActive(on);
     }
 
+    public void ChangeLanguage()
+    {
+        _titleText.GetComponentInChildren<TMP_Text>().text =
+           ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Setting);
+
+        _resumeBtn.GetComponentInChildren<TMP_Text>().text =
+            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.ResumeMenu);
+
+        _bgmBtn.GetComponentInChildren<TMP_Text>().text =
+           ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.BGMMenu);
+
+        _sfxBtn.GetComponentInChildren<TMP_Text>().text =
+            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.SFXMenu);
+
+        _exitBtn.GetComponentInChildren<TMP_Text>().text =
+            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.ExitMenu);
+    }
+
     public void Initialize()
     {
         DontDestroyOnLoad(gameObject);
+
+        ChangeLanguage();
 
         _resumeBtn.onClick.AddListener
         (

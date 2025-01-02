@@ -17,7 +17,7 @@ public class DBBuilder : MonoBehaviour
 
     Dictionary<PopUpViewer.State, string> _popUpInfos = new Dictionary<PopUpViewer.State, string>
     {
-        { PopUpViewer.State.ShortOfGold, "골드가 부족합니다." },
+        { PopUpViewer.State.ShortOfGold, $"골드가 부족합니다." },
         { PopUpViewer.State.NowMaxUpgrade, "최대 업그레이드 상태입니다." },
     };
 
@@ -803,20 +803,20 @@ public class DBBuilder : MonoBehaviour
     #region CARD 데이터
     Dictionary<BaseSkill.Name, CardInfoData> _cardDatas = new Dictionary<BaseSkill.Name, CardInfoData>
     {
-        { BaseSkill.Name.SpawnBlackhole, new CardInfoData("블랙홀", "적을 빨아들이는 공간을 생성한다.", 30) },
-        { BaseSkill.Name.SpawnBlade, new CardInfoData("블레이드", "벽을 튕겨다니며 공격하는 칼날을 발사한다.", 30) },
-        { BaseSkill.Name.Impact, new CardInfoData("충격파", "폭발을 일으켜 적을 튕겨내고 경직시킨다.", 30) },
-        { BaseSkill.Name.Knockback, new CardInfoData("넉백", "적을 멀리 밀쳐내며 공격한다.", 30) },
+        { BaseSkill.Name.SpawnBlackhole, new CardInfoData(30) },
+        { BaseSkill.Name.SpawnBlade, new CardInfoData(30) },
+        { BaseSkill.Name.Impact, new CardInfoData(30) },
+        { BaseSkill.Name.Knockback, new CardInfoData(30) },
 
-        { BaseSkill.Name.SpawnRifleShooter, new CardInfoData("펫:슈터", "탄을 발사하는 펫을 소환한다.", 20) },
-        { BaseSkill.Name.SpawnRocketShooter, new CardInfoData("펫:붐버", "포탄을 발사하는 펫을 소환한다.", 20) },
+        { BaseSkill.Name.SpawnRifleShooter, new CardInfoData(20) },
+        { BaseSkill.Name.SpawnRocketShooter, new CardInfoData(20) },
 
-        { BaseSkill.Name.Statikk, new CardInfoData("유도 레이저", "근처의 적을 타격하는 레이저를 발사한다.", 30) },
-        { BaseSkill.Name.SpawnStickyBomb, new CardInfoData("시한 폭탄", "적에게 폭탄을 붙여 일정시간 이후 폭발시킨다.", 20) },
+        { BaseSkill.Name.Statikk, new CardInfoData(30) },
+        { BaseSkill.Name.SpawnStickyBomb, new CardInfoData(20) },
 
-        { BaseSkill.Name.UpgradeShooting, new CardInfoData("슈팅 강화", "슈팅의 차징 속도를 감소시키고 무적시간을 증가시킨다.", 10) },
-        { BaseSkill.Name.UpgradeDamage, new CardInfoData("최종 데미지 증가", "최종 데미지를 상승시킨다.", 10) },
-        { BaseSkill.Name.UpgradeCooltime, new CardInfoData("스킬 쿨타임 감소", "쿨타임 스킬의 재사용 대기시간을 감소시킨다.", 10) },
+        { BaseSkill.Name.UpgradeShooting, new CardInfoData(10) },
+        { BaseSkill.Name.UpgradeDamage, new CardInfoData(10) },
+        { BaseSkill.Name.UpgradeCooltime, new CardInfoData(10) },
     };
 
     #endregion
@@ -837,15 +837,15 @@ public class DBBuilder : MonoBehaviour
 
     Dictionary<GameMode.Level, ILevelInfo> _levelDatas = new Dictionary<GameMode.Level, ILevelInfo>()
     {
-        { GameMode.Level.TriconChapter, new ChapterInfo("Tricon", "첫 발걸음", 20, GameMode.Level.RhombusChapter) },
-        { GameMode.Level.RhombusChapter, new ChapterInfo("Rhombus", "오르막길", 20, GameMode.Level.PentagonicChapter) },
-        { GameMode.Level.PentagonicChapter, new ChapterInfo("Pentagonic", "시련1", 20, GameMode.Level.HexahornChapter) },
-        { GameMode.Level.HexahornChapter, new ChapterInfo("Hexahorn", "시련2", 20, GameMode.Level.OctaviaChapter) },
-        { GameMode.Level.OctaviaChapter, new ChapterInfo("Octavia", "시련3", 20) },
+        { GameMode.Level.TriconChapter, new ChapterInfo(20, GameMode.Level.RhombusChapter) },
+        { GameMode.Level.RhombusChapter, new ChapterInfo(20, GameMode.Level.PentagonicChapter) },
+        { GameMode.Level.PentagonicChapter, new ChapterInfo(20, GameMode.Level.HexahornChapter) },
+        { GameMode.Level.HexahornChapter, new ChapterInfo(20, GameMode.Level.OctaviaChapter) },
+        { GameMode.Level.OctaviaChapter, new ChapterInfo(20) },
 
-        { GameMode.Level.PyramidSurvival, new SurvivalInfo("Pyramid", "첫 발걸음", 300, GameMode.Level.CubeSurvival) },
-        { GameMode.Level.CubeSurvival, new SurvivalInfo("Cube", "오르막길", 300, GameMode.Level.PrismSurvival) },
-        { GameMode.Level.PrismSurvival, new SurvivalInfo("Prism", "시련", 300) },
+        { GameMode.Level.PyramidSurvival, new SurvivalInfo(300, GameMode.Level.CubeSurvival) },
+        { GameMode.Level.CubeSurvival, new SurvivalInfo(300, GameMode.Level.PrismSurvival) },
+        { GameMode.Level.PrismSurvival, new SurvivalInfo(300) },
     };
 
     #endregion
@@ -867,8 +867,6 @@ public class DBBuilder : MonoBehaviour
 
         Database database = new Database
         (
-            _buyInfo,
-            _popUpInfos,
             _skinModifiers,
             _skinDatas,
             _statModifiers,

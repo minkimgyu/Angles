@@ -5,21 +5,6 @@ using Newtonsoft.Json.Converters;
 
 public struct Database
 {
-    #region INFO 데이터
-
-    // lock, description
-    [JsonProperty]
-    Dictionary<SkinInfoModel.State, string> _buyInfo;
-    [JsonIgnore]
-    public Dictionary<SkinInfoModel.State, string> BuyInfos { get { return _buyInfo; } }
-
-    [JsonProperty]
-    Dictionary<PopUpViewer.State, string> _popUpInfos;
-    [JsonIgnore]
-    public Dictionary<PopUpViewer.State, string> PopUpInfos { get { return _popUpInfos; } }
-
-    #endregion
-
     #region SKIN 데이터
 
     [JsonProperty]
@@ -142,8 +127,6 @@ public struct Database
     #endregion
 
     public Database(
-        Dictionary<SkinInfoModel.State, string> buyInfo,
-        Dictionary<PopUpViewer.State, string> popUpInfos,
         Dictionary<SkinData.Key, List<IStatModifier>> skinModifiers,
         Dictionary<SkinData.Key, SkinData> skinDatas,
         Dictionary<StatData.Key, IStatModifier> statModifiers,
@@ -159,8 +142,6 @@ public struct Database
         Dictionary<GameMode.Level, ILevelInfo> levelDatas,
         List<int> coinGaugeData)
     {
-        _buyInfo = buyInfo;
-        _popUpInfos = popUpInfos;
         _skinModifiers = skinModifiers;
         _skinDatas = skinDatas;
         _statModifiers = statModifiers;

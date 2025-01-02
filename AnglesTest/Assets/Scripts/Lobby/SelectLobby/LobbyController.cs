@@ -43,8 +43,7 @@ public class LobbyController : MonoBehaviour
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
 
         _lobbyScrollController.Initialize();
-
-        _popUpViewer.Initialize(addressableHandler.Database.PopUpInfos);
+        _popUpViewer.Initialize();
 
         _lobbyTopViewer.Initialize(() => { ServiceLocater.ReturnSettingController().Activate(true); });
         _lobbyTopModel = new LobbyTopModel(_lobbyTopViewer);
@@ -69,7 +68,6 @@ public class LobbyController : MonoBehaviour
         _skinSelectPage.Initialize(
            addressableHandler.SkinIconAsset,
            addressableHandler.Database.SkinDatas,
-           addressableHandler.Database.BuyInfos,
            lobbyViewerFactory,
            _popUpViewer.UpdateInfo,
            _lobbyTopModel

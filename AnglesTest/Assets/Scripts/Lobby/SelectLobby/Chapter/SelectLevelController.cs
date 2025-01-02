@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using UnityEngine.EventSystems;
 
 public class SelectLevelController : MonoBehaviour
 {
@@ -48,8 +47,11 @@ public class SelectLevelController : MonoBehaviour
 
     void ChangeChapterModel(GameMode.Level level)
     {
-        _selectChapterModel.Title = _levelDatas[level].LevelInfos.Title;
-        _selectChapterModel.Description = _levelDatas[level].LevelInfos.Description;
+        string title = ServiceLocater.ReturnLocalizationHandler().GetWord($"{level}Name");
+        string description = ServiceLocater.ReturnLocalizationHandler().GetWord($"{level}Description");
+
+        _selectChapterModel.Title = title;
+        _selectChapterModel.Description = description;
 
         _selectChapterModel.LevelInfo = new Tuple<GameMode.Type, ILevelInfo>
         (

@@ -61,8 +61,8 @@ public class ChapterLevelController : BaseStageController
         _levelUIController.ShowStageResult(true);
 
         string clearTxt = "";
-        if(_stageCount == _maxStageCount) clearTxt = "Boss Clear";
-        else clearTxt = "Level Clear";
+        if(_stageCount == _maxStageCount) clearTxt = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.BossClear);
+        else clearTxt = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.StageClear);
 
         _levelUIController.ChangeStageResultInfo(clearTxt);
 

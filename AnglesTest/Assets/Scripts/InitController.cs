@@ -39,7 +39,7 @@ public class InitController : MonoBehaviour
         SoundPlayer soundPlayer = FindObjectOfType<SoundPlayer>();
         soundPlayer.Initialize(addressableHandler.SoundAsset);
 
-        SaveManager saveController = new SaveManager(new SaveData(300000));
+        SaveManager saveController = new SaveManager(new SaveData(0));
 
         LocalizationHandler localizationHandler = new LocalizationHandler(addressableHandler.LocalizationAsset);
 

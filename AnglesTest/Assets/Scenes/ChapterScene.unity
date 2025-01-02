@@ -400,6 +400,7 @@ MonoBehaviour:
   _coinTxt: {fileID: 48463035}
   _backButton: {fileID: 2056273938}
   _recreateCountObject: {fileID: 1098756912}
+  _recreateInfoText: {fileID: 1589191526}
   _recreateCountText: {fileID: 1807072845}
   _recreateButton: {fileID: 1409055176}
 --- !u!1 &155891629
@@ -3053,7 +3054,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8dfa06d45b2e92b4a91f222439721388, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 58b1a2c10bf0a144689ed8b6fb54fd0b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4797,7 +4798,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b8e70b175e2f7ee4699627599e7cf551, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 771148d2e8a69ac418872acb71a74105, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

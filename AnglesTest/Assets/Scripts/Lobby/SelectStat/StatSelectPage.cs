@@ -18,9 +18,6 @@ public struct StatData
     }
 
     [JsonProperty] int _maxLevel;
-
-    const string replaceString = "(R)";
-
     [JsonProperty] List<int> _cost;
     [JsonIgnore] public int MaxLevel { get => _maxLevel; }
 
@@ -30,20 +27,9 @@ public struct StatData
         return _cost[level]; 
     }
 
-    public string GetDescription(int level, float ratio, string txt) 
+    public string GetDescription(string description) 
     {
-        txt = txt.Replace(replaceString, (ratio * 100).ToString());
-
-        if (level == 0) return string.Empty;
-        return txt; // 하나씩 앞선 값을 전달
-    }
-
-    public string GetDescription(int level, int value, string txt)
-    {
-        txt = txt.Replace(replaceString, value.ToString());
-
-        if (level == 0) return string.Empty;
-        return txt; // 하나씩 앞선 값을 전달
+        return description; // 하나씩 앞선 값을 전달
     }
 
     public StatData(int maxLevel, List<int> cost)
@@ -77,7 +63,7 @@ public class StatSelectPage : MonoBehaviour
     StatInfoController _statInfoController;
 
     StatData.Key _selectedStatKey;
-    Action<PopUpViewer.State> ActivatePopUp;
+    Action<string> ActivatePopUp;
 
     LobbyTopModel _lobbyTopModel;
 
@@ -85,7 +71,7 @@ public class StatSelectPage : MonoBehaviour
         Dictionary<StatData.Key, Sprite> statSprite,
         Dictionary<StatData.Key, StatData> statData,
         BaseFactory viewerFactory,
-        Action<PopUpViewer.State> ActivatePopUp,
+        Action<string> ActivatePopUp,
         LobbyTopModel lobbyTopModel)
     {
         _statViewers = new List<BaseViewer>();
@@ -95,6 +81,8 @@ public class StatSelectPage : MonoBehaviour
         this.ActivatePopUp = ActivatePopUp;
         _lobbyTopModel = lobbyTopModel;
 
+
+        _upgradeBtn.GetComponentInChildren<TMP_Text>().text = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Upgrade);
         _upgradeBtn.onClick.AddListener(() => { OnClickUpgrade(); });
         _statInfoController = new StatInfoController(new StatInfoModel(_statInfoViewer));
 
@@ -126,14 +114,16 @@ public class StatSelectPage : MonoBehaviour
         bool canUpgrade = saveData._gold >= currentCost;
         if(canUpgrade == false)
         {
-            ActivatePopUp?.Invoke(PopUpViewer.State.ShortOfGold);
+            string outOfGold = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.OutOfGold);
+            ActivatePopUp?.Invoke(outOfGold);
             return;
         }
 
         bool nowMaxUpgrade = currentStatLevel == maxStatLevel;
         if (nowMaxUpgrade == true)
         {
-            ActivatePopUp?.Invoke(PopUpViewer.State.NowMaxUpgrade);
+            string maximumUpgradeStatus = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.MaximumUpgradeStatus);
+            ActivatePopUp?.Invoke(maximumUpgradeStatus);
             return;
         }
 
@@ -143,11 +133,12 @@ public class StatSelectPage : MonoBehaviour
         saveable.ChangeStat(_selectedStatKey, nextLevel); // 스텟을 적용시켜준다.
 
 
-        //_statInfoController.UpdateStat(
-        //    nextLevel,
-        //    statData.GetCost(nextLevel),
-        //    statData.GetDescription(nextLevel)
-        //);
+        string statDescription = ServiceLocater.ReturnLocalizationHandler().GetWord($"{_selectedStatKey.ToString()}Description{nextLevel}");
+        _statInfoController.UpdateStat(
+            nextLevel,
+            statData.GetCost(nextLevel),
+            statData.GetDescription(statDescription)
+        );
     }
 
     void OnClickViewer(StatData.Key key)
@@ -157,14 +148,19 @@ public class StatSelectPage : MonoBehaviour
         int currentStatLevel = saveData._statInfos[key]._currentLevel;
 
         StatData statData = _statData[key];
+        
+
+        string nameDescription = ServiceLocater.ReturnLocalizationHandler().GetWord($"{key.ToString()}Name");
+        string statDescription = ServiceLocater.ReturnLocalizationHandler().GetWord($"{key.ToString()}Description{currentStatLevel}");
 
         _selectedStatKey = key;
-        //_statInfoController.UpdateStat(
-        //    _statSprite[key], 
-        //    _statData[key].Name,
-        //    currentStatLevel,
-        //    statData.GetCost(currentStatLevel),
-        //    statData.GetDescription(currentStatLevel)
-        //);
+        _statInfoController.UpdateStat(
+            _statSprite[key],
+
+            nameDescription, //_statData[key].Name,
+            currentStatLevel,
+            statData.GetCost(currentStatLevel),
+            statData.GetDescription(statDescription)
+        );
     }
 }

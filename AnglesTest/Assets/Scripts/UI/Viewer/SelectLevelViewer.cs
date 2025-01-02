@@ -68,12 +68,14 @@ public class SelectLevelViewer : MonoBehaviour
 
     public void ChangeChapterStageProgress(int level)
     {
-        _levelTxt.text = $"스테이지 수 : {level}";
+        string stageCount = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.StageCount);
+        _levelTxt.text = $"{stageCount} : {level}";
     }
 
     public void ChangeSurvivalStageProgress(int survivalTime)
     {
-        _levelTxt.text = $"생존 시간 : {survivalTime / 60}:{(survivalTime % 60).ToString("D2")}";
+        string surviveTime = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.SurvivalTime);
+        _levelTxt.text = $"{surviveTime} : {survivalTime / 60}:{(survivalTime % 60).ToString("D2")}";
     }
 
     public void ChangeInfo(string info)
