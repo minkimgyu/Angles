@@ -76,7 +76,7 @@ public class LocalizationBuilder : MonoBehaviour
 
 
 
-                    { ILocalization.Key.NormalSkinName, "Default" },
+                    { ILocalization.Key.NormalSkinName, "Orb" },
                     { ILocalization.Key.BloodEaterSkinName, "Blood Eater" },
                     { ILocalization.Key.GuardSkinName, "Guard" },
 
@@ -208,7 +208,7 @@ public class LocalizationBuilder : MonoBehaviour
 
 
 
-                    { ILocalization.Key.NormalSkinName, "기본" },
+                    { ILocalization.Key.NormalSkinName, "구체" },
                     { ILocalization.Key.BloodEaterSkinName, "블러드 이터" },
                     { ILocalization.Key.GuardSkinName, "가드" },
 

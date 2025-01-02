@@ -9,13 +9,26 @@ public class StartMenuController : MonoBehaviour
 {
     [SerializeField] Button _startButton;
     [SerializeField] Button _exitButton;
+
     [SerializeField] Button _languageButton;
+    [SerializeField] Button _instructionButton;
+
+    [SerializeField] GameObject _instructionKOR;
+    [SerializeField] GameObject _instructionENG;
+
+    bool _showInstruction = false;
 
     // Start is called before the first frame update
     void Start()
     {
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
+        _instructionButton.onClick.AddListener(ActivateInstruction);
+
+        _showInstruction = false;
+        _instructionKOR.SetActive(false);
+        _instructionENG.SetActive(false);
+
 
         SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
         _languageButton.GetComponentInChildren<TMP_Text>().text = (saveData._language.ToString()).Substring(0, 3);
@@ -27,6 +40,32 @@ public class StartMenuController : MonoBehaviour
 
         string endWord = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.End);
         _exitButton.GetComponentInChildren<TMP_Text>().text = endWord;
+    }
+
+    void ActivateInstruction()
+    {
+        _showInstruction = !_showInstruction;
+
+        if(_showInstruction == true)
+        {
+            SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
+            switch (saveData._language)
+            {
+                case ILocalization.Language.English:
+                    _instructionENG.SetActive(true);
+                    _instructionKOR.SetActive(false);
+                    break;
+                case ILocalization.Language.Korean:
+                    _instructionKOR.SetActive(true);
+                    _instructionENG.SetActive(false);
+                    break;
+            }
+        }
+        else
+        {
+            _instructionENG.SetActive(false);
+            _instructionKOR.SetActive(false);
+        }
     }
 
     void ChangeLocalization()

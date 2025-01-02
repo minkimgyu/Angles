@@ -42,6 +42,11 @@ public class MultipleShockwave : BaseSkill
 
                 _waveSize = _originWaveSize;
                 _delayTimer.Start(_data.Delay);
+
+                CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
+                if (castingComponent == null) return;
+                castingComponent.CastSkill(_data.Delay);
+
                 break;
             case Timer.State.Finish:
 

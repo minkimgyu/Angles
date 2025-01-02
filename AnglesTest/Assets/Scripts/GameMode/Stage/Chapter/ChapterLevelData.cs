@@ -10,8 +10,8 @@ public struct ChapterLevelData : ILevelData
     [JsonProperty] MobStageData[] mobStageData;
     [JsonProperty] BossStageData bossStageData;
 
-    public MobStageData[] MobStageDatas { get { return mobStageData; } }
-    public BossStageData BossStageData { get { return bossStageData; } }
+    [JsonIgnore] public MobStageData[] MobStageDatas { get { return mobStageData; } }
+    [JsonIgnore] public BossStageData BossStageData { get { return bossStageData; } }
 
     public ChapterLevelData(MobStageData[] mobStageData, BossStageData bossStageData)
     {
