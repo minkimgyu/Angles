@@ -1,0 +1,69 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using Newtonsoft.Json;
+
+[System.Serializable]
+public class RectangleData : EnemyData
+{
+    [JsonProperty] private float _moveSpeed;
+
+    public RectangleData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, 
+        float moveSpeed) : base(maxHp, targetType, size, skillDataToAdd)
+    {
+        _moveSpeed = moveSpeed;
+        _skillData = skillDataToAdd;
+    }
+
+    [JsonIgnore] public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
+
+    public override LifeData Copy()
+    {
+        return new RectangleData(
+            _maxHp, // EnemyData에서 상속된 값
+            _targetType, // EnemyData에서 상속된 값
+            _size, // EnemyData에서 상속된 값
+            new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
+            _moveSpeed // TriangleData 고유 값
+        );
+    }
+}
+
+public class RectangleCreater : LifeCreater
+{
+    BaseFactory _skillFactory;
+    DropData _dropData;
+
+    public RectangleCreater(BaseLife lifePrefab, LifeData lifeData, DropData dropData, BaseFactory effectFactory,
+        BaseFactory skillFactory) : base(lifePrefab, lifeData, effectFactory)
+    {
+        _skillFactory = skillFactory;
+        _dropData = dropData;
+    }
+
+    public override BaseLife Create()
+    {
+        BaseLife life = UnityEngine.Object.Instantiate(_lifePrefab);
+        if (life == null) return null;
+
+        RectangleData data = CopyLifeData as RectangleData;
+
+        life.ResetData(data, _dropData);
+        life.AddEffectFactory(_effectFactory);
+
+        life.Initialize();
+
+        ICaster caster = life.GetComponent<ICaster>();
+        if (caster == null) return life;
+
+        foreach (var item in data.SkillData)
+        {
+            BaseSkill skill = _skillFactory.Create(item.Key);
+            skill.Upgrade(item.Value);
+            caster.AddSkill(item.Key, skill);
+        }
+
+        return life;
+    }
+}

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: LevelIcons
+  m_EditorClassIdentifier: 
+  m_GroupName: LevelIcons
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 16c06a5f13dde8742b22d9c04a27c193
+  m_SerializeEntries:
+  - m_GUID: 73dc02e17592b584c9b37fd819d38365
+    m_Address: TriconChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 152e9fec6b8684348b8be16b800db135
+    m_Address: RhombusChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5b6a85645e07f641b956072d1299324
+    m_Address: PentagonicChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0313be497e0e34448a1428b54a265507
+    m_Address: CubeSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37cbf635358bcef4c9f2f8b526d4fb9b
+    m_Address: PyramidSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e92ca3b4df949b842b0ed0e35e02e3b5
+    m_Address: PrismSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a216bae430657340bbb9289b4c0404f
+    m_Address: HexahornChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fea9fe4c5beb2345b0b34ab42318900
+    m_Address: OctaviaChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c4ee001a26a1f214ba78a278b6aee500, type: 2}
+    - {fileID: 11400000, guid: 7a8cf8a29296a1541b46a7d025dfb256, type: 2}

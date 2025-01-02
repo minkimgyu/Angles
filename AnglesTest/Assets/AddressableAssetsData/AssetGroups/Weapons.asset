@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Weapons
+  m_EditorClassIdentifier: 
+  m_GroupName: Weapons
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 7a0117a25ff08b941b3a498b0730a335
+  m_SerializeEntries:
+  - m_GUID: 16ee59aa17ab7224ba10bb8fee974fdc
+    m_Address: Blackhole
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33e80fa5cc729a64ba651b0148215156
+    m_Address: ShooterBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fed9c54dc1558946a775e52081ec8bb
+    m_Address: Blade
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ea00d2913466164da18694d92bc9d6e
+    m_Address: Rocket
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 601aa820652874740ae7c05acf8ba044
+    m_Address: RocketShooter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2360825c86028d542a247f1d8e5f91e9
+    m_Address: StickyBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f4424c944b01a844a914f72eab70ab7
+    m_Address: RifleShooter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e91d9f0294bd7a049a6638a29e415942
+    m_Address: PentagonBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60abd225cc06e2a42965615887a298d7
+    m_Address: PentagonicBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b44a62f7dcb844a458a84887106d151b
+    m_Address: HexahornBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3a5ea4b47f298d44b8834f267925a145, type: 2}
+    - {fileID: 11400000, guid: 715071079081c584daec4d5fae7333fa, type: 2}

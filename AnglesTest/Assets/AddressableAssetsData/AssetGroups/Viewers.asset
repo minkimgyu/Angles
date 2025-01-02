@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Viewers
+  m_EditorClassIdentifier: 
+  m_GroupName: Viewers
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 28fbb60a17aa4d2468d782efe65b9726
+  m_SerializeEntries:
+  - m_GUID: 011c230bd72160740b33edb99f06acfa
+    m_Address: CardViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3fa873e41136e948bf23a458acdc7be
+    m_Address: DirectionViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 709f4a50fec51d14ab639527e81f42c4
+    m_Address: HpViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2d8b64b2ec1ce44ba300a31db9f8810
+    m_Address: SkillViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a329efbca842b840991aaa089022f80
+    m_Address: DashViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c01d092753d55744b977a9e005e2b397
+    m_Address: CostCardViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd819c3c388ac4f488bc615a8a1211c9
+    m_Address: ChapterSelectViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c1e41ee3c208904f9407ca2957dce22
+    m_Address: StatViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6218a6ec00cd6fc448188549b7a3e3f0
+    m_Address: SkinViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 295981441d381b14c90fe2740ba2c694
+    m_Address: ArrowPointViewer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Viewer
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 81a1a3e58438fc84d9317cac7ff704b7, type: 2}
+    - {fileID: 11400000, guid: c5abbb283ac56b04d9b58255a04ddb93, type: 2}

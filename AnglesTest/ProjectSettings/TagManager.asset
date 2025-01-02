@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - FxTemporaire
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Obstacle
+  - ObstacleReflecter
+  - SoftProjectile
+  - HardProjectile
+  - Target
+  - Capture
+  - Interactable
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 4038780579
+    locked: 0
+  - name: Wall
+    uniqueID: 2032719605
+    locked: 0
+  - name: Life
+    uniqueID: 874387957
+    locked: 0
+  - name: Object
+    uniqueID: 2547430937
+    locked: 0
+  - name: Effect
+    uniqueID: 2985369123
+    locked: 0

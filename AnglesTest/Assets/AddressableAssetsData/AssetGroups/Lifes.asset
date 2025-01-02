@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Lifes
+  m_EditorClassIdentifier: 
+  m_GroupName: Lifes
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 00fe82094d093fb4d8ccd43db00be14a
+  m_SerializeEntries:
+  - m_GUID: d7289f882fc83f946be6050bd74c14ef
+    m_Address: YellowHexagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91fa891cad381e64c9e124974272bb14
+    m_Address: YellowPentagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95c590e6357abb644878db3cd491202a
+    m_Address: Player
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64c4a42177d7053479744aae0be7024c
+    m_Address: YellowRectangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ff553da843831f488f7e19cfe10eb50
+    m_Address: YellowTriangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41ef8837e7663a84a816866fa10712da
+    m_Address: RedHexagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebc4e8ae91c2e494a9f660bae665a569
+    m_Address: RedPentagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f123eb899eea08141984acd7296a770d
+    m_Address: RedRectangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6efae61b61e78b442a3d09662ef20fb6
+    m_Address: RedTriangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 503470cabadce5e42b56de53775c4433
+    m_Address: Rhombus
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 01c8ee4dfffdfae4cb461f7eca029109
+    m_Address: Tricon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76f34f42b08b5884c92ddb44db464e78
+    m_Address: Pentagonic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 353ac6a2edbb98c438dada79aa235c55
+    m_Address: OperaHexagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2f7ac7615cd5a8449dba53ae44ccb7a
+    m_Address: OperaPentagon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fecfba9ae4d5bd04ba23b7a23a864eb5
+    m_Address: OperaRectangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0c0cf541d4dcd040a99564a2276ce13
+    m_Address: OperaTriangle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f3f63c21251e8d4a91cdc52d09ae8fe
+    m_Address: Hexahorn
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 126c2ff5723feba4d9053c08c5cdac42
+    m_Address: Octavia
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Life
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 724f5979e5bf211458adf6835bfa3e7c, type: 2}
+    - {fileID: 11400000, guid: 5dd3d63a5c1043e48aa994a3b8c2aec1, type: 2}
