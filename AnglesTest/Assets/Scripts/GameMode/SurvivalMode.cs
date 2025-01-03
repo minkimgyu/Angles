@@ -44,7 +44,7 @@ public class SurvivalMode : GameMode
 
         int passedTime = (int)_stopwatchTimer.Duration;
         SaveData data = ServiceLocater.ReturnSaveManager().GetSaveData();
-        ServiceLocater.ReturnSaveManager().ChangeLevelDuration(Type.Chapter, data._selectedLevel[Type.Chapter], passedTime);
+        ServiceLocater.ReturnSaveManager().ChangeLevelDuration(data._selectedLevel[Type.Survival], passedTime);
     }
 
     bool _canUnlock;

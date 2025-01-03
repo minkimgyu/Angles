@@ -31,6 +31,8 @@ public class SpawnStickyBomb : BaseSkill
         ITarget target = targetObject.GetComponent<ITarget>();
         if (target == null) return;
 
+        Vector3 targetPos = target.GetPosition();
+
         bool isTarget = target.IsTarget(_data.TargetTypes);
         if (isTarget == false) return;
 
@@ -59,6 +61,7 @@ public class SpawnStickyBomb : BaseSkill
 
         weapon.ModifyData(modifiers);
         weapon.Activate();
+        weapon.ResetPosition(targetPos);
         weapon.ResetFollower(followable);
     }
 }

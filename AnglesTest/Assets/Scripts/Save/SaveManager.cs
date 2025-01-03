@@ -24,8 +24,8 @@ public interface ISaveable
 
     void ChangeStat(StatData.Key name, int level);
 
-    void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel);
-    void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration);
+    void ChangeLevelProgress(GameMode.Level level, int completeLevel);
+    void ChangeLevelDuration(GameMode.Level level, int completeDuration);
     void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level);
 
     /// <summary>
@@ -65,8 +65,8 @@ public class NULLSaveManager : ISaveable
 
     public void ClearSave() { }
 
-    public void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel) { }
-    public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration) { }
+    public void ChangeLevelProgress(GameMode.Level level, int completeLevel) { }
+    public void ChangeLevelDuration(GameMode.Level level, int completeDuration) { }
     public void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level) { }
 
     public void ChangeLanguage(ILocalization.Language language) { }
@@ -217,10 +217,8 @@ public class SaveManager : ISaveable
         Save();
     }
 
-    public void ChangeLevelProgress(GameMode.Type type, GameMode.Level level, int completeLevel)
+    public void ChangeLevelProgress(GameMode.Level level, int completeLevel)
     {
-        GameMode.GetLevels(type);
-
         ISavableLevelInfo savableChapterInfo = _saveData._levelInfos[level];
         savableChapterInfo.CompleteLevel = completeLevel;
 
@@ -228,7 +226,7 @@ public class SaveManager : ISaveable
         Save();
     }
 
-    public void ChangeLevelDuration(GameMode.Type type, GameMode.Level level, int completeDuration)
+    public void ChangeLevelDuration(GameMode.Level level, int completeDuration)
     {
         ISavableLevelInfo savableChapterInfo = _saveData._levelInfos[level];
         savableChapterInfo.CompleteDuration = completeDuration;

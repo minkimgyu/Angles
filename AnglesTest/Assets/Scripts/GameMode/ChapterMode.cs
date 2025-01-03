@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
+using static GameMode;
 
 public class ChapterMode : GameMode
 {
@@ -29,6 +30,11 @@ public class ChapterMode : GameMode
         Initialize();
     }
 
+    private void Update()
+    {
+        _stopwatchTimer.OnUpdate();
+    }
+
     void OnEnd()
     {
         int coinCount = GameStateManager.Instance.ReturnCoin();
@@ -36,7 +42,7 @@ public class ChapterMode : GameMode
 
         SaveData data = ServiceLocater.ReturnSaveManager().GetSaveData();
         int stageCount = _stageController.ReturnCurrentStageCount();
-        ServiceLocater.ReturnSaveManager().ChangeLevelProgress(Type.Chapter, data._selectedLevel[Type.Chapter], stageCount);
+        ServiceLocater.ReturnSaveManager().ChangeLevelProgress(data._selectedLevel[Type.Chapter], stageCount);
     }
 
     bool _canUnlock;
