@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 public interface ISaveable
 {
@@ -19,6 +20,7 @@ public interface ISaveable
 
     void ChangeLanguage(ILocalization.Language language);
 
+    void ChangeType(GameMode.Type type);
     void ChangeSkin(SkinData.Key name);
     void UnlockSkin(SkinData.Key name);
 
@@ -26,7 +28,7 @@ public interface ISaveable
 
     void ChangeLevelProgress(GameMode.Level level, int completeLevel);
     void ChangeLevelDuration(GameMode.Level level, int completeDuration);
-    void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level);
+    void ChangeCurrentLevel(GameMode.Level level);
 
     /// <summary>
     /// 코인을 추가한다.
@@ -54,8 +56,10 @@ public class NULLSaveManager : ISaveable
     public void ChangeCoinCount(int cointCount) { }
 
     public void UnlockLevel(GameMode.Type type, GameMode.Level level) { }
-    public void ChangeStat(StatData.Key name, int level) { }
+    public void ChangeType(GameMode.Type type) { }
 
+
+    public void ChangeStat(StatData.Key name, int level) { }
     public void ChangeSkin(SkinData.Key name) { }
     public void UnlockSkin(SkinData.Key name) { }
 
@@ -67,7 +71,7 @@ public class NULLSaveManager : ISaveable
 
     public void ChangeLevelProgress(GameMode.Level level, int completeLevel) { }
     public void ChangeLevelDuration(GameMode.Level level, int completeDuration) { }
-    public void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level) { }
+    public void ChangeCurrentLevel(GameMode.Level level) { }
 
     public void ChangeLanguage(ILocalization.Language language) { }
 }
@@ -78,9 +82,12 @@ public struct SaveData
     public bool _muteSFX;
 
     [JsonConverter(typeof(StringEnumConverter))] public ILocalization.Language _language;
+    [JsonConverter(typeof(StringEnumConverter))] public GameMode.Type _selectedType;
 
     public int _gold; // 골드
-    public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 선택된 스테이지 정보
+
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+    public Dictionary<GameMode.Type, GameMode.Level> _selectedLevel; // 타입별 선택된 스테이지 정보
 
     [JsonConverter(typeof(StringEnumConverter))] public SkinData.Key _skin;
     public Dictionary<GameMode.Level, ISavableLevelInfo> _levelInfos; // 레벨 정보
@@ -98,6 +105,7 @@ public struct SaveData
         _muteSFX = muteSFX;
         _gold = gold;
 
+        _selectedType = GameMode.Type.Chapter;
         _language = ILocalization.Language.Korean;
 
         _selectedLevel = new Dictionary<GameMode.Type, GameMode.Level>();
@@ -139,9 +147,19 @@ public struct SaveData
     // Json 데이터 업데이트
     public void Update()
     {
-        _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
-        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
+        // 만약 Chapter 키에 담긴 레벨이 없다면 진행
+        if (_selectedLevel.ContainsKey(GameMode.Type.Chapter) == false)
+        {
+            _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
+        }
 
+        // 만약 Survival 키에 담긴 레벨이 없다면 진행
+        if (_selectedLevel.ContainsKey(GameMode.Type.Survival) == false)
+        {
+            _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
+        }
+
+        // 새로 추가된 데이터를 기본 데이터로 추가해준다.
         List<GameMode.Level> chapterLevels = GameMode.GetLevels(GameMode.Type.Chapter);
         for (int i = 0; i < chapterLevels.Count; i++)
         {
@@ -235,8 +253,9 @@ public class SaveManager : ISaveable
         Save();
     }
 
-    public void ChangeCurrentLevel(GameMode.Type type, GameMode.Level level)
+    public void ChangeCurrentLevel(GameMode.Level level)
     {
+        GameMode.Type type = GameMode.GetLevelType(level);
         _saveData._selectedLevel[type] = level;
         Save();
     }
@@ -250,6 +269,12 @@ public class SaveManager : ISaveable
     public void ChangeCoinCount(int cointCount) 
     {
         _saveData._gold = cointCount;
+        Save();
+    }
+
+    public void ChangeType(GameMode.Type type)
+    {
+        _saveData._selectedType = type;
         Save();
     }
 
@@ -279,6 +304,7 @@ public class SaveManager : ISaveable
 
     public void Load()
     {
+        // 파일이 존재하지 않는다면
         if (!File.Exists(_filePath))
         {
             _saveData = _defaultSaveData;

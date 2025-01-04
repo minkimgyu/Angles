@@ -10,6 +10,19 @@ abstract public class GameMode : MonoBehaviour
         Survival
     }
 
+    public static Type GetLevelType(Level level)
+    {
+        foreach (Type type in System.Enum.GetValues(typeof(Type)))
+        {
+            if (level.ToString().Contains(type.ToString()))
+            {
+                return type;
+            }
+        }
+
+        return default;
+    }
+
     public static int GetLevelCount(Type type)
     {
         int count = 0;

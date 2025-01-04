@@ -55,10 +55,10 @@ public class LobbyController : MonoBehaviour
         _lobbyTopModel.GoldCount = saveData._gold;
 
         LobbyViewerFactory lobbyViewerFactory = new LobbyViewerFactory(addressableHandler.ViewerPrefabAsset);
-        Dictionary<GameMode.Level, LevelData> typeDatas = GetLevelDatas(addressableHandler, saveData);
+        Dictionary<GameMode.Level, LevelData> levelDatas = GetLevelDatas(addressableHandler, saveData);
 
         _chapterLevelSelectPage.Initialize(
-            typeDatas,
+            levelDatas,
             lobbyViewerFactory
         );
 

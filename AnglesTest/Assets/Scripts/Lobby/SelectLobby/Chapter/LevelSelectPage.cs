@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
+using static GameMode;
 
 public class LevelSelectPage : MonoBehaviour
 {
@@ -22,11 +23,10 @@ public class LevelSelectPage : MonoBehaviour
 
     Dictionary<GameMode.Level, LevelData> _levelDatas;
 
-    // 매뉴 UI 정보 보여주기
+    // 레벨을 바꾼 경우
     void SelectLevel(GameMode.Level level)
     {
-        ServiceLocater.ReturnSaveManager().ChangeCurrentLevel(_levelType, level);
-
+        ServiceLocater.ReturnSaveManager().ChangeCurrentLevel(level); // 선택된 레벨로 변경
         string title = ServiceLocater.ReturnLocalizationHandler().GetWord($"{level}Name");
 
         _playChapterModel.Title = title;
@@ -43,8 +43,10 @@ public class LevelSelectPage : MonoBehaviour
     void OnChangeGameModeType()
     {
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
+        saveable.ChangeType(_levelType);
+
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
-        SelectLevel(saveData._selectedLevel[_levelType]);
+        SelectLevel(saveData._selectedLevel[_levelType]); // 현재 선택된 레벨 변경
     }
 
     public void Initialize(
@@ -81,9 +83,8 @@ public class LevelSelectPage : MonoBehaviour
             }
         );
 
-        _levelType = GameMode.Type.Chapter;
-        _survivalToggle.isOn = false;
-        _chapterToggle.isOn = true;
+        _levelType = saveData._selectedType; // 선택된 게임 타입
+        SelectLevel(saveData._selectedLevel[_levelType]);
 
         _selectChapterController.Initialize(
             levelDatas,
