@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEditor.PackageManager;
 
 public class StartMenuController : MonoBehaviour
 {
@@ -16,11 +17,21 @@ public class StartMenuController : MonoBehaviour
     [SerializeField] GameObject _instructionKOR;
     [SerializeField] GameObject _instructionENG;
 
+    [SerializeField] TMP_Text _versionInfo;
+
     bool _showInstruction = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+   
+    void Initialize()
+    {
+        // 버전 정보 갱신
+        _versionInfo.text = $"ver {Application.version}";
+
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
         _instructionButton.onClick.AddListener(ActivateInstruction);
@@ -41,6 +52,7 @@ public class StartMenuController : MonoBehaviour
         string endWord = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.End);
         _exitButton.GetComponentInChildren<TMP_Text>().text = endWord;
     }
+
 
     void ActivateInstruction()
     {

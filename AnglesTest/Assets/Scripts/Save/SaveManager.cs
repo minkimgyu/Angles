@@ -10,71 +10,58 @@ using System.Runtime.InteropServices;
 
 public interface ISaveable
 {
-    void Save();
-    void ClearSave();
+    virtual bool VerifyJson(string json) { return false; }
+    virtual bool VerifyJson(string json, out SaveData saveData) { saveData = default; return default; }
 
-    void Load();
+    virtual bool HaveSaveFile() { return false; }
 
-    void ChangeBGMMute(bool nowMute);
-    void ChangeSFXMute(bool nowMute);
+    virtual void Save(string saveJson) { }
+    virtual void Save() { }
+    virtual void ClearSave() { }
 
-    void ChangeLanguage(ILocalization.Language language);
+    virtual void Load() { }
 
-    void ChangeType(GameMode.Type type);
-    void ChangeSkin(SkinData.Key name);
-    void UnlockSkin(SkinData.Key name);
+    virtual void ChangeBGMMute(bool nowMute) { }
+    virtual void ChangeSFXMute(bool nowMute) { }
 
-    void ChangeStat(StatData.Key name, int level);
+    virtual void ChangeLanguage(ILocalization.Language language) { }
 
-    void ChangeLevelProgress(GameMode.Level level, int completeLevel);
-    void ChangeLevelDuration(GameMode.Level level, int completeDuration);
-    void ChangeCurrentLevel(GameMode.Level level);
+    virtual void ChangeType(GameMode.Type type) { }
+    virtual void ChangeSkin(SkinData.Key name) { }
+    virtual void UnlockSkin(SkinData.Key name) { }
+
+    virtual void ChangeStat(StatData.Key name, int level) { }
+
+    virtual void ChangeLevelProgress(GameMode.Level level, int completeLevel) { }
+    virtual void ChangeLevelDuration(GameMode.Level level, int completeDuration) { }
+    virtual void ChangeCurrentLevel(GameMode.Level level) { }
 
     /// <summary>
     /// 코인을 추가한다.
     /// </summary>
-    void AddCoinCount(int cointCount);
+    virtual void AddCoinCount(int cointCount) { }
 
     /// <summary>
     /// 코인 개수를 대입해준다.
     /// </summary>
-    void ChangeCoinCount(int cointCount);
+    virtual void ChangeCoinCount(int cointCount) { }
 
-    void UnlockLevel(GameMode.Type type, GameMode.Level level);
-    SaveData GetSaveData() { return default; }
+    virtual void UnlockLevel(GameMode.Type type, GameMode.Level level) { }
+
+    /// <summary>
+    /// 세이브 데이터 가져오기
+    /// </summary>
+    /// <returns></returns>
+    virtual SaveData GetSaveData() { return default; }
+
+    /// <summary>
+    /// 세이브 Json 데이터 가져오기
+    /// </summary>
+    /// <returns></returns>
+    virtual string GetSaveJsonData() { return default; }
 }
 
-public class NULLSaveManager : ISaveable
-{
-    public void Load() { }
-    public void Save() { }
-    public SaveData GetSaveData() { return default; }
-
-
-
-    public void AddCoinCount(int cointCount) { }
-    public void ChangeCoinCount(int cointCount) { }
-
-    public void UnlockLevel(GameMode.Type type, GameMode.Level level) { }
-    public void ChangeType(GameMode.Type type) { }
-
-
-    public void ChangeStat(StatData.Key name, int level) { }
-    public void ChangeSkin(SkinData.Key name) { }
-    public void UnlockSkin(SkinData.Key name) { }
-
-
-    public void ChangeBGMMute(bool nowMute) { }
-    public void ChangeSFXMute(bool nowMute) { }
-
-    public void ClearSave() { }
-
-    public void ChangeLevelProgress(GameMode.Level level, int completeLevel) { }
-    public void ChangeLevelDuration(GameMode.Level level, int completeDuration) { }
-    public void ChangeCurrentLevel(GameMode.Level level) { }
-
-    public void ChangeLanguage(ILocalization.Language language) { }
-}
+public class NULLSaveManager : ISaveable { }
 
 public struct SaveData
 {
@@ -168,6 +155,7 @@ public struct SaveData
             _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
         }
 
+        // 새로 추가된 데이터를 기본 데이터로 추가해준다.
         List<GameMode.Level> survivalLevels = GameMode.GetLevels(GameMode.Type.Survival);
         for (int i = 0; i < survivalLevels.Count; i++)
         {
@@ -176,11 +164,13 @@ public struct SaveData
             _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
         }
 
+        // 새로 추가된 데이터를 기본 데이터로 추가해준다.
         foreach (StatData.Key key in Enum.GetValues(typeof(StatData.Key)))
         {
             if(_statInfos.ContainsKey(key) == false) _statInfos.Add(key, new SavableStatData(0));
         }
 
+        // 새로 추가된 데이터를 기본 데이터로 추가해준다.
         foreach (SkinData.Key key in Enum.GetValues(typeof(SkinData.Key)))
         {
             if (_skinInfos.ContainsKey(key) == false) _skinInfos.Add(key, new SavableSkinData(false));
@@ -278,7 +268,7 @@ public class SaveManager : ISaveable
         Save();
     }
 
-    public void UnlockLevel(GameMode.Type type, GameMode.Level level) 
+    public void UnlockLevel(GameMode.Level level) 
     {
         ISavableLevelInfo savableChapterInfo = _saveData._levelInfos[level];
         savableChapterInfo.NowUnlock = true;
@@ -294,7 +284,7 @@ public class SaveManager : ISaveable
 
     public void ClearSave() 
     {
-        if (File.Exists(_filePath))
+        if (HaveSaveFile())
         {
             _saveData = _defaultSaveData;
             Save();
@@ -302,30 +292,102 @@ public class SaveManager : ISaveable
         }
     }
 
+    public string GetSaveJsonData()
+    {
+        // 파일이 존재하지 않는다면
+        if (!HaveSaveFile())
+        {
+            _saveData = _defaultSaveData;
+            Save(); // 세이브 파일을 만들어주고 저장한다.
+        }
+
+        // 저장된 파일을 불러서 리턴한다.
+        string json = File.ReadAllText(_filePath);
+        return json;
+    }
+
+
+    /// <summary>
+    /// GPGS용 데이터 검증
+    /// 만약 서버에서 받은 데이터가 고장난 경우 기존 데이터를 삭제하지 않고
+    /// 그대로 사용
+    /// </summary>
+
+    public bool VerifyJson(string json)
+    {
+        // 불러오는 중 오류가 있다면 더 이상 진행하지 않음
+        try
+        {
+            SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e);
+            return false; // 유효하지 않음
+        }
+
+        return true; // 유효함
+    }
+
+
+    public bool VerifyJson(string json, out SaveData saveData)
+    {
+        // 불러오는 중 오류가 있다면 더 이상 진행하지 않음
+        try
+        {
+            saveData = _parser.JsonToObject<SaveData>(json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e);
+            saveData = default;
+            return false; // 유효하지 않음
+        }
+
+        return true; // 유효함
+    }
+
+    public bool HaveSaveFile()
+    {
+        return File.Exists(_filePath);
+    }
+
     public void Load()
     {
         // 파일이 존재하지 않는다면
-        if (!File.Exists(_filePath))
+        if (!HaveSaveFile())
         {
-            _saveData = _defaultSaveData;
+            _saveData = _defaultSaveData; // 기본 세이브로 대체해준다.
             Save();
             return;
         }
 
         string json = File.ReadAllText(_filePath);
 
-        // 불러오는 중 오류가 있다면 기본 세이브로 바꾸고 다시 저장
-        try
+        SaveData newSaveData;
+        bool nowValidate = VerifyJson(json, out newSaveData);
+
+        if(nowValidate == true)
         {
-            _saveData = _parser.JsonToObject<SaveData>(json);
-            _saveData.Update(); // 저장한 데이터를 로드할 때 업데이트 필요
+            _saveData = newSaveData; // 유효하다면 해당 데이터를 사용한다.
+            _saveData.Update(); // 기존 데이터를 업데이트 해준다.
         }
-        catch (System.Exception e)
+        else
         {
-            Debug.Log(e);
-            _saveData = _defaultSaveData; // 기본적으로 업데이트 되어있음
+            _saveData = _defaultSaveData; // 기본 데이터로 대체한다.
             Save();
         }
+    }
+
+    /// <summary>
+    /// GPGS용 세이브
+    /// </summary>
+    public void Save(string saveJson)
+    {
+        bool nowValidate = VerifyJson(saveJson);
+        if (nowValidate == false) return; // 유효하지 않다면 저장하지 않음
+
+        File.WriteAllText(_filePath, saveJson);
     }
 
     public void Save()
