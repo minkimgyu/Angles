@@ -82,8 +82,6 @@ public class PlayerSpawner
         ApplySkin(player);
         ApplyStat(player);
 
-        EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.SetPlayerInvincible, new SetPlayerInvincibleCommand(() => player.SetInvincible()));
-
         _inputController.Initialize();
         if (_inputController != null)
         {

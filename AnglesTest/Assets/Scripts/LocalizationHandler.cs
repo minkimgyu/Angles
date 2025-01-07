@@ -45,6 +45,7 @@ public interface ILocalization
 
         RecordTime,
         TabToContinue,
+        TabToRevive,
 
         LeftCount,
         PickAgain,

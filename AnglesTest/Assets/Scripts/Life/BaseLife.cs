@@ -55,7 +55,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     {
         Normal, // 일반
         Immunity, // 데미지 면역
-        Invincible, // 무적
         Groggy, // 기절
     }
 
@@ -115,9 +114,10 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         else _aliveState = AliveState.Normal;
     }
 
-    public virtual void SetInvincible()
+    protected virtual void Revive() 
     {
-        _aliveState = AliveState.Invincible;
+        _aliveState = AliveState.Normal;
+        GetHeal(_lifeData.MaxHp);
     }
 
     protected virtual void OnDie()
@@ -126,7 +126,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         effect.ResetPosition(transform.position);
         effect.Play();
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     public virtual void GetHeal(float point)
@@ -175,7 +175,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void GetDamage(DamageableData damageableData)
     {
-        if (_lifeState == LifeState.Alive && (_aliveState == AliveState.Immunity || _aliveState == AliveState.Invincible)) return; // 면역 상태거나 무적 상태의 경우 리턴
+        if (_lifeState == LifeState.Alive && _aliveState == AliveState.Immunity) return; // 면역 상태거나 무적 상태의 경우 리턴
         if (_lifeState == LifeState.Die) return;
 
         bool canDamage = damageableData._targetType.Contains(_targetType);

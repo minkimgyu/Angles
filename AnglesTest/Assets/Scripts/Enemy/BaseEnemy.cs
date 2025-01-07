@@ -44,6 +44,7 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.DropItem, _dropData, transform.position);
         OnDieRequested?.Invoke();
         base.OnDie();
+        Destroy(gameObject);
     }
 
     public override void AddEffectFactory(BaseFactory _effectFactory) 

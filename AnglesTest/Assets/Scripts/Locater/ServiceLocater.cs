@@ -22,6 +22,9 @@ public static class ServiceLocater
     static ILocalization _localization;
     static NULLLocalizationHandler _nullLocalizationHandler;
 
+    static IAdMob _adMob;
+    static NULLAdMobManager _nullAdMobManager;
+
     static ServiceLocater()
     {
         _nullSoundPlayer = new NullSoundPlayer();
@@ -30,6 +33,7 @@ public static class ServiceLocater
         _nullSaveController = new NULLSaveManager();
         _nullSettingController = new NULLSettingController();
         _nullLocalizationHandler = new NULLLocalizationHandler();
+        _nullAdMobManager = new NULLAdMobManager();
     }
 
     public static void Provide(ISoundPlayable soundPlayer)
@@ -60,6 +64,11 @@ public static class ServiceLocater
     public static void Provide(ILocalization localization)
     {
         _localization = localization;
+    }
+
+    public static void Provide(IAdMob adMob)
+    {
+        _adMob = adMob;
     }
 
 
@@ -97,5 +106,11 @@ public static class ServiceLocater
     {
         if (_localization == null) return _nullLocalizationHandler;
         return _localization;
+    }
+
+    public static IAdMob ReturnAdMobManager()
+    {
+        if (_adMob == null) return _nullAdMobManager;
+        return _adMob;
     }
 }

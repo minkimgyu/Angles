@@ -60,8 +60,6 @@ public class SurvivalMode : GameMode
     {
         OnEnd();
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ChapterClear);
-        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.SetPlayerInvincible);
-
         UnlockNextChapter();
 
         float passedTime = _stopwatchTimer.Duration;
@@ -157,7 +155,10 @@ public class SurvivalMode : GameMode
                                      addressableHandler.Database.SkillDatas, addressableHandler.SkillIconAsset,
                                      viewerFactory, skillFactory); // --> 커멘드 패턴을 사용해서 리팩토링 해보기
 
-        _gameResultUIController.Initialize(() => { ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.LobbyScene); });
+        _gameResultUIController.Initialize(() => 
+        {
+            ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.LobbyScene); 
+        });
 
         BaseFactory interactableFactory = inGameFactory.GetFactory(InGameFactory.Type.Interactable);
 

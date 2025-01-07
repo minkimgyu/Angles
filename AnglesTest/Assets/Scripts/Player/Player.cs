@@ -80,19 +80,6 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     float DashRatio { get { return _currentDashFillDuration / _playerData.DashRestoreDuration; } }
     float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
 
-    //protected override float MaxHp 
-    //{   
-    //    get => _playerData.MaxHp;
-    //    set
-    //    {
-    //        _playerData.MaxHp = value;
-    //        OnHpChangeRequested?.Invoke(Hp / MaxHp); // hp 비율 재조정
-    //    }
-    //}
-    //protected override float Hp { get => _playerData._hp; set => _playerData._hp = value; }
-    //protected override float DamageReductionRatio { get => _playerData._damageReductionRatio; }
-    //protected override float AutoRecoveryPoint { get => _playerData._autoHpRecoveryPoint; }
-
     SpriteRenderer _spriteRenderer;
 
     public void ApplySkinSprite(Sprite skin) => _spriteRenderer.sprite = skin;
@@ -209,10 +196,16 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         _actionFSM.Initialize(actionStates, ActionState.Ready);
     }
 
+    protected override void Revive() 
+    {
+        base.Revive();
+        gameObject.SetActive(true);
+    }
+
     protected override void OnDie()
     {
+        gameObject.SetActive(false);
         EventBusManager.Instance.MainEventBus.Publish(MainEventBus.State.GameOver);
-        Destroy(gameObject);
     }
 
     void OnUseDash() 

@@ -89,6 +89,9 @@ abstract public class GameMode : MonoBehaviour
         Orange,
     }
 
+    protected int _reviveChance = 1;
+    protected bool CanRevive() { return _reviveChance > 0; }
+
     protected abstract void Initialize(); // 게임이 시작될 떄 처리
     public abstract void OnGameClearRequested(); // 게임 클리어 시 처리
     public abstract void OnGameOverRequested(); // 게임 오버 시 처리

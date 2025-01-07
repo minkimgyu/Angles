@@ -31,7 +31,7 @@ public class LocalizationBuilder : MonoBehaviour
 
                     { ILocalization.Key.RecordTime, "Record" },
                     { ILocalization.Key.TabToContinue, "Tab To Continue" },
-
+                    { ILocalization.Key.TabToRevive, "Revive by watching an ad" },
 
 
                     { ILocalization.Key.LeftCount, "Left Count" },
@@ -165,7 +165,7 @@ public class LocalizationBuilder : MonoBehaviour
 
                     { ILocalization.Key.RecordTime, "생존 시간" },
                     { ILocalization.Key.TabToContinue, "탭해서 나가기" },
-
+                    { ILocalization.Key.TabToRevive, "광고보고 부활하기" },
 
                     { ILocalization.Key.LeftCount, "남은 횟수" },
                     { ILocalization.Key.PickAgain, "다시 뽑기" },
