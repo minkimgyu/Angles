@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static GooglePlayGames.Editor.GPGSStrings;
 
 // addressable 초기화
 // SceneController 초기화

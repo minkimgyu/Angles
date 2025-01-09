@@ -18,12 +18,13 @@ public class TrackableHpViewer : RatioViewer
         bool canAttach = _followTarget.CanFollow();
         if (canAttach == true)
         {
+            TurnOnViewer(true);
             Vector3 pos = _followTarget.GetPosition();
             transform.position = pos + (Vector3)_followTarget.BottomPoint;
         }
         else
         {
-            Destroy(gameObject);
+            TurnOnViewer(false);
             return;
         }
     }

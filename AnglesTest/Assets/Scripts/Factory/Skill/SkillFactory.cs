@@ -97,6 +97,8 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.SpreadMultipleBullets] = new SpreadMultipleBulletsCreater(skillDatas[BaseSkill.Name.SpreadMultipleBullets], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.ShootMultipleLaser] = new ShootMultipleLaserCreater(skillDatas[BaseSkill.Name.ShootMultipleLaser], effectFactory);
+
+        _skillCreaters[BaseSkill.Name.ReviveImpact] = new ReviveImpactCreater(skillDatas[BaseSkill.Name.ReviveImpact], effectFactory);
     }
 
     public override BaseSkill Create(BaseSkill.Name name)

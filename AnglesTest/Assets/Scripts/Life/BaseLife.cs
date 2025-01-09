@@ -4,11 +4,6 @@ using UnityEngine;
 
 abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 {
-    //protected abstract float Hp { get; set; }
-    //protected abstract float MaxHp { get; set; }
-    //protected abstract float DamageReductionRatio { get; }
-    //protected abstract float AutoRecoveryPoint { get; }
-
     LifeData _lifeData;
     protected Timer _groggyTimer = new Timer();
     protected Timer _autoHealTimer = new Timer();
@@ -114,9 +109,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         else _aliveState = AliveState.Normal;
     }
 
-    protected virtual void Revive() 
+    public virtual void Revive() 
     {
-        _aliveState = AliveState.Normal;
+        _lifeState = LifeState.Alive;
         GetHeal(_lifeData.MaxHp);
     }
 

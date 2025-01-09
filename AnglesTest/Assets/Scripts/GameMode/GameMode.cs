@@ -90,9 +90,9 @@ abstract public class GameMode : MonoBehaviour
     }
 
     protected int _reviveChance = 1;
-    protected bool CanRevive() { return _reviveChance > 0; }
+    protected bool CanRevive { get { return _reviveChance > 0; } }
 
-    protected abstract void Initialize(); // 게임이 시작될 떄 처리
+    protected abstract void Initialize(GameMode.Type modeType); // 게임이 시작될 떄 처리
     public abstract void OnGameClearRequested(); // 게임 클리어 시 처리
     public abstract void OnGameOverRequested(); // 게임 오버 시 처리
 }

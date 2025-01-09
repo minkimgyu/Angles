@@ -196,9 +196,10 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         _actionFSM.Initialize(actionStates, ActionState.Ready);
     }
 
-    protected override void Revive() 
+    public override void Revive() 
     {
         base.Revive();
+        _skillController.OnRevive();
         gameObject.SetActive(true);
     }
 
@@ -323,7 +324,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     public void OnRightInputEnd() => _actionFSM.OnChargeEnd();
     public void OnRightDoubleTab() => _movementFSM.OnDash();
 
-    public bool CanFollow() { return _lifeState == LifeState.Alive; }
+    public bool CanFollow() { return gameObject as UnityEngine.Object != null; }
 
     public Vector3 ReturnFowardDirection()
     {

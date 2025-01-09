@@ -10,13 +10,13 @@ public interface IAdMob
     virtual void LoadRewardedAd() { }
 
     // 리워드 콜백으로 보상형 광고 표시
-    virtual void ShowRewardedAd(Action OnRewardComplete) { }
+    virtual void ShowRewardedAd(Action OnCompleted, Action OnError) { }
 
-    // 보상형 광고 이벤트 수신
-    virtual void RegisterEventHandlers(RewardedAd ad) { }
+    //// 보상형 광고 이벤트 수신
+    //virtual void RegisterEventHandlers(RewardedAd ad) { }
 
-    // 다음 보상형 광고 미리 로드
-    virtual void RegisterReloadHandler(RewardedAd ad) { }
+    //// 다음 보상형 광고 미리 로드
+    //virtual void RegisterReloadHandler(RewardedAd ad) { }
 }
 
 public class NULLAdMobManager : IAdMob
@@ -53,7 +53,7 @@ public class AdMobManager : IAdMob
     /// <summary>
     /// Loads the rewarded ad.
     /// </summary>
-    public void LoadRewardedAd()
+    public void LoadRewardedAd(Action OnCompleted, Action OnError)
     {
         // 보상형 광고 정리
         // Clean up the old ad before loading a new one.
@@ -77,6 +77,8 @@ public class AdMobManager : IAdMob
                 {
                     Debug.LogError("Rewarded ad failed to load an ad " +
                                    "with error : " + error);
+
+                    OnError?.Invoke();
                     return;
                 }
 
@@ -84,93 +86,109 @@ public class AdMobManager : IAdMob
                           + ad.GetResponseInfo());
 
                 _rewardedAd = ad;
+                OnCompleted?.Invoke();
             });
     }
 
     // 리워드 콜백으로 보상형 광고 표시
-    public void ShowRewardedAd(Action OnRewardComplete)
+    public void ShowRewardedAd(Action OnRewardComplete, Action OnError)
     {
         const string rewardMsg =
             "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 
-        if (_rewardedAd != null && _rewardedAd.CanShowAd())
+        if (_rewardedAd == null || _rewardedAd.CanShowAd() == false)
+        {
+            LoadRewardedAd
+            (
+                () => 
+                {
+                    Debug.Log("광고 재로드 후 재생");
+
+                    _rewardedAd.Show((Reward reward) =>
+                    {
+                        // TODO: Reward the user.
+                        Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+                        OnRewardComplete?.Invoke(); // 리워드 제공 콜백 함수 적용
+                    });
+                },
+                () =>
+                {
+                    Debug.Log("광고 로드 실패");
+                    OnError?.Invoke();
+                }
+            );
+        }
+        else
         {
             _rewardedAd.Show((Reward reward) =>
             {
                 // TODO: Reward the user.
                 Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
-
-                RegisterReloadHandler(_rewardedAd); // 새로운 광고 등록
                 OnRewardComplete?.Invoke(); // 리워드 제공 콜백 함수 적용
             });
         }
-        else
-        {
-            LoadRewardedAd();
-            Debug.Log("광고 재로드");
-        }
     }
 
-    // 보상형 광고 이벤트 수신
-    public void RegisterEventHandlers(RewardedAd ad)
-    {
-        // Raised when the ad is estimated to have earned money.
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-            Debug.Log(String.Format("Rewarded ad paid {0} {1}.",
-                adValue.Value,
-                adValue.CurrencyCode));
-        };
-        // Raised when an impression is recorded for an ad.
-        ad.OnAdImpressionRecorded += () =>
-        {
-            Debug.Log("Rewarded ad recorded an impression.");
-        };
-        // Raised when a click is recorded for an ad.
-        ad.OnAdClicked += () =>
-        {
-            Debug.Log("Rewarded ad was clicked.");
-        };
-        // Raised when an ad opened full screen content.
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            Debug.Log("Rewarded ad full screen content opened.");
-        };
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("Rewarded ad full screen content closed.");
-        };
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
-        };
-    }
+    //// 보상형 광고 이벤트 수신
+    //public void RegisterEventHandlers(RewardedAd ad)
+    //{
+    //    // Raised when the ad is estimated to have earned money.
+    //    ad.OnAdPaid += (AdValue adValue) =>
+    //    {
+    //        Debug.Log(String.Format("Rewarded ad paid {0} {1}.",
+    //            adValue.Value,
+    //            adValue.CurrencyCode));
+    //    };
+    //    // Raised when an impression is recorded for an ad.
+    //    ad.OnAdImpressionRecorded += () =>
+    //    {
+    //        Debug.Log("Rewarded ad recorded an impression.");
+    //    };
+    //    // Raised when a click is recorded for an ad.
+    //    ad.OnAdClicked += () =>
+    //    {
+    //        Debug.Log("Rewarded ad was clicked.");
+    //    };
+    //    // Raised when an ad opened full screen content.
+    //    ad.OnAdFullScreenContentOpened += () =>
+    //    {
+    //        Debug.Log("Rewarded ad full screen content opened.");
+    //    };
+    //    // Raised when the ad closed full screen content.
+    //    ad.OnAdFullScreenContentClosed += () =>
+    //    {
+    //        Debug.Log("Rewarded ad full screen content closed.");
+    //    };
+    //    // Raised when the ad failed to open full screen content.
+    //    ad.OnAdFullScreenContentFailed += (AdError error) =>
+    //    {
+    //        Debug.LogError("Rewarded ad failed to open full screen content " +
+    //                       "with error : " + error);
+    //    };
+    //}
 
     // 다음 보상형 광고 미리 로드
-    public void RegisterReloadHandler(RewardedAd ad)
-    {
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("Rewarded Ad full screen content closed.");
+    //public void RegisterReloadHandler(RewardedAd ad)
+    //{
+    //    // Raised when the ad closed full screen content.
+    //    ad.OnAdFullScreenContentClosed += () =>
+    //    {
+    //        Debug.Log("Rewarded Ad full screen content closed.");
 
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
+    //        // Reload the ad so that we can show another as soon as possible.
+    //        LoadRewardedAd();
+    //    };
 
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
+    //    // Raised when the ad failed to open full screen content.
+    //    ad.OnAdFullScreenContentFailed += (AdError error) =>
+    //    {
+    //        Debug.LogError("Rewarded ad failed to open full screen content " +
+    //                       "with error : " + error);
 
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-    }
+    //        // Reload the ad so that we can show another as soon as possible.
+    //        LoadRewardedAd();
+    //    };
+    //}
 
     #endregion
 }

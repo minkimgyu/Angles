@@ -77,7 +77,7 @@ public class PlayerSpawner
     public Player Spawn()
     {
         Player player = (Player)_factoryCollection.GetFactory(InGameFactory.Type.Life).Create(BaseLife.Name.Player);
-        //player.transform.position = spawnPos;
+        EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.Revive, new ReviveCommand(() => { player.Revive(); }));
 
         ApplySkin(player);
         ApplyStat(player);

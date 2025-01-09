@@ -316,6 +316,8 @@ public class DBBuilder : MonoBehaviour
 
         { BaseSkill.Name.Impact, new ImpactData(5, 0.2f, 20, 1, 2, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
 
+        { BaseSkill.Name.ReviveImpact, new ReviveImpactData(5, 1, 2, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
+
         { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 0.1f, 0, 1, 0.3f, 3, new List<ITarget.Type> { ITarget.Type.Red })},
 
         { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 1, 0.1f, 0, 0.6f, BaseWeapon.Name.ShooterBullet, new List<ITarget.Type> { ITarget.Type.Red }) },
@@ -634,7 +636,7 @@ public class DBBuilder : MonoBehaviour
 
                 0.6f,
                 1.0f,
-            new List<BaseSkill.Name> { BaseSkill.Name.ContactAttack })
+            new List<BaseSkill.Name> { BaseSkill.Name.ContactAttack, BaseSkill.Name.ReviveImpact })
         },
 
         {
@@ -852,7 +854,7 @@ public class DBBuilder : MonoBehaviour
 
     #region CoinGauge 데이터
 
-    List<int> _coinGaugeData = new List<int>() { 50, 100, 150, 200, 250, 300, 350, 400, 500 }; // 0랩부터 시작
+    List<int> _coinGaugeData = new List<int>() { 50, 100, 150, 200, 250, 300, 350, 400, 500, 600 }; // 100랩 까지
 
     #endregion
 

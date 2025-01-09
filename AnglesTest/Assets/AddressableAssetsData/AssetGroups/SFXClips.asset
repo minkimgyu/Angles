@@ -144,13 +144,13 @@ MonoBehaviour:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 65d18dc44be6c7f44a9fce6bc5012363
-    m_Address: ChapterClear
+    m_Address: LevelClear
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 758dfe46781cc7147a8095e553ab2b57
-    m_Address: ChapterFail
+    m_Address: LevelFail
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound

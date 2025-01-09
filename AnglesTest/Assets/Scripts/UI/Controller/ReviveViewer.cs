@@ -17,6 +17,9 @@ public class ReviveViewer : BaseViewer
 
     public void Initialize(Action OnReviveRequested, Action OnCancelRequested)
     {
+        _reviveBtn.onClick.AddListener(() => { OnReviveRequested?.Invoke(); });
+        _cancelBtn.onClick.AddListener(() => { OnCancelRequested?.Invoke(); });
+
         this.OnReviveRequested = OnReviveRequested;
         this.OnCancelRequested = OnCancelRequested;
         TurnOnViewer(false);

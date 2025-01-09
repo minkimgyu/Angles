@@ -46,7 +46,7 @@ public interface ISaveable
     /// </summary>
     virtual void ChangeCoinCount(int cointCount) { }
 
-    virtual void UnlockLevel(GameMode.Type type, GameMode.Level level) { }
+    virtual void UnlockLevel(GameMode.Level level) { }
 
     /// <summary>
     /// 세이브 데이터 가져오기

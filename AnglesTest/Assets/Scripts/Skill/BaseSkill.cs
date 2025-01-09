@@ -36,6 +36,7 @@ abstract public class BaseSkill : ISkillUpgradable
         SelfDestruction,
 
         SpreadMultipleBullets,
+        ReviveImpact,
     }
 
     public enum Type
@@ -105,6 +106,7 @@ abstract public class BaseSkill : ISkillUpgradable
     public virtual void OnAdd() { }
     public virtual void OnReflect(GameObject targetObject, Vector3 contactPos) { }
     public virtual void OnDamaged(float ratio) { }
+    public virtual void OnRevive() { }
 
     public virtual void OnCaptureEnter(ITarget target) { }
     public virtual void OnCaptureExit(ITarget target) { }

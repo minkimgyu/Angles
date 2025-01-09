@@ -27,12 +27,6 @@ public struct SkillUpgradeData
     public bool CanUpgrade() { return _upgradeCount <= _maxUpgradeCount; } // 만약 같다면 더 이상 업그레이드 불가능
 }
 
-//public interface ICaster
-//{
-//    T GetComponent<T>();
-//    void ReturnDamage(float damagePoint);
-//}
-
 public class SkillController : MonoBehaviour
 {
     public class UpgradeableData
@@ -105,6 +99,15 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnReflect(targetObject, contactPos);
+        }
+    }
+
+    public void OnRevive()
+    {
+        foreach (var skill in _skillDictionary)
+        {
+            if (skill.Value.CanUse() == false) continue;
+            skill.Value.OnRevive();
         }
     }
 

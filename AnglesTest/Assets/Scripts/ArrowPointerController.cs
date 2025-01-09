@@ -8,7 +8,7 @@ public class ArrowPointerController : MonoBehaviour
     List<ITarget> _targets;
     List<ArrowPointViewer> _arrorViewers;
 
-    Transform _parent;
+    [SerializeField] Transform _parent;
     InGameFactory _inGameFactory;
     Canvas _canvas; // UI가 위치한 캔버스
     const float _edgeOffset = 80f; // 화면 모서리와의 여백
@@ -23,12 +23,11 @@ public class ArrowPointerController : MonoBehaviour
 
     public void Initialize(InGameFactory inGameFactory)
     {
-        _parent = gameObject.transform;
         _inGameFactory = inGameFactory;
         _targets = new List<ITarget>();
         _arrorViewers = new List<ArrowPointViewer>();
 
-        _canvas = GetComponent<Canvas>();
+        _canvas = _parent.GetComponent<Canvas>();
 
         // 화면 중심과 타겟 방향 계산
         _screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);

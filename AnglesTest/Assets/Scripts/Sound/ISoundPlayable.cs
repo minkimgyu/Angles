@@ -52,8 +52,8 @@ public interface ISoundPlayable
         OrangeBossBGM,
 
         Reroll,
-        ChapterClear,
-        ChapterFail,
+        LevelClear,
+        LevelFail,
     }
 
     void Initialize(Dictionary<SoundName, AudioClip> clipDictionary);

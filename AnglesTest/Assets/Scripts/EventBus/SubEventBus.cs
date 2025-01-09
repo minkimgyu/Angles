@@ -63,10 +63,27 @@ public class CreateReusableCardCommand : BaseCommand
     }
 }
 
+public class ReviveCommand : BaseCommand
+{
+    Action Revive;
+
+    public ReviveCommand(Action Revive)
+    {
+        this.Revive = Revive;
+    }
+
+
+    public override void Execute()
+    {
+        Revive?.Invoke();
+    }
+}
+
 public class SubEventBus : BaseEventBus<SubEventBus.State>
 {
     public enum State
     {
+        Revive,
         CreateCard,
         CreateReusableCard,
         
