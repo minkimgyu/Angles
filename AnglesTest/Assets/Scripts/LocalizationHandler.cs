@@ -20,6 +20,9 @@ public interface ILocalization
         Start,
         End,
 
+        Yes,
+        No,
+
         Setting,
         BGMMenu,
         SFXMenu,
@@ -46,6 +49,7 @@ public interface ILocalization
         RecordTime,
         TabToContinue,
         TabToRevive,
+        TabToGetGold,
 
         LeftCount,
         PickAgain,

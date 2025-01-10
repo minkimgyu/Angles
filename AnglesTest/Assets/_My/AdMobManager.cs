@@ -7,10 +7,16 @@ using System;
 
 public interface IAdMob
 {
-    virtual void LoadRewardedAd() { }
+    virtual void LoadRewardedAd(Action OnError) { }
 
     // 리워드 콜백으로 보상형 광고 표시
-    virtual void ShowRewardedAd(Action OnCompleted, Action OnError) { }
+    virtual void ShowRewardedAd(Action OnError) { }
+
+    virtual bool CanGetReward { get { return false; } }
+    virtual void GetReward() { }
+
+    virtual bool CanLoadAd { get { return false; } }
+    virtual void GetAd() { }
 
     //// 보상형 광고 이벤트 수신
     //virtual void RegisterEventHandlers(RewardedAd ad) { }
@@ -29,6 +35,9 @@ public class AdMobManager : IAdMob
     public Text LogText;
     public Button RewardAdsBtn;
 
+    bool _getReward = false;
+    bool _getLoad = false;
+
     public AdMobManager()
     {
         // Google Mobile Ads SDK 초기화
@@ -43,6 +52,12 @@ public class AdMobManager : IAdMob
         MobileAds.SetRequestConfiguration(requestConfiguration);
     }
 
+    public bool CanGetReward { get { return _getReward; } }
+    public void GetReward() { _getReward = false; }
+
+    public bool CanLoadAd { get { return _getLoad; } }
+    public void GetAd() { _getLoad = false; }
+
     #region 리워드 광고
 
     const string _rewardTestID = "ca-app-pub-3940256099942544/5224354917";
@@ -53,7 +68,7 @@ public class AdMobManager : IAdMob
     /// <summary>
     /// Loads the rewarded ad.
     /// </summary>
-    public void LoadRewardedAd(Action OnCompleted, Action OnError)
+    public void LoadRewardedAd(Action OnError)
     {
         // 보상형 광고 정리
         // Clean up the old ad before loading a new one.
@@ -86,46 +101,29 @@ public class AdMobManager : IAdMob
                           + ad.GetResponseInfo());
 
                 _rewardedAd = ad;
-                OnCompleted?.Invoke();
+                _getLoad = true;
             });
     }
 
     // 리워드 콜백으로 보상형 광고 표시
-    public void ShowRewardedAd(Action OnRewardComplete, Action OnError)
+    public void ShowRewardedAd(Action OnError)
     {
         const string rewardMsg =
             "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 
-        if (_rewardedAd == null || _rewardedAd.CanShowAd() == false)
-        {
-            LoadRewardedAd
-            (
-                () => 
-                {
-                    Debug.Log("광고 재로드 후 재생");
-
-                    _rewardedAd.Show((Reward reward) =>
-                    {
-                        // TODO: Reward the user.
-                        Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
-                        OnRewardComplete?.Invoke(); // 리워드 제공 콜백 함수 적용
-                    });
-                },
-                () =>
-                {
-                    Debug.Log("광고 로드 실패");
-                    OnError?.Invoke();
-                }
-            );
-        }
-        else
+        if (_rewardedAd != null && _rewardedAd.CanShowAd() == true)
         {
             _rewardedAd.Show((Reward reward) =>
             {
                 // TODO: Reward the user.
                 Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
-                OnRewardComplete?.Invoke(); // 리워드 제공 콜백 함수 적용
+
+                _getReward = true;
             });
+        }
+        else
+        {
+            OnError?.Invoke();
         }
     }
 

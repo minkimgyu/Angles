@@ -33,8 +33,13 @@ public class LobbyTopViewer : MonoBehaviour
 {
     [SerializeField] TMP_Text _goldTxt;
     [SerializeField] Button _settingBtn;
+    [SerializeField] Button _adBtn;
 
-    public void Initialize(Action OnClickSettingBtn) => _settingBtn.onClick.AddListener(() => { OnClickSettingBtn?.Invoke(); });
+    public void Initialize(Action OnClickAdBtn, Action OnClickSettingBtn)
+    {
+        _adBtn.onClick.AddListener(() => { OnClickAdBtn?.Invoke(); });
+        _settingBtn.onClick.AddListener(() => { OnClickSettingBtn?.Invoke(); });
+    }
 
     public void ChangeGoldCount(int gold)
     {

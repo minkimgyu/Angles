@@ -14,7 +14,7 @@ abstract public class DungeonMode : GameMode
     [SerializeField] ChargeUIController _chargeUIController;
 
     [SerializeField] protected CoinViewer _coinViewer;
-    [SerializeField] ReviveViewer _reviveViewer;
+    [SerializeField] AdViewer _reviveViewer;
     [SerializeField] Button _settingBtn;
 
     DropController _dropController;
@@ -32,6 +32,28 @@ abstract public class DungeonMode : GameMode
     protected virtual void Update()
     {
         _stopwatchTimer.OnUpdate();
+
+        bool canLoadAd = ServiceLocater.ReturnAdMobManager().CanLoadAd;
+        if (canLoadAd == true)
+        {
+            // 광고 로드 성공 시 적용
+            ServiceLocater.ReturnTimeController().Stop();
+            _reviveViewer.TurnOnViewer(true);
+            _reviveChance -= 1;
+
+            ServiceLocater.ReturnAdMobManager().GetAd(); // 광고 로드 완료하면 작동
+        }
+
+
+        bool canGetReward = ServiceLocater.ReturnAdMobManager().CanGetReward;
+        if (canGetReward == true)
+        {
+            // 광고보기 성공 시 적용
+            ServiceLocater.ReturnTimeController().Restart();
+            EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.Revive);
+
+            ServiceLocater.ReturnAdMobManager().GetReward(); // 보상을 받으면 작동
+        }
     }
 
     protected virtual void OnGameEnd()
@@ -56,17 +78,29 @@ abstract public class DungeonMode : GameMode
     {
         if (CanRevive == true)
         {
-            ServiceLocater.ReturnTimeController().Stop();
-            _reviveViewer.TurnOnViewer(true);
-            _reviveChance -= 1;
-            return;
+            ServiceLocater.ReturnAdMobManager().LoadRewardedAd
+            (
+                () =>
+                {
+                    // 광고 로드 실패 시 적용
+                    OnGameEnd();
+                    ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.LevelFail);
+                    float passedTime = _stopwatchTimer.Duration;
+                    _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());
+                }
+            );
+
+            // 여기에서 광고가 로드 가능하면 아래에서 띄워주기
+            // 불가능하다면 바로 종료
         }
+        else
+        {
+            OnGameEnd();
+            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.LevelFail);
 
-        OnGameEnd();
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.LevelFail);
-
-        float passedTime = _stopwatchTimer.Duration;
-        _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());
+            float passedTime = _stopwatchTimer.Duration;
+            _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());
+        }
     }
 
     protected override void Initialize(GameMode.Type type)
@@ -88,16 +122,13 @@ abstract public class DungeonMode : GameMode
             () =>
             {
                 _reviveViewer.TurnOnViewer(false);
-                ServiceLocater.ReturnAdMobManager().ShowRewardedAd(
+                ServiceLocater.ReturnAdMobManager().ShowRewardedAd
+                (
                     () =>
                     {
+                        // 광고가 로드되지 못했거나 볼 수 없는 경우 그래도 부활 적용
                         ServiceLocater.ReturnTimeController().Restart();
                         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.Revive);
-                    },
-                    () =>
-                    {
-                        ServiceLocater.ReturnTimeController().Restart();
-                        OnGameOverRequested();
                     }
                 );
             },
@@ -106,7 +137,8 @@ abstract public class DungeonMode : GameMode
                 _reviveViewer.TurnOnViewer(false); 
                 ServiceLocater.ReturnTimeController().Restart(); 
                 OnGameOverRequested(); 
-            }
+            },
+            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToRevive)
         );
 
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameClear, new GameEndCommand(OnGameClearRequested));

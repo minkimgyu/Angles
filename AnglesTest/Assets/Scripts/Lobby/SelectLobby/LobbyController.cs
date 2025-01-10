@@ -15,11 +15,14 @@ public class LobbyController : MonoBehaviour
 
     [SerializeField] LevelSelectPage _chapterLevelSelectPage;
 
+    [SerializeField] AdViewer _adViewer;
 
     [SerializeField] StatSelectPage _statSelectPage;
     [SerializeField] SkinSelectPage _skinSelectPage;
 
     [SerializeField] Scrollbar _horizontalScrollbar;
+
+    const int _adCoinCount = 100;
 
     Dictionary<GameMode.Level, LevelData> GetLevelDatas(AddressableHandler addressableHandler, SaveData saveData)
     {
@@ -37,6 +40,29 @@ public class LobbyController : MonoBehaviour
         return levelDatas;
     }
 
+    private void Update()
+    {
+        bool canLoadAd = ServiceLocater.ReturnAdMobManager().CanLoadAd;
+        if (canLoadAd == true)
+        {
+            ServiceLocater.ReturnAdMobManager().ShowRewardedAd
+            (
+                () =>
+                {
+                    Debug.Log("광고 보기 실패");
+                }
+            );
+            ServiceLocater.ReturnAdMobManager().GetAd(); // 광고 로드 완료하면 작동
+        }
+
+        bool canGetReward = ServiceLocater.ReturnAdMobManager().CanGetReward;
+        if (canGetReward == true)
+        {
+            _lobbyTopModel.GoldCount += _adCoinCount;
+            ServiceLocater.ReturnAdMobManager().GetReward(); // 보상을 받으면 작동
+        }
+    }
+
     private void Start()
     {
         AddressableHandler addressableHandler = FindObjectOfType<AddressableHandler>();
@@ -50,7 +76,38 @@ public class LobbyController : MonoBehaviour
         _lobbyScrollController.Initialize();
         _popUpViewer.Initialize();
 
-        _lobbyTopViewer.Initialize(() => { ServiceLocater.ReturnSettingController().Activate(true); });
+        _adViewer.Initialize
+        (
+            () =>
+            {
+                _adViewer.TurnOnViewer(false);
+                ServiceLocater.ReturnAdMobManager().LoadRewardedAd
+                (
+                    () =>
+                    {
+                        Debug.Log("광고 로드 실패");
+                    }
+                );
+            },
+            () =>
+            {
+                _adViewer.TurnOnViewer(false);
+            },
+            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToGetGold)
+        );
+
+        _lobbyTopViewer.Initialize
+        (
+            () => 
+            {
+                _adViewer.TurnOnViewer(true);
+            },
+            () =>
+            {
+                ServiceLocater.ReturnSettingController().Activate(true);
+            }
+        );
+
         _lobbyTopModel = new LobbyTopModel(_lobbyTopViewer);
         _lobbyTopModel.GoldCount = saveData._gold;
 

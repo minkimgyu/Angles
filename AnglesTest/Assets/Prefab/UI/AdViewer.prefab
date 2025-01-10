@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7476590713948104331}
   - component: {fileID: 1482278492246153161}
   m_Layer: 5
-  m_Name: ReviveBtn
+  m_Name: YesBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 8814353604918329123}
   - component: {fileID: 7038911846157602768}
   m_Layer: 5
-  m_Name: CancelBtn
+  m_Name: NoBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Revive
+  m_text: Yes
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1be9b68f5d3f9304ab83311722dc88d4, type: 2}
   m_sharedMaterial: {fileID: -8783808053894379631, guid: 1be9b68f5d3f9304ab83311722dc88d4, type: 2}
@@ -582,7 +582,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cancel
+  m_text: No
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1be9b68f5d3f9304ab83311722dc88d4, type: 2}
   m_sharedMaterial: {fileID: -8783808053894379631, guid: 1be9b68f5d3f9304ab83311722dc88d4, type: 2}
@@ -662,7 +662,7 @@ GameObject:
   - component: {fileID: 8670789562427512790}
   - component: {fileID: 5690307550543266591}
   m_Layer: 5
-  m_Name: ReviveViewer
+  m_Name: AdViewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -701,6 +701,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _reviveTxt: {fileID: 4799359085405065769}
+  _yesTxt: {fileID: 3002808278218710779}
+  _noTxt: {fileID: 3676357319065975320}
   _reviveBtn: {fileID: 1482278492246153161}
   _cancelBtn: {fileID: 7038911846157602768}
 --- !u!1 &4335963965246265497

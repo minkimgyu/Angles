@@ -8,7 +8,7 @@ namespace DamageUtility
 {
     class Damage
     {
-        const float _instantDeathDamage = 100000000;
+        const float _instantDeathDamage = 999999;
         public static float InstantDeathDamage { get { return _instantDeathDamage; } }
 
         public static void Hit(DamageableData damageData, IDamageable damageable)

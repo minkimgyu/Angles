@@ -17,6 +17,8 @@ public class LocalizationBuilder : MonoBehaviour
                     { ILocalization.Key.End, "End" },
                     { ILocalization.Key.Setting, "Setting" },
 
+                    { ILocalization.Key.Yes, "Yes" },
+                    { ILocalization.Key.No, "No" },
 
                     { ILocalization.Key.StageCount, "Stage Count" },
                     { ILocalization.Key.SurvivalTime, "Survival Time" },
@@ -32,6 +34,7 @@ public class LocalizationBuilder : MonoBehaviour
                     { ILocalization.Key.RecordTime, "Record" },
                     { ILocalization.Key.TabToContinue, "Tab To Continue" },
                     { ILocalization.Key.TabToRevive, "Revive by watching an ad" },
+                    { ILocalization.Key.TabToGetGold, "Watch Ad to get free 100 coin" },
 
 
                     { ILocalization.Key.LeftCount, "Left Count" },
@@ -153,6 +156,9 @@ public class LocalizationBuilder : MonoBehaviour
                     { ILocalization.Key.End, "종료" },
                     { ILocalization.Key.Setting, "설정" },
 
+                    { ILocalization.Key.Yes, "확인" },
+                    { ILocalization.Key.No, "취소" },
+
                     { ILocalization.Key.StageCount, "스테이지 수" },
                     { ILocalization.Key.SurvivalTime, "생존 시간" },
                     { ILocalization.Key.Progress, "진행" },
@@ -165,7 +171,8 @@ public class LocalizationBuilder : MonoBehaviour
 
                     { ILocalization.Key.RecordTime, "생존 시간" },
                     { ILocalization.Key.TabToContinue, "탭해서 나가기" },
-                    { ILocalization.Key.TabToRevive, "광고보고 부활하기" },
+                    { ILocalization.Key.TabToRevive, "광고 보고 부활하기" },
+                    { ILocalization.Key.TabToGetGold, "광고 보고 무료 100코인 얻기" },
 
                     { ILocalization.Key.LeftCount, "남은 횟수" },
                     { ILocalization.Key.PickAgain, "다시 뽑기" },

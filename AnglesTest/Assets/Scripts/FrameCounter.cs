@@ -9,6 +9,8 @@ public class FrameCounter : MonoBehaviour
     [SerializeField] private int size = 25;
     [SerializeField] private Color color = Color.red;
 
+#if UNITY_ANDROID && UNITY_EDITOR
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -34,4 +36,7 @@ public class FrameCounter : MonoBehaviour
 
         GUI.Label(rect, text, style);
     }
+
+#elif UNITY_ANDROID
+#endif
 }
