@@ -16,8 +16,15 @@ public class FileIO
         // Application.dataPath + filePath + fileName + _extension
     }
 
+    public bool HaveFile(string path)
+    {
+        return File.Exists(path);
+    }
+
     string ReturnPath(string filePath, string fileName)
-    { return $"{Application.dataPath}/{filePath}/{fileName}{_extension}"; }
+    { 
+        return $"{Application.dataPath}/{filePath}/{fileName}{_extension}"; 
+    }
 
     public T LoadData<T>(string jData)
     {
@@ -57,7 +64,7 @@ public class FileIO
     string ReturnFilePath(string filePath, string fileName, bool canOverwrite = false)
     {
         string path = ReturnPath(filePath, fileName);
-        if (canOverwrite || File.Exists(path) == false) return path;
+        if (canOverwrite || HaveFile(path) == false) return path;
 
         Debug.LogError("이미 해당 경로에 파일이 존재함");
 
@@ -69,7 +76,7 @@ public class FileIO
             if (index > 0) originName = $"{originName} {index}";
 
             path = ReturnPath(filePath, originName);
-            if (File.Exists(path) == false) break; // 존재하지 않으면 break
+            if (HaveFile(path) == false) break; // 존재하지 않으면 break
             else index++;
         }
         while (true);

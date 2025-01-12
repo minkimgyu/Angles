@@ -824,6 +824,7 @@ public class DBBuilder : MonoBehaviour
     #endregion
 
     #region INTERACTABLE 데이터
+
     Dictionary<IInteractable.Name, BaseInteractableObjectData> _interactableObjectDatas = new Dictionary<IInteractable.Name, BaseInteractableObjectData>
     {
         { IInteractable.Name.CardTable, new CardTableData(3) },
@@ -849,6 +850,24 @@ public class DBBuilder : MonoBehaviour
         { GameMode.Level.CubeSurvival, new SurvivalInfo(300, GameMode.Level.PrismSurvival) },
         { GameMode.Level.PrismSurvival, new SurvivalInfo(300) },
     };
+
+    #endregion
+
+    #region AD 데이터
+
+    const int _lobbyAdCoinCount = 100;
+    const string _lobbyAdSaveKeyName = "lobbyAd";
+    const int _lobbyAdDelay = 60;
+
+    const string _inGameAdSaveKeyName = "inGameAd";
+    const int _inGameAdDelay = 10;
+
+    AdData _adData = new AdData(
+                        _lobbyAdCoinCount,
+                        _lobbyAdSaveKeyName,
+                        _lobbyAdDelay,
+                        _inGameAdSaveKeyName,
+                        _inGameAdDelay);
 
     #endregion
 
@@ -882,7 +901,8 @@ public class DBBuilder : MonoBehaviour
             _cardDatas,
             _interactableObjectDatas,
             _levelDatas,
-            _coinGaugeData
+            _coinGaugeData,
+            _adData
         );
 
         fileIO.SaveData(database, fileLocation, fileName, true);

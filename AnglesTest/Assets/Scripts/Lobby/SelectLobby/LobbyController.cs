@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,9 @@ public class LobbyController : MonoBehaviour
 
     [SerializeField] Scrollbar _horizontalScrollbar;
 
-    const int _adCoinCount = 100;
+    AdHandler _adHandler;
+
+    int _adCoinCount = 100;
 
     Dictionary<GameMode.Level, LevelData> GetLevelDatas(AddressableHandler addressableHandler, SaveData saveData)
     {
@@ -42,6 +45,13 @@ public class LobbyController : MonoBehaviour
 
     private void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    Debug.Log($"광고까지 남은 시간: {_adHandler.LeftMinute}");
+        //}
+        _lobbyTopModel.ActiveAdBtn = _adHandler.CanShowAdd;
+        _lobbyTopModel.AdDuration = _adHandler.LeftTime;
+
         bool canLoadAd = ServiceLocater.ReturnAdMobManager().CanLoadAd;
         if (canLoadAd == true)
         {
@@ -76,11 +86,18 @@ public class LobbyController : MonoBehaviour
         _lobbyScrollController.Initialize();
         _popUpViewer.Initialize();
 
+        _adCoinCount = addressableHandler.Database.AdData.LobbyAdCoinCount;
+        string lobbyAdSaveKeyName = addressableHandler.Database.AdData.LobbyAdSaveKeyName;
+        int lobbyAdDelay = addressableHandler.Database.AdData.LobbyAdDelay;
+        _adHandler = new AdHandler(lobbyAdSaveKeyName, lobbyAdDelay);
+
         _adViewer.Initialize
         (
             () =>
             {
                 _adViewer.TurnOnViewer(false);
+                _adHandler.ResetAdShowTime(); // 광고를 볼 수 있다면 초기화해주기
+
                 ServiceLocater.ReturnAdMobManager().LoadRewardedAd
                 (
                     () =>

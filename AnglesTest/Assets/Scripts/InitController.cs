@@ -67,7 +67,15 @@ public class InitController : MonoBehaviour
         settingController.Initialize();
         ServiceLocater.Provide(settingController);
 
-        ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.MenuScene);
+        // 위 내용을 전부 반영하고 AdTimer 적용
+        AdTimer adTimer = FindObjectOfType<AdTimer>();
+        ServiceLocater.Provide(adTimer);
+
+        // 초기화 완료 시 씬 전환
+        adTimer.Initialize(() => 
+        { 
+            ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.MenuScene);
+        });
     }
 
     AddressableHandler CreateAddressableHandler()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,8 @@ abstract public class DungeonMode : GameMode
 
     bool _canUnlock;
     Level _unlockLevel;
+
+    AdHandler _adHandler;
 
     void UnlockNextChapter()
     {
@@ -76,8 +79,15 @@ abstract public class DungeonMode : GameMode
 
     public override void OnGameOverRequested()
     {
-        if (CanRevive == true)
+        if(_adHandler.CanShowAdd == false)
         {
+            Debug.Log($"광고까지 남은 시간: {_adHandler.LeftTime}");
+        }
+
+        if (CanRevive == true && _adHandler.CanShowAdd == true)
+        {
+            _adHandler.ResetAdShowTime(); // 광고를 볼 수 있다면 초기화해주기
+
             ServiceLocater.ReturnAdMobManager().LoadRewardedAd
             (
                 () =>
@@ -111,6 +121,10 @@ abstract public class DungeonMode : GameMode
             Debug.Log("addressableHandler 존재하지 않음");
             return;
         }
+
+        string inGameAdSaveKeyName = addressableHandler.Database.AdData.InGameAdSaveKeyName;
+        int inGameAdDelay = addressableHandler.Database.AdData.InGameAdDelay;
+        _adHandler = new AdHandler(inGameAdSaveKeyName, inGameAdDelay);
 
         _settingBtn.onClick.AddListener(() => { Debug.Log("Setting"); ServiceLocater.ReturnSettingController().Activate(true); });
 

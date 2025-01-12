@@ -23,6 +23,9 @@ public interface ILocalization
         Yes,
         No,
 
+        ForLeftAd,
+        Left,
+
         Setting,
         BGMMenu,
         SFXMenu,

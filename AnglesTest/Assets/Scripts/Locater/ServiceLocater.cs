@@ -25,6 +25,9 @@ public static class ServiceLocater
     static IAdMob _adMob;
     static NULLAdMobManager _nullAdMobManager;
 
+    static IAdTimer _adTimer;
+    static NULLAdTimer _nullAdTimer;
+
     static ServiceLocater()
     {
         _nullSoundPlayer = new NullSoundPlayer();
@@ -34,6 +37,7 @@ public static class ServiceLocater
         _nullSettingController = new NULLSettingController();
         _nullLocalizationHandler = new NULLLocalizationHandler();
         _nullAdMobManager = new NULLAdMobManager();
+        _nullAdTimer = new NULLAdTimer();
     }
 
     public static void Provide(ISoundPlayable soundPlayer)
@@ -71,6 +75,10 @@ public static class ServiceLocater
         _adMob = adMob;
     }
 
+    public static void Provide(IAdTimer adTimer)
+    {
+        _adTimer = adTimer;
+    }
 
     public static ISettable ReturnSettingController()
     {
@@ -112,5 +120,11 @@ public static class ServiceLocater
     {
         if (_adMob == null) return _nullAdMobManager;
         return _adMob;
+    }
+
+    public static IAdTimer ReturnAdTimer()
+    {
+        if (_adTimer == null) return _nullAdTimer;
+        return _adTimer;
     }
 }

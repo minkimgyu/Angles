@@ -20,6 +20,9 @@ public class LocalizationBuilder : MonoBehaviour
                     { ILocalization.Key.Yes, "Yes" },
                     { ILocalization.Key.No, "No" },
 
+                    { ILocalization.Key.ForLeftAd, "Until the next ad" },
+                    { ILocalization.Key.Left, "remaining" },
+
                     { ILocalization.Key.StageCount, "Stage Count" },
                     { ILocalization.Key.SurvivalTime, "Survival Time" },
                     { ILocalization.Key.Progress, "Progress" },
@@ -158,6 +161,9 @@ public class LocalizationBuilder : MonoBehaviour
 
                     { ILocalization.Key.Yes, "확인" },
                     { ILocalization.Key.No, "취소" },
+
+                    { ILocalization.Key.ForLeftAd, "다음 광고까지" },
+                    { ILocalization.Key.Left, "남음" },
 
                     { ILocalization.Key.StageCount, "스테이지 수" },
                     { ILocalization.Key.SurvivalTime, "생존 시간" },

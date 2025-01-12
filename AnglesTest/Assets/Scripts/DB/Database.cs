@@ -126,6 +126,16 @@ public struct Database
 
     #endregion
 
+    #region AD µ•¿Ã≈Õ
+
+    [JsonProperty] 
+    AdData _adData;
+
+    [JsonIgnore] 
+    public AdData AdData { get { return _adData; } }
+
+    #endregion
+
     public Database(
         Dictionary<SkinData.Key, List<IStatModifier>> skinModifiers,
         Dictionary<SkinData.Key, SkinData> skinDatas,
@@ -140,7 +150,8 @@ public struct Database
         Dictionary<BaseSkill.Name, CardInfoData> cardDatas,
         Dictionary<IInteractable.Name, BaseInteractableObjectData> interactableObjectDatas,
         Dictionary<GameMode.Level, ILevelInfo> levelDatas,
-        List<int> coinGaugeData)
+        List<int> coinGaugeData,
+        AdData adData)
     {
         _skinModifiers = skinModifiers;
         _skinDatas = skinDatas;
@@ -156,5 +167,6 @@ public struct Database
         _interactableObjectDatas = interactableObjectDatas;
         _levelDatas = levelDatas;
         _coinGaugeData = coinGaugeData;
+        _adData = adData;
     }
 }
