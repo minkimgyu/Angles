@@ -20,7 +20,7 @@ public class LobbyTopModel
         get { return _adDuration; }
         set
         {
-            if (_adDuration == string.Empty)
+            if (value == string.Empty)
             {
                 _lobbyViewer.ChangeAdDuration();
                 return;

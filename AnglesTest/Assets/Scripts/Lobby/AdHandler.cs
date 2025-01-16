@@ -54,11 +54,24 @@ public class AdHandler
 
     DateTime _adShowTime; // 광고 보여주는 시간
 
-    public bool CanShowAdd 
-    { 
-        get 
+    // 인터넷에 연결되지 않아 광고 로드가 불가능한 경우
+    bool CanLoadAdd
+    {
+        get
         {
-            if (ServiceLocater.ReturnAdTimer().IsLoadSuccess == false) return false;
+            if (ServiceLocater.ReturnAdTimer().IsLoadSuccess == false ||
+                Application.internetReachability == NetworkReachability.NotReachable) return false;
+
+            return true;
+        }
+    }
+
+    public bool CanShowAdd
+    {
+        get
+        {
+            if (CanLoadAdd == false) return false;
+            // 처음 로드가 되지 않았거나 인터넷 연결이 안 되어있는 경우
 
             DateTime currentTime = ServiceLocater.ReturnAdTimer().CurrentTime;
             if (currentTime.CompareTo(_adShowTime) > 0) return true;
@@ -70,7 +83,7 @@ public class AdHandler
     {
         get
         {
-            if (ServiceLocater.ReturnAdTimer().IsLoadSuccess == false || CanShowAdd == true) return ""; // 로드가 안 되었거나 광고를 보여줄 수 있다면 return;
+            if (CanLoadAdd == false || CanShowAdd == true) return ""; // 로드가 안 되었거나 인터넷 연결이 안된 경우 return;
 
             DateTime currentTime = ServiceLocater.ReturnAdTimer().CurrentTime;
 

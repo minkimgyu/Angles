@@ -33,7 +33,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     private void OnGUI()
     {
-#if UNITY_ANDROID && UNITY_EDITOR
+#if UNITY_EDITOR
         int size = 25;
         Color color = Color.red;
 
@@ -250,7 +250,6 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     protected override void Update()
     {
         base.Update();
-
         if (_aliveState == AliveState.Groggy) return;
 
         switch (_lifeState)
@@ -311,18 +310,52 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     //    }
     //}
 
-    public void OnLeftInputStart() => _movementFSM.OnMoveStart();
+    public void OnLeftInputStart()
+    {
+        if (_lifeState == LifeState.Die) return;
+
+        _movementFSM.OnMoveStart();
+    }
     public void OnLeftInput(Vector2 direction)
     {
+        if (_lifeState == LifeState.Die) return;
+
         _movementFSM.OnMove(direction);
         _actionFSM.OnMove(direction);
     }
-    public void OnLeftInputEnd() => _movementFSM.OnMoveEnd();
+    public void OnLeftInputEnd()
+    {
+        if (_lifeState == LifeState.Die) return;
 
-    public void OnRightInputStart() => _actionFSM.OnChargeStart();
-    public void OnRightInput(Vector2 direction) => _actionFSM.OnCharge(direction);
-    public void OnRightInputEnd() => _actionFSM.OnChargeEnd();
-    public void OnRightDoubleTab() => _movementFSM.OnDash();
+        _movementFSM.OnMoveEnd();
+    }
+
+    public void OnRightInputStart()
+    {
+        if (_lifeState == LifeState.Die) return;
+
+        _actionFSM.OnChargeStart();
+    }
+
+    public void OnRightInput(Vector2 direction)
+    {
+        if (_lifeState == LifeState.Die) return;
+
+        _actionFSM.OnCharge(direction);
+    }
+    public void OnRightInputEnd()
+    {
+        if (_lifeState == LifeState.Die) return;
+
+        _actionFSM.OnChargeEnd();
+    }
+
+    public void OnRightDoubleTab()
+    {
+        if (_lifeState == LifeState.Die) return;
+
+        _movementFSM.OnDash();
+    }
 
     public bool CanFollow() { return gameObject as UnityEngine.Object != null; }
 

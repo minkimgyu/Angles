@@ -45,32 +45,8 @@ public class LobbyController : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    Debug.Log($"광고까지 남은 시간: {_adHandler.LeftMinute}");
-        //}
         _lobbyTopModel.ActiveAdBtn = _adHandler.CanShowAdd;
         _lobbyTopModel.AdDuration = _adHandler.LeftTime;
-
-        bool canLoadAd = ServiceLocater.ReturnAdMobManager().CanLoadAd;
-        if (canLoadAd == true)
-        {
-            ServiceLocater.ReturnAdMobManager().ShowRewardedAd
-            (
-                () =>
-                {
-                    Debug.Log("광고 보기 실패");
-                }
-            );
-            ServiceLocater.ReturnAdMobManager().GetAd(); // 광고 로드 완료하면 작동
-        }
-
-        bool canGetReward = ServiceLocater.ReturnAdMobManager().CanGetReward;
-        if (canGetReward == true)
-        {
-            _lobbyTopModel.GoldCount += _adCoinCount;
-            ServiceLocater.ReturnAdMobManager().GetReward(); // 보상을 받으면 작동
-        }
     }
 
     private void Start()
@@ -96,13 +72,16 @@ public class LobbyController : MonoBehaviour
             () =>
             {
                 _adViewer.TurnOnViewer(false);
-                _adHandler.ResetAdShowTime(); // 광고를 볼 수 있다면 초기화해주기
-
-                ServiceLocater.ReturnAdMobManager().LoadRewardedAd
+                ServiceLocater.ReturnAdMobManager().ShowRewardedAd
                 (
                     () =>
                     {
-                        Debug.Log("광고 로드 실패");
+                        _adHandler.ResetAdShowTime(); // 광고를 볼 수 있다면 초기화해주기
+                        _lobbyTopModel.GoldCount += _adCoinCount;
+                    },
+                    () =>
+                    {
+                        Debug.Log("광고 재생 실패");
                     }
                 );
             },

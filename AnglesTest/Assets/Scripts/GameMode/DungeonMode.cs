@@ -35,28 +35,6 @@ abstract public class DungeonMode : GameMode
     protected virtual void Update()
     {
         _stopwatchTimer.OnUpdate();
-
-        bool canLoadAd = ServiceLocater.ReturnAdMobManager().CanLoadAd;
-        if (canLoadAd == true)
-        {
-            // 광고 로드 성공 시 적용
-            ServiceLocater.ReturnTimeController().Stop();
-            _reviveViewer.TurnOnViewer(true);
-            _reviveChance -= 1;
-
-            ServiceLocater.ReturnAdMobManager().GetAd(); // 광고 로드 완료하면 작동
-        }
-
-
-        bool canGetReward = ServiceLocater.ReturnAdMobManager().CanGetReward;
-        if (canGetReward == true)
-        {
-            // 광고보기 성공 시 적용
-            ServiceLocater.ReturnTimeController().Restart();
-            EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.Revive);
-
-            ServiceLocater.ReturnAdMobManager().GetReward(); // 보상을 받으면 작동
-        }
     }
 
     protected virtual void OnGameEnd()
@@ -84,24 +62,11 @@ abstract public class DungeonMode : GameMode
             Debug.Log($"광고까지 남은 시간: {_adHandler.LeftTime}");
         }
 
-        if (CanRevive == true && _adHandler.CanShowAdd == true)
+        // 광고를 볼 수 있다면
+        if (CanRevive == true && _adHandler.CanShowAdd == true && ServiceLocater.ReturnAdMobManager().CanShowAdd() == true)
         {
-            _adHandler.ResetAdShowTime(); // 광고를 볼 수 있다면 초기화해주기
-
-            ServiceLocater.ReturnAdMobManager().LoadRewardedAd
-            (
-                () =>
-                {
-                    // 광고 로드 실패 시 적용
-                    OnGameEnd();
-                    ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.LevelFail);
-                    float passedTime = _stopwatchTimer.Duration;
-                    _gameResultUIController.OnFailRequested(passedTime, GameStateManager.Instance.ReturnCoin());
-                }
-            );
-
-            // 여기에서 광고가 로드 가능하면 아래에서 띄워주기
-            // 불가능하다면 바로 종료
+            _reviveViewer.TurnOnViewer(true);
+            _reviveChance -= 1;
         }
         else
         {
@@ -140,16 +105,19 @@ abstract public class DungeonMode : GameMode
                 (
                     () =>
                     {
-                        // 광고가 로드되지 못했거나 볼 수 없는 경우 그래도 부활 적용
-                        ServiceLocater.ReturnTimeController().Restart();
+                        _adHandler.ResetAdShowTime(); // 광고를 본다면 초기화해주기
                         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.Revive);
+                    },
+                    () =>
+                    {
+                        _reviveViewer.TurnOnViewer(false);
+                        OnGameOverRequested();
                     }
                 );
             },
             () => 
             { 
                 _reviveViewer.TurnOnViewer(false); 
-                ServiceLocater.ReturnTimeController().Restart(); 
                 OnGameOverRequested(); 
             },
             ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToRevive)

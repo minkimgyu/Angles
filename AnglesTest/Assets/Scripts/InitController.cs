@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 // addressable 초기화
 // SceneController 초기화
@@ -53,28 +54,54 @@ public class InitController : MonoBehaviour
 
         SaveManager saveController = new SaveManager(new SaveData(0));
         LocalizationHandler localizationHandler = new LocalizationHandler(addressableHandler.LocalizationAsset);
-        AdMobManager adMobManager = new AdMobManager();
+        
 
         ServiceLocater.Provide(timeController);
         ServiceLocater.Provide(sceneController);
         ServiceLocater.Provide(soundPlayer);
         ServiceLocater.Provide(saveController);
         ServiceLocater.Provide(localizationHandler);
-        ServiceLocater.Provide(adMobManager);
 
+        InjectSettingController();
+        InjectAdMobManager(() =>
+        {
+            InjectAdTimer(() =>
+            {
+                ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.MenuScene);
+            });
+        });
+    }
+
+    void InjectSettingController()
+    {
         // 위 내용을 전부 반영하고 SettingController 적용
         SettingController settingController = FindObjectOfType<SettingController>();
         settingController.Initialize();
         ServiceLocater.Provide(settingController);
+    }
 
+    void InjectAdMobManager(Action OnComplete)
+    {
+        AdMobManager adMobManager = FindObjectOfType<AdMobManager>();
+        ServiceLocater.Provide(adMobManager);
+
+        // 초기화 완료 시 실행
+        adMobManager.Initialize(() =>
+        {
+            OnComplete?.Invoke();
+        });
+    }
+
+    void InjectAdTimer(Action OnComplete)
+    {
         // 위 내용을 전부 반영하고 AdTimer 적용
         AdTimer adTimer = FindObjectOfType<AdTimer>();
         ServiceLocater.Provide(adTimer);
 
-        // 초기화 완료 시 씬 전환
-        adTimer.Initialize(() => 
-        { 
-            ServiceLocater.ReturnSceneController().ChangeScene(ISceneControllable.SceneName.MenuScene);
+        // 초기화 완료 시 실행
+        adTimer.Initialize(() =>
+        {
+            OnComplete?.Invoke();
         });
     }
 
