@@ -7,6 +7,7 @@ public class Bullet : ProjectileWeapon
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 벽의 경우
         ITarget target = collision.GetComponent<ITarget>();
         if(target == null)
         {

@@ -97,8 +97,12 @@ public class SkillController : MonoBehaviour
     {
         foreach (var skill in _skillDictionary)
         {
-            if (skill.Value.CanUse() == false) continue;
-            skill.Value.OnReflect(targetObject, contactPos);
+            if (skill.Value.CanUse() == false) continue; // 개수 맞는지 확인
+
+            bool canUseReflectSkill = skill.Value.OnReflect(targetObject, contactPos);
+            if (canUseReflectSkill == false) continue;
+
+            skill.Value.Use(); // 사용 가능하다면 쓰기
         }
     }
 
@@ -108,6 +112,7 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnRevive();
+            skill.Value.Use();
         }
     }
 
@@ -117,6 +122,7 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnDamaged(ratio);
+            skill.Value.Use();
         }
     }
 
@@ -134,6 +140,7 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnCaptureEnter(target);
+            skill.Value.Use();
         }
     }
 
@@ -143,6 +150,7 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnCaptureExit(target);
+            skill.Value.Use();
         }
     }
 
@@ -152,6 +160,7 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnCaptureEnter(target, damageable);
+            skill.Value.Use();
         }
     }
 
@@ -161,6 +170,7 @@ public class SkillController : MonoBehaviour
         {
             if (skill.Value.CanUse() == false) continue;
             skill.Value.OnCaptureExit(target, damageable);
+            skill.Value.Use();
         }
     }
 }

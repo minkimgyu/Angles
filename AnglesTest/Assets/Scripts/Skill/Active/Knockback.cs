@@ -27,13 +27,13 @@ public class Knockback : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(GameObject targetObject, Vector3 contactPos) 
+    public override bool OnReflect(GameObject targetObject, Vector3 contactPos) 
     {
         ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return;
+        if (target == null) return false;
 
         bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
+        if (isTarget == false) return false;
 
         Transform casterTransform = _caster.GetComponent<Transform>();
 
@@ -61,5 +61,6 @@ public class Knockback : BaseSkill
 
         Damage.HitBoxRange(damageData, casterTransform.position, _data.Offset.V2, casterTransform.right,
             _data.Size.V2 * _data.RangeMultiplier, true, Color.red);
+        return true;
     }
 }

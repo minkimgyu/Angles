@@ -26,16 +26,16 @@ public class SpawnBlade : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
     {
         ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return;
+        if (target == null) return false;
 
         bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
+        if (isTarget == false) return false;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blade);
-        if (weapon == null) return;
+        if (weapon == null) return false;
 
         Transform casterTransform = _caster.GetComponent<Transform>();
 
@@ -62,9 +62,10 @@ public class SpawnBlade : BaseSkill
         weapon.ResetPosition(casterTransform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
-        if (projectile == null) return;
+        if (projectile == null) return false;
 
         Vector2 direction = casterTransform.right;
         projectile.Shoot(direction, _data.Force);
+        return true;
     }
 }

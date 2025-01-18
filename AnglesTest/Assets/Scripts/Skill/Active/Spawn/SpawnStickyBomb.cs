@@ -26,21 +26,21 @@ public class SpawnStickyBomb : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
     {
         ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return;
+        if (target == null) return false;
 
         Vector3 targetPos = target.GetPosition();
 
         bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
+        if (isTarget == false) return false;
 
         IFollowable followable = targetObject.GetComponent<IFollowable>();
-        if (followable == null) return;
+        if (followable == null) return false;
 
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
-        if (weapon == null) return;
+        if (weapon == null) return false;
 
         DamageableData damageData = new DamageableData
         (
@@ -63,5 +63,6 @@ public class SpawnStickyBomb : BaseSkill
         weapon.Activate();
         weapon.ResetPosition(targetPos);
         weapon.ResetFollower(followable);
+        return true;
     }
 }

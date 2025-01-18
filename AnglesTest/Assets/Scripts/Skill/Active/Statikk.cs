@@ -27,13 +27,13 @@ public class Statikk : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
     {
         ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return;
+        if (target == null) return false;
 
         bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
+        if (isTarget == false) return false;
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Statikk);
 
@@ -63,5 +63,7 @@ public class Statikk : BaseSkill
 
             effect.Play();
         }
+
+        return true;
     }
 }

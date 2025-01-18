@@ -96,15 +96,18 @@ abstract public class BaseSkill : ISkillUpgradable
         _useConstraint.RemoveViewEvent(viewEvent); 
     }
 
-    public virtual bool CanUse() 
+    public bool CanUse() 
     {
-        bool canUse = _useConstraint.CanUse();
-        if(canUse == true) _useConstraint.Use();
-
-        return canUse; 
+        return _useConstraint.CanUse();
     }
+
+    public void Use()
+    {
+        _useConstraint.Use();
+    }
+
     public virtual void OnAdd() { }
-    public virtual void OnReflect(GameObject targetObject, Vector3 contactPos) { }
+    public virtual bool OnReflect(GameObject targetObject, Vector3 contactPos) { return false; }
     public virtual void OnDamaged(float ratio) { }
     public virtual void OnRevive() { }
 

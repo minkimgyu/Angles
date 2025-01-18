@@ -15,16 +15,16 @@ public class ContactAttack : BaseSkill
         _effectFactory = effectFactory;
     }
 
-    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
     {
         ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return;
+        if (target == null) return false;
 
         IDamageable damageable = targetObject.GetComponent<IDamageable>();
-        if (damageable == null) return;
+        if (damageable == null) return false;
 
         bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
+        if (isTarget == false) return false;
 
         Debug.Log("ContactAttack");
 
@@ -45,5 +45,6 @@ public class ContactAttack : BaseSkill
         );
 
         Damage.Hit(damageData, damageable);
+        return true;
     }
 }

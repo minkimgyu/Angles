@@ -24,7 +24,7 @@ public class Rocket : ProjectileWeapon
         _effectFactory = effectFactory;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void Hit()
     {
         // 폭발을 우선 적용하고 이후에 접촉한 적에 대해 데미지를 가한다.
         SpawnExplosionEffect();
@@ -32,6 +32,23 @@ public class Rocket : ProjectileWeapon
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, transform.position, 0.4f);
         Damage.HitCircleRange(_data.DamageableData, transform.position, _data.Range, true, Color.red, 3);
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        ITarget target = collision.GetComponent<ITarget>();
+        if (target == null) // 벽의 경우
+        {
+            Hit();
+            return;
+        }
+
+        if (target.IsTarget(_data.DamageableData._targetType) == true)
+        {
+            Hit();
+            return;
+        }
     }
 
     void SpawnExplosionEffect()

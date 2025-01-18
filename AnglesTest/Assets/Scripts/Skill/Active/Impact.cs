@@ -27,19 +27,19 @@ public class Impact : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
     {
         ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return;
+        if (target == null) return false;
 
         bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
+        if (isTarget == false) return false;
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Impact, 0.7f);
         Debug.Log("Impact");
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
-        if (effect == null) return;
+        if (effect == null) return false;
 
         effect.ResetPosition(contactPos);
         effect.ResetSize(_data.RangeMultiplier);
@@ -57,6 +57,8 @@ public class Impact : BaseSkill
             _data.TargetTypes,
             _data.GroggyDuration
         );
+
         Damage.HitCircleRange(damageData, contactPos, _data.Range * _data.RangeMultiplier, true, Color.red, 3);
+        return true;
     }
 }
