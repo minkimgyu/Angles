@@ -70,16 +70,16 @@ public class Pathfinder : MonoBehaviour
 
             _openList.DeleteMin(); // 해당 그리드 지워줌
             _closedList.Add(targetNode); // 해당 그리드 추가해줌
-            AddNearGridInList(targetNode, endNode.Index, size); // 주변 그리드를 찾아서 다시 넣어줌
+            AddNearGridInList(targetNode, endNode, size); // 주변 그리드를 찾아서 다시 넣어줌
         }
 
         // 이 경우는 경로를 찾지 못한 상황임
         return null;
     }
 
-    void AddNearGridInList(Node targetGrid, Grid2D targetNodeIndex, BaseLife.Size size)
+    void AddNearGridInList(Node targetNode, Node endNode, BaseLife.Size size)
     {
-        List<Node> nearNodes = targetGrid.NearNodes[size];
+        List<Node> nearNodes = targetNode.NearNodes[size];
         if (nearNodes == null) return;
 
         for (int i = 0; i < nearNodes.Count; i++)
@@ -94,9 +94,7 @@ public class Pathfinder : MonoBehaviour
             if (_closedList.Contains(nearNode)) continue; // 통과하지 못하거나 닫힌 리스트에 있는 경우 다음 그리드 탐색
 
             // 이 부분 중요! --> 거리를 측정해서 업데이트 하지 않고 계속 더해주는 방식으로 진행해야함
-            float moveCost = Vector2.Distance(targetGrid.WorldPos, nearNode.WorldPos);
-            moveCost += targetGrid.G;
-
+            float moveCost = targetNode.G + Vector2.Distance(targetNode.WorldPos, nearNode.WorldPos);
             bool isOpenListContainNearGrid = _openList.Contain(nearNode);
 
             // 오픈 리스트에 있더라도 G 값이 변경된다면 다시 리셋해주기
@@ -104,8 +102,8 @@ public class Pathfinder : MonoBehaviour
             {
                 // 여기서 grid 값 할당 필요
                 nearNode.G = moveCost;
-                nearNode.H = Vector2.Distance(nearNode.WorldPos, targetGrid.WorldPos);
-                nearNode.ParentNode = targetGrid;
+                nearNode.H = Vector2.Distance(nearNode.WorldPos, endNode.WorldPos);
+                nearNode.ParentNode = targetNode;
             }
 
             if (isOpenListContainNearGrid == false) _openList.Insert(nearNode);

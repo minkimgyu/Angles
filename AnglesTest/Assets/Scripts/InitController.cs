@@ -23,6 +23,8 @@ public class InitController : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         Application.targetFrameRate = 60;
 #endif
+
+
         Screen.SetResolution(Screen.width, Screen.height, true);
 
         _gPGSManager = new GPGSManager();

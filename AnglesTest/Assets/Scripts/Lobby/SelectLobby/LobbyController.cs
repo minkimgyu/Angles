@@ -45,19 +45,23 @@ public class LobbyController : MonoBehaviour
 
     private void Update()
     {
-        _lobbyTopModel.ActiveAdBtn = _adHandler.CanShowAdd;
+        // 광고를 볼 수 있는 시간이고 광고가 로드되서 준비 상태인 경우
+        bool canShowAd = _adHandler.CanShowAdd && ServiceLocater.ReturnAdMobManager().CanShowAdd();
+
+        // 버튼 활성화
+        _lobbyTopModel.ActiveAdBtn = canShowAd;
         _lobbyTopModel.AdDuration = _adHandler.LeftTime;
     }
 
     private void Start()
     {
         AddressableHandler addressableHandler = FindObjectOfType<AddressableHandler>();
+        if (addressableHandler == null) return;
+
         ServiceLocater.ReturnSoundPlayer().PlayBGM(ISoundPlayable.SoundName.LobbyBGM);
 
         ISaveable saveable = ServiceLocater.ReturnSaveManager();
         SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
-
-        _horizontalScrollbar.value = 0; // 스크롤바 초기화
 
         _lobbyScrollController.Initialize();
         _popUpViewer.Initialize();
