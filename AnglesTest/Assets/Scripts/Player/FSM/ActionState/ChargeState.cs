@@ -48,9 +48,11 @@ public class ChargeState : State<Player.ActionState>
         //this.ShowShootDirection = ShowShootDirection;
     }
 
+    const float _minChargeRatio = 0.25f;
+
     bool CanShoot(Vector2 input)
     {
-        return input.magnitude >= _playerData.MinJoystickLength;
+        return input.magnitude >= _playerData.MinJoystickLength && _chargeTimer.Ratio >= _minChargeRatio;
     }
 
     public override void OnStateEnter()
@@ -79,7 +81,7 @@ public class ChargeState : State<Player.ActionState>
 
     public override void OnCharge(Vector2 input)
     {
-        _storedInput = -input.normalized;
+        _storedInput = -input;
     }
 
     public override void OnChargeEnd()
@@ -99,6 +101,7 @@ public class ChargeState : State<Player.ActionState>
         }
         else
         {
+            ChangeBodyScale?.Invoke(true, 1); // 몸 크기 원래대로 바꾸기
             _baseFSM.SetState(Player.ActionState.Ready);
         }
     }
