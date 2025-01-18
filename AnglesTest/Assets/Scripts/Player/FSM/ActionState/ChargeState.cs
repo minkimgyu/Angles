@@ -48,6 +48,8 @@ public class ChargeState : State<Player.ActionState>
         //this.ShowShootDirection = ShowShootDirection;
     }
 
+    const float minAlpha = 0.03f;
+    const float maxAlpha = 0.3f;
     const float _minChargeRatio = 0.25f;
 
     bool CanShoot(Vector2 input)
@@ -76,7 +78,11 @@ public class ChargeState : State<Player.ActionState>
         ChangeBodyScale?.Invoke(true, 1 - _storedInput.magnitude);
         _moveComponent.FaceDirection(_storedInput);
 
-        EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnChargeRatioChange, _chargeTimer.Ratio);
+        float handleAlpha = 0;
+        if (_chargeTimer.Ratio >= _minChargeRatio) handleAlpha = maxAlpha;
+        else handleAlpha = minAlpha;
+
+        EventBusManager.Instance.ObserverEventBus.Publish(ObserverEventBus.State.OnChargeRatioChange, _chargeTimer.Ratio, handleAlpha);
     }
 
     public override void OnCharge(Vector2 input)

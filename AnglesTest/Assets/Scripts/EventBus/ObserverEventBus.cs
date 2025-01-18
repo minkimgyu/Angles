@@ -50,16 +50,16 @@ public class TurnOnOffCommand : BaseCommand
 
 public class ChangeRatioCommand : BaseCommand
 {
-    public ChangeRatioCommand(Action<float> ChangeRatioAction)
+    public ChangeRatioCommand(Action<float, float> ChangeRatioAction)
     {
         this.ChangeRatioAction = ChangeRatioAction;
     }
 
-    Action<float> ChangeRatioAction;
+    Action<float, float> ChangeRatioAction;
 
-    public override void Execute(float ratio)
+    public override void Execute(float fillRatio, float alphaChangeRatio)
     {
-        ChangeRatioAction?.Invoke(ratio);
+        ChangeRatioAction?.Invoke(fillRatio, alphaChangeRatio);
     }
 }
 

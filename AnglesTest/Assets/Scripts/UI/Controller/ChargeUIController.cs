@@ -11,6 +11,17 @@ public class ChargeModel
         _chargeViewer = dashViewer;
     }
 
+    float _alpha;
+    public float Alpha
+    {
+        get => _alpha;
+        set
+        {
+            _alpha = value;
+            _chargeViewer.UpdateChargeAlpha(_alpha);
+        }
+    }
+
     float _ratio;
     public float Ratio
     {
@@ -30,12 +41,13 @@ public class ChargeUIController : MonoBehaviour
 
     public void Initialize()
     {
-        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnChargeRatioChange, new ChangeRatioCommand(UpdateViewer));
+        EventBusManager.Instance.ObserverEventBus.Register(ObserverEventBus.State.OnChargeRatioChange, new ChangeRatioCommand(UpdateChargeHandler));
         _chargeModel = new ChargeModel(_chargeViewer);
     }
 
-    public void UpdateViewer(float fillRatio)
+    public void UpdateChargeHandler(float fillRatio, float handleAlpha)
     {
         _chargeModel.Ratio = fillRatio;
+        _chargeModel.Alpha = handleAlpha;
     }
 }

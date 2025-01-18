@@ -29,7 +29,7 @@ public class LobbyScrollController : ScrollUI
         }
 
         SetUp(childCount);
-    }    
+    }
 
     public void TabClick(bool isLeft)
     {

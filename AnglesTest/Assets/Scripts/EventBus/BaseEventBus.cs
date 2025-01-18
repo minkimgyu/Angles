@@ -37,6 +37,12 @@ abstract public class BaseEventBus<T>
         commands[state].Execute(item);
     }
 
+    public virtual void Publish(T state, float chargeRatio, float handleAlpha)
+    {
+        if (!commands.ContainsKey(state)) return;
+        commands[state].Execute(chargeRatio, handleAlpha);
+    }
+
     public virtual void Publish(T state, BaseSkill.Name name, BaseSkill skill)
     {
         if (!commands.ContainsKey(state)) return;

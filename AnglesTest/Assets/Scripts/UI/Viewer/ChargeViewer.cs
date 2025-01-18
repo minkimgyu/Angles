@@ -16,4 +16,9 @@ public class ChargeViewer : BaseViewer
     {
         _fillImg.fillAmount = ratio;
     }
+
+    public void UpdateChargeAlpha(float alpha)
+    {
+        _fillImg.color = new Color(_fillImg.color.r, _fillImg.color.g, _fillImg.color.b, alpha);
+    }
 }
