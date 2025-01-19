@@ -42,10 +42,13 @@ public class AddressableHandler : MonoBehaviour
         this.OnProgress = OnProgress;
     }
 
-    public AddressableHandler()
+    public void Initialize()
     {
+        DontDestroyOnLoad(gameObject);
+
         _successCount = 0;
         _totalCount = 0;
+        _assetLoaders = new HashSet<BaseLoader>();
     }
 
     public Dictionary<SkinData.Key, Sprite> SkinIconAsset { get; private set; }
@@ -70,9 +73,6 @@ public class AddressableHandler : MonoBehaviour
 
     public void Load(Action OnCompleted)
     {
-        _assetLoaders = new HashSet<BaseLoader>();
-
-
         _assetLoaders.Add(new SkinIconAssetLoader(Label.SkinIcon, (value, label) => { SkinIconAsset = value; OnSuccess(label); }));
         _assetLoaders.Add(new StatIconAssetLoader(Label.StatIcon, (value, label) => { StatIconAsset = value; OnSuccess(label); }));
 

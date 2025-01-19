@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm",
     "com.unity.addressables": "1.21.21",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.2d": "2.0.1",

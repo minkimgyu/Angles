@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 public class ChapterMode : DungeonMode
 {
-    ChapterLevelController _stageController;
+    ChapterStageController _stageController;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +29,7 @@ public class ChapterMode : DungeonMode
 
     protected override void InitializeLevel(AddressableHandler addressableHandler, InGameFactory inGameFactory, Level level)
     {
-        _stageController = GetComponent<ChapterLevelController>();
+        _stageController = GetComponent<ChapterStageController>();
 
         ILevelInfo levelInfo = addressableHandler.Database.LevelDatas[level];
         _stageController.Initialize(levelInfo.MaxLevel, addressableHandler, inGameFactory);

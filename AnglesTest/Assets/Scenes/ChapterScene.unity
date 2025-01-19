@@ -1776,7 +1776,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 986343857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be700092e4f39fc4f93cd77782a4344c, type: 3}
+  m_Script: {fileID: 11500000, guid: e824575644eb40c459a0221cc4e7de0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _levelUIController: {fileID: 1492042883}

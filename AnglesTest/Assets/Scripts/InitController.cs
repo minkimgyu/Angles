@@ -23,12 +23,14 @@ public class InitController : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         Application.targetFrameRate = 60;
 #endif
-
-
         Screen.SetResolution(Screen.width, Screen.height, true);
 
-        _gPGSManager = new GPGSManager();
-        _gPGSManager.Login(OnLoginCompleted);
+        // 가장 먼저 버전 테스트를 진행한다.
+        InjectInAppUpdateManager(() =>
+        {
+            _gPGSManager = new GPGSManager();
+            _gPGSManager.Login(OnLoginCompleted);
+        });
     }
 
     void OnLoginCompleted(bool nowSuccess)
@@ -56,7 +58,7 @@ public class InitController : MonoBehaviour
 
         SaveManager saveController = new SaveManager(new SaveData(0));
         LocalizationHandler localizationHandler = new LocalizationHandler(addressableHandler.LocalizationAsset);
-        
+
 
         ServiceLocater.Provide(timeController);
         ServiceLocater.Provide(sceneController);
@@ -65,6 +67,8 @@ public class InitController : MonoBehaviour
         ServiceLocater.Provide(localizationHandler);
 
         InjectSettingController();
+
+
         InjectAdMobManager(() =>
         {
             InjectAdTimer(() =>
@@ -84,7 +88,8 @@ public class InitController : MonoBehaviour
 
     void InjectAdMobManager(Action OnComplete)
     {
-        AdMobManager adMobManager = FindObjectOfType<AdMobManager>();
+        GameObject adMobManagerObject = new GameObject("AdMobManager");
+        AdMobManager adMobManager = adMobManagerObject.AddComponent<AdMobManager>();
         ServiceLocater.Provide(adMobManager);
 
         // 초기화 완료 시 실행
@@ -94,10 +99,23 @@ public class InitController : MonoBehaviour
         });
     }
 
+    void InjectInAppUpdateManager(Action OnComplete)
+    {
+        GameObject inAppUpdateManagerObject = new GameObject("InAppUpdateManager");
+        InAppUpdateManager inAppUpdateManager = inAppUpdateManagerObject.AddComponent<InAppUpdateManager>();
+
+        // 초기화 완료 시 실행
+        inAppUpdateManager.Initialize((value) =>
+        {
+            Debug.Log(value);
+            OnComplete?.Invoke();
+        });
+    }
+
     void InjectAdTimer(Action OnComplete)
     {
-        // 위 내용을 전부 반영하고 AdTimer 적용
-        AdTimer adTimer = FindObjectOfType<AdTimer>();
+        GameObject adTimerObject = new GameObject("AdTimer");
+        AdTimer adTimer = adTimerObject.AddComponent<AdTimer>();
         ServiceLocater.Provide(adTimer);
 
         // 초기화 완료 시 실행
@@ -109,10 +127,9 @@ public class InitController : MonoBehaviour
 
     AddressableHandler CreateAddressableHandler()
     {
-        GameObject addressable = new GameObject();
-        addressable.name = "Addressable";
-        AddressableHandler addressableHandler = addressable.AddComponent<AddressableHandler>();
-        DontDestroyOnLoad(addressable);
+        GameObject addressableObject = new GameObject("AddressableHandler");
+        AddressableHandler addressableHandler = addressableObject.AddComponent<AddressableHandler>();
+        addressableHandler.Initialize();
 
         return addressableHandler;
     }
