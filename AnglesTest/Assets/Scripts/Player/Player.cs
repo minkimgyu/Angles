@@ -44,8 +44,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         {
             { new Tuple<string, float>("MaxHp", _playerData.MaxHp) },
             { new Tuple<string, float>("AutoHpRecoveryPoint", _playerData.AutoHpRecoveryPoint) },
+            { new Tuple<string, float>("DamageReductionRatio", _playerData.DamageReductionRatio) },
 
-            { new Tuple<string, float>("DamageReductionRatio", _playerData.AutoHpRecoveryPoint) },
+            { new Tuple<string, float>("AliveState", (int)_aliveState) },
 
             { new Tuple<string, float>("AttackDamage", _playerData.AttackDamage) },
             { new Tuple<string, float>("TotalDamageRatio", _playerData.TotalDamageRatio) },
@@ -117,12 +118,12 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
                     new Vector3(maxScale, maxScale, transform.localScale.z), ratio);
     }
 
-    protected override void SetImmunity(bool nowInvincible)
+    protected override void SetImmunity(bool nowImmunity)
     {
-        base.SetImmunity(nowInvincible);
-        _moveComponent.FreezeRotation(nowInvincible);
+        base.SetImmunity(nowImmunity);
+        _moveComponent.FreezeRotation(nowImmunity);
 
-        if (nowInvincible) _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnInvincible);
+        if (nowImmunity) _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnImmunity);
         else _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
     }
 

@@ -8,7 +8,8 @@ public class OutlineComponent : MonoBehaviour
     {
         OnIdle,
         OnDash,
-        OnInvincible,
+
+        OnImmunity,
         OnGroggy,
         OnInteract,
 
@@ -27,7 +28,7 @@ public class OutlineComponent : MonoBehaviour
         _outlineColorDictionary.Add(Condition.OnIdle, _spriteRenderer.color);
 
 
-        _outlineColorDictionary.Add(Condition.OnInvincible, new Color(20 / 255f, 217 / 255f, 148 / 255f));
+        _outlineColorDictionary.Add(Condition.OnImmunity, new Color(20 / 255f, 217 / 255f, 148 / 255f));
         _outlineColorDictionary.Add(Condition.OnDash, new Color(20 / 255f, 217 / 255f, 148 / 255f));
 
 

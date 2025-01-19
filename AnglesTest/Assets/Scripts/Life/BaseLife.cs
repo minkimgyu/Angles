@@ -50,13 +50,14 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     {
         Normal, // 일반
         Immunity, // 데미지 면역
+        Invincible, // 무적 상태 --> 더 상위 개념
         Groggy, // 기절
     }
 
     public enum LifeState
     {
         Alive,
-        Die
+        Die,
     }
 
     protected ITarget.Type _targetType;
@@ -105,6 +106,8 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     protected virtual void SetImmunity(bool nowImmunity)
     {
+        if (_aliveState == AliveState.Invincible) return; // 무적 상태면 바꾸지 않음
+
         if (nowImmunity) _aliveState = AliveState.Immunity;
         else _aliveState = AliveState.Normal;
     }
@@ -113,6 +116,11 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     {
         _lifeState = LifeState.Alive;
         GetHeal(_lifeData.MaxHp);
+    }
+
+    public virtual void SetInvincible()
+    {
+        _aliveState = AliveState.Invincible;
     }
 
     protected virtual void OnDie()
@@ -170,8 +178,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void GetDamage(DamageableData damageableData)
     {
-        if (_lifeState == LifeState.Alive && _aliveState == AliveState.Immunity) return; // 면역 상태거나 무적 상태의 경우 리턴
-        if (_lifeState == LifeState.Die) return;
+        if (_lifeState == LifeState.Alive && _aliveState == AliveState.Immunity) return; // 살아있고 면역 상태의 경우 리턴
+        if (_lifeState == LifeState.Alive && _aliveState == AliveState.Invincible) return; // 살아있고 무적 상태의 경우 리턴
+        if (_lifeState == LifeState.Die) return; // 죽었거나 무적이면 리턴
 
         bool canDamage = damageableData._targetType.Contains(_targetType);
         if (canDamage == false) return;

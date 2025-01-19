@@ -79,11 +79,29 @@ public class ReviveCommand : BaseCommand
     }
 }
 
+public class SetInvincibleCommand : BaseCommand
+{
+    Action SetInvincible;
+
+    public SetInvincibleCommand(Action SetInvincible)
+    {
+        this.SetInvincible = SetInvincible;
+    }
+
+
+    public override void Execute()
+    {
+        SetInvincible?.Invoke();
+    }
+}
+
 public class SubEventBus : BaseEventBus<SubEventBus.State>
 {
     public enum State
     {
-        Revive,
+        Revive, // 부활 적용
+        SetInvincible, // 플레이어 무적으로 지정
+
         CreateCard,
         CreateReusableCard,
         

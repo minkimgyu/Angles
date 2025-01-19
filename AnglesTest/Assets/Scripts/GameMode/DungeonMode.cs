@@ -37,8 +37,11 @@ abstract public class DungeonMode : GameMode
         _stopwatchTimer.OnUpdate();
     }
 
+    bool _gameEnd;
+
     protected virtual void OnGameEnd()
     {
+        _gameEnd = true;
         _stopwatchTimer.Stop();
 
         int coinCount = GameStateManager.Instance.ReturnCoin();
@@ -47,6 +50,9 @@ abstract public class DungeonMode : GameMode
 
     public override void OnGameClearRequested()
     {
+        if (_gameEnd == true) return; // 이미 게임 끝 판정이 난 경우 return
+        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.SetInvincible);
+
         OnGameEnd();
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.LevelClear);
         UnlockNextChapter();
@@ -57,7 +63,9 @@ abstract public class DungeonMode : GameMode
 
     public override void OnGameOverRequested()
     {
-        if(_adHandler.CanShowAdd == false)
+        if (_gameEnd == true) return; // 이미 게임 끝 판정이 난 경우 return
+
+        if (_adHandler.CanShowAdd == false)
         {
             Debug.Log($"광고까지 남은 시간: {_adHandler.LeftTime}");
         }
@@ -86,6 +94,8 @@ abstract public class DungeonMode : GameMode
             Debug.Log("addressableHandler 존재하지 않음");
             return;
         }
+
+        _gameEnd = false;
 
         string inGameAdSaveKeyName = addressableHandler.Database.AdData.InGameAdSaveKeyName;
         int inGameAdDelay = addressableHandler.Database.AdData.InGameAdDelay;

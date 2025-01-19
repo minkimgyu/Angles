@@ -1,3 +1,4 @@
+using DamageUtility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ public class SurvivalStage : BaseStage, ILevel
     SurvivalLevelUIController _levelUIController;
     ArrowPointerController _arrowPointerController;
 
+    List<BaseLife> _spawnedEnemys;
+
     public SurvivalStage SurvivalStageLevel { get { return this; } }
 
     public override void ResetData(SurvivalStageData survivalStageData)
@@ -31,6 +34,8 @@ public class SurvivalStage : BaseStage, ILevel
         ArrowPointerController arrowPointerController)
     {
         base.Initialize(gameMode, addressableHandler, inGameFactory, levelUIController, arrowPointerController);
+
+        _spawnedEnemys = new List<BaseLife>();
 
         _levelUIController = levelUIController;
         _arrowPointerController = arrowPointerController;
@@ -94,6 +99,9 @@ public class SurvivalStage : BaseStage, ILevel
             for (int i = 0; i < size; i++)
             {
                 BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas[i].Name);
+                enemy.AddObserverEvent(() => { _spawnedEnemys.Remove(enemy); });
+                _spawnedEnemys.Add(enemy);
+
                 Vector2 spawnPos = _survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas[i].SpawnPosition.V2;
 
                 if (isLastSpawn)
@@ -121,6 +129,12 @@ public class SurvivalStage : BaseStage, ILevel
         _spawnCount++;
         if(_spawnCount == _lastSpawnCount)
         {
+            DamageableData damageData = new DamageableData(new DamageStat(DamageUtility.Damage.InstantDeathDamage));
+            for (int i = 0; i < _spawnedEnemys.Count; i++)
+            {
+                _spawnedEnemys[i].GetDamage(damageData);
+            }
+
             _gameMode.OnGameClearRequested();
         }
     }

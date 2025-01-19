@@ -78,6 +78,7 @@ public class PlayerSpawner
     {
         Player player = (Player)_factoryCollection.GetFactory(InGameFactory.Type.Life).Create(BaseLife.Name.Player);
         EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.Revive, new ReviveCommand(() => { player.Revive(); }));
+        EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.SetInvincible, new SetInvincibleCommand(() => { player.SetInvincible(); }));
 
         ApplySkin(player);
         ApplyStat(player);

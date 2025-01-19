@@ -47,11 +47,7 @@ public class AdHandler
     int _runningMinute; // 광고가 생성되는 시간
     string _saveKeyName; // 광고 세이브 키 이름
 
-    float _passedTime = 0;
-    float _initializedTime = 0; // 초기화된 시간
-
     JsonParser _parser;
-
     DateTime _adShowTime; // 광고 보여주는 시간
 
     // 인터넷에 연결되지 않아 광고 로드가 불가능한 경우
