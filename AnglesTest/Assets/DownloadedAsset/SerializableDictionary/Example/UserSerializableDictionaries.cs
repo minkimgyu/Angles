@@ -27,9 +27,8 @@ using UnityEngine;
 //[Serializable]
 //public class InteractableObjectInputDictionary : SerializableDictionary<IInteractable.Name, InteractableObjectCreaterInput> { }
 
-
-[Serializable]
-public class FlockBehaviorDictionary : SerializableDictionary<FlockComponent.BehaviorType, float> { }
+//[Serializable]
+//public class FlockBehaviorDictionary : SerializableDictionary<FlockComponent.BehaviorType, float> { }
 
 [Serializable]
 public class HandlerDictionary : SerializableDictionary<InputController.Side, BaseInputHandler> {}

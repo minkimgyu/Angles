@@ -1,1 +1,0 @@
-{"_damage":20.0,"_force":5.0,"_delay":2.0,"_distanceFromCaster":1.5, "_bulletCount":5,"_targetTypes":[0],"_probability":1.0}

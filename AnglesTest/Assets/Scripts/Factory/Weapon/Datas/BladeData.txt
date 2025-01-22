@@ -1,1 +1,0 @@
-{"_attackDelay":0.3,"_lifeTime":10.0,"_damage":100.0}

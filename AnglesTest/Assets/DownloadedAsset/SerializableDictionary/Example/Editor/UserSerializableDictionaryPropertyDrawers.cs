@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomPropertyDrawer(typeof(FlockBehaviorDictionary))]
 [CustomPropertyDrawer(typeof(HandlerDictionary))]
 
 [CustomPropertyDrawer(typeof(ObjectColorDictionary))]

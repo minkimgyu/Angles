@@ -1,1 +1,0 @@
-{"_delay":2.0,"_damage":20.0,"_range":5.0,"_targetTypes":[0],"_probability":1.0}

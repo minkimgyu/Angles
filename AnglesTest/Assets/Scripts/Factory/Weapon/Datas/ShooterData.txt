@@ -1,1 +1,0 @@
-{"_moveSpeed":5.0,"_shootForce": 10.0,"_fireDelay":0.2,"_followOffset":2.0,"_damage":100.0}

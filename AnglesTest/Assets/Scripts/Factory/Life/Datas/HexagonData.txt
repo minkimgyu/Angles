@@ -1,1 +1,0 @@
-{"_moveSpeed":5.0,"_skillNames":[8],"_stopDistance":4.0,"_gap":2.0,"_maxHp":300.0,"_targetType":1}

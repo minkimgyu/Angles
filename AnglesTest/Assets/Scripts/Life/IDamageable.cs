@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [Serializable]
 public struct DamageableData
@@ -82,6 +84,11 @@ public struct DamageStat
         _adRatio = adRatio;
         _totalMultiplier = totalMultiplier;
     }
+}
+
+public interface IPos
+{
+    Vector3 GetPosition();
 }
 
 public interface ITarget : IPos
