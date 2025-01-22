@@ -849,6 +849,8 @@ public class DBBuilder : MonoBehaviour
         { GameMode.Level.PyramidSurvival, new SurvivalInfo(300, GameMode.Level.CubeSurvival) },
         { GameMode.Level.CubeSurvival, new SurvivalInfo(300, GameMode.Level.PrismSurvival) },
         { GameMode.Level.PrismSurvival, new SurvivalInfo(300) },
+
+        { GameMode.Level.MainTutorial, new TutorialInfo(1) },
     };
 
     #endregion

@@ -11,6 +11,7 @@ public interface ISceneControllable
         LobbyScene,
         ChapterScene,
         SurvivalScene,
+        TutorialScene,
     }
 
     void ChangeScene(SceneName sceneName);

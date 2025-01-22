@@ -50,6 +50,9 @@ public class SelectLevelModel
                 case GameMode.Type.Survival:
                     _selectChapterViewer.ChangeSurvivalStageProgress(_levelInfo.Item2.TotalDuration);
                     break;
+                case GameMode.Type.Tutorial:
+                    _selectChapterViewer.ChangeChapterStageProgress(_levelInfo.Item2.MaxLevel);
+                    break;
             }
         }
     }

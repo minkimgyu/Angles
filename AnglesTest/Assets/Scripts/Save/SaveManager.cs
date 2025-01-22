@@ -96,8 +96,11 @@ public struct SaveData
         _language = ILocalization.Language.Korean;
 
         _selectedLevel = new Dictionary<GameMode.Type, GameMode.Level>();
-        _selectedLevel[GameMode.Type.Chapter] = GameMode.Level.TriconChapter;
-        _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
+
+        foreach (GameMode.Type type in Enum.GetValues(typeof(GameMode.Type)))
+        {
+            _selectedLevel[type] = GameMode.GetLevel(type, 0);
+        }
 
         _skin = SkinData.Key.Normal;
 
@@ -117,6 +120,13 @@ public struct SaveData
             else _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
         }
 
+        List<GameMode.Level> tutorialLevels = GameMode.GetLevels(GameMode.Type.Tutorial);
+        for (int i = 0; i < tutorialLevels.Count; i++)
+        {
+            if (i == 0) _levelInfos[tutorialLevels[i]] = new SavableTutorialInfo(0, true);
+            else _levelInfos[tutorialLevels[i]] = new SavableTutorialInfo(0, false);
+        }
+
         _statInfos = new Dictionary<StatData.Key, SavableStatData>();
         foreach (StatData.Key i in Enum.GetValues(typeof(StatData.Key)))
         {
@@ -129,6 +139,16 @@ public struct SaveData
             if (i == 0) _skinInfos.Add(i, new SavableSkinData(true));
             else _skinInfos.Add(i, new SavableSkinData(false));
         }
+    }
+
+    public bool HavePlayData()
+    {
+        foreach (var levelData in _levelInfos)
+        {
+            if(levelData.Value.HavePlayData == true) return true;
+        }
+
+        return false;
     }
 
     // Json 데이터 업데이트
@@ -146,13 +166,20 @@ public struct SaveData
             _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
         }
 
+        // 만약 Survival 키에 담긴 레벨이 없다면 진행
+        if (_selectedLevel.ContainsKey(GameMode.Type.Tutorial) == false)
+        {
+            _selectedLevel[GameMode.Type.Tutorial] = GameMode.Level.MainTutorial;
+        }
+
         // 새로 추가된 데이터를 기본 데이터로 추가해준다.
         List<GameMode.Level> chapterLevels = GameMode.GetLevels(GameMode.Type.Chapter);
         for (int i = 0; i < chapterLevels.Count; i++)
         {
             if (_levelInfos.ContainsKey(chapterLevels[i]) == true) continue;
 
-            _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
+            if (i == 0) _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, true);
+            else _levelInfos[chapterLevels[i]] = new SavableChapterInfo(0, false);
         }
 
         // 새로 추가된 데이터를 기본 데이터로 추가해준다.
@@ -161,7 +188,19 @@ public struct SaveData
         {
             if (_levelInfos.ContainsKey(survivalLevels[i]) == true) continue;
 
-            _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
+            if (i == 0) _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, true);
+            else _levelInfos[survivalLevels[i]] = new SavableSurvivalInfo(0, false);
+        }
+
+        // 새로 추가된 데이터를 기본 데이터로 추가해준다.
+        List<GameMode.Level> tutorialLevels = GameMode.GetLevels(GameMode.Type.Tutorial);
+        for (int i = 0; i < tutorialLevels.Count; i++)
+        {
+            if (_levelInfos.ContainsKey(tutorialLevels[i]) == true) continue;
+
+            // 첫 데이터가 없다면 스테이지가 열려있게 하기
+            if (i == 0) _levelInfos[tutorialLevels[i]] = new SavableTutorialInfo(0, true);
+            else _levelInfos[tutorialLevels[i]] = new SavableTutorialInfo(0, false);
         }
 
         // 새로 추가된 데이터를 기본 데이터로 추가해준다.
@@ -316,16 +355,17 @@ public class SaveManager : ISaveable
     public bool VerifyJson(string json)
     {
         // 불러오는 중 오류가 있다면 더 이상 진행하지 않음
-        try
-        {
-            SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log(e);
-            return false; // 유효하지 않음
-        }
+        //try
+        //{
+        //    SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
+        //}
+        //catch (System.Exception e)
+        //{
+        //    Debug.Log(e);
+        //    return false; // 유효하지 않음
+        //}
 
+        SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
         return true; // 유효함
     }
 
@@ -333,17 +373,18 @@ public class SaveManager : ISaveable
     public bool VerifyJson(string json, out SaveData saveData)
     {
         // 불러오는 중 오류가 있다면 더 이상 진행하지 않음
-        try
-        {
-            saveData = _parser.JsonToObject<SaveData>(json);
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log(e);
-            saveData = default;
-            return false; // 유효하지 않음
-        }
+        //try
+        //{
+        //    saveData = _parser.JsonToObject<SaveData>(json);
+        //}
+        //catch (System.Exception e)
+        //{
+        //    Debug.Log(e);
+        //    saveData = default;
+        //    return false; // 유효하지 않음
+        //}
 
+        saveData = _parser.JsonToObject<SaveData>(json);
         return true; // 유효함
     }
 

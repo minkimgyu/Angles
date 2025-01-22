@@ -14,7 +14,7 @@ public class LobbyController : MonoBehaviour
 
     [SerializeField] PopUpViewer _popUpViewer;
 
-    [SerializeField] LevelSelectPage _chapterLevelSelectPage;
+    [SerializeField] LevelSelectPage _levelSelectPage;
 
     [SerializeField] AdViewer _adViewer;
 
@@ -115,7 +115,7 @@ public class LobbyController : MonoBehaviour
         LobbyViewerFactory lobbyViewerFactory = new LobbyViewerFactory(addressableHandler.ViewerPrefabAsset);
         Dictionary<GameMode.Level, LevelData> levelDatas = GetLevelDatas(addressableHandler, saveData);
 
-        _chapterLevelSelectPage.Initialize(
+        _levelSelectPage.Initialize(
             levelDatas,
             lobbyViewerFactory
         );

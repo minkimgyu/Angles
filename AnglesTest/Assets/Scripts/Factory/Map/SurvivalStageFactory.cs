@@ -31,18 +31,10 @@ public class SurvivalStageFactory : BaseFactory
     {
         _stageCreaters = new Dictionary<GameMode.Level, StageCreater>();
 
-        try
+        List<GameMode.Level> levels = GameMode.GetLevels(GameMode.Type.Survival);
+        for (int i = 0; i < levels.Count; i++)
         {
-            List<GameMode.Level> levels = GameMode.GetLevels(GameMode.Type.Survival);
-            for (int i = 0; i < levels.Count; i++)
-            {
-                _stageCreaters[levels[i]] = new SurvivalStageCreater(stagePrefab[levels[i]].SurvivalStageLevel, (SurvivalStageData)stageData[levels[i]]);
-            }
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log(e);
-            throw;
+            _stageCreaters[levels[i]] = new SurvivalStageCreater(stagePrefab[levels[i]].SurvivalStageLevel, (SurvivalStageData)stageData[levels[i]]);
         }
     }
 

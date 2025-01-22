@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-abstract public class BaseState<T>
+abstract public class BaseState<T> : ITutorialInjector
 {
     protected BaseFSM<T> _baseFSM;
     public BaseState(FSM<T> fsm) { _baseFSM = fsm; }
+
+    public virtual void InjectTutorialEvent(Action MoveStartTutorialEvent) { }
+    public virtual void InjectTutorialEvent(Action ShootingTutorialEvent, Action CollisionTutorialEvent, Action CancelShootingTutorialEvent) { }
 
     public abstract void OnStateEnter();
     public abstract void OnStateEnter(ITarget target, string message);
@@ -43,7 +47,6 @@ public class State<T> : BaseState<T>
     public override void OnStateEnter(Vector2 vec2, string message) { }
     public override void OnStateEnter(Vector2 vec2, float ratio, string message) { }
     public override void OnStateEnter(Collision2D collision, string message) { }
-
 
     public override void OnStateExit() { }
 

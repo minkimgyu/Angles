@@ -137,8 +137,27 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         _playerData = data;
     }
 
+    Action OnGetSkillTutorialEvent;
+
+    public void InjectTutorialEvent(
+        Action MoveStartTutorialEvent,
+        Action ShootingTutorialEvent,
+        Action CollisionTutorialEvent,
+        Action CancelShootingTutorialEvent,
+        Action OnGetSkillTutorialEvent)
+    {
+        ITutorialInjector moveStateInjector = _movementFSM.GetState(MovementState.Move);
+        moveStateInjector.InjectTutorialEvent(MoveStartTutorialEvent);
+
+        ITutorialInjector shootingInjector = _actionFSM.GetState(ActionState.Shoot);
+        shootingInjector.InjectTutorialEvent(ShootingTutorialEvent, CollisionTutorialEvent, CancelShootingTutorialEvent);
+
+        this.OnGetSkillTutorialEvent = OnGetSkillTutorialEvent;
+    }
+
     public void AddSkill(BaseSkill.Name name, BaseSkill skill) 
     {
+        OnGetSkillTutorialEvent?.Invoke(); // 튜토리얼 이벤트 실행
         _skillController.AddSkill(name, skill);
     }
 

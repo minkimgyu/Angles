@@ -1,0 +1,44 @@
+{
+  "$type": "TutorialStageData, Assembly-CSharp",
+  "spawnDatas": {
+    "$type": "SpawnData[], Assembly-CSharp",
+    "$values": [
+      {
+        "$type": "SpawnData, Assembly-CSharp",
+        "spawnPosition": {
+          "$type": "SerializableVector2, Assembly-CSharp",
+          "x": -4,
+          "y": 0
+        },
+        "name": "YellowTriangle"
+      },
+      {
+        "$type": "SpawnData, Assembly-CSharp",
+        "spawnPosition": {
+          "$type": "SerializableVector2, Assembly-CSharp",
+          "x": -4,
+          "y": -11
+        },
+        "name": "YellowTriangle"
+      },
+      {
+        "$type": "SpawnData, Assembly-CSharp",
+        "spawnPosition": {
+          "$type": "SerializableVector2, Assembly-CSharp",
+          "x": 8,
+          "y": -11
+        },
+        "name": "YellowTriangle"
+      },
+      {
+        "$type": "SpawnData, Assembly-CSharp",
+        "spawnPosition": {
+          "$type": "SerializableVector2, Assembly-CSharp",
+          "x": 8,
+          "y": 0
+        },
+        "name": "YellowTriangle"
+      }
+    ]
+  }
+}

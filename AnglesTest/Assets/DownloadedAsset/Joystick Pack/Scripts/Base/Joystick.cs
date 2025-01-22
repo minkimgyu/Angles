@@ -65,9 +65,9 @@ public class Joystick : BaseInputHandler, IPointerDownHandler, IDragHandler, IPo
 
     bool CanDoubleTab()
     {
-        Debug.Log(_tabCnt);
-        Debug.Log(_tabTime);
-        Debug.Log(Time.time);
+        //Debug.Log(_tabCnt);
+        //Debug.Log(_tabTime);
+        //Debug.Log(Time.time);
 
         // 이전에 한번 누르고
         // 나중에 두번 누르는 경우 이전 경우를 무시해줘야한다.

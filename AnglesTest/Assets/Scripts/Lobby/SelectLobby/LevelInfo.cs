@@ -20,6 +20,9 @@ public interface ISavableLevelInfo
 
     [JsonIgnore] int CompleteLevel { get; set; } // 클리어 한 레벨
     [JsonIgnore] int CompleteDuration { get; set; } // 최장 생존 시간
+
+    // 클리어 데이터가 있는 경우
+    [JsonIgnore] bool HavePlayData { get; }
 }
 
 public struct LevelData
@@ -37,6 +40,49 @@ public struct LevelData
         _levelInfos = levelInfos;
         _savableLevelInfos = savableLevelInfos;
         _levelSprite = levelSprite;
+    }
+}
+
+public struct TutorialInfo : ILevelInfo
+{
+    [JsonProperty] private GameMode.Type _type;
+    [JsonProperty] private int _maxLevel;
+
+    [JsonIgnore] public GameMode.Type Type { get => _type; }
+    [JsonIgnore] public bool CanUnlockLevel { get => false; }
+    [JsonIgnore] public GameMode.Level UnlockLevel { get => default; }
+
+    [JsonIgnore] public int MaxLevel { get => _maxLevel; }
+
+    public TutorialInfo(int maxLevel)
+    {
+        _type = GameMode.Type.Tutorial;
+        _maxLevel = maxLevel;
+    }
+}
+
+public struct SavableTutorialInfo : ISavableLevelInfo
+{
+    [JsonProperty] private int _completeLevel;
+    [JsonProperty] private bool _nowUnlock; // 이전 스테이지를 클리어해야 해금된다.
+
+    [JsonIgnore] public int CompleteLevel { get => _completeLevel; set => _completeLevel = value; }
+    [JsonIgnore] public bool NowUnlock { get => _nowUnlock; set => _nowUnlock = value; }
+    [JsonIgnore] public int CompleteDuration { get { return -1; } set { } }
+
+    // 클리어 한 레벨이 0인 경우
+    public bool HavePlayData { get { return _completeLevel > 0;  }}
+
+    public SavableTutorialInfo(bool nowUnlock)
+    {
+        _completeLevel = 0;
+        _nowUnlock = nowUnlock;
+    }
+
+    public SavableTutorialInfo(int completeLevel, bool nowUnlock)
+    {
+        _completeLevel = completeLevel;
+        _nowUnlock = nowUnlock;
     }
 }
 
@@ -82,6 +128,9 @@ public struct SavableChapterInfo : ISavableLevelInfo
     [JsonIgnore] public int CompleteLevel { get => _completeLevel; set => _completeLevel = value; }
     [JsonIgnore] public bool NowUnlock { get => _nowUnlock; set => _nowUnlock = value; }
     [JsonIgnore] public int CompleteDuration { get { return -1; } set { } }
+
+    // 클리어 한 레벨이 0보다 큰 경우
+    public bool HavePlayData { get { return _completeLevel > 0; } }
 
     public SavableChapterInfo(bool nowUnlock)
     {
@@ -138,6 +187,9 @@ public struct SavableSurvivalInfo : ISavableLevelInfo
     [JsonIgnore] public int CompleteDuration { get => _completeDuration; set => _completeDuration = value; }
     [JsonIgnore] public bool NowUnlock { get => _nowUnlock; set => _nowUnlock = value; }
     [JsonIgnore] public int CompleteLevel { get { return -1; } set { } }
+
+    // 클리어 한 시간이 0보다 큰 경우
+    public bool HavePlayData { get { return _completeDuration > 0; } }
 
     public SavableSurvivalInfo(bool nowUnlock)
     {

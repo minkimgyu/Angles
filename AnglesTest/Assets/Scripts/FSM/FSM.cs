@@ -19,6 +19,8 @@ abstract public class BaseFSM<T>
         SetState(startState);
     }
 
+    public BaseState<T> GetState(T stateName) { return _states[stateName]; }
+
     public bool SetState(T stateName)
     {
         return ChangeState(_states[stateName]);

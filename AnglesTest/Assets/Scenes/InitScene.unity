@@ -1199,7 +1199,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _loadingPregressBar: {fileID: 2019788025}
   _loadingPregressTxt: {fileID: 1087157636}
-  _updateTxt: {fileID: 0}
 --- !u!4 &909842332
 Transform:
   m_ObjectHideFlags: 0

@@ -1,21 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Portal : MonoBehaviour, IInteractable
 {
-    //OutlineComponent _outlineComponent;
     Vector2 _movePos;
     bool _isActive;
 
-    System.Action OnInteractRequested;
+    Action OnInteractRequested;
 
-    public void Initialize(System.Action OnInteractRequested)
+    public void Initialize(Action OnInteractRequested)
     {
         this.OnInteractRequested = OnInteractRequested;
-        //_outlineComponent = GetComponentInChildren<OutlineComponent>();
-        //_outlineComponent.Initialize();
-
         Disable();
     }
 
@@ -23,13 +20,11 @@ public class Portal : MonoBehaviour, IInteractable
     {
         _movePos = movePos;
         _isActive = true;
-        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnEnabled);
     }
 
     public void Disable()
     {
         _isActive = false;
-        //_outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
     }
 
     public void OnInteractEnter(IInteracter interacter) { }
@@ -43,11 +38,6 @@ public class Portal : MonoBehaviour, IInteractable
     }
 
     public void OnInteractExit(IInteracter interacter) { }
-
-    public Object ReturnObject()
-    {
-        return this;
-    }
 
     public void ResetPosition(Vector3 pos)
     {

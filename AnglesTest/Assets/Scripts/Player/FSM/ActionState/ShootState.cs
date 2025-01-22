@@ -46,6 +46,17 @@ public class ShootState : State<Player.ActionState>
         _layerMask = LayerMask.GetMask("Obstacle", "Target");
     }
 
+    Action ShootingTutorialEvent;
+    Action CollisionTutorialEvent;
+    Action CancelShootingTutorialEvent;
+
+    public override void InjectTutorialEvent(Action ShootingTutorialEvent, Action CollisionTutorialEvent, Action CancelShootingTutorialEvent)
+    {
+        this.ShootingTutorialEvent = ShootingTutorialEvent;
+        this.CollisionTutorialEvent = CollisionTutorialEvent;
+        this.CancelShootingTutorialEvent = CancelShootingTutorialEvent;
+    }
+
     public override void OnCollisionEnter(Collision2D collision)
     {
         ReflectTo(collision.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
@@ -54,7 +65,8 @@ public class ShootState : State<Player.ActionState>
     void ReflectTo(GameObject targetObject, Vector3 contactPos, Vector3 contactNormal)
     {
         // collision -> Àû, º®
-        Debug.Log(targetObject.name);
+        //Debug.Log(targetObject.name);
+        CollisionTutorialEvent?.Invoke();
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce, 0.6f);
         OnReflect?.Invoke(targetObject, contactPos);
@@ -70,6 +82,8 @@ public class ShootState : State<Player.ActionState>
 
     public override void OnStateEnter(Vector2 direction, float ratio, string message)
     {
+        ShootingTutorialEvent?.Invoke();
+
         _moveComponent.ApplyMovement = false;
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shooting);
 
@@ -119,8 +133,10 @@ public class ShootState : State<Player.ActionState>
         }
     }
 
+    // ½´ÆÃ Äµ½½ Àû¿ë
     public override void OnChargeStart()
     {
+        CancelShootingTutorialEvent?.Invoke();
         GoToReadyState();
     }
 

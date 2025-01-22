@@ -86,28 +86,26 @@ public class AdMobManager : MonoBehaviour, IAdMob
         var adRequest = new AdRequest();
 
         // send the request to load the ad.
-        RewardedAd.Load(_isTestMode ? _rewardTestID : _rewardID, adRequest,
-            (RewardedAd ad, LoadAdError error) =>
+        RewardedAd.Load(_isTestMode ? _rewardTestID : _rewardID, adRequest, (RewardedAd ad, LoadAdError error) => {
+            // if error is not null, the load request failed.
+            if (error != null || ad == null)
             {
-                // if error is not null, the load request failed.
-                if (error != null || ad == null)
-                {
-                    Debug.LogError("Rewarded ad failed to load an ad " +
-                                   "with error : " + error);
-
-                    lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
-                    return;
-                }
-
-                Debug.Log("Rewarded ad loaded with response : "
-                          + ad.GetResponseInfo());
-
-                _rewardedAd = ad;
-                RegisterReloadHandler(_rewardedAd); // 광고 재로드를 위한 이벤트 연결
-                //RegisterEventHandlers(_rewardedAd); // 광고 이벤트 핸들러 연결
+                Debug.LogError("Rewarded ad failed to load an ad " +
+                                "with error : " + error);
 
                 lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
-            });
+                return;
+            }
+
+            Debug.Log("Rewarded ad loaded with response : "
+                        + ad.GetResponseInfo());
+
+            _rewardedAd = ad;
+            RegisterReloadHandler(_rewardedAd); // 광고 재로드를 위한 이벤트 연결
+            //RegisterEventHandlers(_rewardedAd); // 광고 이벤트 핸들러 연결
+
+            lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
+        });
     }
 
     public bool CanShowAdd()

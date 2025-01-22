@@ -7,7 +7,8 @@ abstract public class GameMode : MonoBehaviour
     public enum Type
     {
         Chapter,
-        Survival
+        Survival,
+        Tutorial,
     }
 
     public static Type GetLevelType(Level level)
@@ -78,6 +79,8 @@ abstract public class GameMode : MonoBehaviour
         PyramidSurvival,
         CubeSurvival,
         PrismSurvival,
+
+        MainTutorial
     }
 
     public enum LevelColor

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
 public class SettingController : MonoBehaviour, ISettable
 {
     [SerializeField] GameObject _content;

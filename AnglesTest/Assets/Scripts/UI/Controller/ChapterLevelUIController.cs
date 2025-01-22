@@ -26,7 +26,7 @@ public class ChapterLevelModel
         get => _showStageCountViewer;
         set
         {
-            _showBossHPViewer = value;
+            _showStageCountViewer = value;
             _stageCountViewer.TurnOnViewer(_showStageCountViewer);
         }
     }

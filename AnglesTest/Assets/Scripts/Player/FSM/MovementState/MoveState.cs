@@ -29,6 +29,18 @@ public class MoveState : State<Player.MovementState>
         this.UseDash = UseDash;
     }
 
+    Action MoveStartTutorialEvent;
+
+    public override void InjectTutorialEvent(Action MoveStartTutorialEvent)
+    {
+        this.MoveStartTutorialEvent = MoveStartTutorialEvent;
+    }
+
+    public override void OnStateEnter()
+    {
+        MoveStartTutorialEvent?.Invoke();
+    }
+
     public override void OnMove(Vector2 input)
     {
         _storedInput = input;

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
-using static GameMode;
 
 public class LevelSelectPage : MonoBehaviour
 {
@@ -16,6 +15,7 @@ public class LevelSelectPage : MonoBehaviour
 
     [SerializeField] Button _playChapterBtn;
 
+    [SerializeField] GameObject _toggleParent;
     [SerializeField] Toggle _survivalToggle;
     [SerializeField] Toggle _chapterToggle;
 
@@ -53,9 +53,6 @@ public class LevelSelectPage : MonoBehaviour
         Dictionary<GameMode.Level, LevelData> levelDatas,
         BaseFactory viewerFactory)
     {
-        ISaveable saveable = ServiceLocater.ReturnSaveManager();
-        SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
-
         _levelDatas = levelDatas;
         _playChapterModel = new PlayLevelModel(_playChapterViewer);
 
@@ -83,8 +80,22 @@ public class LevelSelectPage : MonoBehaviour
             }
         );
 
-        _levelType = saveData._selectedType; // 선택된 게임 타입
-        SelectLevel(saveData._selectedLevel[_levelType]);
+        ISaveable saveable = ServiceLocater.ReturnSaveManager();
+        SaveData saveData = saveable.GetSaveData(); // 저장된 데이터
+
+        // 기존 플레이 데이터가 있다면
+        if(saveData.HavePlayData() == true)
+        {
+            _toggleParent.SetActive(true); // 토글 켜주기
+            _levelType = saveData._selectedType; // 세이브된 게임 타입 적용
+            SelectLevel(saveData._selectedLevel[_levelType]); // 게임 타입 선택
+        }
+        else // 기존 플레이 데이터가 없다면
+        {
+            _toggleParent.SetActive(false);// 토글 꺼주기
+            _levelType = GameMode.Type.Tutorial; // 튜토리얼 타입 적용
+            SelectLevel(saveData._selectedLevel[_levelType]); // 게임 타입 선택
+        }
 
         _selectChapterController.Initialize(
             levelDatas,
