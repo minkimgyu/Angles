@@ -12,11 +12,14 @@ public class StartMenuController : MonoBehaviour
 
     [SerializeField] Button _languageButton;
     [SerializeField] Button _instructionButton;
+    [SerializeField] Button _cloudButton;
 
     [SerializeField] GameObject _instructionKOR;
     [SerializeField] GameObject _instructionENG;
 
     [SerializeField] TMP_Text _versionInfo;
+
+    [SerializeField] CloudSaveController _cloudSaveController;
 
     bool _showInstruction = false;
 
@@ -28,12 +31,16 @@ public class StartMenuController : MonoBehaviour
    
     void Initialize()
     {
+        AddressableHandler addressableHandler = FindObjectOfType<AddressableHandler>();
+        if (addressableHandler == null) return; // 어드레서블 없으면 return;
+
         // 버전 정보 갱신
         _versionInfo.text = $"ver {Application.version}";
 
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
         _instructionButton.onClick.AddListener(ActivateInstruction);
+        _cloudButton.onClick.AddListener(() => { _cloudSaveController.Activate(); });
 
         _showInstruction = false;
         _instructionKOR.SetActive(false);
@@ -41,6 +48,18 @@ public class StartMenuController : MonoBehaviour
 
 
         SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
+
+        _cloudSaveController.Initialize(
+            addressableHandler.SkinIconAsset,
+            addressableHandler.StatIconAsset,
+            addressableHandler.LevelIconAsset,
+            addressableHandler.GoldIcon,
+
+            addressableHandler.Database.LevelDatas,
+            addressableHandler.Database.StatDatas,
+            new MenuViewerFactory(addressableHandler.ViewerPrefabAsset)
+        );
+
         _languageButton.GetComponentInChildren<TMP_Text>().text = (saveData._language.ToString()).Substring(0, 3);
 
         _languageButton.onClick.AddListener(ChangeLocalization);

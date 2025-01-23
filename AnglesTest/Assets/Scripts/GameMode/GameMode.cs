@@ -8,7 +8,7 @@ abstract public class GameMode : MonoBehaviour
     {
         Chapter,
         Survival,
-        Tutorial,
+        Tutorial
     }
 
     public static Type GetLevelType(Level level)

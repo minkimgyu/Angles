@@ -157,7 +157,10 @@ public interface ILocalization
         CancelShootingQuestContent,
         GetSkillQuestContent,
         StageClearQuestContent,
-        EnterPotalQuestContent
+        EnterPotalQuestContent,
+
+        UploadToCloud,
+        RetrieveToLocal,
     }
 
     string GetWord(Key key);
@@ -176,7 +179,7 @@ public struct Localization
     }
 }
 
-public class NULLLocalizationHandler : ILocalization
+public class NullLocalizationHandler : ILocalization
 {
     public string GetWord(ILocalization.Key key) { return default; }
     public string GetWord(string key) { return default; }

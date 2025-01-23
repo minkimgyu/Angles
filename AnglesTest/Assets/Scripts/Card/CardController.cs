@@ -330,6 +330,7 @@ public class CardController : MonoBehaviour
     {
         CardViewer viewer = (CardViewer)_viewerFactory.Create(type);
         viewer.transform.SetParent(_cardParent);
+        viewer.transform.localScale = Vector3.one;
 
         viewer.Initialize
         (

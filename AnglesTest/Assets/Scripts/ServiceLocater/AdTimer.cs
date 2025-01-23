@@ -12,7 +12,7 @@ public interface IAdTimer
     virtual DateTime CurrentTime { get { return default; } } // 현재 시간
 }
 
-public class NULLAdTimer : IAdTimer
+public class NullAdTimer : IAdTimer
 {
 }
 

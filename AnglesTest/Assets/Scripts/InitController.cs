@@ -15,21 +15,19 @@ public class InitController : MonoBehaviour
     [SerializeField] Image _loadingPregressBar;
     [SerializeField] TMP_Text _loadingPregressTxt;
 
-    GPGSManager _gPGSManager;
-
     // Start is called before the first frame update
     void Start()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
         Application.targetFrameRate = 60;
 #endif
-        Screen.SetResolution(Screen.width, Screen.height, true);
 
         // 가장 먼저 버전 테스트를 진행한다.
-        InjectInAppUpdateManager(() =>
+        CreateInAppUpdateManager(() =>
         {
-            _gPGSManager = new GPGSManager();
-            _gPGSManager.Login(OnLoginCompleted);
+            GPGSManager gpgsManager = new GPGSManager();
+            ServiceLocater.Provide(gpgsManager);
+            gpgsManager.Login(OnLoginCompleted);
         });
     }
 
@@ -68,7 +66,6 @@ public class InitController : MonoBehaviour
 
         InjectSettingController();
 
-
         InjectAdMobManager(() =>
         {
             InjectAdTimer(() =>
@@ -99,7 +96,7 @@ public class InitController : MonoBehaviour
         });
     }
 
-    void InjectInAppUpdateManager(Action OnComplete)
+    void CreateInAppUpdateManager(Action OnComplete)
     {
         GameObject inAppUpdateManagerObject = new GameObject("InAppUpdateManager");
         InAppUpdateManager inAppUpdateManager = inAppUpdateManagerObject.AddComponent<InAppUpdateManager>();

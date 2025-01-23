@@ -7,14 +7,27 @@ using GooglePlayGames.BasicApi.SavedGame;
 using System.Text;
 using System;
 
-public class GPGSManager
+public interface IGPGS
+{
+    void Login(Action<bool> OnLoginComplete);
+    void Save(Action<bool> OnSaveComplete);
+    void Load(Action<bool, string> OnLoadComplete);
+}
+
+public class NullGPGSManager : IGPGS
+{
+    public void Login(Action<bool> OnLoginComplete) { }
+    public void Save(Action<bool> OnSaveComplete) { }
+    public void Load(Action<bool, string> OnLoadComplete) { }
+}
+
+public class GPGSManager : IGPGS
 {
     private const string fileName = "file.dat";
 
     Action<bool> OnLoginComplete;
     Action<bool> OnSaveComplete;
-    Action<bool> OnLoadComplete;
-    Action<bool> OnComformComplete;
+    Action<bool, string> OnLoadComplete;
 
     #region 로그인
 
@@ -114,7 +127,7 @@ public class GPGSManager
 
     #region 불러오기
 
-    public void Load(Action<bool> OnLoadComplete)
+    public void Load(Action<bool, string> OnLoadComplete)
     {
         this.OnLoadComplete = OnLoadComplete;
         OpenLoadGame();
@@ -145,7 +158,7 @@ public class GPGSManager
         else
         {
             // 실패함
-            OnLoadComplete?.Invoke(false);
+            OnLoadComplete?.Invoke(false, default);
             OnLoadComplete = null;
             Debug.Log("로드 실패");
         }
@@ -158,17 +171,14 @@ public class GPGSManager
         if (jData == "")
         {
             Debug.Log("데이터가 없음 초기 데이터 저장");
-            Save(OnLoadComplete); // OnLoadComplete 콜백 넘겨서 완료 이벤트 받기
+            OnLoadComplete?.Invoke(false, default);
+            OnLoadComplete = null;
         }
         else
         {
             
             Debug.Log("로드 데이터 : " + jData);
-
-            // 이후 세이브 된 데이터를 다시 불러온다.
-            ServiceLocater.ReturnSaveManager().Save(jData);
-            ServiceLocater.ReturnSaveManager().Load();
-            OnLoadComplete?.Invoke(true);
+            OnLoadComplete?.Invoke(true, jData);
             OnLoadComplete = null;
         }
     }

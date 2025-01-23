@@ -27,7 +27,8 @@ public class AddressableHandler : MonoBehaviour
 
         LevelIcon,
         StatIcon,
-        SkinIcon
+        SkinIcon,
+        GoldIcon
     }
 
     HashSet<BaseLoader> _assetLoaders;
@@ -67,6 +68,7 @@ public class AddressableHandler : MonoBehaviour
     public Dictionary<GameMode.Level, ILevel> LevelAsset { get; private set; }
     public Dictionary<GameMode.Level, ILevelData> LevelDesignAsset { get; private set; }
 
+    public Sprite GoldIcon { get; private set; }
 
     public Database Database { get; private set; }
     public Localization LocalizationAsset { get; private set; }
@@ -87,6 +89,8 @@ public class AddressableHandler : MonoBehaviour
         _assetLoaders.Add(new SoundAssetLoader(Label.Sound, (value, label) => { SoundAsset = value; OnSuccess(Label.Sound); }));
         _assetLoaders.Add(new DBJsonAssetLoader(Label.Database, (value, label) => { Database = value; OnSuccess(Label.Database); }));
         _assetLoaders.Add(new LocalizationJsonAssetLoader(Label.Localization, (value, label) => { LocalizationAsset = value; OnSuccess(Label.Localization); }));
+
+        _assetLoaders.Add(new GoldIconAssetLoader(Label.GoldIcon, (value, label) => { GoldIcon = value; OnSuccess(Label.GoldIcon); }));
 
         // GetLevels로 가져와서 자동화 진행
         // 로드 성공을 Levels 개수 만큼 하면 됨

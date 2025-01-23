@@ -15,7 +15,7 @@ abstract public class DungeonMode : GameMode
     [SerializeField] ChargeUIController _chargeUIController;
 
     [SerializeField] protected CoinViewer _coinViewer;
-    [SerializeField] AdViewer _reviveViewer;
+    [SerializeField] DecisionMessageViewer _reviveViewer;
     [SerializeField] Button _settingBtn;
 
     DropController _dropController;
@@ -73,7 +73,7 @@ abstract public class DungeonMode : GameMode
         // 광고를 볼 수 있다면
         if (CanRevive == true && _adHandler.CanShowAdd == true && ServiceLocater.ReturnAdMobManager().CanShowAdd() == true)
         {
-            _reviveViewer.TurnOnViewer(true);
+            _reviveViewer.Activate(true);
             _reviveChance -= 1;
         }
         else
@@ -110,7 +110,7 @@ abstract public class DungeonMode : GameMode
         (
             () =>
             {
-                _reviveViewer.TurnOnViewer(false);
+                _reviveViewer.Activate(false);
                 ServiceLocater.ReturnAdMobManager().ShowRewardedAd
                 (
                     () =>
@@ -120,18 +120,20 @@ abstract public class DungeonMode : GameMode
                     },
                     () =>
                     {
-                        _reviveViewer.TurnOnViewer(false);
+                        _reviveViewer.Activate(false);
                         OnGameOverRequested();
                     }
                 );
             },
             () => 
             { 
-                _reviveViewer.TurnOnViewer(false); 
+                _reviveViewer.Activate(false); 
                 OnGameOverRequested(); 
-            },
-            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToRevive)
+            }
         );
+
+        string state = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToRevive);
+        _reviveViewer.UpdateInfo(state);
 
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameClear, new GameEndCommand(OnGameClearRequested));
         EventBusManager.Instance.MainEventBus.Register(MainEventBus.State.GameOver, new GameEndCommand(OnGameOverRequested));

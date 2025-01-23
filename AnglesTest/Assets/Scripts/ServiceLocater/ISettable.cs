@@ -9,7 +9,7 @@ public interface ISettable
     void Initialize();
 }
 
-public class NULLSettingController : ISettable
+public class NullSettingController : ISettable
 {
     public void ChangeLanguage() { }
     public void Activate(bool on) { }

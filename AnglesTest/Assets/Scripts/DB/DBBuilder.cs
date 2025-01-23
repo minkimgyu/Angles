@@ -6,23 +6,6 @@ using UnityEngine;
 
 public class DBBuilder : MonoBehaviour
 {
-    #region INFO 데이터
-
-    Dictionary<SkinInfoModel.State, string> _buyInfo = new Dictionary<SkinInfoModel.State, string>
-    {
-        { SkinInfoModel.State.Lock, "구매하기" },
-        { SkinInfoModel.State.UnSelected, "장착하기" },
-        { SkinInfoModel.State.Selected, "장착 중" },
-    };
-
-    Dictionary<PopUpViewer.State, string> _popUpInfos = new Dictionary<PopUpViewer.State, string>
-    {
-        { PopUpViewer.State.ShortOfGold, $"골드가 부족합니다." },
-        { PopUpViewer.State.NowMaxUpgrade, "최대 업그레이드 상태입니다." },
-    };
-
-    #endregion
-
     #region SKIN 데이터
 
     Dictionary<SkinData.Key, List<IStatModifier>> _skinModifiers = new Dictionary<SkinData.Key, List<IStatModifier>>

@@ -37,6 +37,7 @@ public class SkillUIController : MonoBehaviour
 
         _viewers.Add(skillName, viewer);
         viewer.transform.SetParent(_skillViewerParent);
+        viewer.transform.localScale = Vector3.one;
     }
 
     public void RemoveViewer(BaseSkill.Name skillName, BaseSkill skill)

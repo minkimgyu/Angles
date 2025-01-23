@@ -63,22 +63,22 @@ public class StatSelectPage : MonoBehaviour
     StatInfoController _statInfoController;
 
     StatData.Key _selectedStatKey;
-    Action<string> ActivatePopUp;
-
     LobbyTopModel _lobbyTopModel;
+
+    ConfirmationMessageViewer _messageViewer;
 
     public void Initialize(
         Dictionary<StatData.Key, Sprite> statSprite,
         Dictionary<StatData.Key, StatData> statData,
         BaseFactory viewerFactory,
-        Action<string> ActivatePopUp,
+        ConfirmationMessageViewer messageViewer,
         LobbyTopModel lobbyTopModel)
     {
         _statViewers = new List<BaseViewer>();
         _statSprite = statSprite;
         _statData = statData;
         _viewerFactory = viewerFactory;
-        this.ActivatePopUp = ActivatePopUp;
+        _messageViewer = messageViewer;
         _lobbyTopModel = lobbyTopModel;
 
 
@@ -91,7 +91,9 @@ public class StatSelectPage : MonoBehaviour
         {
             StatViewer statViewer = (StatViewer)viewerFactory.Create(BaseViewer.Name.StatViewer);
             StatData.Key statType = (StatData.Key)i;
+
             statViewer.transform.SetParent(_statInfoParent);
+            statViewer.transform.localScale = Vector3.one;
 
             statViewer.Initialize(statSprite[statType], () => { OnClickViewer(statType); });
             _statViewers.Add(statViewer);
@@ -115,7 +117,8 @@ public class StatSelectPage : MonoBehaviour
         if(canUpgrade == false)
         {
             string outOfGold = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.OutOfGold);
-            ActivatePopUp?.Invoke(outOfGold);
+            _messageViewer.UpdateInfo(outOfGold);
+            _messageViewer.Activate(true);
             return;
         }
 
@@ -123,7 +126,8 @@ public class StatSelectPage : MonoBehaviour
         if (nowMaxUpgrade == true)
         {
             string maximumUpgradeStatus = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.MaximumUpgradeStatus);
-            ActivatePopUp?.Invoke(maximumUpgradeStatus);
+            _messageViewer.UpdateInfo(maximumUpgradeStatus);
+            _messageViewer.Activate(true);
             return;
         }
 
@@ -148,7 +152,6 @@ public class StatSelectPage : MonoBehaviour
         int currentStatLevel = saveData._statInfos[key]._currentLevel;
 
         StatData statData = _statData[key];
-        
 
         string nameDescription = ServiceLocater.ReturnLocalizationHandler().GetWord($"{key.ToString()}Name");
         string statDescription = ServiceLocater.ReturnLocalizationHandler().GetWord($"{key.ToString()}Description{currentStatLevel}");

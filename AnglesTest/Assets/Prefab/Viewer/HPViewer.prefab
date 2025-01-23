@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 8731185751520978835}
   - component: {fileID: 4583905687013876253}
   m_Layer: 5
-  m_Name: HpViewer
+  m_Name: HPViewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8731185751520978835
 MonoBehaviour:
   m_ObjectHideFlags: 0

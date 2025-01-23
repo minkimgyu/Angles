@@ -61,7 +61,7 @@ public interface ISaveable
     virtual string GetSaveJsonData() { return default; }
 }
 
-public class NULLSaveManager : ISaveable { }
+public class NullSaveManager : ISaveable { }
 
 public struct SaveData
 {
@@ -355,36 +355,34 @@ public class SaveManager : ISaveable
     public bool VerifyJson(string json)
     {
         // 불러오는 중 오류가 있다면 더 이상 진행하지 않음
-        //try
-        //{
-        //    SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
-        //}
-        //catch (System.Exception e)
-        //{
-        //    Debug.Log(e);
-        //    return false; // 유효하지 않음
-        //}
+        try
+        {
+            SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e);
+            return false; // 유효하지 않음
+        }
 
-        SaveData newSaveData = _parser.JsonToObject<SaveData>(json);
         return true; // 유효함
     }
 
 
     public bool VerifyJson(string json, out SaveData saveData)
     {
-        // 불러오는 중 오류가 있다면 더 이상 진행하지 않음
-        //try
-        //{
-        //    saveData = _parser.JsonToObject<SaveData>(json);
-        //}
-        //catch (System.Exception e)
-        //{
-        //    Debug.Log(e);
-        //    saveData = default;
-        //    return false; // 유효하지 않음
-        //}
+        // 불러오는 중 오류가 있다면 기본 데이터를 넘겨준다.
+        try
+        {
+            saveData = _parser.JsonToObject<SaveData>(json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e);
+            saveData = _defaultSaveData;
+            return false; // 유효하지 않음
+        }
 
-        saveData = _parser.JsonToObject<SaveData>(json);
         return true; // 유효함
     }
 

@@ -50,22 +50,23 @@ public class SkinSelectPage : MonoBehaviour
     SkinInfoController _skinInfoController;
 
     SkinData.Key _selectedSkinKey;
-    Action<string> ActivatePopUp;
-
     LobbyTopModel _lobbyTopModel;
+
+    ConfirmationMessageViewer _messageViewer;
 
     public void Initialize(
         Dictionary<SkinData.Key, Sprite> skinSprite,
         Dictionary<SkinData.Key, SkinData> skinData,
         BaseFactory viewerFactory,
-        Action<string> ActivatePopUp,
+        ConfirmationMessageViewer messageViewer,
         LobbyTopModel lobbyTopModel)
     {
+        _messageViewer = messageViewer;
+
         _skinViewers = new Dictionary<SkinData.Key, SkinViewer>();
         _skinSprite = skinSprite;
         _skinData = skinData;
         _viewerFactory = viewerFactory;
-        this.ActivatePopUp = ActivatePopUp;
         _lobbyTopModel = lobbyTopModel;
 
         _upgradeBtn.onClick.AddListener(() => { OnClickBtn(); });
@@ -81,7 +82,9 @@ public class SkinSelectPage : MonoBehaviour
 
             SkinViewer skinViewer = (SkinViewer)viewerFactory.Create(BaseViewer.Name.SkinViewer);
             SkinData.Key skinType = (SkinData.Key)i;
+
             skinViewer.transform.SetParent(_skinInfoParent);
+            skinViewer.transform.localScale = Vector3.one;
 
             skinViewer.Initialize(skinSprite[skinType], () => { OnClickViewer(skinType); });
             skinViewer.ActivateLockImg(!isUnlock);
@@ -122,7 +125,8 @@ public class SkinSelectPage : MonoBehaviour
         if (canBuy == false)
         {
             string outOfGold = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.OutOfGold);
-            ActivatePopUp?.Invoke(outOfGold);
+            _messageViewer.UpdateInfo(outOfGold);
+            _messageViewer.Activate(true);
             return;
         }
 

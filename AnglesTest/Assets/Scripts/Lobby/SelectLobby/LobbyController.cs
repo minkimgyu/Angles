@@ -12,11 +12,11 @@ public class LobbyController : MonoBehaviour
     [SerializeField] LobbyTopViewer _lobbyTopViewer;
     [SerializeField] LobbyScrollController _lobbyScrollController;
 
-    [SerializeField] PopUpViewer _popUpViewer;
+    [SerializeField] ConfirmationMessageViewer _popUpViewer;
 
     [SerializeField] LevelSelectPage _levelSelectPage;
 
-    [SerializeField] AdViewer _adViewer;
+    [SerializeField] DecisionMessageViewer _adViewer;
 
     [SerializeField] StatSelectPage _statSelectPage;
     [SerializeField] SkinSelectPage _skinSelectPage;
@@ -76,7 +76,7 @@ public class LobbyController : MonoBehaviour
         (
             () =>
             {
-                _adViewer.TurnOnViewer(false);
+                _adViewer.Activate(false);
                 ServiceLocater.ReturnAdMobManager().ShowRewardedAd
                 (
                     () =>
@@ -92,16 +92,18 @@ public class LobbyController : MonoBehaviour
             },
             () =>
             {
-                _adViewer.TurnOnViewer(false);
-            },
-            ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToGetGold)
+                _adViewer.Activate(false);
+            }
         );
+
+        string state = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.TabToGetGold);
+        _adViewer.UpdateInfo(state);
 
         _lobbyTopViewer.Initialize
         (
             () => 
             {
-                _adViewer.TurnOnViewer(true);
+                _adViewer.Activate(true);
             },
             () =>
             {
@@ -124,7 +126,7 @@ public class LobbyController : MonoBehaviour
             addressableHandler.StatIconAsset,
             addressableHandler.Database.StatDatas,
             lobbyViewerFactory,
-            _popUpViewer.UpdateInfo,
+            _popUpViewer,
             _lobbyTopModel
         );
 
@@ -132,7 +134,7 @@ public class LobbyController : MonoBehaviour
            addressableHandler.SkinIconAsset,
            addressableHandler.Database.SkinDatas,
            lobbyViewerFactory,
-           _popUpViewer.UpdateInfo,
+           _popUpViewer,
            _lobbyTopModel
        );
     }

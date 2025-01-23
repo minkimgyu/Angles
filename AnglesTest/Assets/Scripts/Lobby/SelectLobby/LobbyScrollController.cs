@@ -15,6 +15,8 @@ public class LobbyScrollController : ScrollUI
         _leftButton.onClick.AddListener(() => TabClick(true));
         _rightButton.onClick.AddListener(() => TabClick(false));
 
+        RectTransform parentRectTransform = GetComponentInParent<RectTransform>();
+
         int childCount = _content.childCount;
         for (int i = 0; i < childCount; i++)
         {
@@ -22,8 +24,8 @@ public class LobbyScrollController : ScrollUI
 
             // 현재 sizeDelta 값을 가져옴 (현재 크기의 높이는 유지하고 너비만 수정)
             Vector2 newSize = rectTransform.sizeDelta;
-            newSize.x = Screen.width;  // 너비 설정
-            newSize.y = Screen.height;  // 너비 설정
+            newSize.x = parentRectTransform.rect.width;  // 너비 설정
+            newSize.y = parentRectTransform.rect.height;  // 너비 설정
 
             rectTransform.sizeDelta = newSize;  // 변경된 값을 다시 할당
         }

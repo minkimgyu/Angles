@@ -70,3 +70,12 @@ abstract public class AssetLoader<Key, Value, Type> : MultipleAssetLoader<Key, V
         };
     }
 }
+
+public class GoldIconAssetLoader : SingleAssetLoader<Sprite, Sprite>
+{
+    public GoldIconAssetLoader(AddressableHandler.Label label, Action<Sprite, AddressableHandler.Label> OnComplete) : base(label, OnComplete)
+    {
+    }
+
+    protected override void LoadAsset(Sprite item) => _asset = item;
+}

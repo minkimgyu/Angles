@@ -35,6 +35,7 @@ public class ViewerFactory : BaseFactory
 
     public override BaseViewer Create(BaseViewer.Name name)
     {
+        if (_viewerCreaters.ContainsKey(name) == false) return null;
         return _viewerCreaters[name].Create();
     }
 }

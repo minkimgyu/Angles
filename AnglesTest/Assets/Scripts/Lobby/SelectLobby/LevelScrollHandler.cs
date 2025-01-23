@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class LevelScrollHandler : ScrollUI
 {
     HorizontalLayoutGroup _horizontalLayoutGroup;
-    float _selectedSize = 1.3f;
+    const float _selectedSize = 1.3f;
     Timer _scaleChangeTimer;
     BaseFactory _viewerFactory;
 
@@ -33,8 +33,11 @@ public class LevelScrollHandler : ScrollUI
         BaseFactory viewerFactory,
         Action<GameMode.Level> OnLevelSelected)
     {
-        int chapterRectHalfSize = (int)(350 * 1.3 / 2);
-        int offset = (Screen.width / 2) - chapterRectHalfSize;
+        Canvas parentCanvas = GetComponentInParent<Canvas>();
+        RectTransform rectTransform = parentCanvas.GetComponent<RectTransform>();
+
+        int chapterRectHalfSize = (int)(350 * _selectedSize / 2);
+        int offset = ((int)rectTransform.rect.width / 2) - chapterRectHalfSize;
 
         _horizontalLayoutGroup = _content.GetComponent<HorizontalLayoutGroup>();
         _horizontalLayoutGroup.padding.left = offset;

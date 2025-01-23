@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,7 +46,7 @@ public struct LevelData
 
 public struct TutorialInfo : ILevelInfo
 {
-    [JsonProperty] private GameMode.Type _type;
+    [JsonConverter(typeof(StringEnumConverter))] [JsonProperty] private GameMode.Type _type;
     [JsonProperty] private int _maxLevel;
 
     [JsonIgnore] public GameMode.Type Type { get => _type; }
@@ -88,9 +89,9 @@ public struct SavableTutorialInfo : ISavableLevelInfo
 
 public struct ChapterInfo : ILevelInfo
 {
-    [JsonProperty] private GameMode.Type _type;
+    [JsonConverter(typeof(StringEnumConverter))] [JsonProperty] private GameMode.Type _type;
     [JsonProperty] bool _canUnlockLevel;
-    [JsonProperty] GameMode.Level _unlockLevel;
+    [JsonConverter(typeof(StringEnumConverter))] [JsonProperty] GameMode.Level _unlockLevel;
 
     [JsonProperty] private int _maxLevel;
 
@@ -148,9 +149,9 @@ public struct SavableChapterInfo : ISavableLevelInfo
 // 생존 시간 추가
 public struct SurvivalInfo : ILevelInfo
 {
-    [JsonProperty] private GameMode.Type _type;
+    [JsonConverter(typeof(StringEnumConverter))] [JsonProperty] private GameMode.Type _type;
     [JsonProperty] bool _canUnlockLevel;
-    [JsonProperty] GameMode.Level _unlockLevel;
+    [JsonConverter(typeof(StringEnumConverter))] [JsonProperty] GameMode.Level _unlockLevel;
 
     [JsonProperty] private int _totalDuration;
 

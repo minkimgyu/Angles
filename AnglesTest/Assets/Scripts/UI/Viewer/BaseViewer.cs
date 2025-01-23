@@ -19,7 +19,11 @@ public class BaseViewer : MonoBehaviour
 
         ChapterSelectViewer,
         StatViewer,
-        SkinViewer
+        SkinViewer,
+        CloudSaveViewer,
+
+        OkViewer, // 확인 Viewer
+        OkCancelViewer, // 확인 취소 Viewer
     }
 
     public virtual void Initialize() { }

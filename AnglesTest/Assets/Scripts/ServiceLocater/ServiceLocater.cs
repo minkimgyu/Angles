@@ -14,30 +14,34 @@ public static class ServiceLocater
     static NullTimeController _nullTimeController;
 
     static ISaveable _saveController;
-    static NULLSaveManager _nullSaveController;
+    static NullSaveManager _nullSaveController;
 
     static ISettable _settingController;
-    static NULLSettingController _nullSettingController;
+    static NullSettingController _nullSettingController;
 
     static ILocalization _localization;
-    static NULLLocalizationHandler _nullLocalizationHandler;
+    static NullLocalizationHandler _nullLocalizationHandler;
 
     static IAdMob _adMob;
-    static NULLAdMobManager _nullAdMobManager;
+    static NullAdMobManager _nullAdMobManager;
 
     static IAdTimer _adTimer;
-    static NULLAdTimer _nullAdTimer;
+    static NullAdTimer _nullAdTimer;
+
+    static IGPGS _gpgs;
+    static NullGPGSManager _nullGPGS;
 
     static ServiceLocater()
     {
         _nullSoundPlayer = new NullSoundPlayer();
         _nullSceneController = new NullSceneController();
         _nullTimeController = new NullTimeController();
-        _nullSaveController = new NULLSaveManager();
-        _nullSettingController = new NULLSettingController();
-        _nullLocalizationHandler = new NULLLocalizationHandler();
-        _nullAdMobManager = new NULLAdMobManager();
-        _nullAdTimer = new NULLAdTimer();
+        _nullSaveController = new NullSaveManager();
+        _nullSettingController = new NullSettingController();
+        _nullLocalizationHandler = new NullLocalizationHandler();
+        _nullAdMobManager = new NullAdMobManager();
+        _nullAdTimer = new NullAdTimer();
+        _nullGPGS = new NullGPGSManager();
     }
 
     public static void Provide(ISoundPlayable soundPlayer)
@@ -78,6 +82,11 @@ public static class ServiceLocater
     public static void Provide(IAdTimer adTimer)
     {
         _adTimer = adTimer;
+    }
+
+    public static void Provide(IGPGS gpgs)
+    {
+        _gpgs = gpgs;
     }
 
     public static ISettable ReturnSettingController()
@@ -126,5 +135,11 @@ public static class ServiceLocater
     {
         if (_adTimer == null) return _nullAdTimer;
         return _adTimer;
+    }
+
+    public static IGPGS ReturnGPGS()
+    {
+        if (_gpgs == null) return _nullGPGS;
+        return _gpgs;
     }
 }

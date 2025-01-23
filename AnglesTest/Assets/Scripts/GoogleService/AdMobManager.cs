@@ -13,7 +13,7 @@ public interface IAdMob
     virtual bool CanShowAdd() {  return false; }
 }
 
-public class NULLAdMobManager : IAdMob
+public class NullAdMobManager : IAdMob
 { 
 }
 
@@ -30,19 +30,20 @@ public class AdMobManager : MonoBehaviour, IAdMob
     {
         DontDestroyOnLoad(gameObject);
 
-#if UNITY_EDITOR
-        _isTestMode = true; // 에디터의 경우
-#else
-        _isTestMode = false; //  안드로이드의 경우
-#endif
+//#if UNITY_EDITOR
+//        _isTestMode = true; // 에디터의 경우
+//#else
+//        _isTestMode = false; //  안드로이드의 경우
+//#endif
 
         // Google Mobile Ads SDK 초기화
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
             // SDK 초기화가 완료된 후 호출되는 콜백
             RequestConfiguration requestConfiguration = new RequestConfiguration();
-            //requestConfiguration.TestDeviceIds.Add("2E25EEE6DF5651D6");
-            //requestConfiguration.TestDeviceIds.Add("50CCC82EF8D263D3");
+            requestConfiguration.TestDeviceIds.Add("a169087db8c74d6f"); // s23fe
+            requestConfiguration.TestDeviceIds.Add("3d0c8e6bde24e4a3"); // s6lite
+            requestConfiguration.TestDeviceIds.Add("429d991807e82f44"); // ha
 
             MobileAds.SetRequestConfiguration(requestConfiguration);
 
