@@ -279,7 +279,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Create Shockwave
+  m_text: "\uCFE8\uD0C0\uC784 \uC2A4\uD0AC\uC758 \uC7AC\uC0AC\uC6A9<br>\uB300\uAE30\uC2DC\uAC04\uC744
+    \uAC10\uC18C\uC2DC\uD0A8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1be9b68f5d3f9304ab83311722dc88d4, type: 2}
   m_sharedMaterial: {fileID: -8783808053894379631, guid: 1be9b68f5d3f9304ab83311722dc88d4, type: 2}
@@ -306,8 +307,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 23
+  m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -682,8 +683,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 89.5}
-  m_SizeDelta: {x: -140, y: 79.4}
+  m_AnchoredPosition: {x: 0, y: 52.7}
+  m_SizeDelta: {x: -170, y: 112.8}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &5571418727500335981
 GameObject:

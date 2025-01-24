@@ -268,4 +268,9 @@ public class TutorialMode : DungeonMode
     {
         return new TutorialStageFactory(addressableHandler.LevelAsset, addressableHandler.LevelDesignAsset);
     }
+
+    protected override HashSet<BaseSkill.Name> GetUpgradeableSkills(Database database)
+    {
+        return database.TutorialUpgradeableSkills;
+    }
 }

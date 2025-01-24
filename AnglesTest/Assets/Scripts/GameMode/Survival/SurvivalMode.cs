@@ -92,4 +92,9 @@ public class SurvivalMode : DungeonMode
     {
         return new SurvivalStageFactory(addressableHandler.LevelAsset, addressableHandler.LevelDesignAsset);
     }
+
+    protected override HashSet<BaseSkill.Name> GetUpgradeableSkills(Database database)
+    {
+        return database.UpgradeableSkills;
+    }
 }

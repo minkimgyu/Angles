@@ -1,5 +1,6 @@
 <dependencies>
   <packages>
+    <package>androidx.activity:activity:1.6.0</package>
     <package>androidx.constraintlayout:constraintlayout:2.1.4</package>
     <package>com.google.android.gms:play-services-ads:23.6.0</package>
     <package>com.google.android.play:app-update:2.1.0</package>

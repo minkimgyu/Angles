@@ -12,6 +12,7 @@ public interface IGPGS
     void Login(Action<bool> OnLoginComplete);
     void Save(Action<bool> OnSaveComplete);
     void Load(Action<bool, string> OnLoadComplete);
+    //void ShowSelectUI();
 }
 
 public class NullGPGSManager : IGPGS
@@ -19,6 +20,7 @@ public class NullGPGSManager : IGPGS
     public void Login(Action<bool> OnLoginComplete) { }
     public void Save(Action<bool> OnSaveComplete) { }
     public void Load(Action<bool, string> OnLoadComplete) { }
+    //public void ShowSelectUI() { }
 }
 
 public class GPGSManager : IGPGS
@@ -60,6 +62,33 @@ public class GPGSManager : IGPGS
 
     #endregion
 
+    //public void ShowSelectUI()
+    //{
+    //    uint maxNumToDisplay = 5;
+    //    bool allowCreateNew = false;
+    //    bool allowDelete = true;
+
+    //    ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+    //    savedGameClient.ShowSelectSavedGameUI("Select saved game",
+    //        maxNumToDisplay,
+    //        allowCreateNew,
+    //        allowDelete,
+    //        OnSavedGameSelected);
+    //}
+
+
+    //public void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata game)
+    //{
+    //    if (status == SelectUIStatus.SavedGameSelected)
+    //    {
+    //        // handle selected game save
+    //    }
+    //    else
+    //    {
+    //        // handle cancel or error
+    //    }
+    //}
+
     #region 세이브
 
     public void Save(Action<bool> OnSaveComplete)
@@ -75,7 +104,7 @@ public class GPGSManager : IGPGS
         savedGameClient.OpenWithAutomaticConflictResolution
         (
             fileName,
-            DataSource.ReadCacheOrNetwork,
+            DataSource.ReadNetworkOnly,
             ConflictResolutionStrategy.UseLastKnownGood,
             OnSavedGameOpened
         );
@@ -89,13 +118,18 @@ public class GPGSManager : IGPGS
             // 세이브 적용
             Debug.Log("저장 성공");
 
-            var update = new SavedGameMetadataUpdate.Builder().Build();
+            SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder()
+                .WithUpdatedPlayedTime(TimeSpan.Zero)
+                .WithUpdatedDescription("Saved game at " + DateTime.Now);
+
             string jData = ServiceLocater.ReturnSaveManager().GetSaveJsonData();
 
             Debug.Log(jData);
 
             byte[] bytes = Encoding.UTF8.GetBytes(jData);
-            savedGameClient.CommitUpdate(game, update, bytes, OnSavedGameWritten);
+
+            SavedGameMetadataUpdate updatedMetadata = builder.Build();
+            savedGameClient.CommitUpdate(game, updatedMetadata, bytes, OnSavedGameWritten);
         }
         else
         {
@@ -140,7 +174,7 @@ public class GPGSManager : IGPGS
         savedGameClient.OpenWithAutomaticConflictResolution
         (
             fileName,
-            DataSource.ReadCacheOrNetwork,
+            DataSource.ReadNetworkOnly,
             ConflictResolutionStrategy.UseLastKnownGood,
             LoadGameData
         );
@@ -166,9 +200,7 @@ public class GPGSManager : IGPGS
 
     private void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] loadedData)
     {
-        string jData = Encoding.UTF8.GetString(loadedData);
-
-        if (jData == "")
+        if (loadedData.Length == 0)
         {
             Debug.Log("데이터가 없음 초기 데이터 저장");
             OnLoadComplete?.Invoke(false, default);
@@ -176,7 +208,7 @@ public class GPGSManager : IGPGS
         }
         else
         {
-            
+            string jData = Encoding.UTF8.GetString(loadedData);
             Debug.Log("로드 데이터 : " + jData);
             OnLoadComplete?.Invoke(true, jData);
             OnLoadComplete = null;
@@ -199,7 +231,7 @@ public class GPGSManager : IGPGS
         savedGameClient.OpenWithAutomaticConflictResolution
         (
             fileName,
-            DataSource.ReadCacheOrNetwork,
+            DataSource.ReadNetworkOnly,
             ConflictResolutionStrategy.UseLastKnownGood,
             DeleteSaveGame
         );

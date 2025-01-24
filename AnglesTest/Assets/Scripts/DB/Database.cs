@@ -45,6 +45,13 @@ public struct Database
     [JsonIgnore]
     public HashSet<BaseSkill.Name> UpgradeableSkills { get { return _upgradeableSkills; } }
 
+
+    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+    HashSet<BaseSkill.Name> _tutorialUpgradeableSkills;
+
+    public HashSet<BaseSkill.Name> TutorialUpgradeableSkills { get { return _tutorialUpgradeableSkills; } }
+
+
     [JsonProperty]
     Dictionary<BaseSkill.Name, IUpgradeVisitor> _upgrader;
 
@@ -141,7 +148,10 @@ public struct Database
         Dictionary<SkinData.Key, SkinData> skinDatas,
         Dictionary<StatData.Key, IStatModifier> statModifiers,
         Dictionary<StatData.Key, StatData> statDatas,
+
         HashSet<BaseSkill.Name> upgradeableSkills,
+        HashSet<BaseSkill.Name> tutorialUpgradeableSkills,
+
         Dictionary<BaseSkill.Name, IUpgradeVisitor> upgrader,
         Dictionary<BaseSkill.Name, SkillData> skillDatas,
         Dictionary<BaseWeapon.Name, WeaponData> weaponDatas,
@@ -157,7 +167,10 @@ public struct Database
         _skinDatas = skinDatas;
         _statModifiers = statModifiers;
         _statDatas = statDatas;
+
         _upgradeableSkills = upgradeableSkills;
+        _tutorialUpgradeableSkills = tutorialUpgradeableSkills;
+
         _upgrader = upgrader;
         _skillDatas = skillDatas;
         _weaponDatas = weaponDatas;

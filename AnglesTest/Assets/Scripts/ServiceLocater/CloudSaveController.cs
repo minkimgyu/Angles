@@ -34,7 +34,7 @@ public class CloudSaveController : MonoBehaviour
 
     private void Update()
     {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
+        if (Application.internetReachability == NetworkReachability.NotReachable) // Social.localUser.authenticated == true
         {
             _uploadBtn.interactable = false;
             _retrieveBtn.interactable = false;
@@ -42,13 +42,10 @@ public class CloudSaveController : MonoBehaviour
             // 인터넷 연결 없음
             // Debug.Log("인터넷 연결에 연결되지 않았습니다.");
         }
-        else
+        else // Application.internetReachability != NetworkReachability.NotReachable
         {
             _uploadBtn.interactable = true;
             _retrieveBtn.interactable = true;
-
-            // 인터넷 연결됨
-            // Debug.Log("인터넷 연결에 연결되어 있습니다.");
         }
     }
 
@@ -138,7 +135,10 @@ public class CloudSaveController : MonoBehaviour
         if(active == true)
         {
             IGPGS gPGS = ServiceLocater.ReturnGPGS();
-            gPGS.Load((canLoad, saveData) => {
+            //gPGS.ShowSelectUI();
+
+            gPGS.Load((canLoad, saveData) =>
+            {
                 if (canLoad == false) return;
 
                 JsonParser jsonParser = new JsonParser();
@@ -168,6 +168,9 @@ public class CloudSaveController : MonoBehaviour
                     Debug.Log($"저장 여부: {canSave}");
 
                     if (canSave == false) return;
+
+
+
 
                     // 세이브 성공 시
                     gPGS.Load((canLoad, saveJson) => {

@@ -39,6 +39,8 @@ abstract public class DungeonMode : GameMode
 
     bool _gameEnd;
 
+    protected abstract HashSet<BaseSkill.Name> GetUpgradeableSkills(Database database);
+
     protected virtual void OnGameEnd()
     {
         _gameEnd = true;
@@ -155,10 +157,12 @@ abstract public class DungeonMode : GameMode
             viewerFactory
         ); // --> 아이콘을 Factory에서 초기화하게끔 만들기
 
+        HashSet<BaseSkill.Name> upgradeableSkills = GetUpgradeableSkills(addressableHandler.Database);
+
         _cardUIController.Initialize
         (
             addressableHandler.Database.CardDatas,
-            addressableHandler.Database.UpgradeableSkills,
+            upgradeableSkills,
             addressableHandler.Database.SkillDatas,
             addressableHandler.SkillIconAsset,
             viewerFactory,

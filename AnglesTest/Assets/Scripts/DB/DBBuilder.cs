@@ -133,6 +133,13 @@ public class DBBuilder : MonoBehaviour
         BaseSkill.Name.UpgradeShooting,
     };
 
+    HashSet<BaseSkill.Name> _tutorialUpgradeableSkills = new HashSet<BaseSkill.Name>
+    {
+        BaseSkill.Name.Statikk,
+        BaseSkill.Name.Knockback,
+        BaseSkill.Name.SpawnRifleShooter,
+    };
+
     Dictionary<BaseSkill.Name, IUpgradeVisitor> _skillUpgrader = new Dictionary<BaseSkill.Name, IUpgradeVisitor>
     {
         {
@@ -877,7 +884,10 @@ public class DBBuilder : MonoBehaviour
             _skinDatas,
             _statModifiers,
             _statDatas,
+
             _upgradeableSkills,
+            _tutorialUpgradeableSkills,
+
             _skillUpgrader,
             _skillDatas,
             _weaponDatas,

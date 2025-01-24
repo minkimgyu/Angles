@@ -46,4 +46,9 @@ public class ChapterMode : DungeonMode
     {
         return new ChapterStageFactory(addressableHandler.LevelAsset, addressableHandler.LevelDesignAsset);
     }
+
+    protected override HashSet<BaseSkill.Name> GetUpgradeableSkills(Database database)
+    {
+        return database.UpgradeableSkills;
+    }
 }

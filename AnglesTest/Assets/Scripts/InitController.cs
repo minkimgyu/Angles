@@ -18,6 +18,7 @@ public class InitController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
 #if UNITY_ANDROID && !UNITY_EDITOR
         Application.targetFrameRate = 60;
 #endif

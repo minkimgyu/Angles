@@ -24,26 +24,28 @@ public class NullAdMobManager : IAdMob
 
 public class AdMobManager : MonoBehaviour, IAdMob
 {
-    [SerializeField] bool _isTestMode = true;
+    bool _isTestMode = true;
+    bool _canLoadAd = true;
 
     public void Initialize(Action OnComplete)
     {
         DontDestroyOnLoad(gameObject);
 
-//#if UNITY_EDITOR
-//        _isTestMode = true; // 에디터의 경우
-//#else
-//        _isTestMode = false; //  안드로이드의 경우
-//#endif
+#if UNITY_EDITOR
+        _isTestMode = true; // 에디터의 경우
+#elif UNITY_ANDROID
+        _isTestMode = false; //  안드로이드의 경우
+#endif
 
         // Google Mobile Ads SDK 초기화
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
             // SDK 초기화가 완료된 후 호출되는 콜백
             RequestConfiguration requestConfiguration = new RequestConfiguration();
-            requestConfiguration.TestDeviceIds.Add("a169087db8c74d6f"); // s23fe
-            requestConfiguration.TestDeviceIds.Add("3d0c8e6bde24e4a3"); // s6lite
+            //requestConfiguration.TestDeviceIds.Add("a169087db8c74d6f"); // s23fe
+            //requestConfiguration.TestDeviceIds.Add("3d0c8e6bde24e4a3"); // s6lite
             requestConfiguration.TestDeviceIds.Add("429d991807e82f44"); // ha
+            // ha씨 태블릿만 넣어놓는다.
 
             MobileAds.SetRequestConfiguration(requestConfiguration);
 
@@ -77,6 +79,13 @@ public class AdMobManager : MonoBehaviour, IAdMob
     /// </summary>
     void LoadRewardedAd(Action OnComplete = null)
     {
+        if(_canLoadAd == false) // 광고를 로드할 수 없으면 로드하지 않는다.
+        {
+            Debug.Log("dont load ad");
+            lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
+            return;
+        }
+
         // 보상형 광고 정리
         // Clean up the old ad before loading a new one.
         DestroyAd();
