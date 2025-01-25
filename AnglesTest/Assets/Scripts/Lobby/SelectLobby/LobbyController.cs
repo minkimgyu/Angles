@@ -47,7 +47,7 @@ public class LobbyController : MonoBehaviour
     {
         // 광고를 볼 수 있는 시간이고 광고가 로드되서 준비 상태인 경우
         if (_adHandler == null) return;
-        bool canShowAd = _adHandler.CanShowAdd && ServiceLocater.ReturnAdMobManager().CanShowAdd();
+        bool canShowAd = _adHandler.CanShowAd;
 
         // 버튼 활성화
         _lobbyTopModel.ActiveAdBtn = canShowAd;
@@ -77,7 +77,7 @@ public class LobbyController : MonoBehaviour
             () =>
             {
                 _adViewer.Activate(false);
-                ServiceLocater.ReturnAdMobManager().ShowRewardedAd
+                ServiceLocater.ReturnAdMobManager().ShowAd
                 (
                     () =>
                     {

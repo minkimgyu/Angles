@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,13 +66,13 @@ abstract public class DungeonMode : GameMode
     {
         if (_gameEnd == true) return; // 이미 게임 끝 판정이 난 경우 return
 
-        if (_adHandler.CanShowAdd == false)
+        if (_adHandler.CanShowAd == false)
         {
             Debug.Log($"광고까지 남은 시간: {_adHandler.LeftTime}");
         }
 
         // 광고를 볼 수 있다면
-        if (CanRevive == true && _adHandler.CanShowAdd == true && ServiceLocater.ReturnAdMobManager().CanShowAdd() == true)
+        if (CanRevive == true && _adHandler.CanShowAd == true)
         {
             _reviveViewer.Activate(true);
             _reviveChance -= 1;
@@ -113,7 +112,7 @@ abstract public class DungeonMode : GameMode
             () =>
             {
                 _reviveViewer.Activate(false);
-                ServiceLocater.ReturnAdMobManager().ShowRewardedAd
+                ServiceLocater.ReturnAdMobManager().ShowAd
                 (
                     () =>
                     {
@@ -122,7 +121,7 @@ abstract public class DungeonMode : GameMode
                     },
                     () =>
                     {
-                        _reviveViewer.Activate(false);
+                        //_reviveViewer.Activate(false);
                         OnGameOverRequested();
                     }
                 );

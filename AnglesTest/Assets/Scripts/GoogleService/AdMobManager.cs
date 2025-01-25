@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
-using UnityEngine.UI;
 using System;
 
 public interface IAdMob
 {
     virtual void Initialize(Action OnComplete) { }
     // 리워드 콜백으로 보상형 광고 표시
-    virtual void ShowRewardedAd(Action OnSuccess, Action OnError) { }
-    virtual bool CanShowAdd() {  return false; }
+
+    virtual void ShowAd(Action OnSuccess, Action OnError) { }
+    //virtual void ShowRewardedAd(Action OnSuccess, Action OnError) { }
+    virtual bool CanShowAd() {  return false; }
 }
 
 public class NullAdMobManager : IAdMob
@@ -41,17 +42,18 @@ public class AdMobManager : MonoBehaviour, IAdMob
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
             // SDK 초기화가 완료된 후 호출되는 콜백
-            RequestConfiguration requestConfiguration = new RequestConfiguration();
+            //RequestConfiguration requestConfiguration = new RequestConfiguration();
             //requestConfiguration.TestDeviceIds.Add("a169087db8c74d6f"); // s23fe
             //requestConfiguration.TestDeviceIds.Add("3d0c8e6bde24e4a3"); // s6lite
-            requestConfiguration.TestDeviceIds.Add("429d991807e82f44"); // ha
+            //requestConfiguration.TestDeviceIds.Add("429d991807e82f44"); // ha
             // ha씨 태블릿만 넣어놓는다.
 
-            MobileAds.SetRequestConfiguration(requestConfiguration);
+            //MobileAds.SetRequestConfiguration(requestConfiguration);
 
             _lock = new object();
             _eventQueue = new Queue<Action>();
-            LoadRewardedAd(OnComplete);
+            lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
+            //LoadRewardedAd(OnComplete);
         });
     }
 
@@ -73,16 +75,51 @@ public class AdMobManager : MonoBehaviour, IAdMob
     const string _rewardID = "ca-app-pub-5276709661960694/3367887647";
     RewardedAd _rewardedAd;
 
+    public void ShowAd(Action OnSuccess, Action OnError)
+    {
+        bool canShowAd = CanShowAd();
+
+        if (canShowAd == false) // 광고를 볼 수 없다면
+        {
+            LoadRewardedAd(() => // 광고를 로드하고 성공한다면 광고 보여주기
+            {
+                ShowRewardedAd(() =>
+                {
+                    OnSuccess?.Invoke();  // 광고 재생 성공 시 성공 호출
+                },
+                () =>
+                {
+                    OnError?.Invoke(); // 광고 재생 실패 시 에러 호출
+                });
+            }, () =>
+            {
+                OnError?.Invoke(); // 광고 로드 실패 시 에러 호출
+            });
+        }
+        else
+        {
+            ShowRewardedAd(() =>
+            {
+                OnSuccess?.Invoke();  // 광고 재생 성공 시 성공 호출
+            },
+            () =>
+            {
+                OnError?.Invoke(); // 광고 재생 실패 시 에러 호출
+            });
+        }
+    }
+
+
     // 보상형 광고 로드
     /// <summary>
     /// Loads the rewarded ad.
     /// </summary>
-    void LoadRewardedAd(Action OnComplete = null)
+    void LoadRewardedAd(Action OnComplete, Action OnError)
     {
         if(_canLoadAd == false) // 광고를 로드할 수 없으면 로드하지 않는다.
         {
             Debug.Log("dont load ad");
-            lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
+            lock (_lock) _eventQueue.Enqueue(OnError); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
             return;
         }
 
@@ -103,7 +140,7 @@ public class AdMobManager : MonoBehaviour, IAdMob
                 Debug.LogError("Rewarded ad failed to load an ad " +
                                 "with error : " + error);
 
-                lock (_lock) _eventQueue.Enqueue(OnComplete); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
+                lock (_lock) _eventQueue.Enqueue(OnError); // 큐에 넣어줌 -> 업데이트에서 꺼내서 실행
                 return;
             }
 
@@ -118,7 +155,7 @@ public class AdMobManager : MonoBehaviour, IAdMob
         });
     }
 
-    public bool CanShowAdd()
+    public bool CanShowAd()
     {
         return _rewardedAd != null && _rewardedAd.CanShowAd() == true;
     }
@@ -134,10 +171,11 @@ public class AdMobManager : MonoBehaviour, IAdMob
     }
 
     bool _rewardCalled;
+    const int _delay = 3000;
 
     async void CheckRewardCalled(Action OnError)
     {
-        await System.Threading.Tasks.Task.Delay(3000);
+        await System.Threading.Tasks.Task.Delay(_delay);
         if (_rewardCalled == true)
         {
             // 리워드 받아짐
@@ -150,33 +188,35 @@ public class AdMobManager : MonoBehaviour, IAdMob
     }
 
     // 리워드 콜백으로 보상형 광고 표시
-    public void ShowRewardedAd(Action OnSuccess, Action OnError)
+    void ShowRewardedAd(Action OnSuccess, Action OnError)
     {
         const string rewardMsg =
             "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 
         _rewardCalled = false;
 
-        if (CanShowAdd() == true)
+        // 광고 종료 이후 일정 시간 이후에도 리워드가 들어오지 않는 경우 OnError 리턴
+        _rewardedAd.OnAdFullScreenContentClosed += () =>
         {
-            // 광고 종료 이후 일정 시간 이후에도 리워드가 들어오지 않는 경우 OnError 리턴
-            _rewardedAd.OnAdFullScreenContentClosed += () =>
-            {
-                CheckRewardCalled(OnError);
-            };
+            CheckRewardCalled(OnError);
+        };
 
-            _rewardedAd.Show((Reward reward) =>
-            {
-                // TODO: Reward the user.
-                _rewardCalled = true;
-                Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
-                lock (_lock) _eventQueue.Enqueue(OnSuccess);
-            });
-        }
-        else
+        _rewardedAd.Show((Reward reward) =>
         {
-            lock (_lock) _eventQueue.Enqueue(OnError);
-        }
+            // TODO: Reward the user.
+            _rewardCalled = true;
+            Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+            lock (_lock) _eventQueue.Enqueue(OnSuccess);
+        });
+
+        //if (CanShowAd() == true)
+        //{
+            
+        //}
+        //else
+        //{
+        //    lock (_lock) _eventQueue.Enqueue(OnError);
+        //}
     }
 
     //void RegisterEventHandlers(RewardedAd ad)
@@ -226,7 +266,7 @@ public class AdMobManager : MonoBehaviour, IAdMob
             Debug.Log("Rewarded Ad full screen content closed.");
 
             // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
+            LoadRewardedAd(null, null);
         };
         // Raised when the ad failed to open full screen content.
         ad.OnAdFullScreenContentFailed += (AdError error) =>
@@ -235,7 +275,7 @@ public class AdMobManager : MonoBehaviour, IAdMob
                            "with error : " + error);
 
             // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
+            LoadRewardedAd(null, null);
         };
     }
 
