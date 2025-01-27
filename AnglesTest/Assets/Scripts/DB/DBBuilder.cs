@@ -852,7 +852,7 @@ public class DBBuilder : MonoBehaviour
     const int _lobbyAdDelay = 30; // 수정 필요
 
     const string _inGameAdSaveKeyName = "inGameAd";
-    const int _inGameAdDelay = 10; // 수정 필요
+    const int _inGameAdDelay = 30; // 수정 필요
 
     AdData _adData = new AdData(
                         _lobbyAdCoinCount,

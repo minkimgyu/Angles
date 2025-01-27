@@ -55,7 +55,7 @@ public class AdHandler
     {
         get
         {
-            return false; // 광고 수정 전까지 이렇게 하자
+            //return false; // 광고 수정 전까지 이렇게 하자
 
             if (ServiceLocater.ReturnAdTimer().IsLoadSuccess == false ||
                 Application.internetReachability == NetworkReachability.NotReachable) return false;
@@ -68,7 +68,7 @@ public class AdHandler
     {
         get
         {
-            return false; // 광고 수정 전까지 이렇게 하자
+            //return false; // 광고 수정 전까지 이렇게 하자
 
             if (CanLoadAd == false) return false;
             // 처음 시간이 로드가 되지 않았거나 인터넷 연결이 안 되어있는 경우
