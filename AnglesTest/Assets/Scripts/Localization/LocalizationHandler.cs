@@ -67,6 +67,8 @@ public interface ILocalization
         CubeSurvivalName,
         PrismSurvivalName,
         MainTutorialName,
+        DodecaSurvivalName,
+        IcosaSurvivalName,
 
         TriconChapterDescription,
         RhombusChapterDescription,
@@ -77,6 +79,8 @@ public interface ILocalization
         CubeSurvivalDescription,
         PrismSurvivalDescription,
         MainTutorialDescription,
+        DodecaSurvivalDescription,
+        IcosaSurvivalDescription,
 
         NormalSkinName,
         BloodEaterSkinName,

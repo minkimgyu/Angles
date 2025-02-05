@@ -71,6 +71,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - LevelData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dce0f0a977ceff84cab6d5b579456cdb
+    m_Address: IcosaSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb3ba5eac930fda48b62e0ed9fe66ab9
+    m_Address: DodecaSurvival
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelData
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

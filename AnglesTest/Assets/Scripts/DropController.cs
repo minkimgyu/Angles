@@ -25,7 +25,7 @@ public class DropController
     const float _spreadOffset = 1.5f;
     BaseFactory _interactableFactory;
 
-    public DropController( BaseFactory interactableFactory)
+    public DropController(BaseFactory interactableFactory)
     {
         _interactableFactory = interactableFactory;
         EventBusManager.Instance.SubEventBus.Register(SubEventBus.State.DropItem, new DropItemCommand(OnDropRequested));

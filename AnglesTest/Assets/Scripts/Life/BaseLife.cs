@@ -16,6 +16,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     protected Size _size;
 
+    // 생성 순으로 정렬 필요
     public enum Name
     {
         Player, // 0
@@ -43,7 +44,14 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         Hexahorn,
         Octavia,
 
-        Bomb
+        Bomb,
+
+        GreenTriangle,
+        GreenRectangle,
+        GreenPentagon,
+        GreenHexagon,
+
+        Hexatric
     }
 
     public enum AliveState

@@ -79,6 +79,8 @@ abstract public class GameMode : MonoBehaviour
         PyramidSurvival,
         CubeSurvival,
         PrismSurvival,
+        DodecaSurvival,
+        IcosaSurvival,
 
         MainTutorial
     }
