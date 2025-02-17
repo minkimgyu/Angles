@@ -103,7 +103,7 @@ public class SubEventBus : BaseEventBus<SubEventBus.State>
         SetInvincible, // 플레이어 무적으로 지정
 
         CreateCard,
-        CreateReusableCard,
+        //CreateReusableCard,
         
         DropItem,
         AddFollableCamera,

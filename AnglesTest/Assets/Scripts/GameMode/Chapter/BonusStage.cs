@@ -34,7 +34,7 @@ public class BonusStage : BaseStage
     {
         _baseStageController.OnStageClearRequested();
 
-        IInteractable interactableObject = _inGameFactory.GetFactory(InGameFactory.Type.Interactable).Create(IInteractable.Name.Shop);
+        IInteractable interactableObject = _inGameFactory.GetFactory(InGameFactory.Type.Interactable).Create(IInteractable.Name.CardTable);
         _spawnedObjects.Add(interactableObject.ReturnGameObject());
         interactableObject.ResetPosition(_bonusPostion.position);
     }

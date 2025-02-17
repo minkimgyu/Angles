@@ -52,12 +52,9 @@ public class SpawnBlade : BaseSkill
             _data.GroggyDuration
         );
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponSizeModifier(_data.SizeMultiplier));
-        modifiers.Add(new WeaponLifetimeModifier(_data.Lifetime));
+        BladeDataModifier bladeDataModifier = new BladeDataModifier(damageData, _data.SizeMultiplier, _data.Lifetime);
 
-        weapon.ModifyData(modifiers);
+        weapon.ModifyData(bladeDataModifier);
         weapon.Activate();
         weapon.ResetPosition(casterTransform.position);
 

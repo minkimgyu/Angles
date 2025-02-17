@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,6 +42,7 @@ public class SkinSelectPage : MonoBehaviour
     [SerializeField] SkinInfoViewer _skinInfoViewer;
     [SerializeField] Transform _skinInfoParent;
     [SerializeField] Button _upgradeBtn;
+    [SerializeField] TMP_Text _titleText;
 
     Dictionary<SkinData.Key, Sprite> _skinSprite;
     Dictionary<SkinData.Key, SkinData> _skinData;
@@ -68,6 +70,8 @@ public class SkinSelectPage : MonoBehaviour
         _skinData = skinData;
         _viewerFactory = viewerFactory;
         _lobbyTopModel = lobbyTopModel;
+
+        _titleText.text = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Skin);
 
         _upgradeBtn.onClick.AddListener(() => { OnClickBtn(); });
         _skinInfoController = new SkinInfoController(new SkinInfoModel(_skinInfoViewer));

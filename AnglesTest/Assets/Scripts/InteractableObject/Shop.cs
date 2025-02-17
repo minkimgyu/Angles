@@ -34,7 +34,7 @@ public class Shop : MonoBehaviour, IInteractable
 
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
-        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateReusableCard, interacter.GetCaster(), _cardCount, _recreateCount);
+        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.GetCaster(), _cardCount, _recreateCount);
         Destroy(gameObject);
     }
 

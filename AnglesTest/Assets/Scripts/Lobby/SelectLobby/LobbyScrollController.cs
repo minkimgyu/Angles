@@ -30,21 +30,23 @@ public class LobbyScrollController : ScrollUI
             rectTransform.sizeDelta = newSize;  // 변경된 값을 다시 할당
         }
 
-        SetUp(childCount);
+        SetUp(childCount, 1);
     }
 
     public void TabClick(bool isLeft)
     {
-        _currentPos = SetPos();
+        _currentPos = GetPos();
         int childCount = _content.childCount;
 
         if (isLeft)
         {
+            if (_targetIndex == 0) return;
             _targetIndex--;
-            if (_targetIndex < 0) _targetIndex = childCount - 1;
+            //if (_targetIndex < 0) _targetIndex = childCount - 1;
         }
         else
         {
+            if (_targetIndex == childCount - 1) return;
             _targetIndex = ++_targetIndex % childCount;
         }
 

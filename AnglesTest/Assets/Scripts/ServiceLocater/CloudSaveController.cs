@@ -14,6 +14,7 @@ public class CloudSaveController : MonoBehaviour
 
     [SerializeField] Button _uploadBtn;
     [SerializeField] Button _retrieveBtn;
+    [SerializeField] Button _closeBtn;
 
     public enum State
     {
@@ -126,9 +127,8 @@ public class CloudSaveController : MonoBehaviour
 
     State _state;
 
-    public void Activate()
+    public void Activate(bool active)
     {
-        bool active = !_content.activeSelf;
         _content.SetActive(active);
 
         // Å°¸é »ý¼º, ²ô¸é ÆÄ±«
@@ -222,6 +222,9 @@ public class CloudSaveController : MonoBehaviour
         _levelDatas = levelDatas;
         _statDatas = statDatas;
         _viewerFactory = viewerFactory;
+
+        _closeBtn.onClick.AddListener(() => { Activate(false); });
+
 
         _decisionMessageViewer.Initialize(() =>
         {

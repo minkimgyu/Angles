@@ -15,12 +15,9 @@ public class StickyBomb : BaseWeapon
         _data = data;
     }
 
-    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    public override void ModifyData(StickyBombDataModifier modifier)
     {
-        for (int i = 0; i < modifiers.Count; i++)
-        {
-            _data = modifiers[i].Visit(_data);
-        }
+        _data = modifier.Visit(_data);
     }
 
     public override void Initialize(BaseFactory effectFactory) 

@@ -37,6 +37,9 @@ public class Knockback : BaseSkill
 
         Transform casterTransform = _caster.GetComponent<Transform>();
 
+        IForce forceTarget = targetObject.GetComponent<IForce>();
+        if (forceTarget != null) forceTarget.ApplyForce(casterTransform.forward, _data.Force, ForceMode2D.Impulse);
+
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Knockback);
         Debug.Log("Knockback");
 

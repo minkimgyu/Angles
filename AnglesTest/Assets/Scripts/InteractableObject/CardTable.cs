@@ -8,10 +8,12 @@ public class CardTable : MonoBehaviour, IInteractable
     OutlineComponent _outlineComponent;
     bool _isActive;
     int _cardCount;
+    int _recreateCount;
 
     public void Initialize(CardTableData data)
     {
         _cardCount = data.CardCount;
+        _recreateCount = data.RecreateCount;
 
         _isActive = true;
         _outlineComponent = GetComponentInChildren<OutlineComponent>();
@@ -31,7 +33,7 @@ public class CardTable : MonoBehaviour, IInteractable
 
         _isActive = false;
         _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnDisabled);
-        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.GetCaster(), _cardCount);
+        EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.GetCaster(), _cardCount, _recreateCount);
         Destroy(gameObject);
     }
 

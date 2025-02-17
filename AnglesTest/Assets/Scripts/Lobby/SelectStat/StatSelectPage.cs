@@ -54,6 +54,7 @@ public class StatSelectPage : MonoBehaviour
     [SerializeField] StatInfoViewer _statInfoViewer;
     [SerializeField] Transform _statInfoParent;
     [SerializeField] Button _upgradeBtn;
+    [SerializeField] TMP_Text _titleText;
 
     Dictionary<StatData.Key, Sprite> _statSprite;
     Dictionary<StatData.Key, StatData> _statData;
@@ -81,6 +82,7 @@ public class StatSelectPage : MonoBehaviour
         _messageViewer = messageViewer;
         _lobbyTopModel = lobbyTopModel;
 
+        _titleText.text = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Stat);
 
         _upgradeBtn.GetComponentInChildren<TMP_Text>().text = ServiceLocater.ReturnLocalizationHandler().GetWord(ILocalization.Key.Upgrade);
         _upgradeBtn.onClick.AddListener(() => { OnClickUpgrade(); });

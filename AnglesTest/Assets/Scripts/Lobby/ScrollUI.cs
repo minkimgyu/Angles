@@ -17,7 +17,7 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     protected int _targetIndex;
 
-    protected void SetUp(int menuCount)
+    protected void SetUp(int menuCount, int startIndex = 0)
     {
         _menuSize = menuCount;
         _points = new float[_menuSize];
@@ -28,6 +28,8 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             _points[i] = _distance * i;
         }
+
+        _targetPos = _points[startIndex];
     }
 
     protected virtual void Update()
@@ -40,7 +42,7 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        _currentPos = SetPos();
+        _currentPos = GetPos();
     }
 
     public virtual void OnDrag(PointerEventData eventData)
@@ -51,7 +53,7 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void OnEndDrag(PointerEventData eventData)
     {
         _isDrag = false;
-        _targetPos = SetPos();
+        _targetPos = GetPos();
 
         // 절반거리를 넘지 않아도 마우스를 빠르게 이동하면
         if (_currentPos == _targetPos)
@@ -72,7 +74,7 @@ public class ScrollUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
-    protected float SetPos()
+    protected float GetPos()
     {
         // 절반거리를 기준으로 가까운 위치를 반환
         for (int i = 0; i < _menuSize; i++)

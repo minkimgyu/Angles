@@ -55,11 +55,9 @@ public class SpawnStickyBomb : BaseSkill
             _data.GroggyDuration
         );
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponDelayModifier(_data.Delay));
+        StickyBombDataModifier stickyBombDataModifier = new StickyBombDataModifier(damageData, _data.Delay);
 
-        weapon.ModifyData(modifiers);
+        weapon.ModifyData(stickyBombDataModifier);
         weapon.Activate();
         weapon.ResetPosition(targetPos);
         weapon.ResetFollower(followable);

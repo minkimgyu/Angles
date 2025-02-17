@@ -36,7 +36,7 @@ MonoBehaviour:
     - Weapon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8ea00d2913466164da18694d92bc9d6e
-    m_Address: Rocket
+    m_Address: ShooterRocket
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon

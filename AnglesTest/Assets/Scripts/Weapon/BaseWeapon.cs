@@ -13,7 +13,7 @@ abstract public class BaseWeapon : MonoBehaviour
         PentagonicBullet,
         HexahornBullet,
 
-        Rocket,
+        ShooterRocket,
 
         Blackhole,
         StickyBomb,
@@ -47,7 +47,13 @@ abstract public class BaseWeapon : MonoBehaviour
         _sizeModifyComponent.ResetSize();
     }
 
-    public abstract void ModifyData(List<WeaponDataModifier> modifiers);
+    public virtual void ModifyData(BladeDataModifier modifiers) { }
+    public virtual void ModifyData(BlackholeDataModifier modifiers) { }
+    public virtual void ModifyData(StickyBombDataModifier modifiers) { }
+    public virtual void ModifyData(ShooterDataModifier modifiers) { }
+    public virtual void ModifyData(RocketDataModifier modifiers) { }
+    public virtual void ModifyData(BulletDataModifier modifiers) { }
+
 
     public virtual void Initialize() { }
     public virtual void Initialize(BaseFactory factory) { }

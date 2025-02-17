@@ -66,7 +66,7 @@ public class SurvivalMode : DungeonMode
             if (_currentCoinLevel < _maxCoinLevel && _totalCoinCount >= _coinGaugeData[_currentCoinLevel])
             {
                 _currentCoinLevel++;
-                EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateReusableCard, FindObjectOfType<Player>().GetCaster(), 3, 3);
+                EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, FindObjectOfType<Player>().GetCaster(), 3);
             }
 
             _levelUIController.ChangeCoinLevel(_currentCoinLevel);

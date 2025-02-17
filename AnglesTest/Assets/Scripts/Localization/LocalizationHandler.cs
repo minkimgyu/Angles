@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEngine;
 using Newtonsoft.Json;
 
 public interface ILocalization
@@ -32,6 +29,9 @@ public interface ILocalization
         SFXMenu,
         ExitMenu,
         ResumeMenu,
+
+        Skin,
+        Stat,
 
         Upgrade,
 

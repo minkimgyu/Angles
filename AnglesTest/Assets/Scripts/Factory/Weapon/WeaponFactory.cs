@@ -57,7 +57,7 @@ public class WeaponFactory : BaseFactory
         _weaponCreaters[BaseWeapon.Name.HexahornBullet] = new BulletCreater(weaponPrefabs[BaseWeapon.Name.HexahornBullet], weaponData[BaseWeapon.Name.HexahornBullet], effectFactory);
 
 
-        _weaponCreaters[BaseWeapon.Name.Rocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.Rocket], weaponData[BaseWeapon.Name.Rocket], effectFactory);
+        _weaponCreaters[BaseWeapon.Name.ShooterRocket] = new RocketCreater(weaponPrefabs[BaseWeapon.Name.ShooterRocket], weaponData[BaseWeapon.Name.ShooterRocket], effectFactory);
 
         _weaponCreaters[BaseWeapon.Name.RifleShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RifleShooter], weaponData[BaseWeapon.Name.RifleShooter], this);
         _weaponCreaters[BaseWeapon.Name.RocketShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RocketShooter], weaponData[BaseWeapon.Name.RocketShooter], this);

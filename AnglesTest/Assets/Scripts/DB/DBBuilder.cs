@@ -302,7 +302,7 @@ public class DBBuilder : MonoBehaviour
     {
         { BaseSkill.Name.Statikk, new StatikkData(5, 1, 1, 10, 1f, 3, 3, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.Knockback, new KnockbackData(5, 3, 1, 20, 1, 3, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0), new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.Knockback, new KnockbackData(5, 3, 1, 20, 1, 3, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0), 20, new List<ITarget.Type> { ITarget.Type.Red }) },
 
         { BaseSkill.Name.Impact, new ImpactData(5, 0.2f, 20, 1, 2, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
 
@@ -310,9 +310,9 @@ public class DBBuilder : MonoBehaviour
 
         { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 0.1f, 0, 1, 0.3f, 3, new List<ITarget.Type> { ITarget.Type.Red })},
 
-        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 1, 0.1f, 0, 0.6f, BaseWeapon.Name.ShooterBullet, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 1, 0.1f, 0, 0.6f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 5, 0.5f, 0, 3, BaseWeapon.Name.Rocket, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 5, 0.5f, 0, 3, new List<ITarget.Type> { ITarget.Type.Red }) },
 
         { BaseSkill.Name.SpawnBlade, new SpawnBladeData(5, 0.3f, 10, 1, 1, 3f, 8f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
@@ -389,7 +389,7 @@ public class DBBuilder : MonoBehaviour
         { BaseWeapon.Name.PentagonicBullet, new BulletData(5)},
         { BaseWeapon.Name.HexahornBullet, new BulletData(5)},
 
-        { BaseWeapon.Name.Rocket, new RocketData(3, 5)},
+        { BaseWeapon.Name.ShooterRocket, new RocketData(3, 5)},
 
         { BaseWeapon.Name.Blackhole, new BlackholeData(-10, 0.1f)},
         { BaseWeapon.Name.StickyBomb, new StickyBombData(3, 3)},
@@ -817,11 +817,11 @@ public class DBBuilder : MonoBehaviour
 
     Dictionary<IInteractable.Name, BaseInteractableObjectData> _interactableObjectDatas = new Dictionary<IInteractable.Name, BaseInteractableObjectData>
     {
-        { IInteractable.Name.CardTable, new CardTableData(3) },
+        { IInteractable.Name.CardTable, new CardTableData(3, 1) },
         { IInteractable.Name.Coin, new CoinData(5, 25) },
         { IInteractable.Name.Heart, new HeartData(20, 25) },
         { IInteractable.Name.SkillBubble, new SkillBubbleData(1, 25) },
-        { IInteractable.Name.Shop, new ShopData(3, 3) }
+        { IInteractable.Name.Shop, new ShopData(3, 2) }
     };
 
     #endregion

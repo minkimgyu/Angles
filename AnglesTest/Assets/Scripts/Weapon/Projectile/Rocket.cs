@@ -58,11 +58,8 @@ public class Rocket : ProjectileWeapon
         effect.Play();
     }
 
-    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    public override void ModifyData(RocketDataModifier modifier)
     {
-        for (int i = 0; i < modifiers.Count; i++)
-        {
-            _data = modifiers[i].Visit(_data);
-        }
+        _data = modifier.Visit(_data);
     }
 }

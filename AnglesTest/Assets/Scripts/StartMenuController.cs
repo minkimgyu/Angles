@@ -12,7 +12,8 @@ public class StartMenuController : MonoBehaviour
 
     [SerializeField] Button _languageButton;
     [SerializeField] Button _instructionButton;
-    [SerializeField] Button _cloudButton;
+
+    [SerializeField] Button _cloudOpenButton;
 
     [SerializeField] GameObject _instructionKOR;
     [SerializeField] GameObject _instructionENG;
@@ -40,7 +41,7 @@ public class StartMenuController : MonoBehaviour
         _startButton.onClick.AddListener(OnStartRequested);
         _exitButton.onClick.AddListener(OnExitRequested);
         _instructionButton.onClick.AddListener(ActivateInstruction);
-        _cloudButton.onClick.AddListener(() => { _cloudSaveController.Activate(); });
+        _cloudOpenButton.onClick.AddListener(() => { _cloudSaveController.Activate(true); });
 
         _showInstruction = false;
         _instructionKOR.SetActive(false);

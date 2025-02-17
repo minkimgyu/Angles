@@ -49,12 +49,9 @@ public class SpawnBlackhole : BaseSkill
             _data.GroggyDuration
         );
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponSizeModifier(_data.SizeMultiplier));
-        modifiers.Add(new WeaponLifetimeModifier(_data.Lifetime));
+        BlackholeDataModifier blackholeDataModifier = new BlackholeDataModifier(damageData, _data.SizeMultiplier, _data.Lifetime);
 
-        weapon.ModifyData(modifiers);
+        weapon.ModifyData(blackholeDataModifier);
         weapon.Activate();
 
         weapon.ResetPosition(casterTransform.position);

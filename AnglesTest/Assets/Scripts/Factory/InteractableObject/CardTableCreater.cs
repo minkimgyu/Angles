@@ -9,9 +9,13 @@ public class CardTableData : BaseInteractableObjectData
     [JsonProperty] private int _cardCount;
     [JsonIgnore] public int CardCount { get => _cardCount; }
 
-    public CardTableData(int cardCount)
+    [JsonProperty] private int _recreateCount;
+    [JsonIgnore] public int RecreateCount { get => _recreateCount; }
+
+    public CardTableData(int cardCount, int recreateCount)
     {
         _cardCount = cardCount;
+        _recreateCount = recreateCount;
     }
 }
 

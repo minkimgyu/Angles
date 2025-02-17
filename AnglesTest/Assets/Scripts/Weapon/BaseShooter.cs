@@ -5,7 +5,7 @@ using UnityEngine;
 // 여기서 IUpgradable를 재정의
 // CopyWeaponData를 증가시키는 방향으로 개발 진행
 
-public class Shooter : BaseWeapon
+abstract public class BaseShooter : BaseWeapon
 {
     TargetCaptureComponent _targetCaptureComponent;
     FollowComponent _trackComponent;
@@ -17,11 +17,7 @@ public class Shooter : BaseWeapon
 
         _waitFire = 0;
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(_data.DamageableData));
-
-        ProjectileWeapon weapon = (ProjectileWeapon)_weaponFactory.Create(_data.FireWeaponName);
-        weapon.ModifyData(modifiers);
+        BaseWeapon weapon = CreateProjectileWeapon();
         weapon.ResetPosition(transform.position);
 
         IProjectable projectile = weapon.GetComponent<IProjectable>();
@@ -31,18 +27,17 @@ public class Shooter : BaseWeapon
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.ShooterFire, transform.position);
     }
 
+    protected abstract BaseWeapon CreateProjectileWeapon();
+
     protected float _waitFire;
     List<ITarget> _targetDatas;
 
     protected ShooterData _data;
     protected BaseFactory _weaponFactory;
 
-    public override void ModifyData(List<WeaponDataModifier> modifiers)
+    public override void ModifyData(ShooterDataModifier modifier)
     {
-        for (int i = 0; i < modifiers.Count; i++)
-        {
-            _data = modifiers[i].Visit(_data);
-        }
+        _data = modifier.Visit(_data);
     }
 
     public override void ResetData(ShooterData shooterData)

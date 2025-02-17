@@ -101,7 +101,7 @@ public class LevelScrollHandler : ScrollUI
 
     public void ScrollToLevel(GameMode.Level level)
     {
-        _currentPos = SetPos();
+        _currentPos = GetPos();
 
         _targetIndex = GameMode.GetLevelIndex(_storedModeType, level);
         _targetPos = _points[_targetIndex];

@@ -53,10 +53,9 @@ public class SpreadBullets : BaseSkill
             _data.GroggyDuration
         );
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(damageData));
+        BulletDataModifier bulletDataModifier = new BulletDataModifier(damageData);
 
-        weapon.ModifyData(modifiers);
+        weapon.ModifyData(bulletDataModifier);
         weapon.Activate();
 
         weapon.ResetPosition(spawnPosition, direction);

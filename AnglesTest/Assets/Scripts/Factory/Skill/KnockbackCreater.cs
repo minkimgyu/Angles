@@ -14,6 +14,8 @@ public class KnockbackData : CooltimeSkillData
     [JsonProperty] private SerializableVector2 _size;
     [JsonProperty] private SerializableVector2 _offset;
 
+    [JsonProperty] private float _force;
+
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
     [JsonProperty] private float _groggyDuration;
 
@@ -24,6 +26,7 @@ public class KnockbackData : CooltimeSkillData
     [JsonIgnore] public SerializableVector2 Offset { get => _offset; }
     [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; }
     [JsonIgnore] public float GroggyDuration { get => _groggyDuration; }
+    [JsonIgnore] public float Force { get => _force; }
 
     public KnockbackData(
         int maxUpgradePoint,
@@ -34,6 +37,7 @@ public class KnockbackData : CooltimeSkillData
         float groggyDuration,
         SerializableVector2 size,
         SerializableVector2 offset,
+        float force,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
@@ -42,6 +46,7 @@ public class KnockbackData : CooltimeSkillData
         _rangeMultiplier = 1;
         _size = size;
         _offset = offset;
+        _force = force;
         _targetTypes = targetTypes;
     }
 
@@ -56,6 +61,7 @@ public class KnockbackData : CooltimeSkillData
             _groggyDuration,
             new SerializableVector2(_size.x, _size.y), // SerializableVector2 ±Ì¿∫ ∫πªÁ
             new SerializableVector2(_offset.x, _offset.y), // SerializableVector2 ±Ì¿∫ ∫πªÁ
+            _force,
             new List<ITarget.Type>(_targetTypes) // ∏ÆΩ∫∆Æ ±Ì¿∫ ∫πªÁ
         );
     }

@@ -35,10 +35,8 @@ public class SpawnShooter : BaseSkill
             _data.GroggyDuration
         );
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponDelayModifier(_data.Delay));
-        _weapon.ModifyData(modifiers);
+        ShooterDataModifier shooterDataModifier = new ShooterDataModifier(damageData, _data.Delay);
+        _weapon.ModifyData(shooterDataModifier);
     }
 
     public override void OnAdd()
@@ -64,12 +62,8 @@ public class SpawnShooter : BaseSkill
             _data.GroggyDuration
         );
 
-        List<WeaponDataModifier> modifiers = new List<WeaponDataModifier>();
-        modifiers.Add(new WeaponDamageModifier(damageData));
-        modifiers.Add(new WeaponDelayModifier(_data.Delay));
-        modifiers.Add(new WeaponProjectileModifier(_data.ProjectileName));
-
-        _weapon.ModifyData(modifiers);
+        ShooterDataModifier shooterDataModifier = new ShooterDataModifier(damageData, _data.Delay);
+        _weapon.ModifyData(shooterDataModifier);
         _weapon.Activate();
 
         Transform casterTransform = _caster.GetComponent<Transform>();
