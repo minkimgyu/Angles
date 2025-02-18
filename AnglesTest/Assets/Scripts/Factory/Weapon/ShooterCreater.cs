@@ -36,9 +36,6 @@ public class ShooterData : WeaponData
         _maxDistanceFromPlayer = maxDistanceFromPlayer;
     }
 
-    public override void ChangeDelay(float delay) { _fireDelay = delay; }
-    public override void ChangeProjectile(BaseWeapon.Name name) { _fireWeaponName = name; }
-
     public override WeaponData Copy()
     {
         return new ShooterData(
@@ -66,7 +63,7 @@ public class ShooterCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(CopyWeaponData as ShooterData);
+        weapon.InjectData(CopyWeaponData as ShooterData);
         weapon.Initialize(_weaponFactory);
 
         return weapon;

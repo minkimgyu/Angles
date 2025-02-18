@@ -23,7 +23,7 @@ public class PentagonEnemy : TrackableEnemy
 
     public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
     {
-        _trackComponent = new TrackComponent(
+        _moveStrategy = new TrackComponent(
              _moveComponent,
              transform,
              _size,

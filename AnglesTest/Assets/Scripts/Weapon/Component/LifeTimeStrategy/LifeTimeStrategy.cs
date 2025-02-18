@@ -3,40 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+public interface IAttackStat
+{
+    public DamageableData DamageableData { get; set; }
+}
+
 public interface ILifetimeStat
 {
     public float Lifetime { get; set; }
 }
 
-abstract public class BaseLifetimeComponent
+public interface ILifetimeStrategy
 {
-    public virtual void Activate() { }
-    public virtual void CheckFinish() { }
+    void Activate();
+    void CheckFinish();
 }
 
-public class NoLifetimeComponent : BaseLifetimeComponent
+public class NoLifetimeStrategy : ILifetimeStrategy
 {
+    public void Activate() { }
+    public void CheckFinish() { }
 }
 
-public class LifetimeComponent : BaseLifetimeComponent
+public class ChangeableLifeTimeStrategy : ILifetimeStrategy
 {
     Action OnLifetimeOver;
     Timer _timer;
     ILifetimeStat _lifetimeData;
 
-    public LifetimeComponent(ILifetimeStat lifetimeData, Action OnLifetimeOver)
+    public ChangeableLifeTimeStrategy(ILifetimeStat lifetimeData, Action OnLifetimeOver)
     {
         _timer = new Timer();
         _lifetimeData = lifetimeData;
         this.OnLifetimeOver = OnLifetimeOver;
     }
 
-    public override void Activate()
+    public void Activate()
     {
         _timer.Start(_lifetimeData.Lifetime);
     }
 
-    public override void CheckFinish()
+    public void CheckFinish()
     {
         if (_timer.CurrentState != Timer.State.Finish) return;
 

@@ -3,34 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Bullet : ProjectileWeapon
+public class Bullet : BaseWeapon, IProjectable
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        // 벽의 경우
-        ITarget target = collision.GetComponent<ITarget>();
-        if(target == null)
-        {
-            SpawnHitEffect();
-            Destroy(gameObject);
-            return;
-        }
-
-        if(target.IsTarget(_data.DamageableData._targetType) == true)
-        {
-            IDamageable damageable = collision.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                Damage.Hit(_data.DamageableData, damageable);
-                SpawnHitEffect();
-                Destroy(gameObject);
-                return;
-            }
-        }
+       _attackStrategy.OnTargetEnter(collider);
     }
 
     BaseFactory _effectFactory;
     BulletData _data;
+
+    void OnHit()
+    {
+        SpawnHitEffect();
+        Destroy(gameObject);
+    }
 
     void SpawnHitEffect()
     {
@@ -44,16 +31,29 @@ public class Bullet : ProjectileWeapon
         _data = modifier.Visit(_data);
     }
 
-    public override void ResetData(BulletData data)
+    public override void InjectData(BulletData data)
     {
         _data = data;
     }
 
+    public void Shoot(Vector3 direction, float force)
+    {
+        transform.right = direction;
+        _force = force;
+
+        _moveComponent.Stop();
+        _moveComponent.AddForce(direction, _force);
+    }
+
+    protected float _force;
+    protected MoveComponent _moveComponent;
+
     public override void Initialize(BaseFactory effectFactory)
     {
         _effectFactory = effectFactory;
-        _lifetimeComponent = new LifetimeComponent(_data, () => { Destroy(gameObject); });
-        _sizeModifyComponent = new NoSizeModifyComponent();
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnHit);
+        _sizeStrategy = new NoSizeStrategy();
+        _attackStrategy = new BulletAttackStrategy(_data, OnHit);
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();

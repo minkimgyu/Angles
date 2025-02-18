@@ -197,20 +197,6 @@ public class ShooterDataModifier : WeaponDataModifier<ShooterData>
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public class RocketDataModifier : WeaponDataModifier<RocketData>
 {
     DamageableData _damageableDataModifier;
@@ -220,11 +206,10 @@ public class RocketDataModifier : WeaponDataModifier<RocketData>
         _damageableDataModifier = damageableDataModifier;
     }
 
-    public override RocketData Visit(RocketData weaponData)
+    public override RocketData Visit(RocketData attackStat)
     {
-        weaponData.DamageableData = _damageableDataModifier;
-
-        return weaponData;
+        attackStat.DamageableData = _damageableDataModifier;
+        return attackStat;
     }
 }
 
@@ -237,13 +222,29 @@ public class BulletDataModifier : WeaponDataModifier<BulletData>
         _damageableDataModifier = damageableDataModifier;
     }
 
-    public override BulletData Visit(BulletData weaponData)
+    public override BulletData Visit(BulletData bulletData)
     {
-        weaponData.DamageableData = _damageableDataModifier;
-
-        return weaponData;
+        bulletData.DamageableData = _damageableDataModifier;
+        return bulletData;
     }
 }
+
+public class TrackableMissileDataModifier : WeaponDataModifier<TrackableMissileData>
+{
+    DamageableData _damageableDataModifier;
+
+    public TrackableMissileDataModifier(DamageableData damageableDataModifier)
+    {
+        _damageableDataModifier = damageableDataModifier;
+    }
+
+    public override TrackableMissileData Visit(TrackableMissileData missileData)
+    {
+        missileData.DamageableData = _damageableDataModifier;
+        return missileData;
+    }
+}
+
 
 public class BladeDataModifier : WeaponDataModifier<BladeData>
 {

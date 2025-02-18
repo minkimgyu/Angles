@@ -21,9 +21,6 @@ public class BlackholeData : WeaponData, ILifetimeStat, ISizeModifyStat
         _forceDelay = forceDelay;
     }
 
-    public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
-    public override void ChangeSizeMultiplier(float sizeMultiplier) { SizeMultiplier = sizeMultiplier; }
-
     public override WeaponData Copy()
     {
         return new BlackholeData(
@@ -44,7 +41,7 @@ public class BlackholeCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(CopyWeaponData as BlackholeData);
+        weapon.InjectData(CopyWeaponData as BlackholeData);
         weapon.Initialize();
 
         return weapon;

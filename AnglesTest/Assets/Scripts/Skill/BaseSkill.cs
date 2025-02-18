@@ -28,7 +28,13 @@ abstract public class BaseSkill : ISkillUpgradable
 
         SpreadBullets,
         SpreadReflectableBullets,
+        SpreadTrackableBullets,
+        SpreadTrackableMissiles,
+
+        RushAttack,
+
         ShootMultipleLaser,
+        ShootFewLaser,
 
         MultipleShockwave,
         Shockwave,
@@ -41,9 +47,9 @@ abstract public class BaseSkill : ISkillUpgradable
 
     public enum Type
     {
-        Passive,
+        Basic,
         Active,
-        Basic
+        Passive
     }
 
     public BaseSkill(Type skillType, int maxUpgradePoint)
@@ -88,12 +94,12 @@ abstract public class BaseSkill : ISkillUpgradable
 
     public void AddViewEvent(Action<float, int, bool> viewEvent) 
     { 
-        _useConstraint.AddViewEvent(viewEvent); 
+        _useConstraint.AddViewEvent(viewEvent);
     }
 
     public void RemoveViewEvent(Action<float, int, bool> viewEvent) 
-    { 
-        _useConstraint.RemoveViewEvent(viewEvent); 
+    {
+        _useConstraint.RemoveViewEvent(viewEvent);
     }
 
     public bool CanUse() 

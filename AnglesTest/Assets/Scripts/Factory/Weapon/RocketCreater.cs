@@ -18,10 +18,6 @@ public class RocketData : WeaponData, ILifetimeStat
         Lifetime = lifeTime;
     }
 
-    public override void ChangeRange(float range) => _range = range;
-    public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
-
-
     public override WeaponData Copy()
     {
         return new RocketData(
@@ -45,7 +41,7 @@ public class RocketCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(CopyWeaponData as RocketData);
+        weapon.InjectData(CopyWeaponData as RocketData);
         weapon.Initialize(_effectFactory);
         return weapon;
     }

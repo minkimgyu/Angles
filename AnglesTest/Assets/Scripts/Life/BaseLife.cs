@@ -104,6 +104,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void ResetData(PentagonData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(HexagonData data, DropData dropData) { SetUp(data); }
     public virtual void ResetData(OperaHexagonData data, DropData dropData) { SetUp(data); }
+    public virtual void ResetData(GreenPentagonData data, DropData dropData) { SetUp(data); }
 
     public void AddObserverEvent(Action<float> OnHpChangeRequested) { this.OnHpChangeRequested = OnHpChangeRequested; }
     public virtual void AddObserverEvent(Action OnDieRequested) { }

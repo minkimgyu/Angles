@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IProjectable
 {
-    void Shoot(Vector3 direction, float force);
+    void Shoot(Vector3 direction, float force) { }
+    void Shoot(ITarget target, float moveSpeed) { }
 }

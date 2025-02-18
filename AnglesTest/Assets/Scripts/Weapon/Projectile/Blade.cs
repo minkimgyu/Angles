@@ -3,32 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 
-public class Blade : ProjectileWeapon
+public class Blade : BaseWeapon, IProjectable
 {
-    public class TargetData
-    {
-        public TargetData(float captureTime, IDamageable damageable)
-        {
-            _captureTime = captureTime;
-            _damageable = damageable;
-        }
-
-        public float CaptureTime { get { return _captureTime; } set { _captureTime = value; } }
-        public IDamageable Damageable { get { return _damageable; } }
-
-        float _captureTime;
-        IDamageable _damageable;
-    }
-
     DamageableCaptureComponent _captureComponent;
-    List<TargetData> _targetDatas;
-
     BladeData _data;
     Timer _soundTimer;
 
-    public override void Shoot(Vector3 direction, float force)
+    float _force;
+    MoveComponent _moveComponent;
+
+    public void Shoot(Vector3 direction, float force)
     {
-        base.Shoot(direction, force);
+        transform.right = direction;
+        _force = force;
+
+        _moveComponent.Stop();
+        _moveComponent.AddForce(direction, _force);
         _soundTimer.Start(1f);
     }
 
@@ -46,7 +36,7 @@ public class Blade : ProjectileWeapon
         _data = modifier.Visit(_data);
     }
 
-    public override void ResetData(BladeData data)
+    public override void InjectData(BladeData data)
     {
         _data = data;
     }
@@ -54,12 +44,12 @@ public class Blade : ProjectileWeapon
     public override void Initialize()
     {
         _soundTimer = new Timer();
-        _targetDatas = new List<TargetData>();
         _captureComponent = GetComponentInChildren<DamageableCaptureComponent>();
         _captureComponent.Initialize(OnEnter, OnExit);
 
-        _lifetimeComponent = new LifetimeComponent(_data, () => { Destroy(gameObject); });
-        _sizeModifyComponent = new SizeModifyComponent(transform, _data);
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
+        _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
+        _attackStrategy = new BladeAttackStrategy(_data);
 
         _moveComponent = GetComponent<MoveComponent>();
         _moveComponent.Initialize();
@@ -67,14 +57,12 @@ public class Blade : ProjectileWeapon
 
     void OnEnter(IDamageable damageable)
     {
-        _targetDatas.Add(new TargetData(Time.time, damageable));
-        Damage.Hit(_data.DamageableData, damageable);
+        _attackStrategy.OnTargetEnter(damageable);
     }
 
     void OnExit(IDamageable damageable)
     {
-        TargetData targetData = _targetDatas.Find(x => x.Damageable == damageable);
-        _targetDatas.Remove(targetData);
+        _attackStrategy.OnTargetExit(damageable);
     }
 
     protected override void Update()
@@ -88,16 +76,6 @@ public class Blade : ProjectileWeapon
             _soundTimer.Start(_data.AttackDelay);
         }
 
-        for (int i = _targetDatas.Count - 1; i >= 0; i--)
-        {
-            float duration = Time.time - _targetDatas[i].CaptureTime;
-            if (duration > _data.AttackDelay)
-            {
-                Damage.Hit(_data.DamageableData, _targetDatas[i].Damageable);
-
-                if (i < 0 || _targetDatas.Count - 1 < i) continue;
-                _targetDatas[i].CaptureTime = Time.time;
-            }
-        }
+        _attackStrategy.OnUpdate();
     }
 }

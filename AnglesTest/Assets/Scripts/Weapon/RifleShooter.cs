@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class RifleShooter : BaseShooter
 {
-    protected override BaseWeapon CreateProjectileWeapon()
+    public override void Initialize(BaseFactory weaponFactory)
     {
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.ShooterBullet);
-        BulletDataModifier bulletDataModifier = new BulletDataModifier(_data.DamageableData);
-
-        weapon.ModifyData(bulletDataModifier);
-        return weapon;
+        base.Initialize(weaponFactory);
+        _attackStrategy = new RifleShooterAttackStrategy(_data, transform, _weaponFactory);
     }
 }

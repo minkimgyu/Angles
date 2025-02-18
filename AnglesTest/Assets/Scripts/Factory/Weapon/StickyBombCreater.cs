@@ -20,8 +20,6 @@ public class StickyBombData : WeaponData, ILifetimeStat
         Lifetime = lifetime;
     }
 
-    public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
-
     public override WeaponData Copy()
     {
         return new StickyBombData(
@@ -45,7 +43,7 @@ public class StickyBombCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(CopyWeaponData as StickyBombData);
+        weapon.InjectData(CopyWeaponData as StickyBombData);
         weapon.Initialize(_effectFactory);
         return weapon;
     }

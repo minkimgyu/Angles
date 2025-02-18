@@ -25,6 +25,7 @@ public interface IUpgradeVisitor
     void Visit(ISkillUpgradable upgradable, SpawnStickyBombData stickyBombData) { }
 
     void Visit(ISkillUpgradable upgradable, SpreadBulletsData data) { }
+    void Visit(ISkillUpgradable upgradable, SpreadTrackableMissilesData data) { }
     void Visit(ISkillUpgradable upgradable, ShockwaveData data) { }
     void Visit(ISkillUpgradable upgradable, MagneticFieldData data) { }
     void Visit(ISkillUpgradable upgradable, SelfDestructionData data) { }

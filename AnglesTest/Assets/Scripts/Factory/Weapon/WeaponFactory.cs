@@ -5,21 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-abstract public class WeaponData 
+abstract public class WeaponData : IAttackStat
 {
-    private DamageableData _damageableData;
-    [JsonIgnore] public DamageableData DamageableData { get => _damageableData; set => _damageableData = value; }
-
-    public void ChangeDamage(DamageableData damageableData) { _damageableData = damageableData; }
-
-    public virtual void ChangeRange(float range) { }
-    public virtual void ChangeSizeMultiplier(float sizeMultiplier) { }
-    public virtual void ChangeLifetime(float lifetime) { }
-
-    public virtual void ChangeTargetCount(int targetCount) { }
-    public virtual void ChangeForce(float force) { }
-    public virtual void ChangeProjectile(BaseWeapon.Name name) { }
-    public virtual void ChangeDelay(float delayModifier) { }
+    public DamageableData DamageableData { get; set; }
 
     public abstract WeaponData Copy();
 }
@@ -63,6 +51,7 @@ public class WeaponFactory : BaseFactory
         _weaponCreaters[BaseWeapon.Name.RocketShooter] = new ShooterCreater(weaponPrefabs[BaseWeapon.Name.RocketShooter], weaponData[BaseWeapon.Name.RocketShooter], this);
 
         _weaponCreaters[BaseWeapon.Name.StickyBomb] = new StickyBombCreater(weaponPrefabs[BaseWeapon.Name.StickyBomb], weaponData[BaseWeapon.Name.StickyBomb], effectFactory);
+        _weaponCreaters[BaseWeapon.Name.TrackableMissile] = new TrackableMissileCreater(weaponPrefabs[BaseWeapon.Name.TrackableMissile], weaponData[BaseWeapon.Name.TrackableMissile], effectFactory);
     }
 
     public override BaseWeapon Create(BaseWeapon.Name name)

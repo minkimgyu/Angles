@@ -8,6 +8,7 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
     protected SkillController _skillController;
     protected float _moveSpeed;
 
+    protected IMoveStrategy _moveStrategy;
     protected MoveComponent _moveComponent;
     Vector3 _dir;
 

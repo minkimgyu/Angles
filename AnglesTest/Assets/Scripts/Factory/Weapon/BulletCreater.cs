@@ -12,8 +12,6 @@ public class BulletData : WeaponData, ILifetimeStat
         Lifetime = lifeTime;
     }
 
-    public override void ChangeLifetime(float lifetime) { Lifetime = lifetime; }
-
     public override WeaponData Copy()
     {
         return new BulletData(
@@ -36,7 +34,7 @@ public class BulletCreater : WeaponCreater
         BaseWeapon weapon = Object.Instantiate(_weaponPrefab);
         if (weapon == null) return null;
 
-        weapon.ResetData(CopyWeaponData as BulletData);
+        weapon.InjectData(CopyWeaponData as BulletData);
         weapon.Initialize(_effectFactory);
         return weapon;
     }

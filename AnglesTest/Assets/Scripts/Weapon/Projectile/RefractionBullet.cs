@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class RefractionBullet : Bullet
 {
-    public float _rotationSpeed = 70f; // 회전 속도 (각속도, 도/초)
-    public float _speedMultiplier = 1.5f; // 속도 배율
-
-    private Rigidbody2D rb;
+    const float _rotationSpeed = 70f; // 회전 속도 (각속도, 도/초)
+    const float _speedMultiplier = 1.5f; // 속도 배율
 
     protected override void Update()
     {

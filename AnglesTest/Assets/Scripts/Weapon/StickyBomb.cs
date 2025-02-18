@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using Unity.VisualScripting;
 
 public class StickyBomb : BaseWeapon
 {
@@ -10,7 +11,7 @@ public class StickyBomb : BaseWeapon
     BaseFactory _effectFactory;
     StickyBombData _data;
 
-    public override void ResetData(StickyBombData data)
+    public override void InjectData(StickyBombData data)
     {
         _data = data;
     }
@@ -23,13 +24,9 @@ public class StickyBomb : BaseWeapon
     public override void Initialize(BaseFactory effectFactory) 
     {
         _effectFactory = effectFactory;
-        _lifetimeComponent = new LifetimeComponent(_data, () => { Explode(); Destroy(gameObject); });
-        _sizeModifyComponent = new NoSizeModifyComponent();
-    }
-
-    public override void ResetFollower(IFollowable followable) 
-    {
-        _followable = followable;
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnLifetimeCompleted);
+        _sizeStrategy = new NoSizeStrategy();
+        _attackStrategy = new StickyBombAttackStrategy(transform, _data);
     }
 
     void Explode()
@@ -39,10 +36,20 @@ public class StickyBomb : BaseWeapon
 
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
-        //effect.ResetSize(_data._range); 
         effect.Play();
 
-        Damage.HitCircleRange(_data.DamageableData, transform.position, _data.Range, true, Color.red, 3);
+        _attackStrategy.OnLifetimeCompleted();
+    }
+
+    public void OnLifetimeCompleted()
+    {
+        Explode();
+        Destroy(gameObject);
+    }
+
+    public override void ResetFollower(IFollowable followable) 
+    {
+        _followable = followable;
     }
 
     protected override void Update()

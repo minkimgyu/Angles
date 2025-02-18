@@ -5,7 +5,6 @@ using UnityEngine;
 
 abstract public class TrackableEnemy : BaseEnemy
 {
-    protected TrackComponent _trackComponent;
     protected List<ITarget.Type> _followableTypes;
 
     protected float _stopDistance;
@@ -16,7 +15,7 @@ abstract public class TrackableEnemy : BaseEnemy
     public override void AddTarget(ITarget target)
     {
         _followTarget = target;
-        _trackComponent.AddTarget(target);
+        _moveStrategy.AddTarget(target);
     }
 
     public override void Initialize()
@@ -30,12 +29,12 @@ abstract public class TrackableEnemy : BaseEnemy
         base.Update();
 
         if (_aliveState == AliveState.Groggy) return;
-        _trackComponent.OnUpdate();
+        _moveStrategy.OnUpdate();
     }
 
     void FixedUpdate()
     {
         if (_aliveState == AliveState.Groggy) return;
-        _trackComponent.OnFixedUpdate();
+        _moveStrategy.OnFixedUpdate();
     }
 }

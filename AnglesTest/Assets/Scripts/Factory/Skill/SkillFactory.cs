@@ -85,6 +85,7 @@ public class SkillFactory : BaseFactory
 
         _skillCreaters[BaseSkill.Name.SpreadBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadBullets], upgraders[BaseSkill.Name.SpreadBullets], weaponFactory);
         _skillCreaters[BaseSkill.Name.SpreadReflectableBullets] = new SpreadBulletsCreater(skillDatas[BaseSkill.Name.SpreadReflectableBullets], weaponFactory);
+        _skillCreaters[BaseSkill.Name.SpreadTrackableMissiles] = new SpreadTrackableMissilesCreater(skillDatas[BaseSkill.Name.SpreadTrackableMissiles], weaponFactory);
 
         _skillCreaters[BaseSkill.Name.Shockwave] = new ShockwaveCreater(skillDatas[BaseSkill.Name.Shockwave], upgraders[BaseSkill.Name.Shockwave], effectFactory);
 

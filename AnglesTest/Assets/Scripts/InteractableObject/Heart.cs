@@ -6,14 +6,14 @@ public class Heart : MonoBehaviour, IInteractable
 {
     float _healPoint;
     float _moveSpeed;
-    FollowComponent _trackComponent;
+    FollowComponent _moveStrategy;
 
     public void OnInteractEnter(IInteracter interacter)
     {
-        _trackComponent.FreezePosition(false);
+        _moveStrategy.FreezePosition(false);
 
         IFollowable followable = interacter.ReturnFollower();
-        _trackComponent.ResetFollower(followable);
+        _moveStrategy.ResetFollower(followable);
     }
 
     public void OnInteract(IInteracter interacter)
@@ -35,9 +35,9 @@ public class Heart : MonoBehaviour, IInteractable
         _moveSpeed = data.MoveSpeed;
         _healPoint = data.HealPoint;
 
-        _trackComponent = GetComponent<FollowComponent>();
-        _trackComponent.Initialize(_moveSpeed);
-        _trackComponent.FreezePosition(true);
+        _moveStrategy = GetComponent<FollowComponent>();
+        _moveStrategy.Initialize(_moveSpeed);
+        _moveStrategy.FreezePosition(true);
     }
 
     GameObject IInteractable.ReturnGameObject() { return gameObject; }

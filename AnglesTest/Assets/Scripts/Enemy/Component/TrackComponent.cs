@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class TrackComponent
+public class TrackComponent : IMoveStrategy
 {
     BaseLife.Size _size;
     protected float _moveSpeed;
@@ -12,7 +12,7 @@ public class TrackComponent
     float _pathfindGap = 0.5f;
 
     Transform _myTransform;
-    protected MoveComponent _moveComponent;
+    MoveComponent _moveComponent;
     Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath;
 
     public TrackComponent(
@@ -134,10 +134,12 @@ public class TrackComponent
 
     void DrawMovePoints()
     {
+#if UNITY_EDITOR
         for (int i = 1; i < _movePoints.Count; i++)
         {
             Debug.DrawLine(_movePoints[i - 1], _movePoints[i], Color.cyan);
         }
+#endif
     }
 
     public virtual void OnFixedUpdate()
