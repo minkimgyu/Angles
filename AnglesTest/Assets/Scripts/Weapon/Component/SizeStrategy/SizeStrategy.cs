@@ -9,12 +9,12 @@ public interface ISizeModifyStat
 
 public interface ISizeStrategy
 {
-    void ResetSize();
+    void OnActivate();
 }
 
 public class NoSizeStrategy : ISizeStrategy
 {
-    public void ResetSize() { }
+    public void OnActivate() { }
 }
 
 public class ChangeableSizeStrategy : ISizeStrategy
@@ -24,5 +24,5 @@ public class ChangeableSizeStrategy : ISizeStrategy
 
     public ChangeableSizeStrategy(Transform transform, ISizeModifyStat sizeStat) { _transform = transform; _sizeStat = sizeStat; }
 
-    public void ResetSize() { _transform.localScale *= _sizeStat.SizeMultiplier; }
+    public void OnActivate() { _transform.localScale *= _sizeStat.SizeMultiplier; }
 }

@@ -7,7 +7,6 @@ using UnityEngine;
 
 abstract public class BaseShooter : BaseWeapon
 {
-    TargetCaptureComponent _targetCaptureComponent;
     FollowComponent _followComponent;
 
     protected ShooterData _data;
@@ -15,7 +14,7 @@ abstract public class BaseShooter : BaseWeapon
 
     public override void ModifyData(ShooterDataModifier modifier)
     {
-        _data = modifier.Visit(_data);
+        modifier.Visit(_data);
     }
 
     public override void InjectData(ShooterData shooterData)
@@ -25,40 +24,25 @@ abstract public class BaseShooter : BaseWeapon
 
     public override void Initialize(BaseFactory weaponFactory)
     {
+        base.Initialize(weaponFactory);
         _weaponFactory = weaponFactory;
+    }
 
+    public override void InitializeStrategy()
+    {
         _followComponent = GetComponent<FollowComponent>();
-        _followComponent.Initialize(
+        _followComponent.Initialize
+        (
             _data.MoveSpeed,
             _data.FollowOffset,
             new Vector2(_data.FollowOffsetDirection.x, _data.FollowOffsetDirection.y),
-            _data.MaxDistanceFromPlayer);
+            _data.MaxDistanceFromPlayer
+        );
 
+        TargetCaptureComponent targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
+        _targetStrategy = new TargetTargetingStrategy(targetCaptureComponent);
         _lifeTimeStrategy = new NoLifetimeStrategy();
         _sizeStrategy = new NoSizeStrategy();
-
-        _targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
-        _targetCaptureComponent.Initialize(OnEnter, OnExit);
-    }
-
-    void OnEnter(ITarget target)
-    {
-        _attackStrategy.OnTargetEnter(target);
-    }
-
-    void OnExit(ITarget target)
-    {
-        _attackStrategy.OnTargetExit(target);
-    }
-
-    public override void ResetFollower(IFollowable followable)
-    {
-        _followComponent.ResetFollower(followable);
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        _attackStrategy.OnUpdate();
+        _moveStrategy = new FollowingMoveStrategy(_followComponent);
     }
 }

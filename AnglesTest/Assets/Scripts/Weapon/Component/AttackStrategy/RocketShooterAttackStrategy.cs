@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,8 @@ public class RocketShooterAttackStrategy : ShooterAttackStrategy
     public RocketShooterAttackStrategy(
         ShooterData shooterData,
         Transform myTransform,
-        BaseFactory weaponFactory) : base(shooterData, myTransform)
+        Func<List<ITarget>> GetTargets,
+        BaseFactory weaponFactory) : base(shooterData, myTransform, GetTargets)
     {
         _weaponFactory = weaponFactory;
     }

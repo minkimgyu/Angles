@@ -67,7 +67,7 @@ public class SpawnShooter : BaseSkill
         _weapon.Activate();
 
         Transform casterTransform = _caster.GetComponent<Transform>();
-        _weapon.ResetFollower(followable);
+        _weapon.InjectFollower(followable);
         _weapon.ResetPosition(casterTransform.position);
     }
 }

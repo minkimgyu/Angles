@@ -15,14 +15,14 @@ public interface ILifetimeStat
 
 public interface ILifetimeStrategy
 {
-    void Activate();
-    void CheckFinish();
+    void OnActivate();
+    void OnUpdate();
 }
 
 public class NoLifetimeStrategy : ILifetimeStrategy
 {
-    public void Activate() { }
-    public void CheckFinish() { }
+    public void OnActivate() { }
+    public void OnUpdate() { }
 }
 
 public class ChangeableLifeTimeStrategy : ILifetimeStrategy
@@ -38,12 +38,12 @@ public class ChangeableLifeTimeStrategy : ILifetimeStrategy
         this.OnLifetimeOver = OnLifetimeOver;
     }
 
-    public void Activate()
+    public void OnActivate()
     {
         _timer.Start(_lifetimeData.Lifetime);
     }
 
-    public void CheckFinish()
+    public void OnUpdate()
     {
         if (_timer.CurrentState != Timer.State.Finish) return;
 

@@ -3,19 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class TrackableEnemy : BaseEnemy
+abstract public class TrackableEnemy : BaseEnemy, ITrackable
 {
     protected List<ITarget.Type> _followableTypes;
 
     protected float _stopDistance;
     protected float _gap;
 
-    protected ITarget _followTarget;
+    //protected ITarget _followTarget;
 
-    public override void AddTarget(ITarget target)
+    void AddTarget(ITarget target)
     {
-        _followTarget = target;
+        //_followTarget = target;
         _moveStrategy.AddTarget(target);
+    }
+
+    public void InjectTarget(ITarget target)
+    {
+        AddTarget(target);
     }
 
     public override void Initialize()

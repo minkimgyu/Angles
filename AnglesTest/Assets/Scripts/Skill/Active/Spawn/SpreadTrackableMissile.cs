@@ -26,7 +26,7 @@ public class SpreadTrackableMissile : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    void ShootBullet(float angle)
+    void ShootBullet(float angle, ITarget target)
     {
         Transform casterTransform = _caster.GetComponent<Transform>();
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.SpreadBullets, casterTransform.position, 0.3f);
@@ -59,13 +59,10 @@ public class SpreadTrackableMissile : BaseSkill
 
         weapon.ResetPosition(spawnPosition, direction);
 
-        IProjectable projectile = weapon.GetComponent<IProjectable>();
-        if (projectile == null) return;
+        ITrackable trackable = weapon.GetComponent<ITrackable>();
+        if (trackable == null) return;
 
-        Player player = Object.FindObjectOfType<Player>();
-        if(player == null) return;
-
-        projectile.Shoot(player, _data.Force);
+        trackable.InjectTarget(target);
     }
 
     public override void OnUpdate()
@@ -78,12 +75,17 @@ public class SpreadTrackableMissile : BaseSkill
                 break;
             case Timer.State.Finish:
 
+                if (_targets.Count == 0)
+                {
+                    _delayTimer.Reset();
+                    return;
+                }
+
                 for (int i = 1; i <= _data.BulletCount; i++)
                 {
                     float angle = 360f / _data.BulletCount * i;
-                    ShootBullet(angle);
+                    ShootBullet(angle, _targets[0]);
                 }
-                _delayTimer.Reset();
                 break;
             default:
                 break;

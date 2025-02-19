@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class Rocket : BaseWeapon, IProjectable
 {
@@ -13,26 +14,9 @@ public class Rocket : BaseWeapon, IProjectable
         _data = data;
     }
 
-    public void Shoot(Vector3 direction, float force)
-    {
-        transform.right = direction;
-        _force = force;
-
-        _moveComponent.Stop();
-        _moveComponent.AddForce(direction, _force);
-    }
-
-    float _force;
-    MoveComponent _moveComponent;
-
     public override void Initialize(BaseFactory effectFactory)
     {
-        _moveComponent = GetComponent<MoveComponent>();
-        _moveComponent.Initialize();
-
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
-        _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new RocketAttackStrategy(_data, OnHit);
+        base.Initialize(effectFactory);
 
         _effectFactory = effectFactory;
     }
@@ -54,13 +38,25 @@ public class Rocket : BaseWeapon, IProjectable
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-       _attackStrategy.OnTargetEnter(collider);
-    }
-
     public override void ModifyData(RocketDataModifier modifier)
     {
-        _data = modifier.Visit(_data);
+        modifier.Visit(_data);
+    }
+
+    public override void InitializeStrategy()
+    {
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        moveComponent.Initialize();
+
+        _targetStrategy = new NoTargetingStrategy();
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
+        _sizeStrategy = new NoSizeStrategy();
+        _attackStrategy = new RocketAttackStrategy(_data, OnHit);
+        _moveStrategy = new ProjectileMoveStrategy(moveComponent, transform);
+    }
+
+    public void Shoot(Vector3 direction, float force)
+    {
+        _moveStrategy.Shoot(direction, force);
     }
 }

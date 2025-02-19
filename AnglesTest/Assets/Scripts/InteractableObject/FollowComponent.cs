@@ -8,7 +8,8 @@ using System;
 // OffsetTrackComponent
 // --> 분리해서 다르게 사용하기
 
-public class FollowComponent : MoveComponent
+[RequireComponent(typeof(MoveComponent))]
+public class FollowComponent : MonoBehaviour
 {
     IFollowable _followableTarget;
     float _moveSpeed = 8f;
@@ -18,44 +19,63 @@ public class FollowComponent : MoveComponent
     float _maxDistanceFromPlayer;
 
     const float _maxDictance = 1000000;
+    const float _maxMoveSpeed = 1000000;
 
     Vector2 _followOffsetDirection;
 
-    public void ResetFollower(IFollowable followable)
+    public void InjectFollower(IFollowable followable)
     {
         _followableTarget = followable;
     }
 
-    public void Initialize(float moveSpeed)
-    {
-        _moveSpeed = moveSpeed;
+    MoveComponent _moveComponent;
 
+    public void Initialize()
+    {
+        _moveComponent = GetComponent<MoveComponent>();
+        _moveComponent.Initialize();
+
+        _moveSpeed = _maxMoveSpeed;
         _followOffset = 0;
         _followOffsetDirection = Vector2.zero;
-
         _maxDistanceFromPlayer = _maxDictance;
-        Initialize();
+    }
+
+    public void Initialize(float moveSpeed)
+    {
+        _moveComponent = GetComponent<MoveComponent>();
+        _moveComponent.Initialize();
+
+        _moveSpeed = moveSpeed;
+        _followOffset = 0;
+        _followOffsetDirection = Vector2.zero;
+        _maxDistanceFromPlayer = _maxDictance;
     }
 
     public void Initialize(float moveSpeed, float followOffset, Vector2 followOffsetDirection, float maxDistanceFromPlayer)
     {
-        _moveSpeed = moveSpeed;
+        _moveComponent = GetComponent<MoveComponent>();
+        _moveComponent.Initialize();
 
+        _moveSpeed = moveSpeed;
         _followOffset = followOffset;
         _followOffsetDirection = followOffsetDirection.normalized;
-
         _maxDistanceFromPlayer = maxDistanceFromPlayer;
-        Initialize();
     }
 
-    private void FixedUpdate()
+    public void FreezePosition(bool freeze)
+    {
+        _moveComponent.FreezePosition(freeze);
+    }
+
+    public void OnFixedUpdate()
     {
         if ((_followableTarget as UnityEngine.Object) == null) return;
 
-        Move(_followPos);
+        _moveComponent.Move(_followPos);
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         if ((_followableTarget as UnityEngine.Object) == null) return;
 

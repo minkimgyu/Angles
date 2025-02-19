@@ -89,7 +89,9 @@ public class BossStage : BattleStage
 
             enemy.transform.position = transform.position + new Vector3(_bossStageData.MobSpawnDatas[i].SpawnPosition.x, _bossStageData.MobSpawnDatas[i].SpawnPosition.y);
             enemy.InitializeFSM(_pathfinder.FindPath);
-            enemy.AddTarget(_target);
+
+            ITrackable trackable = enemy.GetComponent<ITrackable>();
+            if (trackable != null) trackable.InjectTarget(_target);
 
             enemy.AddObserverEvent(() => { _spawnCount--; });
 
@@ -112,7 +114,10 @@ public class BossStage : BattleStage
         enemy.AddObserverEvent(OnHPChange);
         enemy.AddObserverEvent(OnEnemyDieRequested);
         enemy.InitializeFSM(_pathfinder.FindPath);
-        enemy.AddTarget(_target);
+
+        ITrackable trackable = enemy.GetComponent<ITrackable>();
+        if (trackable != null) trackable.InjectTarget(_target);
+
         enemy.transform.position = transform.position + new Vector3(_bossStageData.BossSpawnData.SpawnPosition.x, _bossStageData.BossSpawnData.SpawnPosition.y);
         _enemyCount++;
 

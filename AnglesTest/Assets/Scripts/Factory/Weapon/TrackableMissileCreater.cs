@@ -9,15 +9,20 @@ public class TrackableMissileData : WeaponData, ILifetimeStat
 {
     public float Lifetime { get; set; }
 
-    public TrackableMissileData(float lifeTime)
+    float _moveSpeed;
+    public float MoveSpeed { get { return _moveSpeed; } }
+
+    public TrackableMissileData(float lifeTime, float moveSpeed)
     {
         Lifetime = lifeTime;
+        _moveSpeed = moveSpeed;
     }
 
     public override WeaponData Copy()
     {
         return new TrackableMissileData(
-            Lifetime
+            Lifetime,
+            _moveSpeed
         );
     }
 }

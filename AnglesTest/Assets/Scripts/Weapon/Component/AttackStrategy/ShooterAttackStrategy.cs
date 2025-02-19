@@ -1,30 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 abstract public class ShooterAttackStrategy : IAttackStrategy
 {
-    List<ITarget> _targetDatas;
     protected ShooterData _shooterData;
     Transform _myTransform;
     float _waitFire;
 
-    protected ShooterAttackStrategy(ShooterData shooterData, Transform myTransform)
+    Func<List<ITarget>> GetTargets;
+
+    protected ShooterAttackStrategy(ShooterData shooterData, Transform myTransform, Func<List<ITarget>> GetTargets)
     {
         _shooterData = shooterData;
         _myTransform = myTransform;
+        this.GetTargets = GetTargets;
         _waitFire = 0;
-        _targetDatas = new List<ITarget>();
-    }
-
-    public void OnTargetEnter(ITarget target) 
-    {
-        _targetDatas.Add(target);
-    }
-
-    public void OnTargetExit(ITarget target) 
-    {
-        _targetDatas.Remove(target);
     }
 
     public void OnUpdate()
@@ -60,14 +52,16 @@ abstract public class ShooterAttackStrategy : IAttackStrategy
     {
         ITarget capturedTarget = null;
 
-        for (int i = _targetDatas.Count - 1; i >= 0; i--)
-        {
-            if ((_targetDatas[i] as UnityEngine.Object) == null) continue;
+        List<ITarget> targets = GetTargets();
 
-            bool isTarget = _targetDatas[i].IsTarget(_shooterData.DamageableData._targetType);
+        for (int i = targets.Count - 1; i >= 0; i--)
+        {
+            if ((targets[i] as UnityEngine.Object) == null) continue;
+
+            bool isTarget = targets[i].IsTarget(_shooterData.DamageableData._targetType);
             if (isTarget == false) continue;
 
-            capturedTarget = _targetDatas[i];
+            capturedTarget = targets[i];
             break;
         }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class MoveComponent : MonoBehaviour
 {
     Rigidbody2D _rigid;
@@ -15,7 +16,7 @@ public class MoveComponent : MonoBehaviour
     float _moveSpeedRatio = 1f; // 속도 비율
     public float MoveSpeedRatio { set { _moveSpeedRatio = value; } }
 
-    public void Initialize()
+    public virtual void Initialize()
     {
         _rigid = GetComponent<Rigidbody2D>();
         _applyMovement = true;

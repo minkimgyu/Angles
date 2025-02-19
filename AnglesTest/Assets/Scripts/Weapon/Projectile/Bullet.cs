@@ -2,21 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class Bullet : BaseWeapon, IProjectable
 {
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-       _attackStrategy.OnTargetEnter(collider);
-    }
-
     BaseFactory _effectFactory;
     BulletData _data;
 
-    void OnHit()
+    public override void ModifyData(BulletDataModifier modifier)
     {
-        SpawnHitEffect();
-        Destroy(gameObject);
+        modifier.Visit(_data);
+    }
+
+    public override void InjectData(BulletData data)
+    {
+        _data = data;
+    }
+
+    public override void Initialize(BaseFactory effectFactory)
+    {
+        base.Initialize(effectFactory);
+        _effectFactory = effectFactory;
+    }
+
+    public void Shoot(Vector3 direction, float force)
+    {
+        _moveStrategy.Shoot(direction, force);
+    }
+
+    public override void InitializeStrategy()
+    {
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        moveComponent.Initialize(); // 초기화 후 Inject
+
+        _targetStrategy = new NoTargetingStrategy();
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnHit);
+        _sizeStrategy = new NoSizeStrategy();
+        _attackStrategy = new BulletAttackStrategy(_data, OnHit);
+        _moveStrategy = new ProjectileMoveStrategy(moveComponent, transform);
     }
 
     void SpawnHitEffect()
@@ -26,36 +49,9 @@ public class Bullet : BaseWeapon, IProjectable
         effect.Play();
     }
 
-    public override void ModifyData(BulletDataModifier modifier)
+    void OnHit()
     {
-        _data = modifier.Visit(_data);
-    }
-
-    public override void InjectData(BulletData data)
-    {
-        _data = data;
-    }
-
-    public void Shoot(Vector3 direction, float force)
-    {
-        transform.right = direction;
-        _force = force;
-
-        _moveComponent.Stop();
-        _moveComponent.AddForce(direction, _force);
-    }
-
-    protected float _force;
-    protected MoveComponent _moveComponent;
-
-    public override void Initialize(BaseFactory effectFactory)
-    {
-        _effectFactory = effectFactory;
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnHit);
-        _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new BulletAttackStrategy(_data, OnHit);
-
-        _moveComponent = GetComponent<MoveComponent>();
-        _moveComponent.Initialize();
+        SpawnHitEffect();
+        Destroy(gameObject);
     }
 }

@@ -9,14 +9,14 @@ public class Coin : MonoBehaviour, IInteractable
     int _upCount;
     float _moveSpeed;
 
-    FollowComponent _moveStrategy;
+    FollowComponent _followComponent;
 
     public void OnInteractEnter(IInteracter interacter)
     {
-        _moveStrategy.FreezePosition(false);
+        _followComponent.FreezePosition(false);
 
         IFollowable followable = interacter.ReturnFollower();
-        _moveStrategy.ResetFollower(followable);
+        _followComponent.InjectFollower(followable);
     }
 
     public void OnInteract(IInteracter interacter) 
@@ -33,14 +33,24 @@ public class Coin : MonoBehaviour, IInteractable
         transform.position = pos;
     }
 
+    private void Update()
+    {
+        _followComponent.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        _followComponent.OnFixedUpdate();
+    }
+
     public void Initialize(CoinData data) 
     {
         _upCount = data.UpCount;
         _moveSpeed = data.MoveSpeed;
 
-        _moveStrategy = GetComponent<FollowComponent>();
-        _moveStrategy.Initialize(_moveSpeed);
-        _moveStrategy.FreezePosition(true);
+        _followComponent = GetComponent<FollowComponent>();
+        _followComponent.Initialize(_moveSpeed);
+        _followComponent.FreezePosition(true);
     }
 
     GameObject IInteractable.ReturnGameObject() { return gameObject; }

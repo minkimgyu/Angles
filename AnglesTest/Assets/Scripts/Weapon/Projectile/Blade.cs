@@ -2,38 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using System;
 
 public class Blade : BaseWeapon, IProjectable
 {
-    DamageableCaptureComponent _captureComponent;
     BladeData _data;
     Timer _soundTimer;
 
-    float _force;
-    MoveComponent _moveComponent;
-
-    public void Shoot(Vector3 direction, float force)
-    {
-        transform.right = direction;
-        _force = force;
-
-        _moveComponent.Stop();
-        _moveComponent.AddForce(direction, _force);
-        _soundTimer.Start(1f);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log(collision.collider.name);
-
-        Vector2 nomal = collision.contacts[0].normal;
-        Vector2 direction = Vector2.Reflect(transform.right, nomal);
-        Shoot(direction, _force);
-    }
-
     public override void ModifyData(BladeDataModifier modifier)
     {
-        _data = modifier.Visit(_data);
+        modifier.Visit(_data);
     }
 
     public override void InjectData(BladeData data)
@@ -43,26 +21,9 @@ public class Blade : BaseWeapon, IProjectable
 
     public override void Initialize()
     {
+        base.Initialize();
         _soundTimer = new Timer();
-        _captureComponent = GetComponentInChildren<DamageableCaptureComponent>();
-        _captureComponent.Initialize(OnEnter, OnExit);
-
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
-        _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
-        _attackStrategy = new BladeAttackStrategy(_data);
-
-        _moveComponent = GetComponent<MoveComponent>();
-        _moveComponent.Initialize();
-    }
-
-    void OnEnter(IDamageable damageable)
-    {
-        _attackStrategy.OnTargetEnter(damageable);
-    }
-
-    void OnExit(IDamageable damageable)
-    {
-        _attackStrategy.OnTargetExit(damageable);
+        _soundTimer.Start(1f);
     }
 
     protected override void Update()
@@ -75,7 +36,23 @@ public class Blade : BaseWeapon, IProjectable
             _soundTimer.Reset();
             _soundTimer.Start(_data.AttackDelay);
         }
+    }
 
-        _attackStrategy.OnUpdate();
+    public override void InitializeStrategy()
+    {
+        DamageableCaptureComponent damageableCaptureComponent = GetComponentInChildren<DamageableCaptureComponent>();
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        moveComponent.Initialize();
+
+        _targetStrategy = new DamageableTargetingStrategy(damageableCaptureComponent, _data);
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
+        _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
+        _attackStrategy = new BladeAttackStrategy(_data, _targetStrategy.GetDamageableTargets);
+        _moveStrategy = new ReflectableProjectileMoveStrategy(moveComponent, transform);
+    }
+
+    public void Shoot(Vector3 direction, float force)
+    {
+        _moveStrategy.Shoot(direction, force);
     }
 }

@@ -5,7 +5,7 @@ using System;
 
 public class SkillBubble : MonoBehaviour, IInteractable
 {
-    FollowComponent _moveStrategy;
+    FollowComponent _followComponent;
     int _cardCount;
     float _moveSpeed;
 
@@ -14,20 +14,30 @@ public class SkillBubble : MonoBehaviour, IInteractable
         _cardCount = data.CardCount;
         _moveSpeed = data.MoveSpeed;
 
-        _moveStrategy = GetComponent<FollowComponent>();
-        _moveStrategy.Initialize(_moveSpeed);
+        _followComponent = GetComponent<FollowComponent>();
+        _followComponent.Initialize(_moveSpeed);
     }
 
     public void OnInteractEnter(IInteracter interacter)
     {
         IFollowable followable = interacter.ReturnFollower();
-        _moveStrategy.ResetFollower(followable);
+        _followComponent.InjectFollower(followable);
     }
 
     public void OnInteract(IInteracter interacter) 
     {
         EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, interacter.GetCaster(), _cardCount);
         Destroy(gameObject);
+    }
+
+    private void Update()
+    {
+        _followComponent.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        _followComponent.OnFixedUpdate();
     }
 
     public void OnInteractExit(IInteracter interacter) { }

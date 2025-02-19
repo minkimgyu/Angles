@@ -117,7 +117,9 @@ public class SurvivalStage : BaseStage, ILevel
                 }
                 enemy.transform.position = transform.position + new Vector3(spawnPos.x, spawnPos.y);
                 enemy.InitializeFSM(_pathfinder.FindPath);
-                enemy.AddTarget(_target);
+
+                ITrackable trackable = enemy.GetComponent<ITrackable>();
+                if (trackable != null) trackable.InjectTarget(_target);
             }
 
             _spawnIndex++;

@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
-using Unity.VisualScripting;
 
 public class StickyBomb : BaseWeapon
 {
-    IFollowable _followable;
-
     BaseFactory _effectFactory;
     StickyBombData _data;
 
@@ -18,15 +15,13 @@ public class StickyBomb : BaseWeapon
 
     public override void ModifyData(StickyBombDataModifier modifier)
     {
-        _data = modifier.Visit(_data);
+        modifier.Visit(_data);
     }
 
     public override void Initialize(BaseFactory effectFactory) 
     {
+        base.Initialize(effectFactory);
         _effectFactory = effectFactory;
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnLifetimeCompleted);
-        _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new StickyBombAttackStrategy(transform, _data);
     }
 
     void Explode()
@@ -37,31 +32,26 @@ public class StickyBomb : BaseWeapon
         BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ExplosionEffect);
         effect.ResetPosition(transform.position);
         effect.Play();
-
-        _attackStrategy.OnLifetimeCompleted();
     }
 
-    public void OnLifetimeCompleted()
+    public override void InitializeStrategy()
     {
-        Explode();
-        Destroy(gameObject);
-    }
+        FollowComponent followComponent = GetComponent<FollowComponent>();
+        followComponent.Initialize();
 
-    public override void ResetFollower(IFollowable followable) 
-    {
-        _followable = followable;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        if (_followable as UnityEngine.Object == null) return;
-
-        bool canAttach = _followable.CanFollow();
-        if (canAttach == true)
-        {
-            Vector3 pos = _followable.GetPosition();
-            transform.position = pos;
-        }
+        _targetStrategy = new NoTargetingStrategy();
+        _sizeStrategy = new NoSizeStrategy();
+        _attackStrategy = new StickyBombAttackStrategy(transform, _data);
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy
+        (
+            _data,
+            () =>
+            {
+                _attackStrategy.OnLifetimeCompleted();
+                Explode();
+                Destroy(gameObject);
+            }
+        );
+        _moveStrategy = new FollowingMoveStrategy(followComponent);
     }
 }

@@ -139,13 +139,11 @@ public class BlackholeDataModifier : WeaponDataModifier<BlackholeData>
         _lifeTime = lifeTime;
     }
 
-    public override BlackholeData Visit(BlackholeData weaponData)
+    public override void Visit(BlackholeData weaponData)
     {
         weaponData.DamageableData = _damageableDataModifier;
         weaponData.SizeMultiplier = _sizeModifier;
         weaponData.Lifetime = _lifeTime;
-
-        return weaponData;
     }
 }
 
@@ -163,12 +161,10 @@ public class StickyBombDataModifier : WeaponDataModifier<StickyBombData>
         _lifeTime = lifeTime;
     }
 
-    public override StickyBombData Visit(StickyBombData weaponData)
+    public override void Visit(StickyBombData weaponData)
     {
         weaponData.DamageableData = _damageableDataModifier;
         weaponData.Lifetime = _lifeTime;
-
-        return weaponData;
     }
 }
 
@@ -187,12 +183,10 @@ public class ShooterDataModifier : WeaponDataModifier<ShooterData>
         _fireDelay = fireDelayModifier;
     }
 
-    public override ShooterData Visit(ShooterData weaponData)
+    public override void Visit(ShooterData weaponData)
     {
         weaponData.DamageableData = _damageableDataModifier;
         weaponData.FireDelay = _fireDelay;
-
-        return weaponData;
     }
 }
 
@@ -206,10 +200,9 @@ public class RocketDataModifier : WeaponDataModifier<RocketData>
         _damageableDataModifier = damageableDataModifier;
     }
 
-    public override RocketData Visit(RocketData attackStat)
+    public override void Visit(RocketData attackStat)
     {
         attackStat.DamageableData = _damageableDataModifier;
-        return attackStat;
     }
 }
 
@@ -222,10 +215,9 @@ public class BulletDataModifier : WeaponDataModifier<BulletData>
         _damageableDataModifier = damageableDataModifier;
     }
 
-    public override BulletData Visit(BulletData bulletData)
+    public override void Visit(BulletData bulletData)
     {
         bulletData.DamageableData = _damageableDataModifier;
-        return bulletData;
     }
 }
 
@@ -238,10 +230,9 @@ public class TrackableMissileDataModifier : WeaponDataModifier<TrackableMissileD
         _damageableDataModifier = damageableDataModifier;
     }
 
-    public override TrackableMissileData Visit(TrackableMissileData missileData)
+    public override void Visit(TrackableMissileData missileData)
     {
         missileData.DamageableData = _damageableDataModifier;
-        return missileData;
     }
 }
 
@@ -259,17 +250,15 @@ public class BladeDataModifier : WeaponDataModifier<BladeData>
         _lifeTime = lifeTime;
     }
 
-    public override BladeData Visit(BladeData weaponData)
+    public override void Visit(BladeData weaponData)
     {
         weaponData.DamageableData = _damageableDataModifier;
         weaponData.SizeMultiplier = _sizeMultiplier;
         weaponData.Lifetime = _lifeTime;
-
-        return weaponData;
     }
 }
 
 abstract public class WeaponDataModifier<T> where T : WeaponData
 {
-    public abstract T Visit(T weaponData);
+    public abstract void Visit(T weaponData);
 }

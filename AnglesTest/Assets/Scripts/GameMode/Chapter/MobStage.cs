@@ -88,7 +88,9 @@ public class MobStage : BattleStage
 
             enemy.AddObserverEvent(OnEnemyDieRequested);
             enemy.InitializeFSM(_pathfinder.FindPath);
-            enemy.AddTarget(_target);
+
+            ITrackable trackable = enemy.GetComponent<ITrackable>();
+            if (trackable != null) trackable.InjectTarget(_target);
 
             _enemyCount++;
         }

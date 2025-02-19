@@ -1,15 +1,56 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RefractionBullet : Bullet
+public class RefractionBullet : BaseWeapon, IProjectable
 {
-    const float _rotationSpeed = 70f; // 회전 속도 (각속도, 도/초)
-    const float _speedMultiplier = 1.5f; // 속도 배율
+    BaseFactory _effectFactory;
+    BulletData _data;
 
-    protected override void Update()
+    public override void ModifyData(BulletDataModifier modifier)
     {
-        base.Update();
-        _moveComponent.RotateDirection(_rotationSpeed, _speedMultiplier);
+        modifier.Visit(_data);
+    }
+
+    public override void InjectData(BulletData data)
+    {
+        _data = data;
+    }
+
+    public void Shoot(Vector3 direction, float force)
+    {
+        _moveStrategy.Shoot(direction, force);
+    }
+
+    public override void Initialize(BaseFactory effectFactory)
+    {
+        base.Initialize(effectFactory);
+        _effectFactory = effectFactory;
+    }
+
+    public override void InitializeStrategy()
+    {
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        moveComponent.Initialize(); // 초기화 후 Inject
+
+        _targetStrategy = new NoTargetingStrategy();
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnHit);
+        _sizeStrategy = new NoSizeStrategy();
+        _attackStrategy = new BulletAttackStrategy(_data, OnHit);
+        _moveStrategy = new RefractableProjectileMoveStrategy(moveComponent, transform);
+    }
+
+    void SpawnHitEffect()
+    {
+        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.HitEffect);
+        effect.ResetPosition(transform.position);
+        effect.Play();
+    }
+
+    void OnHit()
+    {
+        SpawnHitEffect();
+        Destroy(gameObject);
     }
 }

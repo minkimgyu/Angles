@@ -111,8 +111,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void AddEffectFactory(BaseFactory effectFactory) { _effectFactory = effectFactory; }
 
-    public virtual void AddTarget(ITarget target) { }
-
     protected virtual void SetImmunity(bool nowImmunity)
     {
         if (_aliveState == AliveState.Invincible) return; // 무적 상태면 바꾸지 않음

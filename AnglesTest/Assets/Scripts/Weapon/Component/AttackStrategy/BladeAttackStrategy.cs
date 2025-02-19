@@ -2,57 +2,35 @@ using DamageUtility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BladeAttackStrategy : IAttackStrategy
 {
-    public class TargetData
-    {
-        public TargetData(float captureTime, IDamageable damageable)
-        {
-            _captureTime = captureTime;
-            _damageable = damageable;
-        }
-
-        public float CaptureTime { get { return _captureTime; } set { _captureTime = value; } }
-        public IDamageable Damageable { get { return _damageable; } }
-
-        float _captureTime;
-        IDamageable _damageable;
-    }
-
     BladeData _bladeData;
+    Func<List<DamageableTargetingStrategy.TargetData>> GetDamageableTargets;
 
-    public BladeAttackStrategy(BladeData bladeData)
+    public BladeAttackStrategy(
+        BladeData bladeData,
+        Func<List<DamageableTargetingStrategy.TargetData>> GetDamageableTargets)
     {
-        _targetDatas = new List<TargetData>();
         _bladeData = bladeData;
-    }
-
-    List<TargetData> _targetDatas;
-
-    public void OnTargetEnter(IDamageable damageable) 
-    {
-        _targetDatas.Add(new TargetData(Time.time, damageable));
-        Damage.Hit(_bladeData.DamageableData, damageable);
-    }
-
-    public void OnTargetExit(IDamageable damageable) 
-    {
-        TargetData targetData = _targetDatas.Find(x => x.Damageable == damageable);
-        _targetDatas.Remove(targetData);
+        this.GetDamageableTargets = GetDamageableTargets;
     }
 
     public void OnUpdate()
     {
-        for (int i = _targetDatas.Count - 1; i >= 0; i--)
-        {
-            float duration = Time.time - _targetDatas[i].CaptureTime;
-            if (duration > _bladeData.AttackDelay)
-            {
-                Damage.Hit(_bladeData.DamageableData, _targetDatas[i].Damageable);
+        List<DamageableTargetingStrategy.TargetData> targetDatas = GetDamageableTargets();
 
-                if (i < 0 || _targetDatas.Count - 1 < i) continue;
-                _targetDatas[i].CaptureTime = Time.time;
+        for (int i = targetDatas.Count - 1; i >= 0; i--)
+        {
+            float duration = Time.time - targetDatas[i].CaptureTime;
+            if (targetDatas[i].HitCount == 0 || duration > _bladeData.AttackDelay)
+            {
+                targetDatas[i].HitCount++;
+                Damage.Hit(_bladeData.DamageableData, targetDatas[i].Damageable);
+
+                if (i < 0 || targetDatas.Count - 1 < i) continue;
+                targetDatas[i].CaptureTime = Time.time;
             }
         }
     }

@@ -121,12 +121,12 @@ public class DBBuilder : MonoBehaviour
         //BaseSkill.Name.Statikk,
         //BaseSkill.Name.Knockback,
         //BaseSkill.Name.Impact,
-        //BaseSkill.Name.SpawnBlackhole,
+        BaseSkill.Name.SpawnBlackhole,
         BaseSkill.Name.SpawnStickyBomb,
-        //BaseSkill.Name.SpawnBlade,
+        BaseSkill.Name.SpawnBlade,
 
-        //BaseSkill.Name.SpawnRifleShooter,
-        //BaseSkill.Name.SpawnRocketShooter,
+        BaseSkill.Name.SpawnRifleShooter,
+        BaseSkill.Name.SpawnRocketShooter,
 
         //BaseSkill.Name.UpgradeDamage,
         //BaseSkill.Name.UpgradeCooltime,
@@ -404,7 +404,7 @@ public class DBBuilder : MonoBehaviour
         { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 18, 1.5f, new SerializableVector2(1, 1), 10.0f)},
         { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 18, 1.5f, new SerializableVector2(-1, 1),10.0f)},
 
-        { BaseWeapon.Name.TrackableMissile, new TrackableMissileData(5)},
+        { BaseWeapon.Name.TrackableMissile, new TrackableMissileData(5, 10)},
 
     };
 

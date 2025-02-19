@@ -60,7 +60,7 @@ public class SpawnStickyBomb : BaseSkill
         weapon.ModifyData(stickyBombDataModifier);
         weapon.Activate();
         weapon.ResetPosition(targetPos);
-        weapon.ResetFollower(followable);
+        weapon.InjectFollower(followable);
         return true;
     }
 }
