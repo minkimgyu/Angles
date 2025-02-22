@@ -99,7 +99,7 @@ public class SurvivalStage : BaseStage, ILevel
             for (int i = 0; i < size; i++)
             {
                 BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(_survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas[i].Name);
-                enemy.AddObserverEvent(() => { _spawnedEnemys.Remove(enemy); });
+                enemy.InjectEvent(() => { _spawnedEnemys.Remove(enemy); });
                 _spawnedEnemys.Add(enemy);
 
                 Vector2 spawnPos = _survivalStageData.PhaseDatas[_spawnIndex].SpawnDatas[i].SpawnPosition.V2;
@@ -111,15 +111,18 @@ public class SurvivalStage : BaseStage, ILevel
                     hpViewer.Initialize();
                     hpViewer.SetFollower(enemy.GetComponent<IFollowable>());
 
-                    enemy.AddObserverEvent(hpViewer.UpdateRatio);
-                    enemy.AddObserverEvent(OnLastEnemyDie); // 마지막의 경우
+                    enemy.InjectEvent(hpViewer.UpdateRatio);
+                    enemy.InjectEvent(OnLastEnemyDie); // 마지막의 경우
                     _arrowPointerController.AddTarget(enemy);
                 }
                 enemy.transform.position = transform.position + new Vector3(spawnPos.x, spawnPos.y);
-                enemy.InitializeFSM(_pathfinder.FindPath);
 
                 ITrackable trackable = enemy.GetComponent<ITrackable>();
-                if (trackable != null) trackable.InjectTarget(_target);
+                if (trackable != null)
+                {
+                    trackable.InjectTarget(_target);
+                    trackable.InjectPathfindEvent(_pathfinder.FindPath);
+                }
             }
 
             _spawnIndex++;

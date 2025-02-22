@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 551123582957600220}
   - component: {fileID: 6316469788623307840}
   - component: {fileID: 3004822057078682762}
+  - component: {fileID: 5866298810679899047}
   m_Layer: 10
   m_Name: OperaHexagon
   m_TagString: Untagged
@@ -316,6 +317,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.91
+--- !u!114 &5866298810679899047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186793780890957785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945cb064452214549a29bddc27a1b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8201603686185182696
 GameObject:
   m_ObjectHideFlags: 0

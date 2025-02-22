@@ -6,21 +6,15 @@ using UnityEngine;
 public class GreenPentagonEnemy : BaseEnemy
 {
     [SerializeField] TargetCaptureComponent _skillTargetCaptureComponent;
+    GreenPentagonData _data;
 
     float _stopDuration;
     float _rushDuration;
 
-    public override void ResetData(GreenPentagonData data, DropData dropData)
+    public override void InjectData(GreenPentagonData data, DropData dropData)
     {
-        base.ResetData(data, dropData);
-        _size = data.Size;
-        _targetType = data.TargetType;
-        _moveSpeed = data.MoveSpeed;
-        _dropData = dropData;
-
-        _stopDuration = data.StopDuration;
-        _rushDuration = data.RushDuration;
-        _destoryEffect = BaseEffect.Name.PentagonDestroyEffect;
+        base.InjectData(data, dropData);
+        _data = data;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -33,14 +27,18 @@ public class GreenPentagonEnemy : BaseEnemy
         _skillController.OnReflect(collision.gameObject, collision.contacts[0].point);
     }
 
-    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    public override void Initialize()
     {
-        _moveStrategy = new RushComponent(
-             _moveComponent,
+        base.Initialize();
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        moveComponent.Initialize();
+
+        _moveStrategy = new RushStrategy(
+             moveComponent,
              transform,
-             _stopDuration,
-             _rushDuration,
-             _moveSpeed,
+             _data.StopDuration,
+             _data.RushDuration,
+             _data.MoveSpeed,
              OnCollision
         );
     }

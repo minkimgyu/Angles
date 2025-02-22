@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlexibleTrackingComponent : TrackComponent
+public class FlexibleTrackingStrategy : TrackStrategy
 {
     bool _nowFreeze;
 
@@ -16,21 +16,16 @@ public class FlexibleTrackingComponent : TrackComponent
     Timer _freezeTimer;
     float _freezeDuration;
 
-    public FlexibleTrackingComponent(
-        MoveComponent moveComponent,
+    public FlexibleTrackingStrategy(
         Transform myTransform,
-        BaseLife.Size size,
+        MoveComponent moveComponent,
+        TrackComponent trackComponent,
 
         float freezeSpeed,
         float normalSpeed,
 
-        float stopDistance,
-        float gap,
-
         float freezeDuration,
-        float movableDuration,
-
-        Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) : base(moveComponent, myTransform, size, normalSpeed, stopDistance, gap, FindPath)
+        float movableDuration) : base(myTransform, moveComponent, trackComponent, normalSpeed)
     {
         _nowFreeze = false;
 
@@ -44,9 +39,9 @@ public class FlexibleTrackingComponent : TrackComponent
         _moveTimer = new Timer();
     }
 
-    public override void AddTarget(ITarget target)
+    public override void InjectTarget(ITarget target)
     {
-        base.AddTarget(target);
+        base.InjectTarget(target);
         _moveTimer.Start(_moveDuration);
     }
 

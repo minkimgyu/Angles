@@ -3,43 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hexahorn : TrackableEnemy
+public class Hexahorn : BaseEnemy, ITrackable
 {
     [SerializeField] TargetCaptureComponent _rangeSkillTargetCaptureComponent;
-
     [SerializeField] Transform _bottomPoint;
+
     public override Vector2 BottomPoint => _bottomPoint.localPosition;
+    HexahornData _data;
 
-    public override void ResetData(HexahornData data, DropData dropData)
+    public override void InjectData(HexahornData data, DropData dropData)
     {
-        base.ResetData(data, dropData);
-        _size = data.Size;
-        _targetType = data.TargetType;
-        _moveSpeed = data.MoveSpeed;
-        _dropData = dropData;
-
-        _stopDistance = data.StopDistance;
-        _gap = data.Gap;
-
-        _destoryEffect = BaseEffect.Name.HexagonDestroyEffect;
+        base.InjectData(data, dropData);
+        _data = data;
     }
 
-    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    public void InjectTarget(ITarget target)
     {
-        _moveStrategy = new TrackComponent(
-             _moveComponent,
-             transform,
-             _size,
-             _moveSpeed,
-             _stopDistance,
-             _gap,
-             FindPath
-        );
+        _moveStrategy.InjectTarget(target);
+    }
+
+    public void InjectPathfindEvent(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _moveStrategy.InjectPathfindEvent(FindPath);
     }
 
     public override void Initialize()
     {
         base.Initialize();
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        TrackComponent trackComponent = GetComponent<TrackComponent>();
+
+        moveComponent.Initialize();
+        trackComponent.Initialize(transform, _data.Size);
+
+        _moveStrategy = new TrackStrategy(
+            transform,
+            moveComponent,
+            trackComponent,
+            _data.MoveSpeed
+        );
+
         _rangeSkillTargetCaptureComponent.Initialize(OnEnter, OnExit);
     }
 

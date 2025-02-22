@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 5467651571456696510}
   - component: {fileID: 2146607661769578460}
   - component: {fileID: 5962456714125029295}
+  - component: {fileID: 4262337655822766403}
   m_Layer: 10
   m_Name: RedTriangle
   m_TagString: Untagged
@@ -301,3 +302,15 @@ CircleCollider2D:
   m_Offset: {x: -0.12, y: 0}
   serializedVersion: 2
   m_Radius: 0.35
+--- !u!114 &4262337655822766403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766707936507907535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945cb064452214549a29bddc27a1b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

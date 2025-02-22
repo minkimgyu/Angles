@@ -105,7 +105,7 @@ public class PlayerSpawner
         TrackableHpViewer hpViewer = (TrackableHpViewer)viewerFactory.Create(BaseViewer.Name.HpViewer);
         hpViewer.Initialize();
         hpViewer.SetFollower(followable);
-        player.AddObserverEvent(hpViewer.UpdateRatio);
+        player.InjectEvent(hpViewer.UpdateRatio);
 
         DirectionViewer directionViewer = (DirectionViewer)viewerFactory.Create(BaseViewer.Name.DirectionViewer);
         directionViewer.Initialize();

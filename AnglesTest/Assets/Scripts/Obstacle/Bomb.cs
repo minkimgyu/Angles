@@ -9,7 +9,7 @@ public class BombData : LifeData
     public float _attackRange;
     public float _groggyDuration;
 
-    public BombData(float maxHp, float damage, float attackRange, float groggyDuration) : base(maxHp, ITarget.Type.Construction)
+    public BombData(float maxHp, float damage, float attackRange, float groggyDuration) : base(maxHp, ITarget.Type.Construction, BaseEffect.Name.TriangleDestroyEffect)
     {
         _damage = damage;
         _attackRange = attackRange;

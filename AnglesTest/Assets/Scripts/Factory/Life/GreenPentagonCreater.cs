@@ -17,11 +17,12 @@ public class GreenPentagonData : EnemyData
     public GreenPentagonData(
         float maxHp,
         ITarget.Type targetType,
+        BaseEffect.Name dieEffectName,
         BaseLife.Size size,
         Dictionary<BaseSkill.Name, int> skillDataToAdd,
         float moveSpeed,
         float stopDuration,
-        float rushDuration) : base(maxHp, targetType, size, skillDataToAdd)
+        float rushDuration) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _stopDuration = stopDuration;
@@ -33,6 +34,7 @@ public class GreenPentagonData : EnemyData
         return new GreenPentagonData(
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
             _size, // EnemyData에서 상속된 값
             new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed, // TriangleData 고유 값
@@ -61,8 +63,8 @@ public class GreenPentagonCreater : LifeCreater
 
         GreenPentagonData data = CopyLifeData as GreenPentagonData;
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

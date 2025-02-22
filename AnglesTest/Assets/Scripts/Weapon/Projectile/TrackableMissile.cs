@@ -42,18 +42,22 @@ public class TrackableMissile : BaseWeapon, ITrackable
         MoveComponent moveComponent = GetComponent<MoveComponent>();
         moveComponent.Initialize();
 
-        Pathfinder pathfinder = GetComponent<Pathfinder>();
-        //pathfinder.Initialize();
+        TrackComponent trackComponent = GetComponent<TrackComponent>();
+        trackComponent.Initialize(transform, BaseLife.Size.Small);
 
         _targetStrategy = new NoTargetingStrategy();
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
         _sizeStrategy = new NoSizeStrategy();
         _attackStrategy = new BulletAttackStrategy(_data, OnHit);
-        _moveStrategy = new TrackingMoveStrategy(_data.MoveSpeed, pathfinder, transform, moveComponent);
+        _moveStrategy = new TrackingMoveStrategy(_data.MoveSpeed, moveComponent, trackComponent);
     }
 
     public void InjectTarget(ITarget target)
     {
         _moveStrategy.InjectTarget(target);
+    }
+
+    public void InjectPathfindEvent(Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath)
+    {
     }
 }

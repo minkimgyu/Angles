@@ -14,8 +14,8 @@ public class PentagonicData : EnemyData
     [JsonIgnore] public float StopDistance { get => _stopDistance; set => _stopDistance = value; }
     [JsonIgnore] public float Gap { get => _gap; set => _gap = value; }
 
-    public PentagonicData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
-        float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillDataToAdd)
+    public PentagonicData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+        float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _stopDistance = stopDistance;
@@ -27,6 +27,7 @@ public class PentagonicData : EnemyData
         return new PentagonicData(
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
             _size, // EnemyData에서 상속된 값
             new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed, // TriangleData 고유 값
@@ -56,8 +57,8 @@ public class PentagonicCreater : LifeCreater
 
         PentagonicData data = CopyLifeData as PentagonicData;
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rhombus : TrackableEnemy
+public class Rhombus : BaseEnemy, ITrackable
 {
     [SerializeField] DamageableTargetCaptureComponent _meleeSkillTargetCaptureComponent;
     [SerializeField] TargetCaptureComponent _rangeSkillTargetCaptureComponent;
@@ -11,36 +11,41 @@ public class Rhombus : TrackableEnemy
     [SerializeField] Transform _bottomPoint;
     public override Vector2 BottomPoint => _bottomPoint.localPosition;
 
-    public override void ResetData(RhombusData data, DropData dropData)
+    RhombusData _data;
+
+    public override void InjectData(RhombusData data, DropData dropData)
     {
-        base.ResetData(data, dropData);
-        _size = data.Size;
-        _targetType = data.TargetType;
-        _moveSpeed = data.MoveSpeed;
-        _dropData = dropData;
-
-        _stopDistance = data.StopDistance;
-        _gap = data.Gap;
-
-        _destoryEffect = BaseEffect.Name.HexagonDestroyEffect;
+        base.InjectData(data, dropData);
+        _data = data;
     }
 
-    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    public void InjectTarget(ITarget target)
     {
-        _moveStrategy = new TrackComponent(
-             _moveComponent,
-             transform,
-             _size,
-             _moveSpeed,
-             _stopDistance,
-             _gap,
-             FindPath
-        );
+        _moveStrategy.InjectTarget(target);
+    }
+
+    public void InjectPathfindEvent(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    {
+        _moveStrategy.InjectPathfindEvent(FindPath);
     }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        TrackComponent trackComponent = GetComponent<TrackComponent>();
+
+        moveComponent.Initialize();
+        trackComponent.Initialize(transform, _data.Size);
+
+        _moveStrategy = new TrackStrategy(
+            transform,
+            moveComponent,
+            trackComponent,
+            _data.MoveSpeed
+        );
+
         _meleeSkillTargetCaptureComponent.Initialize(OnEnter, OnExit);
         _rangeSkillTargetCaptureComponent.Initialize(OnEnter, OnExit);
     }

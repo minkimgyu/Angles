@@ -659,6 +659,7 @@ public class DBBuilder : MonoBehaviour
             BaseLife.Name.Player, new PlayerData(
                 100,
                 ITarget.Type.Blue,
+                BaseEffect.Name.HexagonDestroyEffect,
                 0f,
                 0f,
 
@@ -692,13 +693,13 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.YellowTriangle, new TriangleData(10, ITarget.Type.Red, BaseLife.Size.Small,
+            BaseLife.Name.YellowTriangle, new TriangleData(10, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseLife.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>{{BaseSkill.Name.MagneticField, 0 }}, 8)
         },
 
         {
-            BaseLife.Name.YellowRectangle, new RectangleData(20, ITarget.Type.Red, BaseLife.Size.Small,
+            BaseLife.Name.YellowRectangle, new RectangleData(20, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseLife.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -707,7 +708,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.YellowPentagon, new PentagonData(40, ITarget.Type.Red, BaseLife.Size.Medium,
+            BaseLife.Name.YellowPentagon, new PentagonData(40, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseLife.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -716,7 +717,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.YellowHexagon, new HexagonData(60, ITarget.Type.Red, BaseLife.Size.Medium,
+            BaseLife.Name.YellowHexagon, new HexagonData(60, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseLife.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -728,7 +729,7 @@ public class DBBuilder : MonoBehaviour
 
         // 스킬 업그레이드 수정
         {
-            BaseLife.Name.RedTriangle, new TriangleData(15, ITarget.Type.Red, BaseEnemy.Size.Small,
+            BaseLife.Name.RedTriangle, new TriangleData(15, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -737,7 +738,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.RedRectangle, new RectangleData(30, ITarget.Type.Red, BaseEnemy.Size.Small,
+            BaseLife.Name.RedRectangle, new RectangleData(30, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -747,7 +748,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.RedPentagon, new PentagonData(75, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.RedPentagon, new PentagonData(75, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -756,7 +757,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.RedHexagon, new HexagonData(90, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.RedHexagon, new HexagonData(90, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -767,7 +768,7 @@ public class DBBuilder : MonoBehaviour
 
 
         {
-            BaseLife.Name.OperaTriangle, new TriangleData(25, ITarget.Type.Red, BaseEnemy.Size.Small,
+            BaseLife.Name.OperaTriangle, new TriangleData(25, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -776,7 +777,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.OperaRectangle, new RectangleData(45, ITarget.Type.Red, BaseEnemy.Size.Small,
+            BaseLife.Name.OperaRectangle, new RectangleData(45, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -785,7 +786,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.OperaPentagon, new PentagonData(100, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.OperaPentagon, new PentagonData(100, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -794,7 +795,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.OperaHexagon, new OperaHexagonData(120, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.OperaHexagon, new OperaHexagonData(120, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -804,7 +805,7 @@ public class DBBuilder : MonoBehaviour
 
 
         {
-            BaseLife.Name.GreenTriangle, new TriangleData(40, ITarget.Type.Red, BaseEnemy.Size.Small,
+            BaseLife.Name.GreenTriangle, new TriangleData(40, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -813,7 +814,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.GreenRectangle, new RectangleData(70, ITarget.Type.Red, BaseEnemy.Size.Small,
+            BaseLife.Name.GreenRectangle, new RectangleData(70, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -822,7 +823,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.GreenPentagon, new GreenPentagonData(140, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.GreenPentagon, new GreenPentagonData(140, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -831,7 +832,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.GreenHexagon, new HexagonData(180, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.GreenHexagon, new HexagonData(180, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -842,7 +843,7 @@ public class DBBuilder : MonoBehaviour
 
 
          {
-            BaseLife.Name.Tricon, new TriconData(300, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Tricon, new TriconData(300, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -851,7 +852,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Rhombus, new RhombusData(400, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Rhombus, new RhombusData(400, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -861,7 +862,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Pentagonic, new PentagonicData(500, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Pentagonic, new PentagonicData(500, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -870,7 +871,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Hexahorn, new HexahornData(600, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Hexahorn, new HexahornData(600, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -879,7 +880,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Octavia, new OctaviaData(800, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Octavia, new OctaviaData(800, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -888,7 +889,7 @@ public class DBBuilder : MonoBehaviour
         },
 
           {
-            BaseLife.Name.Hexatric, new HexatricData(800, ITarget.Type.Red, BaseEnemy.Size.Medium,
+            BaseLife.Name.Hexatric, new HexatricData(800, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {

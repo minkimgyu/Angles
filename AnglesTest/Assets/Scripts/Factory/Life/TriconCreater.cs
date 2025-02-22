@@ -19,8 +19,8 @@ public class TriconData : EnemyData
     [JsonIgnore] public float FreezeDuration { get => _freezeDuration; set => _freezeDuration = value; }
     [JsonIgnore] public float MovableDuration { get => _movableDuration; set => _movableDuration = value; }
 
-    public TriconData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
-        float moveSpeed, float stopDistance, float gap, float freezeDuration, float movableDuration) : base(maxHp, targetType, size, skillDataToAdd)
+    public TriconData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+        float moveSpeed, float stopDistance, float gap, float freezeDuration, float movableDuration) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _stopDistance = stopDistance;
@@ -35,6 +35,7 @@ public class TriconData : EnemyData
         return new TriconData(
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
             _size, // EnemyData에서 상속된 값
             new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed, // TriangleData 고유 값
@@ -65,8 +66,8 @@ public class TriconCreater : LifeCreater
 
         TriconData data = CopyLifeData as TriconData;
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

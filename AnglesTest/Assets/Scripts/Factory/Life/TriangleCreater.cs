@@ -9,8 +9,8 @@ public class TriangleData : EnemyData
 {
     [JsonProperty] private float _moveSpeed;
 
-    public TriangleData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, float moveSpeed) 
-        : base(maxHp, targetType, size, skillDataToAdd)
+    public TriangleData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, float moveSpeed) 
+        : base(maxHp, targetType, dieEffectName,size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _skillData = skillDataToAdd;
@@ -23,6 +23,7 @@ public class TriangleData : EnemyData
         return new TriangleData(
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
             _size, // EnemyData에서 상속된 값
             new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed // TriangleData 고유 값
@@ -52,8 +53,8 @@ public class TriangleCreater : LifeCreater
         // 여기에 Upgrader를 넣어서 데이터를 업데이트 시켜주고
         // 아래에서 초기화해주면 어떨까?
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

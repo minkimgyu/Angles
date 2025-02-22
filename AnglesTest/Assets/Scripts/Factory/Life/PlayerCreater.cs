@@ -74,6 +74,7 @@ public class PlayerData : LifeData, IUpgradeableSkillData
         return new PlayerData(
             _maxHp, // LifeData에서 상속된 값
             _targetType, // LifeData에서 상속된 값
+            _destroyEffectName,
             _autoHpRecoveryPoint, // LifeData에서 상속된 값
             _damageReductionRatio, // LifeData에서 상속된 값
 
@@ -104,6 +105,8 @@ public class PlayerData : LifeData, IUpgradeableSkillData
     public PlayerData(
         float maxHp, 
         ITarget.Type targetType,
+        BaseEffect.Name dieEffectName,
+
         float autoRecoveryPoint, 
         float damageReductionRatio,
 
@@ -134,7 +137,7 @@ public class PlayerData : LifeData, IUpgradeableSkillData
 
         float shrinkScale, 
         float normalScale, 
-        List<BaseSkill.Name> skillNames) : base(maxHp, targetType, autoRecoveryPoint, damageReductionRatio)
+        List<BaseSkill.Name> skillNames) : base(maxHp, targetType,  dieEffectName, autoRecoveryPoint, damageReductionRatio)
     {
         AttackDamage = attackDamage;
         TotalDamageRatio = totalDamageRatio;
@@ -186,8 +189,8 @@ public class PlayerCreater : LifeCreater
 
         PlayerData data = CopyLifeData as PlayerData;
 
-        life.ResetData(data);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

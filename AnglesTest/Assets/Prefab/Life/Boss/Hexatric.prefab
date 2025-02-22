@@ -205,6 +205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6522341649915214796}
   - component: {fileID: 2119105281540005989}
+  - component: {fileID: 7568004512947180464}
   - component: {fileID: 5854480855493671585}
   - component: {fileID: 85341912576975308}
   - component: {fileID: 4959811936971416548}
@@ -248,6 +249,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rangeSkillTargetCaptureComponent: {fileID: 7795456933438574917}
   _bottomPoint: {fileID: 2166212401830193230}
+--- !u!114 &7568004512947180464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003193481570149992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945cb064452214549a29bddc27a1b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5854480855493671585
 MonoBehaviour:
   m_ObjectHideFlags: 0

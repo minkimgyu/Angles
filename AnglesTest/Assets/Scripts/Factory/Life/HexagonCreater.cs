@@ -15,8 +15,8 @@ public class HexagonData : EnemyData
     [JsonIgnore] public float StopDistance { get => _stopDistance; set => _stopDistance = value; }
     [JsonIgnore] public float Gap { get => _gap; set => _gap = value; }
 
-    public HexagonData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
-        float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, size, skillDataToAdd)
+    public HexagonData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+        float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _skillData = skillDataToAdd;
@@ -30,10 +30,63 @@ public class HexagonData : EnemyData
         return new HexagonData(
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
             _size, // EnemyData에서 상속된 값
             new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed, // TriangleData 고유 값
             _stopDistance,
+            _gap
+        );
+    }
+}
+
+[System.Serializable]
+public class OperaHexagonData : HexagonData
+{
+    [JsonProperty] private float _freezeDuration;
+    [JsonProperty] private float _movableDuration;
+    [JsonProperty] private float _freezeSpeed;
+
+    [JsonIgnore] public float FreezeDuration { get => _freezeDuration; set => _freezeDuration = value; }
+    [JsonIgnore] public float MovableDuration { get => _movableDuration; set => _movableDuration = value; }
+    [JsonIgnore] public float FreezeSpeed { get => _freezeSpeed; set => _freezeSpeed = value; }
+
+    public OperaHexagonData(
+        float maxHp,
+        ITarget.Type targetType,
+        BaseEffect.Name dieEffectName,
+        BaseLife.Size size,
+        Dictionary<BaseSkill.Name, int> skillDataToAdd,
+        float moveSpeed,
+        float stopDistance,
+
+        float freezeSpeed,
+        float freezeDuration,
+        float movableDuration,
+
+        float gap) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd, moveSpeed, stopDistance, gap)
+    {
+        _freezeDuration = freezeDuration;
+        _movableDuration = movableDuration;
+        _freezeSpeed = freezeSpeed;
+    }
+
+    public override LifeData Copy()
+    {
+        return new OperaHexagonData(
+            _maxHp, // EnemyData에서 상속된 값
+            _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
+            _size, // EnemyData에서 상속된 값
+            new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
+
+            _moveSpeed, // TriangleData 고유 값
+            _stopDistance,
+
+            _freezeSpeed,
+            _freezeDuration,
+            _movableDuration,
+
             _gap
         );
     }
@@ -62,8 +115,8 @@ public class NormalHexagonCreater : LifeCreater
 
         HexagonData data = CopyLifeData as HexagonData;
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 
@@ -107,8 +160,8 @@ public class OperaHexagonCreater : LifeCreater
 
         OperaHexagonData data = CopyLifeData as OperaHexagonData;
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

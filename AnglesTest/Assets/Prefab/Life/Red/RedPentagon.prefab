@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4304492911193030815}
   - component: {fileID: 3900798803479076754}
   - component: {fileID: 289767596098182774}
+  - component: {fileID: 3734372493199078498}
   m_Layer: 10
   m_Name: RedPentagon
   m_TagString: Untagged
@@ -137,6 +138,18 @@ CircleCollider2D:
   m_Offset: {x: -0.05, y: 0}
   serializedVersion: 2
   m_Radius: 0.83
+--- !u!114 &3734372493199078498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109951201476416249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945cb064452214549a29bddc27a1b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4655294942879769978
 GameObject:
   m_ObjectHideFlags: 0

@@ -110,8 +110,8 @@ public class TutorialStage : BaseStage, ILevel
             BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(spawnDatas[i].Name);
             enemy.transform.position = transform.position + new Vector3(spawnDatas[i].SpawnPosition.x, spawnDatas[i].SpawnPosition.y);
 
-            enemy.AddObserverEvent(OnEnemyDieRequested);
-            enemy.InitializeFSM(_pathfinder.FindPath);
+            enemy.InjectEvent(OnEnemyDieRequested);
+            //enemy.InitializeFSM(_pathfinder.FindPath);
 
             ITrackable trackable = enemy.GetComponent<ITrackable>();
             if (trackable != null) trackable.InjectTarget(_target);

@@ -9,8 +9,8 @@ public class RectangleData : EnemyData
 {
     [JsonProperty] private float _moveSpeed;
 
-    public RectangleData(float maxHp, ITarget.Type targetType, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, 
-        float moveSpeed) : base(maxHp, targetType, size, skillDataToAdd)
+    public RectangleData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, 
+        float moveSpeed) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
         _skillData = skillDataToAdd;
@@ -23,6 +23,7 @@ public class RectangleData : EnemyData
         return new RectangleData(
             _maxHp, // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
+            _destroyEffectName,
             _size, // EnemyData에서 상속된 값
             new Dictionary<BaseSkill.Name, int>(_skillData), // 딕셔너리 깊은 복사
             _moveSpeed // TriangleData 고유 값
@@ -49,8 +50,8 @@ public class RectangleCreater : LifeCreater
 
         RectangleData data = CopyLifeData as RectangleData;
 
-        life.ResetData(data, _dropData);
-        life.AddEffectFactory(_effectFactory);
+        life.InjectData(data, _dropData);
+        life.InjectEffectFactory(_effectFactory);
 
         life.Initialize();
 

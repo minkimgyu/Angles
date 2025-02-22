@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4655822693410195702}
   - component: {fileID: 8238244306863144723}
   - component: {fileID: 3259651964756446232}
+  - component: {fileID: 8729646021672684762}
   m_Layer: 10
   m_Name: Pentagonic
   m_TagString: Untagged
@@ -139,6 +140,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.9850695
+--- !u!114 &8729646021672684762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862696754223582188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945cb064452214549a29bddc27a1b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1362798230603435484
 GameObject:
   m_ObjectHideFlags: 0

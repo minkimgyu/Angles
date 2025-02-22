@@ -14,7 +14,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         Medium, // 2 x 2, 3 X 3
     }
 
-    protected Size _size;
+    //protected Size _size;
 
     // 생성 순으로 정렬 필요
     public enum Name
@@ -68,12 +68,10 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         Die,
     }
 
-    protected ITarget.Type _targetType;
+    //protected ITarget.Type _targetType;
 
     protected LifeState _lifeState = LifeState.Alive;
     protected AliveState _aliveState = AliveState.Normal;
-
-    protected BaseEffect.Name _destoryEffect;
 
     protected Action<float> OnHpChangeRequested; // 체력 변화 시 전달
 
@@ -82,34 +80,37 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     protected DisplayPointComponent _displayDamageComponent;
 
     // pathfind 이벤트 추가
-    public virtual void InitializeFSM(Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) { }
+    //public virtual void InitializeFSM(Func<Vector2, Vector2, BaseEnemy.Size, List<Vector2>> FindPath) { }
 
     public virtual void Initialize()
     {
-        _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
+        _displayDamageComponent = new DisplayPointComponent(_lifeData.TargetType, _effectFactory);
         _autoHealTimer.Start(oneTick);
     }
 
-    void SetUp(LifeData data) { _lifeData = data; }
-    public virtual void ResetData(PlayerData data) { SetUp(data); }
-    public virtual void ResetData(TriconData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(RhombusData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(PentagonicData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(HexahornData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(OctaviaData data, DropData dropData) { SetUp(data); }
+    protected void SetUp(LifeData data) { _lifeData = data; }
+    protected virtual void SetUp(LifeData data, DropData dropData) { }
 
+    public virtual void InjectData(PlayerData data) { SetUp(data); }
 
-    public virtual void ResetData(TriangleData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(RectangleData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(PentagonData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(HexagonData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(OperaHexagonData data, DropData dropData) { SetUp(data); }
-    public virtual void ResetData(GreenPentagonData data, DropData dropData) { SetUp(data); }
+    public virtual void InjectData(TriconData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(RhombusData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(PentagonicData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(HexahornData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(OctaviaData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(HexatricData data, DropData dropData) { SetUp(data, dropData); }
 
-    public void AddObserverEvent(Action<float> OnHpChangeRequested) { this.OnHpChangeRequested = OnHpChangeRequested; }
-    public virtual void AddObserverEvent(Action OnDieRequested) { }
+    public virtual void InjectData(TriangleData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(RectangleData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(PentagonData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(HexagonData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(OperaHexagonData data, DropData dropData) { SetUp(data, dropData); }
+    public virtual void InjectData(GreenPentagonData data, DropData dropData) { SetUp(data, dropData); }
 
-    public virtual void AddEffectFactory(BaseFactory effectFactory) { _effectFactory = effectFactory; }
+    public void InjectEvent(Action<float> OnHpChangeRequested) { this.OnHpChangeRequested = OnHpChangeRequested; }
+    public virtual void InjectEvent(Action OnDieRequested) { }
+
+    public virtual void InjectEffectFactory(BaseFactory effectFactory) { _effectFactory = effectFactory; }
 
     protected virtual void SetImmunity(bool nowImmunity)
     {
@@ -132,11 +133,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     protected virtual void OnDie()
     {
-        BaseEffect effect = _effectFactory.Create(_destoryEffect);
+        BaseEffect effect = _effectFactory.Create(_lifeData.DestroyEffectName);
         effect.ResetPosition(transform.position);
         effect.Play();
-
-        //Destroy(gameObject);
     }
 
     public virtual void GetHeal(float point)
@@ -189,7 +188,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         if (_lifeState == LifeState.Alive && _aliveState == AliveState.Invincible) return; // 살아있고 무적 상태의 경우 리턴
         if (_lifeState == LifeState.Die) return; // 죽었거나 무적이면 리턴
 
-        bool canDamage = damageableData._targetType.Contains(_targetType);
+        bool canDamage = damageableData._targetType.Contains(_lifeData.TargetType);
         if (canDamage == false) return;
 
         float finalDamage = damageableData.CalculateDamage(_lifeData.DamageReductionRatio);
@@ -222,6 +221,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public bool IsTarget(List<ITarget.Type> types)
     {
-        return types.Contains(_targetType);
+        return types.Contains(_lifeData.TargetType);
     }
 }

@@ -127,13 +127,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         else _outlineComponent.OnOutlineChange(OutlineComponent.Condition.OnIdle);
     }
 
-    public override void ResetData(PlayerData data)
+    public override void InjectData(PlayerData data)
     {
-        //BuffValueCommand speedModifyCommand = new BuffValueCommand();
-        // 값이 바뀌는 변수들은 BuffFloat나 BuffInt를 사용해서 최소, 최대 값을 지정해주고
-        // 참조 타입으로 설정했으므로 버프로 인해 수정되면 알아서 값이 반영되게 된다.
-        base.ResetData(data);
-        _targetType = data.TargetType;
+        base.InjectData(data);
         _playerData = data;
     }
 
@@ -175,7 +171,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         _interactableObjects = new List<IInteractable>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
+        _displayDamageComponent = new DisplayPointComponent(_playerData.TargetType, _effectFactory);
 
         _farInteractableCaptureComponent.Initialize(OnInteractableEnter, OnInteractableExit); // 원거리 인터랙션
         _closeInteractableCaptureComponent.Initialize(OnInteract); // 근접 인터렉션
@@ -225,6 +221,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     protected override void OnDie()
     {
+        base.OnDie();
         gameObject.SetActive(false);
         EventBusManager.Instance.MainEventBus.Publish(MainEventBus.State.GameOver);
     }

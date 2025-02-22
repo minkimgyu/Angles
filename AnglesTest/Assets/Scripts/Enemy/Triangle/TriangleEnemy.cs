@@ -3,38 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriangleEnemy : TrackableEnemy
+public class TriangleEnemy : BaseEnemy, ITrackable
 {
     [SerializeField] DamageableTargetCaptureComponent _skillTargetCaptureComponent;
+    TriangleData _data;
 
-    public override void ResetData(TriangleData data, DropData dropData)
+    public override void InjectData(TriangleData data, DropData dropData)
     {
-        base.ResetData(data, dropData);
-        _size = data.Size;
-        _targetType = data.TargetType;
-        _moveSpeed = data.MoveSpeed;
-        _dropData = dropData;
-
-        _gap = 0.5f;
-        _destoryEffect = BaseEffect.Name.TriangleDestroyEffect;
+        base.InjectData(data, dropData);
+        _data = data;
     }
 
-    public override void InitializeFSM(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+    public void InjectPathfindEvent(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
     {
-        _moveStrategy = new TrackComponent(
-             _moveComponent,
-             transform,
-             _size,
-             _moveSpeed,
-             _stopDistance,
-             _gap,
-             FindPath
-        );
+        _moveStrategy.InjectPathfindEvent(FindPath);
+    }
+
+    public void InjectTarget(ITarget target)
+    {
+        _moveStrategy.InjectTarget(target);
     }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        MoveComponent moveComponent = GetComponent<MoveComponent>();
+        TrackComponent trackComponent = GetComponent<TrackComponent>();
+        moveComponent.Initialize();
+        trackComponent.Initialize(transform, _data.Size);
+
+        _moveStrategy = new TrackStrategy(
+            transform,
+            moveComponent,
+            trackComponent,
+            _data.MoveSpeed
+        );
+
         _skillTargetCaptureComponent.Initialize(OnEnter, OnExit);
     }
 

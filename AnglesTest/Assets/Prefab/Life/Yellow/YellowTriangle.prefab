@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 5467651571456696510}
   - component: {fileID: 2146607661769578460}
   - component: {fileID: 5962456714125029295}
+  - component: {fileID: 2856811869789564814}
   m_Layer: 10
   m_Name: YellowTriangle
   m_TagString: Untagged
@@ -217,6 +218,18 @@ CircleCollider2D:
   m_Offset: {x: -0.1, y: 0}
   serializedVersion: 2
   m_Radius: 0.22
+--- !u!114 &2856811869789564814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766707936507907535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945cb064452214549a29bddc27a1b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8572746258585092098
 GameObject:
   m_ObjectHideFlags: 0

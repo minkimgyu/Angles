@@ -28,77 +28,34 @@ public class NoMoveStrategy : IWeaponMoveStrategy
 
 public class TrackingMoveStrategy : IWeaponMoveStrategy
 {
-    ITarget _target;
     float _moveSpeed;
-    Pathfinder _pathfinder;
-
-    Transform _myTransform;
     MoveComponent _moveComponent;
-
-    List<Vector2> _movePoints;
-    int _index = 0;
-    float _closeDistance = 0.5f;
-    Vector2 _dir;
-
-    Timer _pathfinderTimer;
-    float _pathfindGap = 0.5f;
-
+    TrackComponent _trackComponent;
 
     public TrackingMoveStrategy(
         float moveSpeed,
-        Pathfinder pathfinder,
-        Transform myTransform,
-        MoveComponent moveComponent)
+        MoveComponent moveComponent,
+        TrackComponent trackComponent)
     {
         _moveSpeed = moveSpeed;
-        _pathfinder = pathfinder;
-        _myTransform = myTransform;
-        _moveComponent = moveComponent;
 
-        _target = null;
-        _movePoints = new List<Vector2>();
+        _moveComponent = moveComponent;
+        _trackComponent = trackComponent;
     }
 
     public void InjectTarget(ITarget target)
     {
-        _target = target;
-    }
-
-    void ChangeDirection()
-    {
-        if (_movePoints == null) return;
-        if (_index >= _movePoints.Count)
-        {
-            _dir = Vector2.zero;
-            return;
-        }
-
-        Vector2 nextMovePos = _movePoints[_index];
-        _dir = (nextMovePos - (Vector2)_myTransform.position).normalized;
-
-        bool nowCloseToNextPoint = Vector2.Distance(_myTransform.position, nextMovePos) < _closeDistance;
-        if (nowCloseToNextPoint) _index++;
+        _trackComponent.InjectTarget(target);
     }
 
     public void OnUpdate()
     {
-        if(_target as UnityEngine.Object == null) return;
-
-        if (_pathfinderTimer.CurrentState == Timer.State.Finish)
-        {
-            _movePoints = _pathfinder.FindPath(_myTransform.position, _target.GetPosition(), BaseLife.Size.Small);
-            _index = 0;
-
-            _pathfinderTimer.Reset();
-            _pathfinderTimer.Start(_pathfindGap);
-        }
-
-        ChangeDirection();
+        _trackComponent.OnUpdate();
     }
 
     public void OnFixedUpdate()
     {
-        _moveComponent.Move(_dir, _moveSpeed);
+        _moveComponent.Move(_trackComponent.MoveDirection, _moveSpeed);
     }
 }
 

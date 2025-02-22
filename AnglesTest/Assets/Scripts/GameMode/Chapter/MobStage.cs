@@ -86,11 +86,14 @@ public class MobStage : BattleStage
             BaseLife enemy = _inGameFactory.GetFactory(InGameFactory.Type.Life).Create(spawnDatas[i].Name);
             enemy.transform.position = transform.position + new Vector3(spawnDatas[i].SpawnPosition.x, spawnDatas[i].SpawnPosition.y);
 
-            enemy.AddObserverEvent(OnEnemyDieRequested);
-            enemy.InitializeFSM(_pathfinder.FindPath);
+            enemy.InjectEvent(OnEnemyDieRequested);
 
             ITrackable trackable = enemy.GetComponent<ITrackable>();
-            if (trackable != null) trackable.InjectTarget(_target);
+            if (trackable != null)
+            {
+                trackable.InjectTarget(_target);
+                trackable.InjectPathfindEvent(_pathfinder.FindPath);
+            }
 
             _enemyCount++;
         }

@@ -3,43 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class TrackableEnemy : BaseEnemy, ITrackable
-{
-    protected List<ITarget.Type> _followableTypes;
+//abstract public class TrackableEnemy : BaseEnemy, ITrackable, IPathfindable
+//{
+//    //TrackComponent _trackComponent;
 
-    protected float _stopDistance;
-    protected float _gap;
+//    //protected float _stopDistance;
+//    //protected float _gap;
 
-    //protected ITarget _followTarget;
+//    //public void InjectPathfinderEvent(Func<Vector2, Vector2, Size, List<Vector2>> FindPath)
+//    //{
 
-    void AddTarget(ITarget target)
-    {
-        //_followTarget = target;
-        _moveStrategy.AddTarget(target);
-    }
+//    //}
 
-    public void InjectTarget(ITarget target)
-    {
-        AddTarget(target);
-    }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _followableTypes = new List<ITarget.Type> { ITarget.Type.Blue };
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        if (_aliveState == AliveState.Groggy) return;
-        _moveStrategy.OnUpdate();
-    }
-
-    void FixedUpdate()
-    {
-        if (_aliveState == AliveState.Groggy) return;
-        _moveStrategy.OnFixedUpdate();
-    }
-}
+//    //public void InjectTarget(ITarget target)
+//    //{
+//    //    _moveStrategy.InjectTarget(target);
+//    //}
+//}

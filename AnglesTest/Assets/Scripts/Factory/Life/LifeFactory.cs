@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 [System.Serializable]
 abstract public class LifeData
 {
-    public LifeData(float maxHp, ITarget.Type targetType, float autoHpRecoveryPoint = 0, float damageReductionRatio = 0)
+    public LifeData(float maxHp, ITarget.Type targetType, BaseEffect.Name destroyEffectName, float autoHpRecoveryPoint = 0, float damageReductionRatio = 0)
     {
         _maxHp = maxHp;
         _hp = maxHp;
@@ -37,9 +37,11 @@ abstract public class LifeData
     [JsonIgnore] public float AutoHpRecoveryPoint { get => _autoHpRecoveryPoint; set => _autoHpRecoveryPoint = value; }
     [JsonIgnore] public float DamageReductionRatio { get => _damageReductionRatio; set => _damageReductionRatio = value; }
     [JsonIgnore] public ITarget.Type TargetType { get => _targetType; set => _targetType = value; }
+    [JsonIgnore] public BaseEffect.Name DestroyEffectName { get => _destroyEffectName; }
 
     [JsonProperty] protected float _maxHp;
     [JsonProperty] private float _hp;
+    [JsonProperty] protected BaseEffect.Name _destroyEffectName;
 
     [JsonProperty] protected float _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
     [JsonProperty] protected float _damageReductionRatio; // 데미지 감소 수치
@@ -62,8 +64,9 @@ abstract public class EnemyData : LifeData
     public EnemyData(
         float maxHp,
         ITarget.Type targetType,
+        BaseEffect.Name destroyEffectName,
         BaseLife.Size size,
-        Dictionary<BaseSkill.Name, int> skillData) : base(maxHp, targetType)
+        Dictionary<BaseSkill.Name, int> skillData) : base(maxHp, targetType, destroyEffectName)
     {
         _size = size;
         _skillData = skillData;

@@ -68,7 +68,6 @@ public class SpreadBullets : BaseSkill
 
     public override void OnUpdate()
     {
-
         switch (_delayTimer.CurrentState)
         {
             case Timer.State.Ready:

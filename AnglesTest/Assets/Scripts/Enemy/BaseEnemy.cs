@@ -6,27 +6,44 @@ using System;
 abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 {
     protected SkillController _skillController;
-    protected float _moveSpeed;
+    //protected float _moveSpeed;
 
     protected IMoveStrategy _moveStrategy;
-    protected MoveComponent _moveComponent;
-    Vector3 _dir;
+    //protected MoveComponent _moveComponent;
+    //Vector3 _dir;
 
     protected DropData _dropData;
     Action OnDieRequested;
 
     public virtual Vector2 BottomPoint { get { return Vector2.zero; } }
 
+    protected override void SetUp(LifeData data, DropData dropData) 
+    {
+        SetUp(data);
+        _dropData = dropData;
+    }
+
     public override void Initialize()
     {
         base.Initialize();
-        _moveComponent = GetComponent<MoveComponent>();
-        _moveComponent.Initialize();
-
         _skillController = GetComponent<SkillController>();
         _skillController.Initialize(new NoUpgradeableData(), this);
 
         OnHpChangeRequested += (float ratio) => _skillController.OnDamaged(ratio);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (_aliveState == AliveState.Groggy) return;
+        _moveStrategy.OnUpdate();
+    }
+
+    void FixedUpdate()
+    {
+        if (_aliveState == AliveState.Groggy) return;
+        _moveStrategy.OnFixedUpdate();
     }
 
     protected override void UpdateOnIdle()
@@ -34,7 +51,7 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
         _skillController.OnUpdate();
     }
 
-    public override void AddObserverEvent(Action OnDieRequested)
+    public override void InjectEvent(Action OnDieRequested)
     {
         this.OnDieRequested = OnDieRequested;
     }
@@ -48,9 +65,9 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
         Destroy(gameObject);
     }
 
-    public override void AddEffectFactory(BaseFactory _effectFactory) 
+    public override void InjectEffectFactory(BaseFactory effectFactory) 
     {
-        this._effectFactory = _effectFactory;
+        _effectFactory = effectFactory;
     }
 
     public bool CanApplyForce()
@@ -60,7 +77,8 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 
     public void ApplyForce(Vector3 direction, float force, ForceMode2D mode)
     {
-        _moveComponent.AddForce(direction, force, mode);
+        _moveStrategy.ApplyForce(direction, force, mode);
+        //_moveComponent.AddForce(direction, force, mode);
     }
 
     public List<SkillUpgradeData> ReturnSkillUpgradeDatas()

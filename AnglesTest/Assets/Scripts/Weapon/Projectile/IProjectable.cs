@@ -7,8 +7,3 @@ public interface IProjectable
 {
     void Shoot(Vector3 direction, float force);
 }
-
-public interface ITrackable
-{
-    void InjectTarget(ITarget target);
-}

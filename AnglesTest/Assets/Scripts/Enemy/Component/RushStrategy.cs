@@ -6,8 +6,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 // 전략 패턴으로 연계해도 좋을 듯
-
-public class RushComponent : IMoveStrategy
+public class RushStrategy : IMoveStrategy
 {
     public enum State
     {
@@ -26,7 +25,7 @@ public class RushComponent : IMoveStrategy
 
     Action<Collision2D> OnCollisionRequested;
 
-    public RushComponent(
+    public RushStrategy(
         MoveComponent moveComponent,
         Transform myTransform,
         float stopDuration,
