@@ -48,7 +48,7 @@ public class TrackableMissile : BaseWeapon, ITrackable
         _targetStrategy = new NoTargetingStrategy();
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
         _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new BulletAttackStrategy(_data, OnHit);
+        _actionStrategy = new BulletAttackStrategy(_data, OnHit);
         _moveStrategy = new TrackingMoveStrategy(_data.MoveSpeed, moveComponent, trackComponent);
     }
 

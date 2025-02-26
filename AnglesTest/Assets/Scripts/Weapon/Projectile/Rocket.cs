@@ -51,7 +51,7 @@ public class Rocket : BaseWeapon, IProjectable
         _targetStrategy = new NoTargetingStrategy();
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
         _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new RocketAttackStrategy(_data, OnHit);
+        _actionStrategy = new RocketAttackStrategy(_data, OnHit);
         _moveStrategy = new ProjectileMoveStrategy(moveComponent, transform);
     }
 

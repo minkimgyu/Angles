@@ -4,7 +4,7 @@ using UnityEngine;
 using DamageUtility;
 using System;
 
-public class BulletAttackStrategy : IAttackStrategy
+public class BulletAttackStrategy : IWeaponActionStrategy
 {
     IAttackStat _attackStat;
     Action OnHit;

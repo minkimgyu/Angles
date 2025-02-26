@@ -62,7 +62,11 @@ abstract public class BaseSkill : ISkillUpgradable
     }
 
     protected IUpgradeVisitor _upgrader;
-    protected UseConstraintComponent _useConstraint = new NoConstraintComponent();
+
+    protected IUseConstraintStrategy _useConstraintStrategy; // = new NoConstraintStrategy();
+    protected ITargetStrategy _targetStrategy;
+    protected IDelayStrategy _delayStrategy;
+    protected ISkillActionStrategy _actionStrategy;
 
     protected Type _skillType;
     public Type SkillType { get { return _skillType; } }
@@ -86,7 +90,7 @@ abstract public class BaseSkill : ISkillUpgradable
         _upgradePoint++;
     }
 
-    public void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster) 
+    public virtual void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster) 
     {
         _upgradeableRatio = upgradeableRatio;
         _caster = caster; 
@@ -94,37 +98,66 @@ abstract public class BaseSkill : ISkillUpgradable
 
     public void AddViewEvent(Action<float, int, bool> viewEvent) 
     { 
-        _useConstraint.AddViewEvent(viewEvent);
+        _useConstraintStrategy.AddViewEvent(viewEvent);
     }
 
     public void RemoveViewEvent(Action<float, int, bool> viewEvent) 
     {
-        _useConstraint.RemoveViewEvent(viewEvent);
+        _useConstraintStrategy.RemoveViewEvent(viewEvent);
     }
 
     public bool CanUse() 
     {
-        return _useConstraint.CanUse();
+        return _useConstraintStrategy.CanUse();
     }
 
     public void Use()
     {
-        _useConstraint.Use();
+        _useConstraintStrategy.Use();
     }
 
-    public virtual void OnAdd() { }
-    public virtual bool OnReflect(GameObject targetObject, Vector3 contactPos) { return false; }
-    public virtual void OnDamaged(float ratio) { }
-    public virtual void OnRevive() { }
+    public virtual void OnAdd() 
+    {
+        _actionStrategy.OnAdd();
+    }
 
-    public virtual void OnCaptureEnter(ITarget target) { }
-    public virtual void OnCaptureExit(ITarget target) { }
+    public virtual bool OnReflect(GameObject targetObject, Vector3 contactPos) 
+    { 
+        return _actionStrategy.OnReflect(targetObject, contactPos); 
+    }
 
-    public virtual void OnCaptureEnter(ITarget target, IDamageable damageable) { }
-    public virtual void OnCaptureExit(ITarget target, IDamageable damageable) { }
+    public virtual void OnDamaged(float ratio) 
+    {
+        _delayStrategy.OnDamaged(ratio);
+    }
+
+    public virtual void OnRevive() 
+    {
+        _actionStrategy.OnRevive();
+    }
+
+    public virtual void OnCaptureEnter(ITarget target) 
+    {
+        _targetStrategy.OnTargetEnter(target);
+    }
+
+    public virtual void OnCaptureExit(ITarget target) 
+    {
+        _targetStrategy.OnTargetExit(target);
+    }
+
+    public virtual void OnCaptureEnter(ITarget target, IDamageable damageable) 
+    {
+        _targetStrategy.OnTargetEnter(target, damageable);
+    }
+
+    public virtual void OnCaptureExit(ITarget target, IDamageable damageable) 
+    {
+        _targetStrategy.OnTargetExit(target, damageable);
+    }
 
     public virtual void OnUpdate()
     {
-        _useConstraint.OnUpdate();
+        _useConstraintStrategy.OnUpdate();
     }
 }

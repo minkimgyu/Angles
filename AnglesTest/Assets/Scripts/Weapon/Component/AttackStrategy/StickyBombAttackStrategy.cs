@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class StickyBombAttackStrategy : IAttackStrategy
+public class StickyBombAttackStrategy : IWeaponActionStrategy
 {
     Transform _myTransform;
     StickyBombData _stickyBombData;

@@ -44,10 +44,10 @@ public class Blade : BaseWeapon, IProjectable
         MoveComponent moveComponent = GetComponent<MoveComponent>();
         moveComponent.Initialize();
 
-        _targetStrategy = new DamageableTargetingStrategy(damageableCaptureComponent, _data);
+        _targetStrategy = new BladeTargetingStrategy(damageableCaptureComponent, _data);
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
         _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
-        _attackStrategy = new BladeAttackStrategy(_data, _targetStrategy.GetDamageableTargets);
+        _actionStrategy = new BladeAttackStrategy(_data, _targetStrategy.GetDamageableTargets);
         _moveStrategy = new ReflectableProjectileMoveStrategy(moveComponent, transform);
     }
 

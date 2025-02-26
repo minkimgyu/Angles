@@ -54,6 +54,11 @@ public class TrackStrategy : IMoveStrategy
         _trackComponent.InjectTarget(target);
     }
 
+    public void InjectPathfindEvent(Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath)
+    {
+        _trackComponent.InjectPathFindEvent(FindPath);
+    }
+
     float ReturnDistanceBetweenTarget()
     {
         if (_target as UnityEngine.Object == null)

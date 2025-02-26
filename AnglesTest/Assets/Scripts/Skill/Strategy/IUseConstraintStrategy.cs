@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 
-abstract public class UseConstraintComponent
+public interface IUseConstraintStrategy
 {
     public abstract bool CanUse();
     public virtual void OnUpdate() { }
@@ -14,12 +14,12 @@ abstract public class UseConstraintComponent
     public virtual void RemoveViewEvent(Action<float, int, bool> viewEvent) { }
 }
 
-public class NoConstraintComponent : UseConstraintComponent
+public class NoConstraintStrategy : IUseConstraintStrategy
 {
-    public override bool CanUse() { return true; }
+    public bool CanUse() { return true; }
 }
 
-public class CooltimeConstraint : UseConstraintComponent
+public class CooltimeConstraintStrategy : IUseConstraintStrategy
 {
     protected int _stackCount;
     protected Timer _cooltimer;
@@ -30,7 +30,7 @@ public class CooltimeConstraint : UseConstraintComponent
     CooltimeSkillData _cooltimeSkillData;
     IUpgradeableSkillData _upgradeableRatio;
 
-    public CooltimeConstraint(CooltimeSkillData cooltimeSkillData, IUpgradeableSkillData upgradeableRatio)
+    public CooltimeConstraintStrategy(CooltimeSkillData cooltimeSkillData, IUpgradeableSkillData upgradeableRatio)
     {
         _showStackCount = true;
         _cooltimeSkillData = cooltimeSkillData;
@@ -40,13 +40,13 @@ public class CooltimeConstraint : UseConstraintComponent
         _cooltimer = new Timer();
     }
 
-    public override void AddViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent += ViewerEvent; }
-    public override void RemoveViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent -= ViewerEvent; }
+    public void AddViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent += ViewerEvent; }
+    public void RemoveViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent -= ViewerEvent; }
 
-    public override bool CanUse() { return _stackCount > 0; }
-    public override void Use() { _stackCount -= 1; }
+    public bool CanUse() { return _stackCount > 0; }
+    public void Use() { _stackCount -= 1; }
 
-    public override void OnUpdate()
+    public void OnUpdate()
     {
         bool showStack = true;
         switch (_cooltimer.CurrentState)
@@ -77,18 +77,18 @@ public class CooltimeConstraint : UseConstraintComponent
     }
 }
 
-public class RandomConstraintComponent : UseConstraintComponent
+public class RandomConstraintStrategy : IUseConstraintStrategy
 {
     RandomSkillData _randomSkillData;
     IUpgradeableSkillData _upgradeableRatio;
 
-    public RandomConstraintComponent(RandomSkillData randomSkillData, IUpgradeableSkillData upgradeableRatio)
+    public RandomConstraintStrategy(RandomSkillData randomSkillData, IUpgradeableSkillData upgradeableRatio)
     {
         _randomSkillData = randomSkillData;
         _upgradeableRatio = upgradeableRatio;
     }
 
-    public override bool CanUse()
+    public bool CanUse()
     {
         float random = Random.Range(0.0f, 1.0f);
         return random <= _randomSkillData.Probability * _upgradeableRatio.TotalRandomRatio;

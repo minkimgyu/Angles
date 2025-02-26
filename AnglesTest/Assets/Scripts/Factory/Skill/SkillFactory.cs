@@ -19,6 +19,46 @@ abstract public class SkillData
     public abstract SkillData Copy();
 }
 
+
+public interface IRandomStat
+{
+    float Probability { get; set; }
+}
+
+public interface ICooltimeStat : IMaxStackStat
+{
+    float Cooltime { get; set; }
+}
+
+public interface IDamageStat
+{
+    float Damage { get; set; }
+}
+
+public interface IDelayStat
+{
+    float Delay { get; set; }
+}
+
+public interface IForceStat
+{
+    float Force { get; set; }
+}
+
+public interface IMaxTargetStat
+{
+    int MaxTargetCount { get; set; }
+}
+
+public interface IMaxStackStat
+{
+    int MaxStackCount { get; set; }
+}
+
+
+
+// stat으로 분리해서 적용해주기
+
 [Serializable]
 abstract public class RandomSkillData : SkillData
 {

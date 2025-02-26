@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IAttackStrategy
+public interface IWeaponActionStrategy
 {
     void OnUpdate() { }
     void OnTargetEnter(Collider2D collision2D) { }
@@ -11,6 +11,6 @@ public interface IAttackStrategy
     void OnLifetimeCompleted() { }
 }
 
-public class NoAttackStrategy : IAttackStrategy
+public class NoAttackStrategy : IWeaponActionStrategy
 {
 }

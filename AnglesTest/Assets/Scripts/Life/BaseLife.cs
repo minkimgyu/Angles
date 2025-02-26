@@ -188,8 +188,8 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         if (_lifeState == LifeState.Alive && _aliveState == AliveState.Invincible) return; // 살아있고 무적 상태의 경우 리턴
         if (_lifeState == LifeState.Die) return; // 죽었거나 무적이면 리턴
 
-        bool canDamage = damageableData._targetType.Contains(_lifeData.TargetType);
-        if (canDamage == false) return;
+        //bool canDamage = damageableData._targetType.Contains(_lifeData.TargetType);
+        //if (canDamage == false) return;
 
         float finalDamage = damageableData.CalculateDamage(_lifeData.DamageReductionRatio);
         _lifeData.Hp -= finalDamage;

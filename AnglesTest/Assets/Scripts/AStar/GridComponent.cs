@@ -250,6 +250,9 @@ public class GridComponent : MonoBehaviour
 
     public void Initialize(Pathfinder pathfinder)
     {
+        PathfindInjecter injecter = _groundTile.gameObject.GetComponent<PathfindInjecter>();
+        if(injecter != null) injecter.Initialize(pathfinder);
+
         _groundTile.CompressBounds(); // 타일의 바운더리를 맞춰준다.
         BoundsInt bounds = _groundTile.cellBounds;
 

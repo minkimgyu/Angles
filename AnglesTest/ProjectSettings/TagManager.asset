@@ -19,8 +19,8 @@ TagManager:
   - Target
   - Capture
   - Interactable
-  - 
-  - 
+  - PathfindInjecter
+  - Pathfindable
   - 
   - 
   - 

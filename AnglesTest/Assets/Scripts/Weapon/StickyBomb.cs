@@ -41,13 +41,13 @@ public class StickyBomb : BaseWeapon
 
         _targetStrategy = new NoTargetingStrategy();
         _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new StickyBombAttackStrategy(transform, _data);
+        _actionStrategy = new StickyBombAttackStrategy(transform, _data);
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy
         (
             _data,
             () =>
             {
-                _attackStrategy.OnLifetimeCompleted();
+                _actionStrategy.OnLifetimeCompleted();
                 Explode();
                 Destroy(gameObject);
             }

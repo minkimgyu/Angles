@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BladeAttackStrategy : IAttackStrategy
+public class BladeAttackStrategy : IWeaponActionStrategy
 {
     BladeData _bladeData;
-    Func<List<DamageableTargetingStrategy.TargetData>> GetDamageableTargets;
+    Func<List<BladeTargetingStrategy.TargetData>> GetDamageableTargets;
 
     public BladeAttackStrategy(
         BladeData bladeData,
-        Func<List<DamageableTargetingStrategy.TargetData>> GetDamageableTargets)
+        Func<List<BladeTargetingStrategy.TargetData>> GetDamageableTargets)
     {
         _bladeData = bladeData;
         this.GetDamageableTargets = GetDamageableTargets;
@@ -19,7 +19,7 @@ public class BladeAttackStrategy : IAttackStrategy
 
     public void OnUpdate()
     {
-        List<DamageableTargetingStrategy.TargetData> targetDatas = GetDamageableTargets();
+        List<BladeTargetingStrategy.TargetData> targetDatas = GetDamageableTargets();
 
         for (int i = targetDatas.Count - 1; i >= 0; i--)
         {

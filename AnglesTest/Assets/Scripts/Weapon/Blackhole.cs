@@ -29,7 +29,7 @@ public class Blackhole : BaseWeapon
         _targetStrategy = new ForceTargetingStrategy(absorbCaptureComponent, _data);
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
         _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
-        _attackStrategy = new BlackholeAttackStrategy(_data, transform, _targetStrategy.GetForceTargets);
+        _actionStrategy = new BlackholeAttackStrategy(_data, transform, _targetStrategy.GetForceTargets);
         _moveStrategy = new NoMoveStrategy();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-abstract public class ShooterAttackStrategy : IAttackStrategy
+abstract public class ShooterAttackStrategy : IWeaponActionStrategy
 {
     protected ShooterData _shooterData;
     Transform _myTransform;

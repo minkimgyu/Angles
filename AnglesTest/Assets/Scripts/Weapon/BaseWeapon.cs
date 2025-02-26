@@ -26,7 +26,7 @@ abstract public class BaseWeapon : MonoBehaviour
     }
 
     protected ITargetStrategy _targetStrategy;
-    protected IAttackStrategy _attackStrategy;
+    protected IWeaponActionStrategy _actionStrategy;
     protected IWeaponMoveStrategy _moveStrategy;
 
     protected ILifetimeStrategy _lifeTimeStrategy;
@@ -36,7 +36,7 @@ abstract public class BaseWeapon : MonoBehaviour
     {
         _moveStrategy.OnUpdate();
         _lifeTimeStrategy.OnUpdate();
-        _attackStrategy.OnUpdate();
+        _actionStrategy.OnUpdate();
     }
 
     protected virtual void FixedUpdate()
@@ -55,7 +55,7 @@ abstract public class BaseWeapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        _attackStrategy.OnTargetEnter(collider);
+        _actionStrategy.OnTargetEnter(collider);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

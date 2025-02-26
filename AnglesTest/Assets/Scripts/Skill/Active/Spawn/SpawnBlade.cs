@@ -17,7 +17,7 @@ public class SpawnBlade : BaseSkill
 
     public override void OnAdd()
     {
-        _useConstraint = new RandomConstraintComponent(_data, _upgradeableRatio);
+        _useConstraintStrategy = new RandomConstraintStrategy(_data, _upgradeableRatio);
     }
 
     public override void Upgrade()

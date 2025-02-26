@@ -34,6 +34,7 @@ public class TrackComponent : MonoBehaviour
         _index = 0;
         _movePoints = new List<Vector2>();
         _pathfinderTimer = new Timer();
+        _pathfinderTimer.Start(_pathfindGap);
 
         _moveDirection = Vector2.zero;
     }
@@ -62,7 +63,7 @@ public class TrackComponent : MonoBehaviour
             _pathfinderTimer.Start(_pathfindGap);
         }
 
-        if (_movePoints.Count == 0) return;
+        if (_movePoints == null || _movePoints.Count == 0) return;
         if (_index >= _movePoints.Count)
         {
             _moveDirection = Vector2.zero;

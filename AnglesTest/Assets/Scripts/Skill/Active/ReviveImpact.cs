@@ -14,37 +14,12 @@ public class ReviveImpact : BaseSkill
         _effectFactory = effectFactory;
     }
 
-    public override void OnAdd()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        _useConstraint = new NoConstraintComponent();
-    }
-
-    public override void OnRevive()
-    {
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Impact, 0.7f);
-        Debug.Log("ReviveImpact");
-
-        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
-        if (effect == null) return;
-
-        Transform casterTransform = _caster.GetComponent<Transform>();
-
-        effect.ResetPosition(casterTransform.position);
-        effect.ResetSize(_data.RangeMultiplier);
-        effect.Play();
-
-        DamageableData damageData = new DamageableData
-        (
-            _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
-        Damage.HitCircleRange(damageData, casterTransform.position, _data.Range * _data.RangeMultiplier, true, Color.red, 3);
+        base.Initialize(upgradeableRatio, caster);
+        _useConstraintStrategy = new NoConstraintStrategy();
+        _targetStrategy = new NoTargetingStrategy();
+        _delayStrategy = new NoDelayStrategy();
+        _actionStrategy = new ReviveImpactStrategy(_caster, _upgradeableRatio, _data.Range, _data.TargetTypes, _effectFactory);
     }
 }

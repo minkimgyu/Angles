@@ -29,24 +29,24 @@ public struct SkillUpgradeData
 
 public class SkillController : MonoBehaviour
 {
-    public class UpgradeableData
-    {
-        public UpgradeableData(float totalDamageRatio, float totalCooltimeRatio, float totalRandomRatio)
-        {
-            _totalDamageRatio = totalDamageRatio;
-            _totalCooltimeRatio = totalCooltimeRatio;
-            _totalRandomRatio = totalRandomRatio;
-        }
+    //public class UpgradeableData
+    //{
+    //    public UpgradeableData(float totalDamageRatio, float totalCooltimeRatio, float totalRandomRatio)
+    //    {
+    //        _totalDamageRatio = totalDamageRatio;
+    //        _totalCooltimeRatio = totalCooltimeRatio;
+    //        _totalRandomRatio = totalRandomRatio;
+    //    }
 
-        float _totalDamageRatio;
-        public float TotalDamageRatio { get { return _totalDamageRatio; } set { _totalDamageRatio = value; } }
+    //    float _totalDamageRatio;
+    //    public float TotalDamageRatio { get { return _totalDamageRatio; } set { _totalDamageRatio = value; } }
 
-        float _totalCooltimeRatio;
-        public float TotalCooltimeRatio { get { return _totalCooltimeRatio; } set { _totalCooltimeRatio = value; } }
+    //    float _totalCooltimeRatio;
+    //    public float TotalCooltimeRatio { get { return _totalCooltimeRatio; } set { _totalCooltimeRatio = value; } }
 
-        float _totalRandomRatio;
-        public float TotalRandomRatio { get { return _totalRandomRatio; } set { _totalRandomRatio = value; } }
-    }
+    //    float _totalRandomRatio;
+    //    public float TotalRandomRatio { get { return _totalRandomRatio; } set { _totalRandomRatio = value; } }
+    //}
 
 
     Dictionary<BaseSkill.Name, BaseSkill> _skillDictionary;

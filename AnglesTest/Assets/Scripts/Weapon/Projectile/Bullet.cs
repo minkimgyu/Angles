@@ -38,7 +38,7 @@ public class Bullet : BaseWeapon, IProjectable
         _targetStrategy = new NoTargetingStrategy();
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnHit);
         _sizeStrategy = new NoSizeStrategy();
-        _attackStrategy = new BulletAttackStrategy(_data, OnHit);
+        _actionStrategy = new BulletAttackStrategy(_data, OnHit);
         _moveStrategy = new ProjectileMoveStrategy(moveComponent, transform);
     }
 

@@ -7,6 +7,6 @@ public class RifleShooter : BaseShooter
     public override void Initialize(BaseFactory weaponFactory)
     {
         base.Initialize(weaponFactory);
-        _attackStrategy = new RifleShooterAttackStrategy(_data, transform, _targetStrategy.GetTargets, _weaponFactory);
+        _actionStrategy = new RifleShooterAttackStrategy(_data, transform, _targetStrategy.GetTargets, _weaponFactory);
     }
 }

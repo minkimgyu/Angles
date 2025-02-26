@@ -18,7 +18,7 @@ public class Statikk : BaseSkill
 
     public override void OnAdd()
     {
-        _useConstraint = new CooltimeConstraint(_data, _upgradeableRatio);
+        _useConstraintStrategy = new CooltimeConstraintStrategy(_data, _upgradeableRatio);
     }
 
     public override void Upgrade()

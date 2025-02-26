@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BlackholeAttackStrategy : IAttackStrategy
+public class BlackholeAttackStrategy : IWeaponActionStrategy
 {
     BlackholeData _data;
     Transform _myTransform;

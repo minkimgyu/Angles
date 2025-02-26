@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class RocketAttackStrategy : IAttackStrategy
+public class RocketAttackStrategy : IWeaponActionStrategy
 {
     RocketData _rocketData;
     Action OnHit;

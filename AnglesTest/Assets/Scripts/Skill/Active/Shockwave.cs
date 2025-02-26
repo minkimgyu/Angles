@@ -62,7 +62,7 @@ public class Shockwave : BaseSkill
                     _data.TargetTypes
                 );
 
-                Damage.HitCircleRange(damageData, casterTransform.position, _data.Range, true, Color.red, 3);
+                Damage.HitCircleRange(damageData, casterTransform.position, _data.Range * _data.SizeMultiplier, true, Color.red, 3);
 
                 _delayTimer.Reset();
                 break;

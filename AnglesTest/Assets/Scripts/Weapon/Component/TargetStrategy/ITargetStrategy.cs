@@ -2,13 +2,21 @@ using DamageUtility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public interface ITargetStrategy
 {
     List<ITarget> GetTargets() { return default; }
-    List<DamageableTargetingStrategy.TargetData> GetDamageableTargets() { return default; }
+    List<BladeTargetingStrategy.TargetData> GetDamageableTargets() { return default; }
     List<ForceTargetingStrategy.TargetData> GetForceTargets() { return default; }
+
+    void OnTargetEnter(ITarget target) { }
+    void OnTargetExit(ITarget target) { }
+
+    void OnTargetEnter(ITarget target, IDamageable damageable) { }
+    void OnTargetExit(ITarget target, IDamageable damageable) { }
+
+    void OnTargetEnter(ITarget target, IForce absorbable, IDamageable damageable) { }
+    void OnTargetExit(ITarget target, IForce absorbable, IDamageable damageable) { }
 }
 
 public class NoTargetingStrategy : ITargetStrategy
@@ -29,18 +37,18 @@ public class TargetTargetingStrategy : ITargetStrategy
 
     public List<ITarget> GetTargets() { return _targetDatas; }
 
-    void OnTargetEnter(ITarget target)
+    public void OnTargetEnter(ITarget target)
     {
         _targetDatas.Add(target);
     }
 
-    void OnTargetExit(ITarget target)
+    public void OnTargetExit(ITarget target)
     {
         _targetDatas.Remove(target);
     }
 }
 
-public class DamageableTargetingStrategy : ITargetStrategy
+public class BladeTargetingStrategy : ITargetStrategy
 {
     public class TargetData
     {
@@ -66,7 +74,7 @@ public class DamageableTargetingStrategy : ITargetStrategy
     DamageableCaptureComponent _damageableCaptureComponent;
     IAttackStat _attackStat;
 
-    public DamageableTargetingStrategy(DamageableCaptureComponent damageableCaptureComponent, IAttackStat attackStat)
+    public BladeTargetingStrategy(DamageableCaptureComponent damageableCaptureComponent, IAttackStat attackStat)
     {
         _attackStat = attackStat;
         _damageableCaptureComponent = damageableCaptureComponent;
@@ -76,14 +84,14 @@ public class DamageableTargetingStrategy : ITargetStrategy
 
     public List<TargetData> GetDamageableTargets() { return _targetDatas; }
 
-    void OnTargetEnter(ITarget target, IDamageable damageable)
+    public void OnTargetEnter(ITarget target, IDamageable damageable)
     {
         // 확인은 Attack 클래스에서 진행
         if (target.IsTarget(_attackStat.DamageableData._targetType) == false) return;
         _targetDatas.Add(new TargetData(Time.time, target, damageable));
     }
 
-    void OnTargetExit(ITarget target, IDamageable damageable)
+    public void OnTargetExit(ITarget target, IDamageable damageable)
     {
         TargetData targetData = _targetDatas.Find(x => x.Target == target && x.Damageable == damageable);
         _targetDatas.Remove(targetData);
@@ -130,7 +138,6 @@ public class ForceTargetingStrategy : ITargetStrategy
     }
 
     public List<TargetData> GetForceTargets() { return _targetDatas; }
-
 
     public void OnTargetEnter(ITarget target, IForce absorbable, IDamageable damageable)
     {
