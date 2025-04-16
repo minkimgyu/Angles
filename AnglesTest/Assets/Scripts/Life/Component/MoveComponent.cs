@@ -67,13 +67,13 @@ public class MoveComponent : MonoBehaviour
         _rigid.MovePosition(pos);
     }
 
-    public void RotateDirection(float rotationSpeed, float speedMultiplier)
+    public void RotateDirection(float rotationSpeed)
     {
         _rigid.angularVelocity = rotationSpeed; // 1. z축을 기준으로 각속도 설정 (회전 속도)
         Vector2 currentVelocity = _rigid.velocity; // 2. 현재 속도 벡터를 가져오기
 
         Vector2 newDirection = transform.right;  // 3. 현재 회전된 오브젝트의 오른쪽 방향을 가져오기 (transform.right)
-        _rigid.velocity = newDirection * currentVelocity.magnitude * speedMultiplier; // 4. 새로운 방향으로 속도 벡터를 수정 (속도 크기는 그대로 유지)
+        _rigid.velocity = newDirection * currentVelocity.magnitude; // 4. 새로운 방향으로 속도 벡터를 수정 (속도 크기는 그대로 유지)
     }
 
     public void FaceDirection(Vector2 direction)

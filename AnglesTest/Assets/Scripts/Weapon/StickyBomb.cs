@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
+using Skill.Strategy;
 
 public class StickyBomb : BaseWeapon
 {
@@ -16,6 +17,8 @@ public class StickyBomb : BaseWeapon
     public override void ModifyData(StickyBombDataModifier modifier)
     {
         modifier.Visit(_data);
+        _targetingStrategy.InjectTargetTypes(_data.TargetTypes);
+        _lifeTimeStrategy.ChangeLifetime(_data.Lifetime);
     }
 
     public override void Initialize(BaseFactory effectFactory) 
@@ -34,22 +37,26 @@ public class StickyBomb : BaseWeapon
         effect.Play();
     }
 
+    void OnHit(List<IDamageable> damageables)
+    {
+        _actionStrategy.Execute(damageables, _data.DamageableStat);
+        Explode();
+        Destroy(gameObject);
+    }
+
     public override void InitializeStrategy()
     {
+        base.InitializeStrategy();
         FollowComponent followComponent = GetComponent<FollowComponent>();
         followComponent.Initialize();
 
-        _targetStrategy = new NoTargetingStrategy();
-        _sizeStrategy = new NoSizeStrategy();
-        _actionStrategy = new StickyBombAttackStrategy(transform, _data);
+        _targetingStrategy = new CircleRangeTargetingStrategy(_data.Range, transform, OnHit);
+        _actionStrategy = new HitTargetStrategy();
         _lifeTimeStrategy = new ChangeableLifeTimeStrategy
         (
-            _data,
-            () =>
-            {
-                _actionStrategy.OnLifetimeCompleted();
-                Explode();
-                Destroy(gameObject);
+            () => 
+            { 
+                _targetingStrategy.Execute(); 
             }
         );
         _moveStrategy = new FollowingMoveStrategy(followComponent);

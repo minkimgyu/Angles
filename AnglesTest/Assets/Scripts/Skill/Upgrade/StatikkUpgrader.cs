@@ -56,12 +56,12 @@ public class StatikkUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         UpgradableData upgradeData = _upgradeDatas[index];
 
         data.Damage += upgradeData._damage;
-        data.Range += upgradeData._range;
+        data.RangeMultiplier += upgradeData._range;
         data.MaxTargetCount += upgradeData._maxTargetCount;
         data.MaxStackCount += upgradeData._maxStackCount;
 
         Debug.Log("_damage: " + data.Damage);
-        Debug.Log("_sizeMultiplier: " + data.Range);
+        Debug.Log("_rangeMultiplier: " + data.Range);
         Debug.Log("_maxTargetCount: " + data.MaxTargetCount);
         Debug.Log("_maxStackCount: " + data.MaxStackCount);
     }

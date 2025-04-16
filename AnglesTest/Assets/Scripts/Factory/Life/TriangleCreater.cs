@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Newtonsoft.Json;
+using Skill;
 
 [Serializable]
 public class TriangleData : EnemyData
 {
     [JsonProperty] private float _moveSpeed;
 
-    public TriangleData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, float moveSpeed) 
+    public TriangleData(UpgradeableStat<float> maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd, float moveSpeed) 
         : base(maxHp, targetType, dieEffectName,size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
@@ -21,7 +22,7 @@ public class TriangleData : EnemyData
     public override LifeData Copy()
     {
         return new TriangleData(
-            _maxHp, // EnemyData에서 상속된 값
+            _maxHp.Copy(), // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _destroyEffectName,
             _size, // EnemyData에서 상속된 값
@@ -63,9 +64,11 @@ public class TriangleCreater : LifeCreater
 
         foreach (var item in data.SkillData)
         {
-            BaseSkill skill = _skillFactory.Create(item.Key);
-            skill.Upgrade(item.Value);
-            caster.AddSkill(item.Key, skill);
+            for (int i = 0; i <= item.Value; i++)
+            {
+                BaseSkill skill = _skillFactory.Create(item.Key);
+                caster.AddSkill(item.Key, skill);
+            }
         }
 
         return life;

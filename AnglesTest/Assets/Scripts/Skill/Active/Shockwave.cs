@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class Shockwave : BaseSkill
 {
@@ -25,65 +27,42 @@ public class Shockwave : BaseSkill
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
+        _delayStrategy.ChangeDelay(_data.Delay);
     }
 
-    public override void OnUpdate()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        BaseEffect effect;
+        base.Initialize(upgradeableRatio, caster);
 
-        switch (_delayTimer.CurrentState)
-        {
-            case Timer.State.Ready:
-                if (_targets.Count == 0) return;
+        _targetingStrategy = new Skill.Strategy.CircleRangeTargetingStrategy(_caster, _data.Range, _data.TargetTypes);
+        _detectingStrategy = new Skill.Strategy.TargetDetectingStrategy(_data.TargetTypes);
 
+        _delayStrategy = new DelayRoutineStrategy(
+            _data.Delay,
+            () => _detectingStrategy.DetectTargets().Count > 0,
+            () => 
+            {
                 CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
-                if (castingComponent != null) castingComponent.CastSkill(_data.Delay);
+                if (castingComponent == null) return;
+                castingComponent.CastSkill(_data.Delay);
+            },
+            () => 
+            {
+                List<IDamageable> damageables = _targetingStrategy.GetDamageables();
+                _actionStrategy.Execute(damageables, new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
 
-                _delayTimer.Start(_data.Delay);
-                break;
-            case Timer.State.Finish:
+                Vector2 pos = _caster.GetComponent<Transform>().position;
+                _effectStrategy.SpawnEffect(pos);
+                _soundStrategy.PlaySound();
+            }
+        );
 
-                Transform casterTransform = _caster.GetComponent<Transform>();
-                ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Shockwave, casterTransform.position, 0.6f);
-
-                effect = _effectFactory.Create(BaseEffect.Name.ShockwaveEffect);
-                effect.ResetPosition(casterTransform.position);
-                effect.Play();
-
-                DamageableData damageData = new DamageableData
-                (
-                    _caster,
-                    new DamageStat(
-                        _data.Damage,
-                        _upgradeableRatio.AttackDamage,
-                        _data.AdRatio,
-                        _upgradeableRatio.TotalDamageRatio
-                    ),
-                    _data.TargetTypes
-                );
-
-                Damage.HitCircleRange(damageData, casterTransform.position, _data.Range * _data.SizeMultiplier, true, Color.red, 3);
-
-                _delayTimer.Reset();
-                break;
-            default:
-                break;
-        }
-    }
-
-    public override void OnCaptureEnter(ITarget target)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _targets.Add(target);
-    }
-
-    public override void OnCaptureExit(ITarget target)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _targets.Remove(target);
+        _soundStrategy = new PlaySoundStrategy(ISoundPlayable.SoundName.Knockback);
+        _effectStrategy = new ParticleEffectStrategy(BaseEffect.Name.ShockwaveEffect, _effectFactory);
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
+            _caster,
+           _upgradeableRatio,
+           _data.AdRatio
+        );
     }
 }

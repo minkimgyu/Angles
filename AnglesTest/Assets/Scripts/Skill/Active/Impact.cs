@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 using System;
-
+using Skill;
+using Skill.Strategy;
 public class Impact : BaseSkill
 {
     ImpactData _data;
@@ -16,49 +17,35 @@ public class Impact : BaseSkill
         _effectFactory = effectFactory;
     }
 
-    public override void OnAdd()
-    {
-        _useConstraintStrategy = new RandomConstraintStrategy(_data, _upgradeableRatio);
-    }
-
     public override void Upgrade()
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return false;
+        base.Initialize(upgradeableRatio, caster);
 
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Impact, 0.7f);
-        Debug.Log("Impact");
-
-        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
-        if (effect == null) return false;
-
-        effect.ResetPosition(contactPos);
-        effect.ResetSize(_data.RangeMultiplier);
-        effect.Play();
-
-        DamageableData damageData = new DamageableData
-        (
+        _useConstraintStrategy = new RandomConstraintStrategy(_data, _upgradeableRatio);
+        _targetingStrategy = new Skill.Strategy.CircleRangeTargetingStrategy(_caster, _data.Range, _data.TargetTypes);
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
             _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
+           _upgradeableRatio,
+           _data.AdRatio,
+           _data.GroggyDuration);
+        _effectStrategy = new ParticleEffectStrategy(BaseEffect.Name.ImpactEffect, _effectFactory);
+    }
 
-        Damage.HitCircleRange(damageData, contactPos, _data.Range * _data.RangeMultiplier, true, Color.red, 3);
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
+    {
+        List<IDamageable> damageables = _targetingStrategy.GetDamageables(targetObject, new Skill.Strategy.CircleRangeTargetingStrategy.ChangeableData(_data.RangeMultiplier));
+        if (damageables == null || damageables.Count == 0) return false; // 타겟이 없는 경우
+
+        _actionStrategy.Execute(damageables, new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
+
+        Vector2 pos = _caster.GetComponent<Transform>().position;
+        _effectStrategy.SpawnEffect(pos);
         return true;
     }
 }

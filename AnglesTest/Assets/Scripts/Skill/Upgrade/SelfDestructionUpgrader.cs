@@ -7,16 +7,16 @@ public class SelfDestructionUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
-        public UpgradableData(float damage, float range, int delay)
+        public UpgradableData(float damage, float rangeMultiplier, int delay)
         {
             _delay = delay;
             _damage = damage;
-            _range = range;
+            _rangeMultiplier = rangeMultiplier;
         }
 
         public int _delay;
         public float _damage;
-        public float _range;
+        public float _rangeMultiplier;
     }
 
     [JsonProperty] List<UpgradableData> _upgradeDatas;
@@ -36,7 +36,7 @@ public class SelfDestructionUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         UpgradableData upgradeData = _upgradeDatas[index];
 
         data.Damage += upgradeData._damage;
-        data.Range += upgradeData._range;
+        data.RangeMultiplier += upgradeData._rangeMultiplier;
         data.Delay += upgradeData._delay;
     }
 }

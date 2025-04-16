@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class ContactAttack : BaseSkill
 {
@@ -15,36 +17,26 @@ public class ContactAttack : BaseSkill
         _effectFactory = effectFactory;
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return false;
-
-        IDamageable damageable = targetObject.GetComponent<IDamageable>();
-        if (damageable == null) return false;
-
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        Debug.Log("ContactAttack");
-
-        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.HitEffect);
-        effect.ResetPosition(contactPos);
-        effect.Play();
-
-        DamageableData damageData = new DamageableData
-        (
+        base.Initialize(upgradeableRatio, caster);
+        _targetingStrategy = new Skill.Strategy.ContactTargetingStrategy(_data.TargetTypes);
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
             _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
+           _upgradeableRatio,
+           _data.AdRatio,
+           _data.GroggyDuration);
 
-        Damage.Hit(damageData, damageable);
+        _effectStrategy = new ParticleEffectStrategy(BaseEffect.Name.HitEffect, _effectFactory);
+    }
+
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
+    {
+        IDamageable damageable = _targetingStrategy.GetDamageable(targetObject);
+        if (damageable == null) return false; // 타겟이 없는 경우
+
+        _actionStrategy.Execute(damageable, new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
+        _effectStrategy.SpawnEffect(contactPos);
         return true;
     }
 }

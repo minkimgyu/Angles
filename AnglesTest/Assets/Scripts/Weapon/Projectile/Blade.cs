@@ -12,6 +12,9 @@ public class Blade : BaseWeapon, IProjectable
     public override void ModifyData(BladeDataModifier modifier)
     {
         modifier.Visit(_data);
+        _sizeStrategy.ChangeSize(_data.SizeMultiplier);
+        _lifeTimeStrategy.ChangeLifetime(_data.Lifetime);
+        _detectingStrategy.InjectTargetTypes(_data.TargetTypes);
     }
 
     public override void InjectData(BladeData data)
@@ -40,14 +43,15 @@ public class Blade : BaseWeapon, IProjectable
 
     public override void InitializeStrategy()
     {
+        base.InitializeStrategy();
         DamageableCaptureComponent damageableCaptureComponent = GetComponentInChildren<DamageableCaptureComponent>();
         MoveComponent moveComponent = GetComponent<MoveComponent>();
         moveComponent.Initialize();
 
-        _targetStrategy = new BladeTargetingStrategy(damageableCaptureComponent, _data);
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
-        _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
-        _actionStrategy = new BladeAttackStrategy(_data, _targetStrategy.GetDamageableTargets);
+        _detectingStrategy = new BladeDetectingStrategy(damageableCaptureComponent);
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(() => { Destroy(gameObject); });
+        _sizeStrategy = new ChangeableSizeStrategy(transform);
+        _actionStrategy = new BladeAttackStrategy(_data, _detectingStrategy.GetBladeTargets);
         _moveStrategy = new ReflectableProjectileMoveStrategy(moveComponent, transform);
     }
 

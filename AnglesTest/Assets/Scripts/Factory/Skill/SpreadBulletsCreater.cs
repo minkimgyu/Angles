@@ -3,18 +3,20 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using Skill;
 
 [Serializable]
 public class SpreadBulletsData : SkillData
 {
     [JsonProperty] private float _damage;
+    [JsonProperty] private float _delay;
+    [JsonProperty] private float _force;
+
     [JsonProperty] private float _adRatio;
     [JsonProperty] private float _groggyDuration;
 
     [JsonProperty] private BaseWeapon.Name _bulletName;
 
-    [JsonProperty] private float _delay;
-    [JsonProperty] private float _force;
     [JsonProperty] private float _bulletCount;
     [JsonProperty] private float _distanceFromCaster;
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
@@ -38,13 +40,15 @@ public class SpreadBulletsData : SkillData
 
         float delay,
         float force,
+
+        float groggyDuration,
         float bulletCount,
         float distanceFromCaster,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
         _adRatio = adRatio;
-        _groggyDuration = 0;
+        _groggyDuration = groggyDuration;
 
         _bulletName = bulletName;
 
@@ -64,6 +68,7 @@ public class SpreadBulletsData : SkillData
             _bulletName,
             _delay,
             _force,
+            _groggyDuration,
             _bulletCount,
             _distanceFromCaster,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사

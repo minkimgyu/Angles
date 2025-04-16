@@ -2,6 +2,8 @@ using DamageUtility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
+using Skill.Strategy;
 
 public class MagneticField : BaseSkill
 {
@@ -25,54 +27,25 @@ public class MagneticField : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override void OnUpdate()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        if (_delayTimer.CurrentState != Timer.State.Running && _damageableTargets.Count == 0) return;
+        base.Initialize(upgradeableRatio, caster);
+        _detectingStrategy = new DamageableDetectingStrategy(_data.TargetTypes);
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
+            _caster,
+           _upgradeableRatio,
+           _data.AdRatio
+        );
 
-        switch (_delayTimer.CurrentState)
-        {
-            case Timer.State.Ready:
-                _delayTimer.Start(_data.Delay);
-                break;
-            case Timer.State.Finish:
-
-                DamageableData damageData = new DamageableData
-                (
-                    _caster,
-                     new DamageStat(
-                        _data.Damage,
-                        _upgradeableRatio.AttackDamage,
-                        _data.AdRatio,
-                        _upgradeableRatio.TotalDamageRatio
-                    ),
-                    _data.TargetTypes
-                );
-
-
-                for (int i = 0; i < _damageableTargets.Count; i++)
-                {
-                    Damage.Hit(damageData, _damageableTargets[i]);
-                }
-                _delayTimer.Reset();
-                break;
-            default:
-                break;
-        }
-    }
-
-    public override void OnCaptureEnter(ITarget target, IDamageable damageable)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _damageableTargets.Add(damageable);
-    }
-
-    public override void OnCaptureExit(ITarget target, IDamageable damageable)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _damageableTargets.Remove(damageable);
+        _delayStrategy = new DelayRoutineStrategy(
+           _data.Delay,
+           () =>
+           {
+               return _detectingStrategy.DetectDamageables().Count != 0;
+           },
+           () => {
+               _actionStrategy.Execute(_detectingStrategy.DetectDamageables(), new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
+           }
+       );
     }
 }

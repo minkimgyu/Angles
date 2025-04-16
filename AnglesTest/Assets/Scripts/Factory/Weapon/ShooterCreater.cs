@@ -16,14 +16,21 @@ public class ShooterData : WeaponData
     private float _maxDistanceFromPlayer;
 
     public float ShootForce { get => _shootForce; set => _shootForce = value; }
-    public float FireDelay { get => _fireDelay; set => _fireDelay = value; }
+    [JsonIgnore] public float FireDelay { get => _fireDelay; set => _fireDelay = value; }
     public BaseWeapon.Name FireWeaponName { get => _fireWeaponName; set => _fireWeaponName = value; }
     public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
     public float FollowOffset { get => _followOffset; set => _followOffset = value; }
     public SerializableVector2 FollowOffsetDirection { get => _followOffsetDirection; set => _followOffsetDirection = value; }
     public float MaxDistanceFromPlayer { get => _maxDistanceFromPlayer; set => _maxDistanceFromPlayer = value; }
 
-    public ShooterData(float shootForce, float fireDelay, float moveSpeed, float followOffset, SerializableVector2 followOffsetDirection, float maxDistanceFromPlayer)
+    public ShooterData(
+        float shootForce,
+        float fireDelay,
+        float moveSpeed,
+        float followOffset,
+        SerializableVector2 followOffsetDirection,
+        float maxDistanceFromPlayer
+    )
     {
         _shootForce = shootForce;
         _fireDelay = fireDelay;

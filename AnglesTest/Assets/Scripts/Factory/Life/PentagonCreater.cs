@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Newtonsoft.Json;
+using Skill;
 
 [System.Serializable]
 public class PentagonData : EnemyData
@@ -15,7 +16,7 @@ public class PentagonData : EnemyData
     [JsonIgnore] public float StopDistance { get => _stopDistance; set => _stopDistance = value; }
     [JsonIgnore] public float Gap { get => _gap; set => _gap = value; }
 
-    public PentagonData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+    public PentagonData(UpgradeableStat<float> maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
         float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
@@ -26,7 +27,7 @@ public class PentagonData : EnemyData
     public override LifeData Copy()
     {
         return new PentagonData(
-            _maxHp, // EnemyData에서 상속된 값
+            _maxHp.Copy(), // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _destroyEffectName,
             _size, // EnemyData에서 상속된 값
@@ -67,9 +68,11 @@ public class PentagonCreater : LifeCreater
 
         foreach (var item in data.SkillData)
         {
-            BaseSkill skill = _skillFactory.Create(item.Key);
-            skill.Upgrade(item.Value);
-            caster.AddSkill(item.Key, skill);
+            for (int i = 0; i <= item.Value; i++)
+            {
+                BaseSkill skill = _skillFactory.Create(item.Key);
+                caster.AddSkill(item.Key, skill);
+            }
         }
 
         return life;

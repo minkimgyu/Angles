@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
 
 [System.Serializable]
 public class UpgradeCooltimeData : SkillData

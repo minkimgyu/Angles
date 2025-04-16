@@ -7,17 +7,17 @@ public class KnockbackUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
-        public UpgradableData(float damage, float sizeMultiplier)
+        public UpgradableData(float damage, float rangeMultiplier)
         {
             _damage = damage;
-            _sizeMultiplier = sizeMultiplier;
+            _rangeMultiplier = rangeMultiplier;
         }
 
         [JsonProperty] private float _damage;
-        [JsonProperty] private float _sizeMultiplier;
+        [JsonProperty] private float _rangeMultiplier;
 
         [JsonIgnore] public float Damage { get => _damage; }
-        [JsonIgnore] public float SizeMultiplier { get => _sizeMultiplier; }
+        [JsonIgnore] public float RangeMultiplier { get => _rangeMultiplier; }
     }
 
     [JsonProperty] List<UpgradableData> _upgradeDatas;
@@ -40,7 +40,7 @@ public class KnockbackUpgrader : BaseSkillUpgrader, IUpgradeVisitor
         UpgradableData upgradeData = _upgradeDatas[index];
 
         data.Damage += upgradeData.Damage;
-        data.RangeMultiplier += upgradeData.SizeMultiplier;
+        data.RangeMultiplier += upgradeData.RangeMultiplier;
 
         Debug.Log("_damage: " + data.Damage);
         Debug.Log("_rangeMultiplier: " + data.RangeMultiplier);

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class SpawnBlade : BaseSkill
 {
@@ -15,54 +17,38 @@ public class SpawnBlade : BaseSkill
         _weaponFactory = weaponFactory;
     }
 
-    public override void OnAdd()
-    {
-        _useConstraintStrategy = new RandomConstraintStrategy(_data, _upgradeableRatio);
-    }
-
     public override void Upgrade()
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
+        base.Initialize(upgradeableRatio, caster);
+
+        _useConstraintStrategy = new RandomConstraintStrategy(_data, _upgradeableRatio);
+        _targetingStrategy = new Skill.Strategy.ContactTargetingStrategy(_data.TargetTypes);
+
+        _actionStrategy = new SpawnBladeStrategy(
+            _caster,
+           _upgradeableRatio,
+           _data.AdRatio,
+           _data.Force,
+           //_data.Damage,
+           //_data.SizeMultiplier,
+           //_data.Lifetime,
+           _data.GroggyDuration,
+           _data.TargetTypes,
+           _weaponFactory);
+    }
+
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
+    {
+        ITarget target = _targetingStrategy.GetTarget(targetObject);
         if (target == null) return false;
 
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blade);
-        if (weapon == null) return false;
-
-        Transform casterTransform = _caster.GetComponent<Transform>();
-
-        DamageableData damageData = new DamageableData
-        (
-            _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
-
-        BladeDataModifier bladeDataModifier = new BladeDataModifier(damageData, _data.SizeMultiplier, _data.Lifetime);
-
-        weapon.ModifyData(bladeDataModifier);
-        weapon.Activate();
-        weapon.ResetPosition(casterTransform.position);
-
-        IProjectable projectile = weapon.GetComponent<IProjectable>();
-        if (projectile == null) return false;
-
-        Vector2 direction = casterTransform.right;
-        projectile.Shoot(direction, _data.Force);
+        _actionStrategy.Execute(new SpawnBladeStrategy.ChangeableData(_data.Damage, _data.SizeMultiplier, _data.Lifetime));
         return true;
     }
 }

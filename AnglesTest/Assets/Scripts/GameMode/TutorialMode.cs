@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DG.Tweening;
+using Skill;
 
 public class TutorialMode : DungeonMode
 {

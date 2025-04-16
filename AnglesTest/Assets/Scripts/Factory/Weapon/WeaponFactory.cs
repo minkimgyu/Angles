@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-abstract public class WeaponData : IAttackStat
+abstract public class WeaponData
 {
-    public DamageableData DamageableData { get; set; }
+    [JsonIgnore] DamageableData _damageableData;
+    [JsonIgnore] List<ITarget.Type> _targetTypes;
+
+    [JsonIgnore] public DamageableData DamageableStat { get => _damageableData; set => _damageableData = value; }
+    [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public abstract WeaponData Copy();
 }

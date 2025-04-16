@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class SelfDestruction : BaseSkill
 {
-    Timer _delayTimer;
-
     SelfDestructionData _data;
     BaseFactory _effectFactory;
 
@@ -16,63 +16,45 @@ public class SelfDestruction : BaseSkill
         _data = data;
         _upgrader = upgrader;
         _effectFactory = effectFactory;
-        _delayTimer = new Timer();
     }
 
     public override void Upgrade()
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
+
+        _delayStrategy.ChangeDelay(_data.Delay);
     }
 
-    public override void OnDamaged(float ratio)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        if (ratio > _data.HpRatioOnInvoke) return;
-        if (_delayTimer.CurrentState != Timer.State.Ready) return;
+        base.Initialize(upgradeableRatio, caster);
 
-        _delayTimer.Start(_data.Delay);
-        CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
-        if (castingComponent == null) return;
+        _targetingStrategy = new Skill.Strategy.CircleRangeTargetingStrategy(_caster, _data.Range, _data.TargetTypes);
 
-        castingComponent.CastSkill(_data.Delay);
-    }
-
-    public override void OnUpdate()
-    {
-        if (_delayTimer.CurrentState == Timer.State.Finish)
+        _delayStrategy = new DelayOnDamageStrategy(_data.Delay, _data.HpRatioOnInvoke, 
+        () =>
         {
-            Debug.Log("SelfDestruction");
-            BaseEffect effect = _effectFactory.Create(BaseEffect.Name.ImpactEffect);
-            if (effect == null) return;
+            CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
+            if (castingComponent == null) return;
+            castingComponent.CastSkill(_data.Delay);
+        },
+        () =>
+        {
+            List<IDamageable> damageables = _targetingStrategy.GetDamageables(new Skill.Strategy.CircleRangeTargetingStrategy.ChangeableData(_data.RangeMultiplier));
+            _actionStrategy.Execute(damageables, new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
 
-            Transform casterTransform = _caster.GetComponent<Transform>();
+            Vector2 pos = _caster.GetComponent<Transform>().position;
+            _effectStrategy.SpawnEffect(pos);
+            _soundStrategy.PlaySound();
+        });
 
-            effect.ResetPosition(casterTransform.position);
-            effect.Play();
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
+            _caster,
+           _upgradeableRatio,
+           _data.AdRatio);
 
-            IDamageable damageable = _caster.GetComponent<IDamageable>();
-            if (damageable == null) return;
-
-            ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Explosion, casterTransform.position, 0.3f);
-
-            DamageableData selfDamageData = new DamageableData(_caster, new DamageStat(Damage.InstantDeathDamage));
-            Damage.Hit(selfDamageData, damageable);
-
-            DamageableData damageData = new DamageableData
-            (
-                _caster,
-               new DamageStat
-               (
-                    _data.Damage,
-                    _upgradeableRatio.AttackDamage,
-                    _data.AdRatio,
-                    _upgradeableRatio.TotalDamageRatio
-               ),
-                _data.TargetTypes
-            );
-
-
-            Damage.HitCircleRange(damageData, casterTransform.position, _data.Range, true, Color.red, 3);
-        }
+        _soundStrategy = new PlaySoundStrategy(ISoundPlayable.SoundName.Impact);
+        _effectStrategy = new ParticleEffectStrategy(BaseEffect.Name.ImpactEffect, _effectFactory);
     }
 }

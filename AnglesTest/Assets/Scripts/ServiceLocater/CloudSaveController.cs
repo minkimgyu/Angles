@@ -50,7 +50,7 @@ public class CloudSaveController : MonoBehaviour
         }
     }
 
-    void CreateCloudViewer(SaveData saveData, Transform parent)
+    void CreateSaveItems(SaveData saveData, Transform parent)
     {
         CreateCloudViewer(_goldIconAsset, saveData._gold.ToString(), parent);
 
@@ -64,6 +64,8 @@ public class CloudSaveController : MonoBehaviour
 
                     for (int i = 0; i < levels.Count; i++)
                     {
+                        if (saveData._levelInfos.ContainsKey(levels[i]) == false) continue; // 키 값이 없으면 넘어감
+
                         string info = $"{saveData._levelInfos[levels[i]].CompleteLevel} / {_levelDatas[levels[i]].MaxLevel}";
                         CreateCloudViewer(_levelIconAsset[levels[i]], info, parent);
                     }
@@ -73,6 +75,8 @@ public class CloudSaveController : MonoBehaviour
 
                     for (int i = 0; i < levels.Count; i++)
                     {
+                        if (saveData._levelInfos.ContainsKey(levels[i]) == false) continue; // 키 값이 없으면 넘어감
+
                         string completeTime = $"{ saveData._levelInfos[levels[i]].CompleteDuration / 60 }:{ (saveData._levelInfos[levels[i]].CompleteDuration % 60).ToString("D2")}";
                         string totalDuration = $"{_levelDatas[levels[i]].TotalDuration / 60 }:{ (_levelDatas[levels[i]].TotalDuration % 60).ToString("D2")}";
                         CreateCloudViewer(_levelIconAsset[levels[i]], $"{completeTime} / {totalDuration}", parent);
@@ -83,6 +87,8 @@ public class CloudSaveController : MonoBehaviour
 
                     for (int i = 0; i < levels.Count; i++)
                     {
+                        if (saveData._levelInfos.ContainsKey(levels[i]) == false) continue; // 키 값이 없으면 넘어감
+
                         string info = $"{saveData._levelInfos[levels[i]].CompleteLevel} / {_levelDatas[levels[i]].MaxLevel}";
                         CreateCloudViewer(_levelIconAsset[levels[i]], info, parent);
                     }
@@ -144,11 +150,11 @@ public class CloudSaveController : MonoBehaviour
                 JsonParser jsonParser = new JsonParser();
                 SaveData cloudSave = jsonParser.JsonToObject<SaveData>(saveData);
 
-                CreateCloudViewer(cloudSave, _cloudViewerParent);
+                CreateSaveItems(cloudSave, _cloudViewerParent);
             });
 
             SaveData clientData = ServiceLocater.ReturnSaveManager().GetSaveData();
-            CreateCloudViewer(clientData, _localViewerParent);
+            CreateSaveItems(clientData, _localViewerParent);
         }
         else
         {
@@ -180,7 +186,7 @@ public class CloudSaveController : MonoBehaviour
                         SaveData cloudData = jsonParser.JsonToObject<SaveData>(saveJson);
 
                         DestroyCloudViewer(_cloudViewerParent); // 부수고
-                        CreateCloudViewer(cloudData, _cloudViewerParent); // 다시 생성해줌
+                        CreateSaveItems(cloudData, _cloudViewerParent); // 다시 생성해줌
                     });
                 });
                 break;
@@ -195,7 +201,7 @@ public class CloudSaveController : MonoBehaviour
                     SaveData saveData = ServiceLocater.ReturnSaveManager().GetSaveData();
 
                     DestroyCloudViewer(_localViewerParent); // 부수고
-                    CreateCloudViewer(saveData, _localViewerParent); // 다시 생성해줌
+                    CreateSaveItems(saveData, _localViewerParent); // 다시 생성해줌
                 });
                 break;
         }
@@ -217,11 +223,19 @@ public class CloudSaveController : MonoBehaviour
         _statIconAsset = statIconAsset;
         _levelIconAsset = levelIconAsset;
 
+        Debug.Log("_skinIconAsset" + _skinIconAsset.Count);
+        Debug.Log("_statIconAsset" + _statIconAsset.Count);
+        Debug.Log("_levelIconAsset" + _levelIconAsset.Count);
+
+
         _goldIconAsset = goldIconAsset;
 
         _levelDatas = levelDatas;
         _statDatas = statDatas;
         _viewerFactory = viewerFactory;
+
+        Debug.Log("_levelDatas" + _levelDatas.Count);
+        Debug.Log("_statDatas" + _statDatas.Count);
 
         _closeBtn.onClick.AddListener(() => { Activate(false); });
 

@@ -83,6 +83,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - LevelIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed36271536ebee443b1cd5c635b6cd99
+    m_Address: HexatricChapter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelIcon
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 198f0148f4768a34c8f815b425dca1a1, type: 2}
   m_SchemaSet:

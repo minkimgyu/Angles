@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class SpawnStickyBomb : BaseSkill
 {
@@ -15,9 +17,19 @@ public class SpawnStickyBomb : BaseSkill
         _weaponFactory = weaponFactory;
     }
 
-    public override void OnAdd()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
+        base.Initialize(upgradeableRatio, caster);
         _useConstraintStrategy = new CooltimeConstraintStrategy(_data, _upgradeableRatio);
+        _targetingStrategy = new Skill.Strategy.ContactTargetingStrategy(_data.TargetTypes);
+
+        _actionStrategy = new SpawnStickyBombStrategy(_caster,
+            _upgradeableRatio,
+            _data.AdRatio,
+            _data.Delay,
+            _data.GroggyDuration,
+            _data.TargetTypes,
+            _weaponFactory);
     }
 
     public override void Upgrade()
@@ -26,41 +38,12 @@ public class SpawnStickyBomb : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return false;
-
-        Vector3 targetPos = target.GetPosition();
-
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        IFollowable followable = targetObject.GetComponent<IFollowable>();
+        IFollowable followable = _targetingStrategy.GetFollowableTarget(targetObject);
         if (followable == null) return false;
 
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.StickyBomb);
-        if (weapon == null) return false;
-
-        DamageableData damageData = new DamageableData
-        (
-            _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
-
-        StickyBombDataModifier stickyBombDataModifier = new StickyBombDataModifier(damageData, _data.Delay);
-
-        weapon.ModifyData(stickyBombDataModifier);
-        weapon.Activate();
-        weapon.ResetPosition(targetPos);
-        weapon.InjectFollower(followable);
+        _actionStrategy.Execute(followable, new Skill.Strategy.SpawnStickyBombStrategy.ChangeableData(_data.Damage));
         return true;
     }
 }

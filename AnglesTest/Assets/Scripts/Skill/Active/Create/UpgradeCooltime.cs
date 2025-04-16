@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
+using Skill.Strategy;
 
 public class UpgradeCooltime : BaseSkill
 {
@@ -11,22 +13,10 @@ public class UpgradeCooltime : BaseSkill
         _data = data;
     }
 
-    public override void Upgrade()
-    {
-        base.Upgrade();
-        UpgradeStat();
-    }
 
-    public override void OnAdd()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        UpgradeStat();
-    }
-
-    void UpgradeStat()
-    {
-        IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
-        if (visitor == null) return;
-
-        visitor.Upgrade(_data.CooltimeStatModifier, UpgradePoint - 1);
+        base.Initialize(upgradeableRatio, caster);
+        _actionStrategy = new UpgradeStatStrategy(_caster, _data.CooltimeStatModifier, () => { return UpgradePoint; });
     }
 }

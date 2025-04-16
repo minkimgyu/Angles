@@ -166,7 +166,7 @@ public struct SaveData
             _selectedLevel[GameMode.Type.Survival] = GameMode.Level.PyramidSurvival;
         }
 
-        // 만약 Survival 키에 담긴 레벨이 없다면 진행
+        // 만약 Tutorial 키에 담긴 레벨이 없다면 진행
         if (_selectedLevel.ContainsKey(GameMode.Type.Tutorial) == false)
         {
             _selectedLevel[GameMode.Type.Tutorial] = GameMode.Level.MainTutorial;

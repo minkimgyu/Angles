@@ -8,7 +8,7 @@ public class ShootState : State<Player.ActionState>
     Action<bool, float> ChangeBodyScale;
 
     Action<bool> SetInvincible;
-    Action<GameObject, Vector3> OnReflect;
+    Action<GameObject, Vector2, Vector2> OnReflect;
 
     float _ratio;
 
@@ -29,7 +29,7 @@ public class ShootState : State<Player.ActionState>
         MoveComponent moveComponent,
 
         Action<bool, float> ChangeBodyScale,
-        Action<GameObject, Vector3> OnReflect,
+        Action<GameObject, Vector2, Vector2> OnReflect,
 
         Action<bool> SetInvincible) : base(fsm)
     {
@@ -69,7 +69,7 @@ public class ShootState : State<Player.ActionState>
         CollisionTutorialEvent?.Invoke();
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Bounce, 0.6f);
-        OnReflect?.Invoke(targetObject, contactPos);
+        OnReflect?.Invoke(targetObject, contactPos, contactNormal);
 
         Vector2 reflectDirection = Vector2.Reflect(_myTransform.right, contactNormal);
         _myTransform.right = reflectDirection;
@@ -106,7 +106,7 @@ public class ShootState : State<Player.ActionState>
     {
         // direction 방향으로 raycast를 쏴서 앞에 뭔가 있으면 반대로 튕기게 하기
         // 나중에 크기 키우면 변경해줘야함
-        float raycastDistance = 0.2f + 0.5f;
+        float raycastDistance = 1.2f + 0.5f;
         float raycastDistanceFrom = 0f;
 
         RaycastHit2D hit = Physics2D.Raycast(_myTransform.position + (Vector3)_myTransform.right * raycastDistanceFrom, _myTransform.right, raycastDistance, _layerMask);

@@ -5,24 +5,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class RocketData : WeaponData, ILifetimeStat
+public class RocketData : WeaponData
 {
     [JsonProperty] private float _range;
     [JsonIgnore] public float Range { get => _range; set => _range = value; }
 
-    public float Lifetime { get; set; }
+    [JsonProperty] float _lifetime;
+    [JsonIgnore] public float Lifetime { get => _lifetime; set => _lifetime = value; }
 
     public RocketData(float range, float lifeTime)
     {
         _range = range;
-        Lifetime = lifeTime;
+        _lifetime = lifeTime;
     }
 
     public override WeaponData Copy()
     {
         return new RocketData(
             _range,
-            Lifetime
+            _lifetime
         );
     }
 }

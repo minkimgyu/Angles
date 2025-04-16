@@ -8,7 +8,7 @@ public interface ISkillUpgradable
     public int MaxUpgradePoint { get; }
 
     void Upgrade();
-    void Upgrade(int level);
+    //void Upgrade(int level);
 }
 
 public interface IStatUpgradable

@@ -12,6 +12,8 @@ public class Bullet : BaseWeapon, IProjectable
     public override void ModifyData(BulletDataModifier modifier)
     {
         modifier.Visit(_data);
+        _targetingStrategy.InjectTargetTypes(_data.TargetTypes);
+        _lifeTimeStrategy.ChangeLifetime(_data.Lifetime);
     }
 
     public override void InjectData(BulletData data)
@@ -32,13 +34,17 @@ public class Bullet : BaseWeapon, IProjectable
 
     public override void InitializeStrategy()
     {
+        base.InitializeStrategy();
         MoveComponent moveComponent = GetComponent<MoveComponent>();
         moveComponent.Initialize(); // 초기화 후 Inject
 
-        _targetStrategy = new NoTargetingStrategy();
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, OnHit);
-        _sizeStrategy = new NoSizeStrategy();
-        _actionStrategy = new BulletAttackStrategy(_data, OnHit);
+        _targetingStrategy = new ContactTargetingStrategy((damageable) => 
+        { 
+            _actionStrategy.Execute(damageable, _data.DamageableStat); 
+            OnHit(); 
+        });
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(OnHit);
+        _actionStrategy = new HitTargetStrategy();
         _moveStrategy = new ProjectileMoveStrategy(moveComponent, transform);
     }
 

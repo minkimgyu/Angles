@@ -1,10 +1,25 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 {
-    LifeData _lifeData;
+    protected UpgradeableStat<float> Hp
+    {
+        get { return _hp; }
+    }
+
+    UpgradeableStat<float> _maxHp;
+    UpgradeableStat<float> _hp;
+
+    UpgradeableStat<float> _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
+    UpgradeableStat<float> _damageReductionRatio; // 데미지 감소 수치
+
+    ITarget.Type _targetType;
+    BaseEffect.Name _destroyEffectName;
+
+    //LifeData _lifeData;
     protected Timer _groggyTimer = new Timer();
     protected Timer _autoHealTimer = new Timer();
 
@@ -84,15 +99,30 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public virtual void Initialize()
     {
-        _displayDamageComponent = new DisplayPointComponent(_lifeData.TargetType, _effectFactory);
+        _displayDamageComponent = new DisplayPointComponent(_targetType, _effectFactory);
         _autoHealTimer.Start(oneTick);
     }
 
-    protected void SetUp(LifeData data) { _lifeData = data; }
-    protected virtual void SetUp(LifeData data, DropData dropData) { }
+    protected void SetUp(LifeData data) 
+    {
+        _maxHp = data.MaxHp;
+        _hp = data.MaxHp.Copy();
+        data.OnMaxHpChanged += (value) => { _maxHp.Value += value; _hp.Value += value; };
+
+        _autoHpRecoveryPoint = data.AutoHpRecoveryPoint;
+        _damageReductionRatio = data.DamageReductionRatio;
+        _destroyEffectName = data.DestroyEffectName;
+        _targetType = data.TargetType;
+    }
+
+    protected virtual void SetUp(
+        LifeData data,
+        DropData dropData) 
+    {
+        SetUp(data);
+    }
 
     public virtual void InjectData(PlayerData data) { SetUp(data); }
-
     public virtual void InjectData(TriconData data, DropData dropData) { SetUp(data, dropData); }
     public virtual void InjectData(RhombusData data, DropData dropData) { SetUp(data, dropData); }
     public virtual void InjectData(PentagonicData data, DropData dropData) { SetUp(data, dropData); }
@@ -123,7 +153,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     public virtual void Revive() 
     {
         _lifeState = LifeState.Alive;
-        GetHeal(_lifeData.MaxHp);
+        GetHeal(_maxHp.Value);
     }
 
     public virtual void SetInvincible()
@@ -133,7 +163,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     protected virtual void OnDie()
     {
-        BaseEffect effect = _effectFactory.Create(_lifeData.DestroyEffectName);
+        BaseEffect effect = _effectFactory.Create(_destroyEffectName);
         effect.ResetPosition(transform.position);
         effect.Play();
     }
@@ -142,13 +172,13 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
     {
         if(point == 0) return;
 
-        _lifeData.Hp += point;
-        OnHpChangeRequested?.Invoke(_lifeData.Hp / _lifeData.MaxHp);
+        _hp.Value += point;
+        OnHpChangeRequested?.Invoke(_hp.Value / _maxHp.Value);
         _displayDamageComponent.SpawnHealTxt(point, transform.position);
 
-        if (_lifeData.MaxHp < _lifeData.Hp)
+        if (_maxHp.Value < _hp.Value)
         {
-            _lifeData.Hp = _lifeData.MaxHp;
+            _hp.Value = _maxHp.Value;
         }
     }
 
@@ -160,7 +190,7 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
         if (_autoHealTimer.CurrentState != Timer.State.Running)
         {
-            GetHeal(_lifeData.AutoHpRecoveryPoint);
+            GetHeal(_autoHpRecoveryPoint.Value);
             _autoHealTimer.Reset();
             _autoHealTimer.Start(oneTick);
         }
@@ -191,9 +221,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
         //bool canDamage = damageableData._targetType.Contains(_lifeData.TargetType);
         //if (canDamage == false) return;
 
-        float finalDamage = damageableData.CalculateDamage(_lifeData.DamageReductionRatio);
-        _lifeData.Hp -= finalDamage;
-        OnHpChangeRequested?.Invoke(_lifeData.Hp / _lifeData.MaxHp);
+        float finalDamage = damageableData.CalculateDamage(_damageReductionRatio.Value);
+        _hp.Value -= finalDamage;
+        OnHpChangeRequested?.Invoke(_hp.Value / _maxHp.Value);
 
         ICaster caster = damageableData._caster;
         if (caster != null) caster.GetDamageData(damageableData);
@@ -206,9 +236,9 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
         _displayDamageComponent.SpawnDamageTxt(finalDamage, transform.position);
 
-        if (_lifeData.Hp <= 0)
+        if (_hp.Value <= 0)
         {
-            _lifeData.Hp = 0;
+            _hp.Value = 0;
             _lifeState = LifeState.Die;
             OnDie();
         }
@@ -221,6 +251,6 @@ abstract public class BaseLife : MonoBehaviour, IDamageable, ITarget
 
     public bool IsTarget(List<ITarget.Type> types)
     {
-        return types.Contains(_lifeData.TargetType);
+        return types.Contains(_targetType);
     }
 }

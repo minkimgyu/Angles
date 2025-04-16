@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Skill;
 
 public class NoUpgradeableData : IUpgradeableSkillData
 {
@@ -72,11 +73,11 @@ public class PlayerData : LifeData, IUpgradeableSkillData
     public override LifeData Copy()
     {
         return new PlayerData(
-            _maxHp, // LifeData에서 상속된 값
+            _maxHp.Copy(), // LifeData에서 상속된 값
             _targetType, // LifeData에서 상속된 값
             _destroyEffectName,
-            _autoHpRecoveryPoint, // LifeData에서 상속된 값
-            _damageReductionRatio, // LifeData에서 상속된 값
+            _autoHpRecoveryPoint.Copy(), // LifeData에서 상속된 값
+            _damageReductionRatio.Copy(), // LifeData에서 상속된 값
 
             AttackDamage,
             TotalDamageRatio,
@@ -103,12 +104,12 @@ public class PlayerData : LifeData, IUpgradeableSkillData
     }
 
     public PlayerData(
-        float maxHp, 
+        UpgradeableStat<float> maxHp, 
         ITarget.Type targetType,
         BaseEffect.Name dieEffectName,
 
-        float autoRecoveryPoint, 
-        float damageReductionRatio,
+        UpgradeableStat<float> autoRecoveryPoint, 
+        UpgradeableStat<float> damageReductionRatio,
 
         float attackDamage,
         float totalDamageRatio,

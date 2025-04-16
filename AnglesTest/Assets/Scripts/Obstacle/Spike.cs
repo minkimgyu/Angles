@@ -28,6 +28,6 @@ public class Spike : MonoBehaviour
 
         Vector3 direction = forceTaret.GetPosition() - (Vector3)collision.contacts[0].point;
         forceTaret.ApplyForce(direction, _force, ForceMode2D.Impulse);
-        Damage.Hit(damageData, damageable);
+        damageable.GetDamage(damageData);
     }
 }

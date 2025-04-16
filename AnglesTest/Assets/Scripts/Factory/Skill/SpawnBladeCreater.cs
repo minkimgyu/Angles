@@ -4,16 +4,17 @@ using UnityEngine;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Skill;
 
 [Serializable]
 public class SpawnBladeData : RandomSkillData
 {
     [JsonProperty] private float _damage;
-    [JsonProperty] private float _adRatio;
-    [JsonProperty] private float _groggyDuration;
-
     [JsonProperty] private float _lifetime;
     [JsonProperty] private float _sizeMultiplier;
+
+    [JsonProperty] private float _adRatio;
+    [JsonProperty] private float _groggyDuration;
 
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
     [JsonProperty] private float _force;
@@ -26,11 +27,20 @@ public class SpawnBladeData : RandomSkillData
     [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
     [JsonIgnore] public float Force { get => _force; set => _force = value; }
 
-    public SpawnBladeData(int maxUpgradePoint, float probability, float damage, float adRatio, float groggyDuration, float lifetime, float force, List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
+    public SpawnBladeData(
+        int maxUpgradePoint,
+        float probability,
+        float damage,
+        float adRatio,
+        float groggyDuration,
+        float lifetime,
+        float sizeMultiplier,
+        float force,
+        List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
         _damage = damage;
         _lifetime = lifetime;
-        _sizeMultiplier = 1;
+        _sizeMultiplier = sizeMultiplier;
 
         _force = force;
         _targetTypes = targetTypes;
@@ -47,6 +57,7 @@ public class SpawnBladeData : RandomSkillData
             _adRatio,
             _groggyDuration,
             _lifetime,
+            _sizeMultiplier,
             _force,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );

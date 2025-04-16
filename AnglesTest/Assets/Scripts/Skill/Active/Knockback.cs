@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class Knockback : BaseSkill
 {
@@ -16,54 +18,37 @@ public class Knockback : BaseSkill
         _upgrader = upgrader;
     }
 
-    public override void OnAdd()
-    {
-        _useConstraintStrategy = new CooltimeConstraintStrategy(_data, _upgradeableRatio);
-    }
-
     public override void Upgrade()
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos) 
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return false;
+        base.Initialize(upgradeableRatio, caster);
 
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        Transform casterTransform = _caster.GetComponent<Transform>();
-
-        IForce forceTarget = targetObject.GetComponent<IForce>();
-        if (forceTarget != null) forceTarget.ApplyForce(casterTransform.forward, _data.Force, ForceMode2D.Impulse);
-
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Knockback);
-        Debug.Log("Knockback");
-
-        BaseEffect effect = _effectFactory.Create(BaseEffect.Name.KnockbackEffect);
-        effect.ResetSize(_data.RangeMultiplier);
-        effect.ResetPosition(casterTransform.position, casterTransform.right);
-        effect.Play();
-
-        DamageableData damageData = new DamageableData
-        (
+        _useConstraintStrategy = new CooltimeConstraintStrategy(_data, _upgradeableRatio);
+        _targetingStrategy = new BoxRangeTargetingStrategy(_caster, _data.Size.V2, _data.Offset.V2, _data.TargetTypes);
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
             _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
+           _upgradeableRatio,
+           _data.AdRatio,
+           _data.GroggyDuration
         );
 
+        _effectStrategy = new DirectionParticleEffectStrategy(BaseEffect.Name.KnockbackEffect, _effectFactory);
+    }
 
-        Damage.HitBoxRange(damageData, casterTransform.position, _data.Offset.V2, casterTransform.right,
-            _data.Size.V2 * _data.RangeMultiplier, true, Color.red);
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
+    {
+        List<IDamageable> damageables = _targetingStrategy.GetDamageables(targetObject, new Skill.Strategy.BoxRangeTargetingStrategy.ChangeableData(_data.RangeMultiplier));
+        if (damageables == null || damageables.Count == 0) return false; // 타겟이 없는 경우
+
+        _actionStrategy.Execute(damageables, new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
+
+        Transform casterTransform = _caster.GetComponent<Transform>();
+        _effectStrategy.SpawnEffect(casterTransform.position, casterTransform.right);
         return true;
     }
 }

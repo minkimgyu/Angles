@@ -21,15 +21,19 @@ public class Blackhole : BaseWeapon
     public override void ModifyData(BlackholeDataModifier modifier)
     {
         modifier.Visit(_data);
+        _sizeStrategy.ChangeSize(_data.SizeMultiplier);
+        _lifeTimeStrategy.ChangeLifetime(_data.Lifetime);
+        _detectingStrategy.InjectTargetTypes(_data.TargetTypes);
     }
 
     public override void InitializeStrategy()
     {
+        base.InitializeStrategy();
         AbsorbableCaptureComponent absorbCaptureComponent = GetComponentInChildren<AbsorbableCaptureComponent>();
-        _targetStrategy = new ForceTargetingStrategy(absorbCaptureComponent, _data);
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
-        _sizeStrategy = new ChangeableSizeStrategy(transform, _data);
-        _actionStrategy = new BlackholeAttackStrategy(_data, transform, _targetStrategy.GetForceTargets);
+        _detectingStrategy = new BlackholeDetectingStrategy(absorbCaptureComponent);
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(() => { Destroy(gameObject); });
+        _sizeStrategy = new ChangeableSizeStrategy(transform);
+        _actionStrategy = new BlackholeAttackStrategy(_data, transform, _detectingStrategy.GetForceTargets);
         _moveStrategy = new NoMoveStrategy();
     }
 }

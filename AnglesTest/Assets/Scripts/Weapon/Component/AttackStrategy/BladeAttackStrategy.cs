@@ -7,11 +7,11 @@ using System;
 public class BladeAttackStrategy : IWeaponActionStrategy
 {
     BladeData _bladeData;
-    Func<List<BladeTargetingStrategy.TargetData>> GetDamageableTargets;
+    Func<List<BladeDetectingStrategy.TargetData>> GetDamageableTargets;
 
     public BladeAttackStrategy(
         BladeData bladeData,
-        Func<List<BladeTargetingStrategy.TargetData>> GetDamageableTargets)
+        Func<List<BladeDetectingStrategy.TargetData>> GetDamageableTargets)
     {
         _bladeData = bladeData;
         this.GetDamageableTargets = GetDamageableTargets;
@@ -19,7 +19,7 @@ public class BladeAttackStrategy : IWeaponActionStrategy
 
     public void OnUpdate()
     {
-        List<BladeTargetingStrategy.TargetData> targetDatas = GetDamageableTargets();
+        List<BladeDetectingStrategy.TargetData> targetDatas = GetDamageableTargets();
 
         for (int i = targetDatas.Count - 1; i >= 0; i--)
         {
@@ -27,7 +27,7 @@ public class BladeAttackStrategy : IWeaponActionStrategy
             if (targetDatas[i].HitCount == 0 || duration > _bladeData.AttackDelay)
             {
                 targetDatas[i].HitCount++;
-                Damage.Hit(_bladeData.DamageableData, targetDatas[i].Damageable);
+                targetDatas[i].Damageable.GetDamage(_bladeData.DamageableStat);
 
                 if (i < 0 || targetDatas.Count - 1 < i) continue;
                 targetDatas[i].CaptureTime = Time.time;

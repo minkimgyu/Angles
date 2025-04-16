@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-
+using Skill;
 
 // 업그레이드 가능한 스킬 데이터를 따로 Struct로 빼서 관리하자
 [Serializable]
 public class StatikkData : CooltimeSkillData
 {
     [JsonProperty] private float _damage;
+    [JsonProperty] private float _rangeMultiplier;
+
     [JsonProperty] private float _adRatio;
     [JsonProperty] private float _range;
+
     [JsonProperty] private int _maxTargetCount;
     [JsonProperty] private float _groggyDuration;
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
 
     [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
+    [JsonIgnore] public float RangeMultiplier { get => _rangeMultiplier; set => _rangeMultiplier = value; }
+
     [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
     [JsonIgnore] public float Range { get => _range; set => _range = value; }
     [JsonIgnore] public int MaxTargetCount { get => _maxTargetCount; set => _maxTargetCount = value; }
@@ -30,6 +34,7 @@ public class StatikkData : CooltimeSkillData
         float coolTime,
         int maxStackCount,
         float damage,
+        float rangeMultiplier,
         float adRatio,
         float range,
         int maxTargetCount,
@@ -37,6 +42,8 @@ public class StatikkData : CooltimeSkillData
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, coolTime, maxStackCount)
     {
         _damage = damage;
+        _rangeMultiplier = rangeMultiplier;
+
         _adRatio = adRatio;
         _range = range;
         _maxTargetCount = maxTargetCount;
@@ -50,7 +57,9 @@ public class StatikkData : CooltimeSkillData
             _maxUpgradePoint, // CooltimeSkillData에서 상속된 값
             _coolTime, // CooltimeSkillData에서 상속된 값
             _maxStackCount, // CooltimeSkillData에서 상속된 값
-            _damage,
+
+            _damage, // 깊은 복사 필요함
+            _rangeMultiplier, // 깊은 복사 필요함
             _adRatio,
             _range,
             _maxTargetCount,

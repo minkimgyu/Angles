@@ -51,7 +51,6 @@ public class MobStage : BattleStage
     {
         _enemyCount -= 1;
         if (_enemyCount > 0) return;
-        Debug.Log(_enemyCount);
 
         ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.StageClear, 0.8f);
         _baseStageController.OnStageClearRequested();

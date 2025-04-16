@@ -49,6 +49,11 @@ public class RushStrategy : IMoveStrategy
 
     State _state;
 
+    public void ApplyForce(Vector3 direction, float force, ForceMode2D mode)
+    {
+        _moveComponent.AddForce(direction, force, mode);
+    }
+
     Vector2 GetRandomDirection()
     {
         float x = Random.Range(0f, 1f);
@@ -65,8 +70,12 @@ public class RushStrategy : IMoveStrategy
                 if (_stateTimer.CurrentState == Timer.State.Finish)
                 {
                     _state = State.Rush;
+
+                    Vector2 dir = GetRandomDirection();
+                    _moveComponent.AddForce(dir, _moveSpeed);
+
                     _stateTimer.Reset();
-                    return;
+                    _stateTimer.Start(_rushDuration);
                 }
                 break;
             case State.Rush:
@@ -75,13 +84,10 @@ public class RushStrategy : IMoveStrategy
                 if(_stateTimer.CurrentState == Timer.State.Finish)
                 {
                     _state = State.Stop;
-                    _stateTimer.Reset();
-                    return;
-                }
 
-                Vector2 dir = GetRandomDirection();
-                _moveComponent.AddForce(dir, _moveSpeed);
-                _stateTimer.Start(_rushDuration);
+                    _stateTimer.Reset();
+                    _stateTimer.Start(_stopDuration);
+                }
                 break;
             default:
                 break;

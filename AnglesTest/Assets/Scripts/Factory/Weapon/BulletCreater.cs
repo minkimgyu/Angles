@@ -1,12 +1,15 @@
 using DamageUtility;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class BulletData : WeaponData, ILifetimeStat
+public class BulletData : WeaponData
 {
-    public float Lifetime { get; set; }
+    [JsonProperty] float _lifetime;
+    public float Lifetime { get => _lifetime; set => _lifetime = value; }
+
     public BulletData(float lifeTime)
     {
         Lifetime = lifeTime;

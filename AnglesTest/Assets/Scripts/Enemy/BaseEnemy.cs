@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Skill;
 
 abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 {
@@ -17,9 +18,11 @@ abstract public class BaseEnemy : BaseLife, ICaster, IFollowable, IForce
 
     public virtual Vector2 BottomPoint { get { return Vector2.zero; } }
 
-    protected override void SetUp(LifeData data, DropData dropData) 
+    protected override void SetUp(
+       LifeData data,
+       DropData dropData) 
     {
-        SetUp(data);
+        base.SetUp(data, dropData);
         _dropData = dropData;
     }
 

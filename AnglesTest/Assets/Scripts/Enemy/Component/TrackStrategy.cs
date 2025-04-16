@@ -48,6 +48,11 @@ public class TrackStrategy : IMoveStrategy
     float _stopDistance;
     float _gap;
 
+    public void ApplyForce(Vector3 direction, float force, ForceMode2D mode) 
+    { 
+        _moveComponent.AddForce(direction, force, mode);
+    }
+
     public virtual void InjectTarget(ITarget target)
     {
         _target = target;

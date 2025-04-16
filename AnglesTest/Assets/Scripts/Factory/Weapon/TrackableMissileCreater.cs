@@ -5,9 +5,10 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class TrackableMissileData : WeaponData, ILifetimeStat
+public class TrackableMissileData : WeaponData
 {
-    public float Lifetime { get; set; }
+    [JsonProperty] float _lifetime;
+    public float Lifetime { get => _lifetime; set => _lifetime = value; }
 
     float _moveSpeed;
     public float MoveSpeed { get { return _moveSpeed; } }

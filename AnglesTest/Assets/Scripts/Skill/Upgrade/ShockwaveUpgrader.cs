@@ -7,16 +7,16 @@ public class ShockwaveUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 {
     public struct UpgradableData
     {
-        public UpgradableData(float damage, float delay, float sizeMultiplier)
+        public UpgradableData(float damage, float delay, float rangeMultiplier)
         {
             _damage = damage;
             _delay = delay;
-            _sizeMultiplier = sizeMultiplier;
+            _rangeMultiplier = rangeMultiplier;
         }
 
         public float _damage;
         public float _delay;
-        public float _sizeMultiplier;
+        public float _rangeMultiplier;
     }
 
     [JsonProperty] List<UpgradableData> _upgradeDatas;
@@ -37,6 +37,6 @@ public class ShockwaveUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 
         data.Damage += upgradeData._damage;
         data.Delay += upgradeData._delay;
-        data.SizeMultiplier += upgradeData._sizeMultiplier;
+        data.RangeMultiplier += upgradeData._rangeMultiplier;
     }
 }

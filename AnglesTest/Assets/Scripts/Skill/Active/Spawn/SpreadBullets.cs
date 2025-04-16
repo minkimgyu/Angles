@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class SpreadBullets : BaseSkill
 {
@@ -25,82 +27,42 @@ public class SpreadBullets : BaseSkill
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
+        _delayStrategy.ChangeDelay(_data.Delay);
     }
 
-    void ShootBullet(float angle)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        Transform casterTransform = _caster.GetComponent<Transform>();
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.SpreadBullets, casterTransform.position, 0.3f);
+        base.Initialize(upgradeableRatio, caster);
+        _detectingStrategy = new Skill.Strategy.TargetDetectingStrategy(_data.TargetTypes);
 
-        float x = Mathf.Sin(angle * Mathf.Deg2Rad);
-        float y = Mathf.Cos(angle * Mathf.Deg2Rad);
-        Vector3 direction = new Vector3(x, y, 0);
-        Vector3 spawnPosition = casterTransform.position + direction * _data.DistanceFromCaster;
-
-        BaseWeapon weapon = _weaponFactory.Create(_data.BulletName);
-        if (weapon == null) return;
-
-        DamageableData damageData = new DamageableData
-        (
+        _actionStrategy = new SpreadBulletStrategy(
             _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
+           _upgradeableRatio,
+           _data.BulletCount,
+           _data.AdRatio,
+           _data.GroggyDuration,
+           _data.DistanceFromCaster,
+           _data.BulletName,
+           _weaponFactory,
+           _data.TargetTypes);
 
-        BulletDataModifier bulletDataModifier = new BulletDataModifier(damageData);
+        _soundStrategy = new PlaySoundStrategy(ISoundPlayable.SoundName.SpreadBullets);
 
-        weapon.ModifyData(bulletDataModifier);
-        weapon.Activate();
+        _delayStrategy = new DelayRoutineStrategy(
+           _data.Delay,
+           () => _detectingStrategy.DetectTargets().Count > 0,
+           () =>
+           {
+               CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
+               if (castingComponent == null) return;
 
-        weapon.ResetPosition(spawnPosition, direction);
-
-        IProjectable projectile = weapon.GetComponent<IProjectable>();
-        if (projectile == null) return;
-
-        projectile.Shoot(direction, _data.Force);
-    }
-
-    public override void OnUpdate()
-    {
-        switch (_delayTimer.CurrentState)
-        {
-            case Timer.State.Ready:
-                if (_targets.Count == 0) return;
-                _delayTimer.Start(_data.Delay);
-                break;
-            case Timer.State.Finish:
-
-                for (int i = 1; i <= _data.BulletCount; i++)
-                {
-                    float angle = 360f / _data.BulletCount * i; 
-                    ShootBullet(angle);
-                }
-                _delayTimer.Reset();
-                break;
-            default:
-                break;
-        }
-    }
-
-    public override void OnCaptureEnter(ITarget target)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _targets.Add(target);
-    }
-
-    public override void OnCaptureExit(ITarget target)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _targets.Remove(target);
+               castingComponent.CastSkill(_data.Delay);
+           },
+           () =>
+           {
+               _actionStrategy.Execute(new SpreadBulletStrategy.ChangeableData(_data.Damage, _data.Force));
+               _soundStrategy.PlaySound();
+           }
+       );
     }
 }

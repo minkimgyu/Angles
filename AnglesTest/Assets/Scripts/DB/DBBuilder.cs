@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
 
 public class DBBuilder : MonoBehaviour
 {
@@ -118,9 +119,9 @@ public class DBBuilder : MonoBehaviour
 
     HashSet<BaseSkill.Name> _upgradeableSkills = new HashSet<BaseSkill.Name>
     {
-        //BaseSkill.Name.Statikk,
-        //BaseSkill.Name.Knockback,
-        //BaseSkill.Name.Impact,
+        BaseSkill.Name.Statikk,
+        BaseSkill.Name.Knockback,
+        BaseSkill.Name.Impact,
         BaseSkill.Name.SpawnBlackhole,
         BaseSkill.Name.SpawnStickyBomb,
         BaseSkill.Name.SpawnBlade,
@@ -128,9 +129,9 @@ public class DBBuilder : MonoBehaviour
         BaseSkill.Name.SpawnRifleShooter,
         BaseSkill.Name.SpawnRocketShooter,
 
-        //BaseSkill.Name.UpgradeDamage,
-        //BaseSkill.Name.UpgradeCooltime,
-        //BaseSkill.Name.UpgradeShooting,
+        BaseSkill.Name.UpgradeDamage,
+        BaseSkill.Name.UpgradeCooltime,
+        BaseSkill.Name.UpgradeShooting,
     };
 
     HashSet<BaseSkill.Name> _tutorialUpgradeableSkills = new HashSet<BaseSkill.Name>
@@ -300,21 +301,21 @@ public class DBBuilder : MonoBehaviour
 
     Dictionary<BaseSkill.Name, SkillData> _skillDatas = new Dictionary<BaseSkill.Name, SkillData>
     {
-        { BaseSkill.Name.Statikk, new StatikkData(5, 1, 1, 10, 1f, 3, 3, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.Statikk, new StatikkData(5, 1, 1, 10, 1, 1f, 3, 3, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.Knockback, new KnockbackData(5, 3, 1, 20, 1, 3, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0), 20, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.Knockback, new KnockbackData(5, 3, 1, 20, 1, 1, 3, new SerializableVector2(5.5f, 3), new SerializableVector2(1.5f, 0), 20, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.Impact, new ImpactData(5, 0.2f, 20, 1, 2, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.Impact, new ImpactData(5, 0.2f, 20, 1, 1, 2, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.ReviveImpact, new ReviveImpactData(5, 1, 2, 1, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.ReviveImpact, new ReviveImpactData(5, 2, DamageUtility.Damage.InstantDeathDamage, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 0.1f, 0, 1, 0.3f, 3, new List<ITarget.Type> { ITarget.Type.Red })},
+        { BaseSkill.Name.SpawnBlackhole, new SpawnBlackholeData(5, 0.1f, 0, 1, 0.3f, 3f, 1f, new List<ITarget.Type> { ITarget.Type.Red })},
 
-        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 1, 0.1f, 0, 0.6f, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRifleShooter, new SpawnShooterData(5, BaseWeapon.Name.RifleShooter, 1, 0.6f, 0, 0.1f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 5, 0.5f, 0, 3, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnRocketShooter, new SpawnShooterData(5, BaseWeapon.Name.RocketShooter, 5, 3f, 0, 0.5f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
-        { BaseSkill.Name.SpawnBlade, new SpawnBladeData(5, 0.3f, 10, 1, 1, 3f, 8f, new List<ITarget.Type> { ITarget.Type.Red }) },
+        { BaseSkill.Name.SpawnBlade, new SpawnBladeData(5, 0.3f, 10, 1, 1, 3f, 1f, 8f, new List<ITarget.Type> { ITarget.Type.Red }) },
 
         { BaseSkill.Name.SpawnStickyBomb, new SpawnStickyBombData(5, 5f, 1, 30, 1, 1, 3, new List<ITarget.Type> { ITarget.Type.Red }) },
 
@@ -365,23 +366,68 @@ public class DBBuilder : MonoBehaviour
             )
         },
 
-        { BaseSkill.Name.ShootMultipleLaser, new ShootMultipleLaserData(0, 20f, 1f, 30f, 1f, 8, 4, 2f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+        { BaseSkill.Name.ShootMultipleLaser, new ShootMultipleLaserData(0, 20f, 1f, 30f, 1f, 8, 4, 0, 2f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.MultipleShockwave, new MultipleShockwaveData(0, 0.5f, 0.7f, 3, 30f, 1f, 1.7f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
-        { BaseSkill.Name.SpreadMultipleBullets, new SpreadMultipleBulletsData(0, 0.3f, 4, 10, 1, 0, 2f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue }) },
+        { BaseSkill.Name.SpreadMultipleBullets, new SpreadMultipleBulletsData(0, 0.3f, 4, 10, 1, 0, 2f, 4f, BaseWeapon.Name.PentagonicBullet, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue }) },
+        {
+            BaseSkill.Name.SpreadBullets,
+            new SpreadBulletsData(
+                3,
+                10,
+                1,
+                BaseWeapon.Name.PentagonBullet,
+                4f,
+                4f,
+                0,
+                5f,
+                1f,
+                new List<ITarget.Type> { ITarget.Type.Blue })
+        },
+        {
+            BaseSkill.Name.SpreadReflectableBullets,
+            new SpreadBulletsData(
+                1,
+                10,
+                1,
+                BaseWeapon.Name.HexahornBullet,
+                1f,
+                4f,
+                0,
+                6f,
+                1f,
+                new List<ITarget.Type> { ITarget.Type.Blue })
+        },
+        {
+            BaseSkill.Name.SpreadTrackableMissiles,
+            new SpreadTrackableMissilesData(
+                1,
+                30,
+                1,
+                3,
+                BaseWeapon.Name.TrackableMissile,
+                6,
+                1f,
+                new List<ITarget.Type> { ITarget.Type.Blue })
+        },
 
-
-        { BaseSkill.Name.SpreadTrackableMissiles, new SpreadTrackableMissilesData(3, 10, 1, 4f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue }) },
-
-
-        { BaseSkill.Name.SpreadBullets, new SpreadBulletsData(3, 10, 1, BaseWeapon.Name.PentagonBullet, 4f, 4f, 5f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
-        { BaseSkill.Name.SpreadReflectableBullets, new SpreadBulletsData(1, 10, 1, BaseWeapon.Name.HexahornBullet, 1f, 4f, 6f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
-        { BaseSkill.Name.SpreadTrackableBullets, new SpreadBulletsData(1, 20, 1, BaseWeapon.Name.HexatricBullet, 1f, 4f, 6f, 1f, new List<ITarget.Type> { ITarget.Type.Blue })},
-
-        { BaseSkill.Name.RushAttack, new ContactAttackData(0, 20, 1, 1, new List<ITarget.Type> { ITarget.Type.Blue }) },
-        { BaseSkill.Name.Shockwave, new ShockwaveData(3, 30f, 1f, 5f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+        { BaseSkill.Name.RushAttack, new ContactAttackData(0, 20, 1, 0, new List<ITarget.Type> { ITarget.Type.Blue }) },
+        { BaseSkill.Name.Shockwave, new ShockwaveData(3, 30f, 1f, 5f, 1f, 3f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
         { BaseSkill.Name.MagneticField, new MagneticFieldData(3, 2f, 1f, 0.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
-        { BaseSkill.Name.SelfDestruction, new SelfDestructionData(3, 20f, 1f, 5f, 3f, 0.7f, new List<ITarget.Type>(){ITarget.Type.Red, ITarget.Type.Blue}) },
-        { BaseSkill.Name.ShootFewLaser, new ShootMultipleLaserData(0, 20f, 1f, 30f, 1f, 8, 3, 1.5f, new List<ITarget.Type>(){ITarget.Type.Blue}) },
+        { BaseSkill.Name.SelfDestruction, new SelfDestructionData(3, 20f, 1f, 5f, 1f, 3f, 0.7f, new List<ITarget.Type>(){ITarget.Type.Red, ITarget.Type.Blue}) },
+        {
+            BaseSkill.Name.ShootFewLaser,
+            new ShootMultipleLaserData(
+                0,
+                20f,
+                1f,
+                30f,
+                1f,
+                8,
+                3,
+                0,
+                1.5f,
+                new List<ITarget.Type>(){ITarget.Type.Blue})
+        },
     };
 
     #endregion
@@ -404,7 +450,7 @@ public class DBBuilder : MonoBehaviour
         { BaseWeapon.Name.RifleShooter, new ShooterData(10, 1, 18, 1.5f, new SerializableVector2(1, 1), 10.0f)},
         { BaseWeapon.Name.RocketShooter, new ShooterData(10, 1, 18, 1.5f, new SerializableVector2(-1, 1),10.0f)},
 
-        { BaseWeapon.Name.TrackableMissile, new TrackableMissileData(5, 10)},
+        { BaseWeapon.Name.TrackableMissile, new TrackableMissileData(5, 15)},
 
     };
 
@@ -657,11 +703,11 @@ public class DBBuilder : MonoBehaviour
     {
         {
             BaseLife.Name.Player, new PlayerData(
-                100,
+                new UpgradeableStat<float>(100),
                 ITarget.Type.Blue,
                 BaseEffect.Name.HexagonDestroyEffect,
-                0f,
-                0f,
+                new UpgradeableStat < float >(0f),
+                new UpgradeableStat < float >(0f),
 
                 10,
                 1,
@@ -693,13 +739,13 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.YellowTriangle, new TriangleData(10, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseLife.Size.Small,
+            BaseLife.Name.YellowTriangle, new TriangleData(new UpgradeableStat < float >(10), ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseLife.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>{{BaseSkill.Name.MagneticField, 0 }}, 8)
         },
 
         {
-            BaseLife.Name.YellowRectangle, new RectangleData(20, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseLife.Size.Small,
+            BaseLife.Name.YellowRectangle, new RectangleData(new UpgradeableStat < float >(20), ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseLife.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -708,7 +754,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.YellowPentagon, new PentagonData(40, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseLife.Size.Medium,
+            BaseLife.Name.YellowPentagon, new PentagonData(new UpgradeableStat < float >(40), ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseLife.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -717,7 +763,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.YellowHexagon, new HexagonData(60, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseLife.Size.Medium,
+            BaseLife.Name.YellowHexagon, new HexagonData(new UpgradeableStat < float >(60), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseLife.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -729,7 +775,7 @@ public class DBBuilder : MonoBehaviour
 
         // 스킬 업그레이드 수정
         {
-            BaseLife.Name.RedTriangle, new TriangleData(15, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
+            BaseLife.Name.RedTriangle, new TriangleData(new UpgradeableStat < float >(15), ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -738,7 +784,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.RedRectangle, new RectangleData(30, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
+            BaseLife.Name.RedRectangle, new RectangleData(new UpgradeableStat < float >(30), ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -748,7 +794,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.RedPentagon, new PentagonData(75, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.RedPentagon, new PentagonData(new UpgradeableStat < float >(75), ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -757,7 +803,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.RedHexagon, new HexagonData(90, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.RedHexagon, new HexagonData(new UpgradeableStat < float >(90), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -768,7 +814,7 @@ public class DBBuilder : MonoBehaviour
 
 
         {
-            BaseLife.Name.OperaTriangle, new TriangleData(25, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
+            BaseLife.Name.OperaTriangle, new TriangleData(new UpgradeableStat < float >(25), ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -777,7 +823,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.OperaRectangle, new RectangleData(45, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
+            BaseLife.Name.OperaRectangle, new RectangleData(new UpgradeableStat < float >(45), ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -786,7 +832,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.OperaPentagon, new PentagonData(100, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.OperaPentagon, new PentagonData(new UpgradeableStat < float >(100), ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -795,7 +841,7 @@ public class DBBuilder : MonoBehaviour
         },
 
         {
-            BaseLife.Name.OperaHexagon, new OperaHexagonData(120, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.OperaHexagon, new OperaHexagonData(new UpgradeableStat < float >(120), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -805,45 +851,45 @@ public class DBBuilder : MonoBehaviour
 
 
         {
-            BaseLife.Name.GreenTriangle, new TriangleData(40, ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
+            BaseLife.Name.GreenTriangle, new TriangleData(new UpgradeableStat < float >(40), ITarget.Type.Red, BaseEffect.Name.TriangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
-                { BaseSkill.Name.MagneticField, 3 }
+                { BaseSkill.Name.MagneticField, 2 }
             }, 5)
         },
 
         {
-            BaseLife.Name.GreenRectangle, new RectangleData(70, ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
+            BaseLife.Name.GreenRectangle, new RectangleData(new UpgradeableStat < float >(70), ITarget.Type.Red, BaseEffect.Name.RectangleDestroyEffect, BaseEnemy.Size.Small,
 
             new Dictionary<BaseSkill.Name, int>
             {
-                { BaseSkill.Name.Shockwave, 1 },
+                { BaseSkill.Name.Shockwave, 0 },
             }, 9)
         },
 
         {
-            BaseLife.Name.GreenPentagon, new GreenPentagonData(140, ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.GreenPentagon, new GreenPentagonData(new UpgradeableStat < float >(140), ITarget.Type.Red, BaseEffect.Name.PentagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
-                { BaseSkill.Name.RushAttack, 1 }
-            }, 10f, 3f, 5f)
+                { BaseSkill.Name.RushAttack, 0 }
+            }, 30f, 3f, 5f)
         },
 
         {
-            BaseLife.Name.GreenHexagon, new HexagonData(180, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.GreenHexagon, new HexagonData(new UpgradeableStat < float >(180), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
-                { BaseSkill.Name.ShootFewLaser, 1 }
+                { BaseSkill.Name.ShootFewLaser, 0 }
             }, 9f, 3f, 1f)
         },
 
 
 
          {
-            BaseLife.Name.Tricon, new TriconData(300, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.Tricon, new TriconData(new UpgradeableStat < float >(300), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -852,7 +898,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Rhombus, new RhombusData(400, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.Rhombus, new RhombusData(new UpgradeableStat < float >(400), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -862,7 +908,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Pentagonic, new PentagonicData(500, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.Pentagonic, new PentagonicData(new UpgradeableStat < float >(500), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -871,7 +917,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Hexahorn, new HexahornData(600, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.Hexahorn, new HexahornData(new UpgradeableStat < float >(600), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -880,7 +926,7 @@ public class DBBuilder : MonoBehaviour
         },
 
          {
-            BaseLife.Name.Octavia, new OctaviaData(800, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.Octavia, new OctaviaData(new UpgradeableStat < float >(800), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -889,7 +935,7 @@ public class DBBuilder : MonoBehaviour
         },
 
           {
-            BaseLife.Name.Hexatric, new HexatricData(800, ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
+            BaseLife.Name.Hexatric, new HexatricData(new UpgradeableStat < float >(800), ITarget.Type.Red, BaseEffect.Name.HexagonDestroyEffect, BaseEnemy.Size.Medium,
 
             new Dictionary<BaseSkill.Name, int>
             {
@@ -943,7 +989,8 @@ public class DBBuilder : MonoBehaviour
         { GameMode.Level.RhombusChapter, new ChapterInfo(20, GameMode.Level.PentagonicChapter) },
         { GameMode.Level.PentagonicChapter, new ChapterInfo(20, GameMode.Level.HexahornChapter) },
         { GameMode.Level.HexahornChapter, new ChapterInfo(20, GameMode.Level.OctaviaChapter) },
-        { GameMode.Level.OctaviaChapter, new ChapterInfo(20) },
+        { GameMode.Level.OctaviaChapter, new ChapterInfo(20, GameMode.Level.HexatricChapter) },
+        { GameMode.Level.HexatricChapter, new ChapterInfo(30) },
 
         { GameMode.Level.PyramidSurvival, new SurvivalInfo(300, GameMode.Level.CubeSurvival) },
         { GameMode.Level.CubeSurvival, new SurvivalInfo(300, GameMode.Level.PrismSurvival) },

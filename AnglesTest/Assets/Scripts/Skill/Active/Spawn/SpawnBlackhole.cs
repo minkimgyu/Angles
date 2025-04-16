@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
+using Skill.Strategy;
 
 public class SpawnBlackhole : BaseSkill
 {
@@ -15,10 +17,22 @@ public class SpawnBlackhole : BaseSkill
         _weaponFactory = weaponFactory;
     }
 
-    public override void OnAdd()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
+        base.Initialize(upgradeableRatio, caster);
         _useConstraintStrategy = new RandomConstraintStrategy(_data, _upgradeableRatio);
+        _targetingStrategy = new Skill.Strategy.ContactTargetingStrategy(_data.TargetTypes);
+        _actionStrategy = new SpawnBlackholeStrategy(
+            _caster,
+            _upgradeableRatio,
+            //_data.Damage,
+            //_data.,
+            //_data.SizeMultiplier,
+            _data.GroggyDuration,
+            _weaponFactory,
+            _data.TargetTypes);
     }
+
 
     public override void Upgrade()
     {
@@ -26,35 +40,12 @@ public class SpawnBlackhole : BaseSkill
         _upgrader.Visit(this, _data);
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
+        ITarget target = _targetingStrategy.GetTarget(targetObject);
         if (target == null) return false;
 
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.Blackhole);
-        if (weapon == null) return false;
-
-        Transform casterTransform = _caster.GetComponent<Transform>();
-
-        DamageableData damageData = new DamageableData
-        (
-            _caster,
-            new DamageStat(
-                _data.Damage
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
-
-        BlackholeDataModifier blackholeDataModifier = new BlackholeDataModifier(damageData, _data.SizeMultiplier, _data.Lifetime);
-
-        weapon.ModifyData(blackholeDataModifier);
-        weapon.Activate();
-
-        weapon.ResetPosition(casterTransform.position);
+        _actionStrategy.Execute(new Skill.Strategy.SpawnBlackholeStrategy.ChangeableData(_data.Damage, _data.Lifetime, _data.SizeMultiplier));
         return true;
     }
 }

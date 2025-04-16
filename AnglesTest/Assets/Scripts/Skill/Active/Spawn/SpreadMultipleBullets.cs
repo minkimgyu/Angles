@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
+using Skill.Strategy;
 
 public class SpreadMultipleBullets : BaseSkill
 {
@@ -23,96 +25,41 @@ public class SpreadMultipleBullets : BaseSkill
         _weaponFactory = weaponFactory;
     }
 
-    void ShootBullet(float angle)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        Transform casterTransform = _caster.GetComponent<Transform>();
+        base.Initialize(upgradeableRatio, caster);
+        _detectingStrategy = new Skill.Strategy.TargetDetectingStrategy(_data.TargetTypes);
 
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.SpreadBullets, casterTransform.position, 0.3f);
-
-        float x = Mathf.Sin(angle * Mathf.Deg2Rad);
-        float y = Mathf.Cos(angle * Mathf.Deg2Rad);
-        Vector3 direction = new Vector3(x, y, 0);
-        Vector3 spawnPosition = casterTransform.position + direction * _data.DistanceFromCaster;
-
-        BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.PentagonicBullet);
-        if (weapon == null) return;
-
-        DamageableData damageData = new DamageableData
-        (
+        _actionStrategy = new SpreadBulletStrategy(
             _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
+           _upgradeableRatio,
+           _data.BulletCount,
+           _data.AdRatio,
+           0,
+           _data.DistanceFromCaster,
+           _data.BulletName,
+           _weaponFactory,
+           _data.TargetTypes);
 
-        BulletDataModifier bulletDataModifier = new BulletDataModifier(damageData);
+        _soundStrategy = new PlaySoundStrategy(ISoundPlayable.SoundName.SpreadBullets);
 
-        weapon.ModifyData(bulletDataModifier);
-        weapon.Activate();
+        _delayStrategy = new WaveDelayRoutineStrategy(
+           _data.Delay,
+           _data.MaxWaveCount,
+           _data.WaveDelay,
+           () => _detectingStrategy.DetectTargets().Count > 0,
+           () =>
+           {
+               CastingComponent castingComponent = _caster.GetComponent<CastingComponent>();
+               if (castingComponent == null) return;
 
-        weapon.ResetPosition(spawnPosition, direction);
-
-        IProjectable projectile = weapon.GetComponent<IProjectable>();
-        if (projectile == null) return;
-
-        projectile.Shoot(direction, _data.Force);
-    }
-
-    public override void OnUpdate()
-    {
-
-        switch (_delayTimer.CurrentState)
-        {
-            case Timer.State.Ready:
-                if (_targets.Count == 0) return;
-                _delayTimer.Start(_data.Delay);
-                break;
-            case Timer.State.Finish:
-
-                if (_waveTimer.CurrentState == Timer.State.Ready || _waveTimer.CurrentState == Timer.State.Finish)
-                {
-                    for (int i = 1; i <= _data.BulletCount; i++)
-                    {
-                        float angle = 360f / _data.BulletCount * i;
-                        ShootBullet(angle);
-                    }
-
-                    _waveTimer.Reset();
-                    _waveTimer.Start(_data.WaveDelay);
-                    _waveCount++;
-
-                    Debug.Log(_waveCount);
-                    if (_waveCount == _data.MaxWaveCount)
-                    {
-                        _waveCount = 0;
-                        _waveTimer.Reset();
-                        _delayTimer.Reset();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    public override void OnCaptureEnter(ITarget target)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _targets.Add(target);
-    }
-
-    public override void OnCaptureExit(ITarget target)
-    {
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return;
-
-        _targets.Remove(target);
+               castingComponent.CastSkill(_data.Delay);
+           },
+           (waveCount) =>
+           {
+               _actionStrategy.Execute(new SpreadBulletStrategy.ChangeableData(_data.Damage, _data.Force));
+               _soundStrategy.PlaySound();
+           }
+       );
     }
 }

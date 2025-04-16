@@ -5,6 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using System;
+using Skill;
 
 public class SoundAssetLoader : AssetLoader<ISoundPlayable.SoundName, AudioClip, AudioClip>
 {

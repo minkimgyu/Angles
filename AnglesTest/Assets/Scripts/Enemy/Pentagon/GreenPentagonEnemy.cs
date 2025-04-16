@@ -24,7 +24,7 @@ public class GreenPentagonEnemy : BaseEnemy
 
     void OnCollision(Collision2D collision)
     {
-        _skillController.OnReflect(collision.gameObject, collision.contacts[0].point);
+        _skillController.OnReflect(collision.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
     }
 
     public override void Initialize()

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DamageUtility;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class Statikk : BaseSkill
 {
@@ -16,54 +18,43 @@ public class Statikk : BaseSkill
         _effectFactory = effectFactory; // 이건 생성자에서 받아서 쓰기
     }
 
-    public override void OnAdd()
-    {
-        _useConstraintStrategy = new CooltimeConstraintStrategy(_data, _upgradeableRatio);
-    }
-
     public override void Upgrade()
     {
         base.Upgrade();
         _upgrader.Visit(this, _data);
     }
 
-    public override bool OnReflect(GameObject targetObject, Vector3 contactPos)
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        ITarget target = targetObject.GetComponent<ITarget>();
-        if (target == null) return false;
+        base.Initialize(upgradeableRatio, caster);
 
-        bool isTarget = target.IsTarget(_data.TargetTypes);
-        if (isTarget == false) return false;
-
-        ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Statikk);
-
-        List<Vector2> hitPoints;
-
-        DamageableData damageData = new DamageableData
-        (
+        _useConstraintStrategy = new CooltimeConstraintStrategy(_data, _upgradeableRatio);
+        _targetingStrategy = new Skill.Strategy.CircleRangeTargetingStrategy(_caster, _data.Range, _data.TargetTypes);
+        _actionStrategy = new Skill.Strategy.HitTargetStrategy(
             _caster,
-            new DamageStat
-            (
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
+            _upgradeableRatio,
+            _data.AdRatio,
             _data.GroggyDuration
         );
-        Damage.HitRaycast(damageData, _data.MaxTargetCount, targetObject.transform.position, _data.Range, out hitPoints, true, Color.red, 3);
 
-        for (int i = 0; i < hitPoints.Count; i++)
-        {
-            BaseEffect effect = _effectFactory.Create(BaseEffect.Name.LaserEffect);
-            effect.ResetColor(new Color(93f / 255f, 177f / 255f, 255f / 255f), new Color(255f / 255f, 255f / 255f, 255f / 255f));
-            effect.ResetPosition(Vector3.zero);
-            effect.ResetLine(targetObject.transform.position, hitPoints[i]);
+        Color startColor = new Color(93f / 255f, 177f / 255f, 255f / 255f);
+        Color endColor = new Color(255f / 255f, 255f / 255f, 255f / 255f);
 
-            effect.Play();
-        }
+        _effectStrategy = new LaserEffectStrategy(BaseEffect.Name.KnockbackEffect, startColor, endColor, _effectFactory);
+        _soundStrategy = new PlaySoundStrategy(ISoundPlayable.SoundName.Statikk);
+    }
 
+    public override bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
+    {
+        List<Vector2> targetPoints = new List<Vector2>();
+        List<IDamageable> damageables = _targetingStrategy.GetDamageables(targetObject, new Skill.Strategy.CircleRangeTargetingStrategy.ChangeableData(_data.RangeMultiplier), _data.MaxTargetCount, out targetPoints);
+        if (damageables == null || damageables.Count == 0) return false; // 타겟이 없는 경우
+
+        _actionStrategy.Execute(damageables, new Skill.Strategy.HitTargetStrategy.ChangeableData(_data.Damage));
+
+        Vector2 pos = _caster.GetComponent<Transform>().position;
+        _effectStrategy.SpawnEffect(pos, targetPoints);
+        _soundStrategy.PlaySound();
         return true;
     }
 }

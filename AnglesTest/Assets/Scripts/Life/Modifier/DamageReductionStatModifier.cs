@@ -27,11 +27,11 @@ public class DamageReductionStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data.DamageReductionRatio += _additionalDamageReductionRatios[level];
+        data.DamageReductionRatio.Value += _additionalDamageReductionRatios[level];
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data.DamageReductionRatio += _additionalDamageReductionRatio;
+        data.DamageReductionRatio.Value += _additionalDamageReductionRatio;
     }
 }

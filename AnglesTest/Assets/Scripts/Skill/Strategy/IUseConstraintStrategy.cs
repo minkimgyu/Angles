@@ -4,96 +4,103 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 
-public interface IUseConstraintStrategy
+namespace Skill.Strategy
 {
-    public abstract bool CanUse();
-    public virtual void OnUpdate() { }
-    public virtual void Use() { }
-
-    public virtual void AddViewEvent(Action<float, int, bool> viewEvent) { }
-    public virtual void RemoveViewEvent(Action<float, int, bool> viewEvent) { }
-}
-
-public class NoConstraintStrategy : IUseConstraintStrategy
-{
-    public bool CanUse() { return true; }
-}
-
-public class CooltimeConstraintStrategy : IUseConstraintStrategy
-{
-    protected int _stackCount;
-    protected Timer _cooltimer;
-
-    protected bool _showStackCount;
-    Action<float, int, bool> ViewerEvent;
-
-    CooltimeSkillData _cooltimeSkillData;
-    IUpgradeableSkillData _upgradeableRatio;
-
-    public CooltimeConstraintStrategy(CooltimeSkillData cooltimeSkillData, IUpgradeableSkillData upgradeableRatio)
+    public interface IUseConstraintStrategy
     {
-        _showStackCount = true;
-        _cooltimeSkillData = cooltimeSkillData;
-        _upgradeableRatio = upgradeableRatio;
+        public abstract bool CanUse();
+        public virtual void OnUpdate() { }
+        public virtual void Use() { }
 
-        _stackCount = 1;
-        _cooltimer = new Timer();
+        public virtual void AddViewEvent(Action<float, int, bool> viewEvent) { }
+        public virtual void RemoveViewEvent(Action<float, int, bool> viewEvent) { }
     }
 
-    public void AddViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent += ViewerEvent; }
-    public void RemoveViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent -= ViewerEvent; }
-
-    public bool CanUse() { return _stackCount > 0; }
-    public void Use() { _stackCount -= 1; }
-
-    public void OnUpdate()
+    public class NoConstraintStrategy : IUseConstraintStrategy
     {
-        bool showStack = true;
-        switch (_cooltimer.CurrentState)
+        public bool CanUse() { return true; }
+    }
+
+    public class CooltimeConstraintStrategy : IUseConstraintStrategy
+    {
+        protected int _stackCount;
+        protected Timer _cooltimer;
+
+        protected bool _showStackCount;
+        Action<float, int, bool> ViewerEvent;
+
+        CooltimeSkillData _cooltimeSkillData; // 나중에 이거
+        IUpgradeableSkillData _upgradeableRatio;
+
+
+
+        // 이 부분 Life 클래스도 수정해주기
+        // UpgradeableStat을 넣어주자
+        public CooltimeConstraintStrategy(CooltimeSkillData cooltimeSkillData, IUpgradeableSkillData upgradeableRatio)
         {
-            case Timer.State.Ready:
-                if (_stackCount >= _cooltimeSkillData.MaxStackCount) return;
+            _showStackCount = true;
+            _cooltimeSkillData = cooltimeSkillData;
+            _upgradeableRatio = upgradeableRatio;
 
-                _cooltimer.Start(_cooltimeSkillData.CoolTime * _upgradeableRatio.TotalCooltimeRatio);
-                break;
-            case Timer.State.Running:
-                ViewerEvent?.Invoke(1 - _cooltimer.Ratio, _stackCount, showStack);
-                break;
-            case Timer.State.Finish:
-                _cooltimer.Reset();
-                _stackCount++;
+            _stackCount = 1;
+            _cooltimer = new Timer();
+        }
 
-                if (_stackCount >= _cooltimeSkillData.MaxStackCount)
-                {
-                    ViewerEvent?.Invoke(0, _stackCount, showStack);
-                    return;
-                }
+        public void AddViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent += ViewerEvent; }
+        public void RemoveViewEvent(Action<float, int, bool> ViewerEvent) { this.ViewerEvent -= ViewerEvent; }
 
-                _cooltimer.Start(_cooltimeSkillData.CoolTime * _upgradeableRatio.TotalCooltimeRatio);
-                break;
-            default:
-                break;
+        public bool CanUse() { return _stackCount > 0; }
+        public void Use() { _stackCount -= 1; }
+
+        public void OnUpdate()
+        {
+            bool showStack = true;
+            switch (_cooltimer.CurrentState)
+            {
+                case Timer.State.Ready:
+                    if (_stackCount >= _cooltimeSkillData.MaxStackCount) return;
+
+                    _cooltimer.Start(_cooltimeSkillData.CoolTime * _upgradeableRatio.TotalCooltimeRatio);
+                    break;
+                case Timer.State.Running:
+                    ViewerEvent?.Invoke(1 - _cooltimer.Ratio, _stackCount, showStack);
+                    break;
+                case Timer.State.Finish:
+                    _cooltimer.Reset();
+                    _stackCount++;
+
+                    if (_stackCount >= _cooltimeSkillData.MaxStackCount)
+                    {
+                        ViewerEvent?.Invoke(0, _stackCount, showStack);
+                        return;
+                    }
+
+                    _cooltimer.Start(_cooltimeSkillData.CoolTime * _upgradeableRatio.TotalCooltimeRatio);
+                    break;
+                default:
+                    break;
+            }
         }
     }
-}
 
-public class RandomConstraintStrategy : IUseConstraintStrategy
-{
-    RandomSkillData _randomSkillData;
-    IUpgradeableSkillData _upgradeableRatio;
-
-    public RandomConstraintStrategy(RandomSkillData randomSkillData, IUpgradeableSkillData upgradeableRatio)
+    public class RandomConstraintStrategy : IUseConstraintStrategy
     {
-        _randomSkillData = randomSkillData;
-        _upgradeableRatio = upgradeableRatio;
-    }
+        RandomSkillData _randomSkillData;
+        IUpgradeableSkillData _upgradeableRatio;
 
-    public bool CanUse()
-    {
-        float random = Random.Range(0.0f, 1.0f);
-        return random <= _randomSkillData.Probability * _upgradeableRatio.TotalRandomRatio;
+        public RandomConstraintStrategy(RandomSkillData randomSkillData, IUpgradeableSkillData upgradeableRatio)
+        {
+            _randomSkillData = randomSkillData;
+            _upgradeableRatio = upgradeableRatio;
+        }
 
-        // 0.7 * 1.2
-        // 0.7 * 0.8
+        public bool CanUse()
+        {
+            float random = Random.Range(0.0f, 1.0f);
+            return random <= _randomSkillData.Probability * _upgradeableRatio.TotalRandomRatio;
+
+            // 0.7 * 1.2
+            // 0.7 * 0.8
+        }
     }
 }

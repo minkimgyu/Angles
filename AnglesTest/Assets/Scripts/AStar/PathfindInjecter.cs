@@ -13,7 +13,7 @@ public class PathfindInjecter : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IPathfindable pathfindable = collision.GetComponent<IPathfindable>();
+        IPathfindable pathfindable = collision.GetComponentInParent<IPathfindable>();
         if (pathfindable == null) return;
 
         pathfindable.InjectPathfindEvent(_pathfinder.FindPath);

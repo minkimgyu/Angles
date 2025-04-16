@@ -19,6 +19,7 @@ public interface IWeaponMoveStrategy
     void Shoot(Vector3 direction, float force) { }
     void InjectTarget(ITarget target) { }
 
+    void InjectPathfindEvent(Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath) { }
     void InjectFollower(IFollowable followable) { }
 }
 
@@ -46,6 +47,11 @@ public class TrackingMoveStrategy : IWeaponMoveStrategy
     public void InjectTarget(ITarget target)
     {
         _trackComponent.InjectTarget(target);
+    }
+
+    public void InjectPathfindEvent(Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath)
+    {
+        _trackComponent.InjectPathFindEvent(FindPath);
     }
 
     public void OnUpdate()
@@ -132,7 +138,6 @@ public class ReflectableProjectileMoveStrategy : ProjectileMoveStrategy
 public class RefractableProjectileMoveStrategy : ProjectileMoveStrategy
 {
     const float _rotationSpeed = 70f; // 회전 속도 (각속도, 도/초)
-    const float _speedMultiplier = 1.5f; // 속도 배율
 
     public RefractableProjectileMoveStrategy
     (
@@ -142,6 +147,6 @@ public class RefractableProjectileMoveStrategy : ProjectileMoveStrategy
 
     public override void OnFixedUpdate()
     {
-        _moveComponent.RotateDirection(_rotationSpeed, _speedMultiplier);
+        _moveComponent.RotateDirection(_rotationSpeed);
     }
 }

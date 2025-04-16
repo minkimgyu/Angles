@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using System;
+using Skill;
 
 // 여기에 코스트 추가하기 --> 만약 코스트가 따로 할당되지 않는다면 코인을 소모하지 않는다.
 public struct SKillCardData
@@ -183,73 +184,6 @@ public class CardController : MonoBehaviour
 
         ServiceLocater.ReturnTimeController().Stop();
     }
-
-    //// maxUpgrade인 스킬은 포함하지 않는다.
-    //public void CreateCards(ICaster caster, int cardCount, int recreateCount)
-    //{
-    //    List<SkillUpgradeData> upgradeDatas = ReturnUpgradeDatas(caster, cardCount);
-    //    if (upgradeDatas.Count == 0) return;
-
-    //    _uiObject.SetActive(true);
-
-    //    for (int i = 0; i < upgradeDatas.Count; i++)
-    //    {
-    //        BaseSkill.Name skillName = upgradeDatas[i].Name;
-    //        int upgradeCount = upgradeDatas[i].UpgradeCount; // 0, 1, 2, 3, 4
-    //        int maxUpgradeCount = upgradeDatas[i].MaxUpgradeCount; // 5
-
-    //        CardInfoData cardInfoData = _cardDatas[skillName];
-    //        Sprite cardIcon = _skillIcons[skillName];
-
-    //        string name = ServiceLocater.ReturnLocalizationHandler().GetWord($"{skillName.ToString()}CardName");
-    //        string description = ServiceLocater.ReturnLocalizationHandler().GetWord($"{skillName.ToString()}CardDescription");
-
-    //        SKillCardData cardData = new SKillCardData(
-    //            skillName,
-    //            cardIcon,
-
-    //            name,
-    //            description,
-    //            cardInfoData.Cost,
-    //            upgradeCount,
-    //            maxUpgradeCount
-    //        );
-
-    //        AddCard(caster, cardData, BaseViewer.Name.CostCardViewer);
-    //    }
-
-    //    recreateCount -= 1;
-    //    if (recreateCount > 0)
-    //    {
-    //        _recreateCountObject.SetActive(true);
-    //        _recreateButton.gameObject.SetActive(true);
-
-    //        _recreateCountText.text = recreateCount.ToString();
-
-    //        _recreateButton.onClick.RemoveAllListeners(); // 이벤트 제거 후 다시 등록
-    //        _recreateButton.onClick.AddListener(
-    //            () =>
-    //            {
-    //                ServiceLocater.ReturnSoundPlayer().PlaySFX(ISoundPlayable.SoundName.Reroll);
-    //                DeleteCards();
-    //                CreateCards(caster, cardCount, recreateCount);
-    //            }
-    //        );
-    //    }
-    //    else
-    //    {
-    //        _recreateCountText.text = "";
-    //        _recreateButton.onClick.RemoveAllListeners();
-
-    //        _recreateCountObject.SetActive(false);
-    //        _recreateButton.gameObject.SetActive(false);
-    //    }
-
-    //    _coinTxt.text = GameStateManager.Instance.ReturnCoin().ToString();
-    //    LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_coinTxt.transform);
-
-    //    ServiceLocater.ReturnTimeController().Stop();
-    //}
 
     List<SkillUpgradeData> ReturnUpgradeDatas(ICaster upgradeable, int maxCardCount)
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 [System.Serializable]
-public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
+public class BladeData : WeaponData
 {
     [JsonProperty] private float _attackDelay;
     [JsonProperty] private float _groggyDuration;
@@ -12,8 +12,13 @@ public class BladeData : WeaponData, ILifetimeStat, ISizeModifyStat
     [JsonIgnore] public float AttackDelay { get => _attackDelay; set => _attackDelay = value; }
     [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
 
-    public float Lifetime { get; set; }
-    public float SizeMultiplier { get; set; }
+
+    [JsonProperty] float _lifetime;
+    [JsonProperty] float _sizeMultiplier;
+
+    [JsonIgnore] public float Lifetime { get => _lifetime; set => _lifetime = value; }
+    [JsonIgnore] public float SizeMultiplier { get => _sizeMultiplier; set => _sizeMultiplier = value; }
+
 
     public BladeData(float attackDelay, float groggyDuration)
     {

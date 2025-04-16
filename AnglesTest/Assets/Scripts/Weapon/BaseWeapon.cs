@@ -12,7 +12,6 @@ abstract public class BaseWeapon : MonoBehaviour
         PentagonBullet,
         PentagonicBullet,
         HexahornBullet,
-        HexatricBullet,
 
         ShooterRocket,
 
@@ -25,7 +24,8 @@ abstract public class BaseWeapon : MonoBehaviour
         TrackableMissile,
     }
 
-    protected ITargetStrategy _targetStrategy;
+    protected IWeaponTargetingStrategy _targetingStrategy;
+    protected IWeaponDetectingStrategy _detectingStrategy;
     protected IWeaponActionStrategy _actionStrategy;
     protected IWeaponMoveStrategy _moveStrategy;
 
@@ -55,7 +55,7 @@ abstract public class BaseWeapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        _actionStrategy.OnTargetEnter(collider);
+        _targetingStrategy.OnTriggerEnter(collider);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -77,7 +77,15 @@ abstract public class BaseWeapon : MonoBehaviour
     public virtual void ModifyData(RocketDataModifier modifier) { }
     public virtual void ModifyData(TrackableMissileDataModifier modifier) { }
 
-    public abstract void InitializeStrategy();
+    public virtual void InitializeStrategy()
+    {
+        _targetingStrategy = new NoTargetingStrategy();
+        _detectingStrategy = new NoDetectingStrategy();
+        _actionStrategy = new NoAttackStrategy();
+        _moveStrategy = new NoMoveStrategy();
+        _lifeTimeStrategy = new NoLifetimeStrategy();
+        _sizeStrategy = new NoSizeStrategy();
+    }
 
     public virtual void Initialize() { InitializeStrategy(); }
     public virtual void Initialize(BaseFactory factory) { InitializeStrategy(); }

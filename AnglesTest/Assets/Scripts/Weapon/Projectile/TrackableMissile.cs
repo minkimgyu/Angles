@@ -11,6 +11,8 @@ public class TrackableMissile : BaseWeapon, ITrackable
     public override void ModifyData(TrackableMissileDataModifier modifier)
     {
         modifier.Visit(_data);
+        _targetingStrategy.InjectTargetTypes(_data.TargetTypes);
+        _lifeTimeStrategy.ChangeLifetime(_data.Lifetime);
     }
 
     public override void InjectData(TrackableMissileData data)
@@ -39,16 +41,21 @@ public class TrackableMissile : BaseWeapon, ITrackable
 
     public override void InitializeStrategy()
     {
+        base.InitializeStrategy();
         MoveComponent moveComponent = GetComponent<MoveComponent>();
         moveComponent.Initialize();
 
         TrackComponent trackComponent = GetComponent<TrackComponent>();
         trackComponent.Initialize(transform, BaseLife.Size.Small);
 
-        _targetStrategy = new NoTargetingStrategy();
-        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(_data, () => { Destroy(gameObject); });
-        _sizeStrategy = new NoSizeStrategy();
-        _actionStrategy = new BulletAttackStrategy(_data, OnHit);
+        _targetingStrategy = new ContactTargetingStrategy((damageable) => 
+        {
+            if (damageable == null) return;
+            _actionStrategy.Execute(damageable, _data.DamageableStat); 
+            OnHit(); 
+        });
+        _lifeTimeStrategy = new ChangeableLifeTimeStrategy(() => { Destroy(gameObject); });
+        _actionStrategy = new HitTargetStrategy();
         _moveStrategy = new TrackingMoveStrategy(_data.MoveSpeed, moveComponent, trackComponent);
     }
 
@@ -59,5 +66,6 @@ public class TrackableMissile : BaseWeapon, ITrackable
 
     public void InjectPathfindEvent(Func<Vector2, Vector2, BaseLife.Size, List<Vector2>> FindPath)
     {
+        _moveStrategy.InjectPathfindEvent(FindPath);
     }
 }

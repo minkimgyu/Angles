@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
 
 abstract public class BaseEventBus<T>
 {
@@ -66,12 +67,6 @@ abstract public class BaseEventBus<T>
     {
         if (!commands.ContainsKey(state)) return;
         commands[state].Execute(value1, value2);
-    }
-
-    public virtual void Publish(T state, ICaster caster, int value1)
-    {
-        if (!commands.ContainsKey(state)) return;
-        commands[state].Execute(caster, value1);
     }
 
     public virtual void Publish(T state, ICaster caster, int value1, int value2)

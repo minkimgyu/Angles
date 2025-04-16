@@ -8,12 +8,12 @@ public class BlackholeAttackStrategy : IWeaponActionStrategy
 {
     BlackholeData _data;
     Transform _myTransform;
-    Func<List<ForceTargetingStrategy.TargetData>> GetTargets;
+    Func<List<BlackholeDetectingStrategy.TargetData>> GetTargets;
 
     public BlackholeAttackStrategy(
         BlackholeData data,
         Transform myTransform,
-        Func<List<ForceTargetingStrategy.TargetData>> GetTargets)
+        Func<List<BlackholeDetectingStrategy.TargetData>> GetTargets)
     {
         _data = data;
         _myTransform = myTransform;
@@ -22,7 +22,7 @@ public class BlackholeAttackStrategy : IWeaponActionStrategy
 
     public void OnUpdate()
     {
-        List<ForceTargetingStrategy.TargetData> targetDatas = GetTargets();
+        List<BlackholeDetectingStrategy.TargetData> targetDatas = GetTargets();
 
         for (int i = targetDatas.Count - 1; i >= 0; i--)
         {
@@ -39,7 +39,7 @@ public class BlackholeAttackStrategy : IWeaponActionStrategy
 
                 Vector3 direction = targetDatas[i].AbsorbableTarget.GetPosition() - _myTransform.position;
                 targetDatas[i].AbsorbableTarget.ApplyForce(direction, _data.AbsorbForce, ForceMode2D.Force);
-                Damage.Hit(_data.DamageableData, targetDatas[i].DamageableTarget);
+                targetDatas[i].DamageableTarget.GetDamage(_data.DamageableStat);
                 targetDatas[i].CaptureTime = Time.time;
             }
         }

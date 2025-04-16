@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using Skill;
 
 public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradable, IForce
 {
@@ -42,9 +43,10 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
         List<Tuple<string, float>> datas = new List<Tuple<string, float>>
         {
-            { new Tuple<string, float>("MaxHp", _playerData.MaxHp) },
-            { new Tuple<string, float>("AutoHpRecoveryPoint", _playerData.AutoHpRecoveryPoint) },
-            { new Tuple<string, float>("DamageReductionRatio", _playerData.DamageReductionRatio) },
+            { new Tuple<string, float>("MaxHp", _playerData.MaxHp.Value) },
+            { new Tuple<string, float>("Hp", Hp.Value) },
+            { new Tuple<string, float>("AutoHpRecoveryPoint", _playerData.AutoHpRecoveryPoint.Value) },
+            { new Tuple<string, float>("DamageReductionRatio", _playerData.DamageReductionRatio.Value) },
 
             { new Tuple<string, float>("AliveState", (int)_aliveState) },
 

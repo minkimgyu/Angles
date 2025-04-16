@@ -51,6 +51,9 @@ public interface ISoundPlayable
         OrangeBGM,
         OrangeBossBGM,
 
+        DeepRedBGM,
+        DeepRedBossBGM,
+
         Reroll,
         LevelClear,
         LevelFail,

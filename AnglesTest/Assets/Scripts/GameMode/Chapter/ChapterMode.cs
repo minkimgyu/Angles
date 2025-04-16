@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Diagnostics;
+using Skill;
 
 public class ChapterMode : DungeonMode
 {

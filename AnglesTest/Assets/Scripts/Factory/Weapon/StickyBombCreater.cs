@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class StickyBombData : WeaponData, ILifetimeStat
+public class StickyBombData : WeaponData
 {
     /// <summary>
     /// 시전 범위
@@ -12,7 +12,8 @@ public class StickyBombData : WeaponData, ILifetimeStat
     [JsonProperty] private float _range;
     [JsonIgnore] public float Range { get => _range; set => _range = value; }
 
-    public float Lifetime { get; set; }
+    [JsonProperty] float _lifetime;
+    public float Lifetime { get => _lifetime; set => _lifetime = value; }
 
     public StickyBombData(float range, float lifetime)
     {

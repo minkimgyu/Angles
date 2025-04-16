@@ -1,3 +1,4 @@
+using Skill.Strategy;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,29 @@ using UnityEngine;
 public interface IWeaponActionStrategy
 {
     void OnUpdate() { }
-    void OnTargetEnter(Collider2D collision2D) { }
-
-    BaseWeapon CreateProjectileWeapon() { return null; }
-    void OnLifetimeCompleted() { }
+    void Execute(List<IDamageable> damageables, DamageableData damageableData) { }
+    void Execute(IDamageable damageable, DamageableData damageableData) { }
 }
 
 public class NoAttackStrategy : IWeaponActionStrategy
 {
+}
+
+public class HitTargetStrategy : IWeaponActionStrategy
+{
+    public void Execute(List<IDamageable> damageables, DamageableData damageableData)
+    {
+        if (damageables == null) return;
+
+        for (int i = 0; i < damageables.Count; i++)
+        {
+            damageables[i].GetDamage(damageableData);
+        }
+    }
+
+    public void Execute(IDamageable damageable, DamageableData damageableData)
+    {
+        if (damageable == null) return;
+        damageable.GetDamage(damageableData);
+    }
 }

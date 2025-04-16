@@ -4,22 +4,27 @@ using UnityEngine;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Skill;
 
 [Serializable]
 public class SpawnBlackholeData : RandomSkillData
 {
+    [JsonProperty] private float _lifeTime;
+    [JsonProperty] private float _sizeMultiplier;
+
     [JsonProperty] private float _damage;
     [JsonProperty] private float _adRatio;
     [JsonProperty] private float _groggyDuration;
-    [JsonProperty] private float _sizeMultiplier;
-    [JsonProperty] private float _lifetime;
+
     [JsonProperty(ItemConverterType = typeof(StringEnumConverter))] private List<ITarget.Type> _targetTypes;
+
+    [JsonIgnore] public float Lifetime { get => _lifeTime; set => _lifeTime = value; }
+    [JsonIgnore] public float SizeMultiplier { get => _sizeMultiplier; set => _sizeMultiplier = value; }
 
     [JsonIgnore] public float Damage { get => _damage; set => _damage = value; }
     [JsonIgnore] public float AdRatio { get => _adRatio; set => _adRatio = value; }
     [JsonIgnore] public float GroggyDuration { get => _groggyDuration; set => _groggyDuration = value; }
-    [JsonIgnore] public float SizeMultiplier { get => _sizeMultiplier; set => _sizeMultiplier = value; }
-    [JsonIgnore] public float Lifetime { get => _lifetime; set => _lifetime = value; }
+
     [JsonIgnore] public List<ITarget.Type> TargetTypes { get => _targetTypes; set => _targetTypes = value; }
 
     public SpawnBlackholeData(
@@ -31,10 +36,11 @@ public class SpawnBlackholeData : RandomSkillData
         float groggyDuration,
 
         float lifetime,
+        float sizeMultiplier,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint, probability)
     {
-        _sizeMultiplier = 1;
-        _lifetime = lifetime;
+        _lifeTime = lifetime;
+        _sizeMultiplier = sizeMultiplier;
 
         _damage = damage;
         _adRatio = adRatio;
@@ -53,7 +59,8 @@ public class SpawnBlackholeData : RandomSkillData
             _adRatio,
             _groggyDuration,
 
-            _lifetime,
+            _lifeTime,
+            _sizeMultiplier,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사
         );
     }

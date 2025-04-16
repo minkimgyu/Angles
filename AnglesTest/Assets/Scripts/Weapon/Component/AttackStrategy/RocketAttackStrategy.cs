@@ -24,7 +24,7 @@ public class RocketAttackStrategy : IWeaponActionStrategy
             return;
         }
 
-        if (target.IsTarget(_rocketData.DamageableData._targetType) == true)
+        if (target.IsTarget(_rocketData.TargetTypes) == true)
         {
             OnHit?.Invoke();
             return;

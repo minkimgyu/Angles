@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
 
 [System.Serializable]
 public class TriconData : EnemyData
@@ -19,7 +20,7 @@ public class TriconData : EnemyData
     [JsonIgnore] public float FreezeDuration { get => _freezeDuration; set => _freezeDuration = value; }
     [JsonIgnore] public float MovableDuration { get => _movableDuration; set => _movableDuration = value; }
 
-    public TriconData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+    public TriconData(UpgradeableStat<float> maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
         float moveSpeed, float stopDistance, float gap, float freezeDuration, float movableDuration) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
@@ -33,7 +34,7 @@ public class TriconData : EnemyData
     public override LifeData Copy()
     {
         return new TriconData(
-            _maxHp, // EnemyData에서 상속된 값
+            _maxHp.Copy(), // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _destroyEffectName,
             _size, // EnemyData에서 상속된 값
@@ -71,14 +72,16 @@ public class TriconCreater : LifeCreater
 
         life.Initialize();
 
-        ICaster skillAddable = life.GetComponent<ICaster>();
-        if (skillAddable == null) return life;
+        ICaster caster = life.GetComponent<ICaster>();
+        if (caster == null) return life;
 
         foreach (var item in data.SkillData)
         {
-            BaseSkill skill = _skillFactory.Create(item.Key);
-            skill.Upgrade(item.Value);
-            skillAddable.AddSkill(item.Key, skill);
+            for (int i = 0; i <= item.Value; i++)
+            {
+                BaseSkill skill = _skillFactory.Create(item.Key);
+                caster.AddSkill(item.Key, skill);
+            }
         }
 
         return life;

@@ -57,7 +57,7 @@ public class BossStage : BattleStage
         DamageableData damageData = new DamageableData(new DamageStat(DamageUtility.Damage.InstantDeathDamage));
         for (int i = 0; i < _mobs.Count; i++)
         {
-            Damage.Hit(damageData, _mobs[i]);
+            _mobs[i].GetDamage(damageData);
         }
 
         _baseStageController.OnStageClearRequested();

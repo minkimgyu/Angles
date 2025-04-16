@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Skill;
+using Skill.Strategy;
 
 public class SpawnShooter : BaseSkill
 {
@@ -31,43 +33,34 @@ public class SpawnShooter : BaseSkill
                 _data.AdRatio,
                 _upgradeableRatio.TotalDamageRatio
             ),
-            _data.TargetTypes,
             _data.GroggyDuration
         );
 
-        ShooterDataModifier shooterDataModifier = new ShooterDataModifier(damageData, _data.Delay);
+        ShooterDataModifier shooterDataModifier = new ShooterDataModifier(damageData, _data.Delay, _data.TargetTypes);
         _weapon.ModifyData(shooterDataModifier);
+    }
+
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
+    {
+        base.Initialize(upgradeableRatio, caster);
+        _actionStrategy = new SpawnShooterStrategy(
+            _caster,
+            _upgradeableRatio,
+            _data.ShooterName,
+            _data.AdRatio,
+            _data.Damage,
+            _data.Delay,
+            _data.GroggyDuration,
+            _data.TargetTypes,
+            _weaponFactory);
+        // _actionStrategy = ÆøÅº ½ºÆù ±â´É Ãß°¡
     }
 
     public override void OnAdd()
     {
-        BaseWeapon weapon = _weaponFactory.Create(_data.ShooterName);
-        if (weapon == null) return;
-
-        IFollowable followable = _caster.GetComponent<IFollowable>();
+        IFollowable followable = _caster.GetComponent<IFollowable>();   
         if (followable == null) return;
 
-        _weapon = weapon;
-
-        DamageableData damageData = new DamageableData
-        (
-            _caster,
-            new DamageStat(
-                _data.Damage,
-                _upgradeableRatio.AttackDamage,
-                _data.AdRatio,
-                _upgradeableRatio.TotalDamageRatio
-            ),
-            _data.TargetTypes,
-            _data.GroggyDuration
-        );
-
-        ShooterDataModifier shooterDataModifier = new ShooterDataModifier(damageData, _data.Delay);
-        _weapon.ModifyData(shooterDataModifier);
-        _weapon.Activate();
-
-        Transform casterTransform = _caster.GetComponent<Transform>();
-        _weapon.InjectFollower(followable);
-        _weapon.ResetPosition(casterTransform.position);
+        _weapon = _actionStrategy.Execute(followable, new SpawnShooterStrategy.ChangeableData(_data.Damage, _data.Delay));
     }
 }

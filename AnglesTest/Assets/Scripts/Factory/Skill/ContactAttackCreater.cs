@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Skill;
 
 [Serializable]
 public class ContactAttackData : SkillData

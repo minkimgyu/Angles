@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
 
 [System.Serializable]
 public class HexatricData : EnemyData
@@ -14,7 +15,7 @@ public class HexatricData : EnemyData
     [JsonIgnore] public float StopDistance { get => _stopDistance; set => _stopDistance = value; }
     [JsonIgnore] public float Gap { get => _gap; set => _gap = value; }
 
-    public HexatricData(float maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
+    public HexatricData(UpgradeableStat<float> maxHp, ITarget.Type targetType, BaseEffect.Name dieEffectName, BaseLife.Size size, Dictionary<BaseSkill.Name, int> skillDataToAdd,
         float moveSpeed, float stopDistance, float gap) : base(maxHp, targetType, dieEffectName, size, skillDataToAdd)
     {
         _moveSpeed = moveSpeed;
@@ -24,8 +25,8 @@ public class HexatricData : EnemyData
 
     public override LifeData Copy()
     {
-        return new HexahornData(
-            _maxHp, // EnemyData에서 상속된 값
+        return new HexatricData(
+            _maxHp.Copy(), // EnemyData에서 상속된 값
             _targetType, // EnemyData에서 상속된 값
             _destroyEffectName,
             _size, // EnemyData에서 상속된 값
@@ -54,7 +55,7 @@ public class HexatricCreater : LifeCreater
         BaseLife life = UnityEngine.Object.Instantiate(_lifePrefab);
         if (life == null) return null;
 
-        HexahornData data = CopyLifeData as HexahornData;
+        HexatricData data = CopyLifeData as HexatricData;
 
         life.InjectData(data, _dropData);
         life.InjectEffectFactory(_effectFactory);
@@ -66,9 +67,11 @@ public class HexatricCreater : LifeCreater
 
         foreach (var item in data.SkillData)
         {
-            BaseSkill skill = _skillFactory.Create(item.Key);
-            skill.Upgrade(item.Value);
-            caster.AddSkill(item.Key, skill);
+            for (int i = 0; i <= item.Value; i++)
+            {
+                BaseSkill skill = _skillFactory.Create(item.Key);
+                caster.AddSkill(item.Key, skill);
+            }
         }
 
         return life;

@@ -58,7 +58,7 @@ abstract public class ShooterAttackStrategy : IWeaponActionStrategy
         {
             if ((targets[i] as UnityEngine.Object) == null) continue;
 
-            bool isTarget = targets[i].IsTarget(_shooterData.DamageableData._targetType);
+            bool isTarget = targets[i].IsTarget(_shooterData.TargetTypes);
             if (isTarget == false) continue;
 
             capturedTarget = targets[i];

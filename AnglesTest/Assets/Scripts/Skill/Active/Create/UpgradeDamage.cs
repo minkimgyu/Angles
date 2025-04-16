@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
+using Skill.Strategy;
 
 public class UpgradeDamage : BaseSkill
 {
@@ -11,22 +13,9 @@ public class UpgradeDamage : BaseSkill
         _data = data;
     }
 
-    public override void Upgrade()
+    public override void Initialize(IUpgradeableSkillData upgradeableRatio, ICaster caster)
     {
-        base.Upgrade();
-        UpgradeStat();
-    }
-
-    public override void OnAdd()
-    {
-        UpgradeStat();
-    }
-
-    void UpgradeStat()
-    {
-        IStatUpgradable visitor = _caster.GetComponent<IStatUpgradable>();
-        if (visitor == null) return;
-
-        visitor.Upgrade(_data.DamageStatModifier, UpgradePoint - 1);
+        base.Initialize(upgradeableRatio, caster);
+        _actionStrategy = new UpgradeStatStrategy(_caster, _data.DamageStatModifier, () => { return UpgradePoint; });
     }
 }

@@ -2,50 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using Skill;
+using Newtonsoft.Json.Converters;
 
 [System.Serializable]
 abstract public class LifeData
 {
-    public LifeData(float maxHp, ITarget.Type targetType, BaseEffect.Name destroyEffectName, float autoHpRecoveryPoint = 0, float damageReductionRatio = 0)
+    [JsonConstructor]
+    public LifeData(UpgradeableStat<float> maxHp, ITarget.Type targetType, BaseEffect.Name destroyEffectName)
     {
         _maxHp = maxHp;
-        _hp = maxHp;
         _targetType = targetType;
+        _destroyEffectName = destroyEffectName;
+
+        _autoHpRecoveryPoint = new UpgradeableStat<float>(0);
+        _damageReductionRatio = new UpgradeableStat<float>(0);
+    }
+
+    [JsonConstructor]
+    public LifeData(UpgradeableStat<float> maxHp, ITarget.Type targetType, BaseEffect.Name destroyEffectName, UpgradeableStat<float> autoHpRecoveryPoint, UpgradeableStat<float> damageReductionRatio)
+    {
+        _maxHp = maxHp;
+        _targetType = targetType;
+        _destroyEffectName = destroyEffectName;
 
         _autoHpRecoveryPoint = autoHpRecoveryPoint;
         _damageReductionRatio = damageReductionRatio;
     }
 
-    protected LifeData()
-    {
-    }
-
-    // setter 활용
-    [JsonIgnore]
-    public float MaxHp
-    {
-        get {  return _maxHp; } 
-        set
-        {
-            float addPoint = value - _maxHp;
-            _maxHp = value;
-            _hp += addPoint;  // 기존 체력에 최대 체력 추가치를 더해준다.
-        }
-    }
-
-    [JsonIgnore] public float Hp { get => _hp; set => _hp = value; }
-    [JsonIgnore] public float AutoHpRecoveryPoint { get => _autoHpRecoveryPoint; set => _autoHpRecoveryPoint = value; }
-    [JsonIgnore] public float DamageReductionRatio { get => _damageReductionRatio; set => _damageReductionRatio = value; }
+    [JsonIgnore] public Action<float> OnMaxHpChanged;
+    [JsonIgnore] public UpgradeableStat<float> MaxHp { get => _maxHp; set => _maxHp = value; }
+    [JsonIgnore] public UpgradeableStat<float> AutoHpRecoveryPoint { get => _autoHpRecoveryPoint; set => _autoHpRecoveryPoint = value; }
+    [JsonIgnore] public UpgradeableStat<float> DamageReductionRatio { get => _damageReductionRatio; set => _damageReductionRatio = value; }
     [JsonIgnore] public ITarget.Type TargetType { get => _targetType; set => _targetType = value; }
     [JsonIgnore] public BaseEffect.Name DestroyEffectName { get => _destroyEffectName; }
 
-    [JsonProperty] protected float _maxHp;
-    [JsonProperty] private float _hp;
-    [JsonProperty] protected BaseEffect.Name _destroyEffectName;
+    [JsonProperty] protected UpgradeableStat<float> _maxHp;
+    [JsonProperty] [JsonConverter(typeof(StringEnumConverter))] protected BaseEffect.Name _destroyEffectName;
 
-    [JsonProperty] protected float _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
-    [JsonProperty] protected float _damageReductionRatio; // 데미지 감소 수치
-    [JsonProperty] protected ITarget.Type _targetType;
+    [JsonProperty] protected UpgradeableStat<float> _autoHpRecoveryPoint; // 일정 시간마다 체력 회복
+    [JsonProperty] protected UpgradeableStat<float> _damageReductionRatio; // 데미지 감소 수치
+    [JsonProperty] [JsonConverter(typeof(StringEnumConverter))] protected ITarget.Type _targetType;
 
     public abstract LifeData Copy();
 }
@@ -53,16 +50,14 @@ abstract public class LifeData
 [Serializable]
 abstract public class EnemyData : LifeData
 {
-    [JsonProperty] private int _level;
     [JsonProperty] protected BaseLife.Size _size;
     [JsonProperty] protected Dictionary<BaseSkill.Name, int> _skillData;
 
-    [JsonIgnore] public int Level { get => _level; set => _level = value; }
     [JsonIgnore] public BaseLife.Size Size { get => _size; set => _size = value; }
     [JsonIgnore] public Dictionary<BaseSkill.Name, int> SkillData { get => _skillData; set => _skillData = value; }
 
     public EnemyData(
-        float maxHp,
+        UpgradeableStat<float> maxHp,
         ITarget.Type targetType,
         BaseEffect.Name destroyEffectName,
         BaseLife.Size size,
@@ -70,10 +65,6 @@ abstract public class EnemyData : LifeData
     {
         _size = size;
         _skillData = skillData;
-    }
-
-    protected EnemyData()
-    {
     }
 }
 
@@ -124,7 +115,7 @@ public class LifeFactory : BaseFactory
         _lifeCreaters[BaseLife.Name.GreenTriangle] = new TriangleCreater(lifePrefabs[BaseLife.Name.GreenTriangle], lifeDatas[BaseLife.Name.GreenTriangle], dropDatas[BaseLife.Name.GreenTriangle], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.GreenRectangle] = new RectangleCreater(lifePrefabs[BaseLife.Name.GreenRectangle], lifeDatas[BaseLife.Name.GreenRectangle], dropDatas[BaseLife.Name.GreenRectangle], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.GreenPentagon] = new GreenPentagonCreater(lifePrefabs[BaseLife.Name.GreenPentagon], lifeDatas[BaseLife.Name.GreenPentagon], dropDatas[BaseLife.Name.GreenPentagon], effectFactory, skillFactory);
-        _lifeCreaters[BaseLife.Name.GreenHexagon] = new HexahornCreater(lifePrefabs[BaseLife.Name.GreenHexagon], lifeDatas[BaseLife.Name.GreenHexagon], dropDatas[BaseLife.Name.GreenHexagon], effectFactory, skillFactory);
+        _lifeCreaters[BaseLife.Name.GreenHexagon] = new NormalHexagonCreater(lifePrefabs[BaseLife.Name.GreenHexagon], lifeDatas[BaseLife.Name.GreenHexagon], dropDatas[BaseLife.Name.GreenHexagon], effectFactory, skillFactory);
 
         _lifeCreaters[BaseLife.Name.Tricon] = new TriconCreater(lifePrefabs[BaseLife.Name.Tricon], lifeDatas[BaseLife.Name.Tricon], dropDatas[BaseLife.Name.Tricon], effectFactory, skillFactory);
         _lifeCreaters[BaseLife.Name.Rhombus] = new RhombusCreater(lifePrefabs[BaseLife.Name.Rhombus], lifeDatas[BaseLife.Name.Rhombus], dropDatas[BaseLife.Name.Rhombus], effectFactory, skillFactory);

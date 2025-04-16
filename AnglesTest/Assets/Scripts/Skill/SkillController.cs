@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Skill;
 
 public struct SkillUpgradeData
 {
@@ -24,31 +25,11 @@ public struct SkillUpgradeData
     // 1, 2, 3, 4, 5
     // 5
 
-    public bool CanUpgrade() { return _upgradeCount <= _maxUpgradeCount; } // 만약 같다면 더 이상 업그레이드 불가능
+    public bool CanUpgrade() { return _upgradeCount < _maxUpgradeCount; } // 만약 같다면 더 이상 업그레이드 불가능
 }
 
 public class SkillController : MonoBehaviour
 {
-    //public class UpgradeableData
-    //{
-    //    public UpgradeableData(float totalDamageRatio, float totalCooltimeRatio, float totalRandomRatio)
-    //    {
-    //        _totalDamageRatio = totalDamageRatio;
-    //        _totalCooltimeRatio = totalCooltimeRatio;
-    //        _totalRandomRatio = totalRandomRatio;
-    //    }
-
-    //    float _totalDamageRatio;
-    //    public float TotalDamageRatio { get { return _totalDamageRatio; } set { _totalDamageRatio = value; } }
-
-    //    float _totalCooltimeRatio;
-    //    public float TotalCooltimeRatio { get { return _totalCooltimeRatio; } set { _totalCooltimeRatio = value; } }
-
-    //    float _totalRandomRatio;
-    //    public float TotalRandomRatio { get { return _totalRandomRatio; } set { _totalRandomRatio = value; } }
-    //}
-
-
     Dictionary<BaseSkill.Name, BaseSkill> _skillDictionary;
     IUpgradeableSkillData _upgradeableRatio;
     ICaster _caster;
@@ -93,13 +74,13 @@ public class SkillController : MonoBehaviour
         OnAddSkillRequested?.Invoke(name, skill);
     }
 
-    public void OnReflect(GameObject targetObject, Vector3 contactPos)
+    public void OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
     {
         foreach (var skill in _skillDictionary)
         {
             if (skill.Value.CanUse() == false) continue; // 개수 맞는지 확인
 
-            bool canUseReflectSkill = skill.Value.OnReflect(targetObject, contactPos);
+            bool canUseReflectSkill = skill.Value.OnReflect(targetObject, contactPos, contactNormal);
             if (canUseReflectSkill == false) continue;
 
             skill.Value.Use(); // 사용 가능하다면 쓰기

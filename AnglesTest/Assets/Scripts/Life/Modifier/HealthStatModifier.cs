@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameMode;
 
 [System.Serializable]
 public class HealthStatModifier : IStatModifier
@@ -23,11 +24,11 @@ public class HealthStatModifier : IStatModifier
 
     public void Visit<T>(T data, int level) where T : PlayerData
     {
-        data.MaxHp += _additionalHealths[level];
+        data.OnMaxHpChanged?.Invoke(_additionalHealths[level]);
     }
 
     public void Visit<T>(T data) where T : PlayerData
     {
-        data.MaxHp += _additionalHealth;
+        data.OnMaxHpChanged?.Invoke(_additionalHealth);
     }
 }

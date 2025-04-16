@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+using Skill;
 
 public class SurvivalMode : DungeonMode
 {
@@ -66,7 +67,8 @@ public class SurvivalMode : DungeonMode
             if (_currentCoinLevel < _maxCoinLevel && _totalCoinCount >= _coinGaugeData[_currentCoinLevel])
             {
                 _currentCoinLevel++;
-                EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, FindObjectOfType<Player>().GetCaster(), 3);
+
+                EventBusManager.Instance.SubEventBus.Publish(SubEventBus.State.CreateCard, FindObjectOfType<Player>().GetCaster(), 3, 1);
             }
 
             _levelUIController.ChangeCoinLevel(_currentCoinLevel);

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Skill;
 
 [Serializable]
 public class ShootMultipleLaserData : SkillData
@@ -43,13 +44,13 @@ public class ShootMultipleLaserData : SkillData
 
         int totalLaserCount,
         int shootableLaserCount,
-
+        float groggyDuration,
         float distanceFromCaster,
         List<ITarget.Type> targetTypes) : base(maxUpgradePoint)
     {
         _damage = damage;
         _adRatio = adRatio;
-        _groggyDuration = 0;
+        _groggyDuration = groggyDuration;
 
         _maxDistance = maxDistance;
         _delay = delay;
@@ -72,6 +73,7 @@ public class ShootMultipleLaserData : SkillData
 
             _totalLaserCount,
             _shootableLaserCount,
+            _groggyDuration,
 
             _distanceFromCaster,
             new List<ITarget.Type>(_targetTypes) // 리스트 깊은 복사

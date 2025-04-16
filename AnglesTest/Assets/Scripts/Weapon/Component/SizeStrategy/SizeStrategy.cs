@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ISizeModifyStat
-{
-    public float SizeMultiplier { get; set; }
-}
+//public interface ISizeModifyStat
+//{
+//    public float SizeMultiplier { get; set; }
+//}
 
 public interface ISizeStrategy
 {
     void OnActivate();
+    void ChangeSize(float size) { }
 }
 
 public class NoSizeStrategy : ISizeStrategy
@@ -20,9 +21,20 @@ public class NoSizeStrategy : ISizeStrategy
 public class ChangeableSizeStrategy : ISizeStrategy
 {
     Transform _transform;
-    ISizeModifyStat _sizeStat;
+    float _sizeMultiplier;
 
-    public ChangeableSizeStrategy(Transform transform, ISizeModifyStat sizeStat) { _transform = transform; _sizeStat = sizeStat; }
+    public ChangeableSizeStrategy(
+        Transform transform) 
+    { 
+        _transform = transform;
+        _sizeMultiplier = 1.0f;
+    }
 
-    public void OnActivate() { _transform.localScale *= _sizeStat.SizeMultiplier; }
+    public void ChangeSize(float sizeMultiplier) 
+    {
+        _sizeMultiplier = sizeMultiplier;
+    }
+
+
+    public void OnActivate() { _transform.localScale *= _sizeMultiplier; }
 }

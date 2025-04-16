@@ -15,6 +15,7 @@ abstract public class BaseShooter : BaseWeapon
     public override void ModifyData(ShooterDataModifier modifier)
     {
         modifier.Visit(_data);
+        _detectingStrategy.InjectTargetTypes(_data.TargetTypes);
     }
 
     public override void InjectData(ShooterData shooterData)
@@ -30,6 +31,7 @@ abstract public class BaseShooter : BaseWeapon
 
     public override void InitializeStrategy()
     {
+        base.InitializeStrategy();
         _followComponent = GetComponent<FollowComponent>();
         _followComponent.Initialize
         (
@@ -40,9 +42,7 @@ abstract public class BaseShooter : BaseWeapon
         );
 
         TargetCaptureComponent targetCaptureComponent = GetComponentInChildren<TargetCaptureComponent>();
-        _targetStrategy = new TargetTargetingStrategy(targetCaptureComponent);
-        _lifeTimeStrategy = new NoLifetimeStrategy();
-        _sizeStrategy = new NoSizeStrategy();
+        _detectingStrategy = new TargetDetectingStrategy(targetCaptureComponent);
         _moveStrategy = new FollowingMoveStrategy(_followComponent);
     }
 }

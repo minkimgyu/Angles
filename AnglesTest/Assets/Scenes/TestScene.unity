@@ -520,12 +520,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobStageDataTxt:
-  - {fileID: 4900000, guid: 1ee0fd3c58b59f74d99a06c8ac3cf966, type: 3}
-  - {fileID: 4900000, guid: 45a40ef3e4244d34ca8446c7547872d8, type: 3}
-  - {fileID: 4900000, guid: abda27ad546899a4ab8ec74d2c2bfa45, type: 3}
-  - {fileID: 4900000, guid: 76e56df147c1dc440b09eb08de7ce466, type: 3}
-  - {fileID: 4900000, guid: 2d0d42dfacdf8fa4182dd63a8f45ba58, type: 3}
-  bossStageDataTxt: {fileID: 4900000, guid: a4f295d12ca11cc4d86efd8e49828a60, type: 3}
+  - {fileID: 4900000, guid: 7c451a9f1055d604a817e27fc319623c, type: 3}
+  - {fileID: 4900000, guid: 1a8763cc5f9f560429ec4f576f9e63b1, type: 3}
+  - {fileID: 4900000, guid: befe004cf08e0194a91119d812fd0ad3, type: 3}
+  - {fileID: 4900000, guid: d3fafe5c7338d3c4494236c2861ae800, type: 3}
+  - {fileID: 4900000, guid: 5c96cf3b1f8f9b24d97f8920195e9e71, type: 3}
+  - {fileID: 4900000, guid: 56658f717242e67479b840f59f199901, type: 3}
+  - {fileID: 4900000, guid: 133a191146b4f3746935931f52b877ff, type: 3}
+  bossStageDataTxt: {fileID: 4900000, guid: f48f83ee581abdb468a4e5d3a097d8eb, type: 3}
 --- !u!4 &899295322
 Transform:
   m_ObjectHideFlags: 0

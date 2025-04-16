@@ -19,7 +19,7 @@ public class RocketShooterAttackStrategy : ShooterAttackStrategy
     protected override BaseWeapon CreateProjectileWeapon()
     {
         BaseWeapon weapon = _weaponFactory.Create(BaseWeapon.Name.ShooterRocket);
-        RocketDataModifier rocketDataModifier = new RocketDataModifier(_shooterData.DamageableData);
+        RocketDataModifier rocketDataModifier = new RocketDataModifier(_shooterData.DamageableStat, _shooterData.TargetTypes);
 
         weapon.ModifyData(rocketDataModifier);
         return weapon;

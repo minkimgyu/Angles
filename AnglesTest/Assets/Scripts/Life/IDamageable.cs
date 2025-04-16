@@ -8,7 +8,6 @@ public struct DamageableData
 {
     public ICaster _caster; // 공격을 적용한 대상
     public DamageStat _damageStat;
-    public List<ITarget.Type> _targetType;
     public float _groggyDuration;
 
     public float CalculateDamage(float damageReductionRatio = 0)
@@ -22,7 +21,6 @@ public struct DamageableData
     {
         _caster = null;
         _damageStat = damageStat;
-        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue, ITarget.Type.Construction };
         _groggyDuration = 0;
     }
 
@@ -30,7 +28,6 @@ public struct DamageableData
     {
         _caster = null;
         _damageStat = damageStat;
-        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue, ITarget.Type.Construction };
         _groggyDuration = groggyDuration;
     }
 
@@ -38,15 +35,13 @@ public struct DamageableData
     {
         _caster = caster;
         _damageStat = damageStat;
-        _targetType = new List<ITarget.Type> { ITarget.Type.Red, ITarget.Type.Blue, ITarget.Type.Construction };
         _groggyDuration = 0;
     }
 
-    public DamageableData(ICaster caster, DamageStat damageStat, List<ITarget.Type> targetType, float groggyDuration = 0)
+    public DamageableData(ICaster caster, DamageStat damageStat, float groggyDuration = 0)
     {
         _caster = caster;
         _damageStat = damageStat;
-        _targetType = targetType;
         _groggyDuration = groggyDuration;
     }
 }

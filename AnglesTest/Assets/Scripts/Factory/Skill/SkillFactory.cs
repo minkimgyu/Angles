@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Newtonsoft.Json;
+using Skill;
 
 [Serializable]
 abstract public class SkillData
@@ -20,45 +21,76 @@ abstract public class SkillData
 }
 
 
-public interface IRandomStat
+//public interface IRandomStat
+//{
+//    float Probability { get; set; }
+//}
+
+//public interface ICooltimeStat : IMaxStackStat
+//{
+//    float Cooltime { get; set; }
+//}
+
+//public interface IDamageStat
+//{
+//    float Damage { get; set; }
+//}
+
+//public interface IDelayStat
+//{
+//    float Delay { get; set; }
+//}
+
+//public interface IForceStat
+//{
+//    float Force { get; set; }
+//}
+
+//public interface IMaxTargetStat
+//{
+//    int MaxTargetCount { get; set; }
+//}
+
+//public interface IMaxStackStat
+//{
+//    int MaxStackCount { get; set; }
+//}
+
+[System.Serializable]
+public class UpgradeableStat<T>
 {
-    float Probability { get; set; }
+    public UpgradeableStat()
+    {
+    }
+
+    public UpgradeableStat(T value)
+    {
+        _value = value;
+    }
+
+    [JsonProperty] private T _value;
+    [JsonIgnore] public T Value { get { return _value; } set { _value = value; } }
+
+    public UpgradeableStat<T> Copy() { return new UpgradeableStat<T>(_value); }
 }
 
-public interface ICooltimeStat : IMaxStackStat
-{
-    float Cooltime { get; set; }
-}
 
-public interface IDamageStat
-{
-    float Damage { get; set; }
-}
+//public class UpgradeableInt : UpgradeableStat<int>
+//{
+//    public UpgradeableInt(int value) : base(value)
+//    {
+//    }
+//}
 
-public interface IDelayStat
-{
-    float Delay { get; set; }
-}
-
-public interface IForceStat
-{
-    float Force { get; set; }
-}
-
-public interface IMaxTargetStat
-{
-    int MaxTargetCount { get; set; }
-}
-
-public interface IMaxStackStat
-{
-    int MaxStackCount { get; set; }
-}
-
+//public class UpgradeableFloat : UpgradeableStat<float>
+//{
+//    public UpgradeableFloat(float value) : base(value)
+//    {
+//    }
+//}
 
 
 // stat으로 분리해서 적용해주기
-
 [Serializable]
 abstract public class RandomSkillData : SkillData
 {
@@ -140,6 +172,10 @@ public class SkillFactory : BaseFactory
         _skillCreaters[BaseSkill.Name.ShootMultipleLaser] = new ShootMultipleLaserCreater(skillDatas[BaseSkill.Name.ShootMultipleLaser], effectFactory);
 
         _skillCreaters[BaseSkill.Name.ReviveImpact] = new ReviveImpactCreater(skillDatas[BaseSkill.Name.ReviveImpact], effectFactory);
+
+        _skillCreaters[BaseSkill.Name.RushAttack] = new ContactAttackCreater(skillDatas[BaseSkill.Name.RushAttack], effectFactory);
+
+        _skillCreaters[BaseSkill.Name.ShootFewLaser] = new ShootMultipleLaserCreater(skillDatas[BaseSkill.Name.ShootFewLaser], effectFactory);
     }
 
     public override BaseSkill Create(BaseSkill.Name name)
