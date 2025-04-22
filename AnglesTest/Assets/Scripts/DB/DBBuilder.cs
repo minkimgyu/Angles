@@ -990,7 +990,8 @@ public class DBBuilder : MonoBehaviour
         { GameMode.Level.PentagonicChapter, new ChapterInfo(20, GameMode.Level.HexahornChapter) },
         { GameMode.Level.HexahornChapter, new ChapterInfo(20, GameMode.Level.OctaviaChapter) },
         { GameMode.Level.OctaviaChapter, new ChapterInfo(20, GameMode.Level.HexatricChapter) },
-        { GameMode.Level.HexatricChapter, new ChapterInfo(30) },
+        { GameMode.Level.HexatricChapter, new ChapterInfo(30, GameMode.Level.GearChapter) },
+        { GameMode.Level.GearChapter, new ChapterInfo(30) },
 
         { GameMode.Level.PyramidSurvival, new SurvivalInfo(300, GameMode.Level.CubeSurvival) },
         { GameMode.Level.CubeSurvival, new SurvivalInfo(300, GameMode.Level.PrismSurvival) },

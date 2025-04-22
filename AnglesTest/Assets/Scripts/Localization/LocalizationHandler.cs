@@ -64,6 +64,7 @@ public interface ILocalization
         HexahornChapterName,
         OctaviaChapterName,
         HexatricChapterName,
+        GearChapterName,
 
         PyramidSurvivalName,
         CubeSurvivalName,
@@ -78,6 +79,7 @@ public interface ILocalization
         HexahornChapterDescription,
         OctaviaChapterDescription,
         HexatricChapterDescription,
+        GearChapterDescription,
 
         PyramidSurvivalDescription,
         CubeSurvivalDescription,

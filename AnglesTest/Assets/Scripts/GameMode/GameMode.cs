@@ -76,6 +76,7 @@ abstract public class GameMode : MonoBehaviour
         HexahornChapter,
         OctaviaChapter,
         HexatricChapter,
+        GearChapter,
 
         PyramidSurvival,
         CubeSurvival,
@@ -93,7 +94,8 @@ abstract public class GameMode : MonoBehaviour
         Green,
         White,
         Orange,
-        DeepRed
+        DeepRed,
+        Cyan
     }
 
     protected int _reviveChance = 1;

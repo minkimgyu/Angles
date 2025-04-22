@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 //움직이는 방식
 
@@ -62,6 +64,51 @@ public class TrackingMoveStrategy : IWeaponMoveStrategy
     public void OnFixedUpdate()
     {
         _moveComponent.Move(_trackComponent.MoveDirection, _moveSpeed);
+    }
+}
+
+public class MoveBetweenPointsStrategy : IWeaponMoveStrategy
+{
+    List<Transform> _movePoints;
+    Transform _myTransform;
+    MoveComponent _moveComponent;
+    int _moveIndex;
+    float _closeDistance = 0.5f;
+    Vector2 _moveDirection;
+    float _speed;
+
+    public MoveBetweenPointsStrategy
+    (
+        List<Transform> points,
+        Transform myTransform,
+        MoveComponent moveComponent,
+        float speed) : base()
+    {
+        _movePoints = points;
+        _myTransform = myTransform;
+        _moveComponent = moveComponent;
+        _moveIndex = 0;
+        _closeDistance = 0.5f;
+        _speed = speed;
+    }
+
+    public void OnUpdate()
+    {
+        Vector2 nextMovePos = _movePoints[_moveIndex].position;
+        _moveDirection = (nextMovePos - (Vector2)_myTransform.position).normalized;
+
+        // 특정 점과 가까워지면 index +1 해주기
+        bool nowCloseToNextPoint = Vector2.Distance(_myTransform.position, nextMovePos) < _closeDistance;
+        if (nowCloseToNextPoint)
+        {
+            _moveIndex++;
+            if (_movePoints.Count == _moveIndex) _moveIndex = 0;
+        }
+    }
+
+    public void OnFixedUpdate()
+    {
+        _moveComponent.Move(_moveDirection, _speed);
     }
 }
 

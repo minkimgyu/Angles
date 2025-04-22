@@ -54,6 +54,9 @@ public interface ISoundPlayable
         DeepRedBGM,
         DeepRedBossBGM,
 
+        CyanBGM,
+        CyanBossBGM,
+
         Reroll,
         LevelClear,
         LevelFail,
