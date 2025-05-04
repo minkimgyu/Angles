@@ -34,7 +34,7 @@ public class SpreadBulletsUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 
     public void Visit(ISkillUpgradable upgradable, SpreadBulletsData data) 
     {
-        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        int index = GetUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
         data.Delay += upgradeData._delay;

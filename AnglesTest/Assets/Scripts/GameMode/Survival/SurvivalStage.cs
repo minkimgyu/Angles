@@ -1,4 +1,5 @@
 using DamageUtility;
+using JPSPlus;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 public class SurvivalStage : BaseStage, ILevel
 {
-    Pathfinder _pathfinder;
+    JPSPlus.JPSPathfinder _pathfinder;
     SurvivalStageData _survivalStageData;
     int _spawnIndex = 0;
 
@@ -16,6 +17,9 @@ public class SurvivalStage : BaseStage, ILevel
     PlayerSpawner _playerSpawner;
     SurvivalLevelUIController _levelUIController;
     ArrowPointerController _arrowPointerController;
+
+    [SerializeField] JPSPlus.GridComponent _gridComponentx1;
+    [SerializeField] JPSPlus.GridComponent _gridComponentx2;
 
     List<BaseLife> _spawnedEnemys;
 
@@ -62,10 +66,10 @@ public class SurvivalStage : BaseStage, ILevel
         interactableObject.ResetPosition(_bonusPostion.position);
 
         _gameMode = gameMode;
-        _pathfinder = GetComponent<Pathfinder>();
+        _pathfinder = GetComponent<JPSPlus.JPSPathfinder>();
 
-        GridComponent gridComponent = GetComponent<GridComponent>();
-        gridComponent.Initialize(_pathfinder);
+        _gridComponentx1.Initialize(_pathfinder);
+        _gridComponentx2.Initialize(_pathfinder);
     }
 
     ITarget _target;

@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3410917068495054607}
   - component: {fileID: 3439745509357578945}
-  - component: {fileID: 7409080003453656424}
-  - component: {fileID: 8557680596826863186}
+  - component: {fileID: 3353625842964305783}
+  - component: {fileID: 1106949118908901699}
+  - component: {fileID: 2724536708946070226}
   m_Layer: 0
   m_Name: IcosaSurvival
   m_TagString: Untagged
@@ -51,7 +52,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _entryPoint: {fileID: 706343554035685709}
   _bonusPostion: {fileID: 756493225571753959}
---- !u!114 &7409080003453656424
+  _gridComponentx1: {fileID: 3353625842964305783}
+  _gridComponentx2: {fileID: 1106949118908901699}
+--- !u!114 &3353625842964305783
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,12 +63,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 689355673865649459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79aa04bca376abe4eb8faf911df25c43, type: 3}
+  m_Script: {fileID: 11500000, guid: 866d8966d3c51a14e9e59589dbb48934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _wallTile: {fileID: 8415857913791995580}
   _groundTile: {fileID: 6100359682944731158}
---- !u!114 &8557680596826863186
+  _size: 0
+  _showPrimaryJumpDirection: 1
+  _showPrimaryJumpPoint: 1
+  _showJumpPointDistances: 0
+  _drawGizmo: 1
+  _blockColor: {r: 1, g: 0.25882354, b: 0.25882354, a: 0.6117647}
+  _primaryJumpPointColor: {r: 1, g: 1, b: 0.4745098, a: 0.48235294}
+  _directionColor: {r: 0.42745098, g: 0.5294118, b: 1, a: 1}
+--- !u!114 &1106949118908901699
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,7 +85,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 689355673865649459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c3af45d449a4ea4cb18f17c3dcce1d4, type: 3}
+  m_Script: {fileID: 11500000, guid: 866d8966d3c51a14e9e59589dbb48934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallTile: {fileID: 8415857913791995580}
+  _groundTile: {fileID: 6100359682944731158}
+  _size: 1
+  _showPrimaryJumpDirection: 1
+  _showPrimaryJumpPoint: 1
+  _showJumpPointDistances: 0
+  _drawGizmo: 1
+  _blockColor: {r: 1, g: 0.25882354, b: 0.25882354, a: 0.6117647}
+  _primaryJumpPointColor: {r: 1, g: 1, b: 0.4745098, a: 0.48235294}
+  _directionColor: {r: 0.42745098, g: 0.5294118, b: 1, a: 1}
+--- !u!114 &2724536708946070226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689355673865649459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1129a1fb48386914fa07f13fce646115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1465526288896674687
@@ -93,7 +126,7 @@ GameObject:
   - component: {fileID: 8244575476889055764}
   - component: {fileID: 1220359966732164647}
   m_Layer: 13
-  m_Name: Floor
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18375,7 +18408,7 @@ GameObject:
   - component: {fileID: 2539837421150382339}
   - component: {fileID: 8088906168010524700}
   m_Layer: 6
-  m_Name: Block
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

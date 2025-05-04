@@ -32,7 +32,7 @@ public class ShockwaveUpgrader : BaseSkillUpgrader, IUpgradeVisitor
 
     public void Visit(ISkillUpgradable upgradable, ShockwaveData data)
     {
-        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        int index = GetUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
         data.Damage += upgradeData._damage;

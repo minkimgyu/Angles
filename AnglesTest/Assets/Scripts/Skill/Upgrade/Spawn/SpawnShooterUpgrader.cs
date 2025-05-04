@@ -33,7 +33,7 @@ public class SpawnShooterUpgrader : BaseSkillUpgrader, IUpgradeVisitor
     public void Visit(ISkillUpgradable upgradable, SpawnShooterData data)
     {
         // 2랩부터 업그레이드가 들어가기 때문에 이렇게 한다.
-        int index = ReturnUpgradeDataIndex(upgradable.UpgradePoint);
+        int index = GetUpgradeDataIndex(upgradable.UpgradePoint);
         UpgradableData upgradeData = _upgradeDatas[index];
 
         data.Damage += upgradeData._damage;

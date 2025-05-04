@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinder : MonoBehaviour
+public class Pathfinder : MonoBehaviour, IPathfinder
 {
     Func<Vector2, Grid2D> ReturnNodeIndex;
     Func<Grid2D, Node> ReturnNode;
@@ -85,8 +85,6 @@ public class Pathfinder : MonoBehaviour
         for (int i = 0; i < nearNodes.Count; i++)
         {
             Node nearNode = nearNodes[i];
-            //bool nowHave = HaveBlockNodeInNearPosition(nearNode.Index, size);
-            //if (nowHave) continue;
 
             // 여기서 bfs 돌려서 주변 3X3 칸에 이동 불가능한 경로가 있다면 다시 뽑아준다.
             // 만약 모든 노드를 다 뽑은 경우 리턴시킨다.

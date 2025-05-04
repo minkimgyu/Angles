@@ -49,6 +49,17 @@ public class TrackComponent : MonoBehaviour
         this.FindPath = FindPath;
     }
 
+    private void OnDrawGizmos()
+    {
+        if (_movePoints == null || _movePoints.Count == 0) return;
+
+        for (int i = 1; i < _movePoints.Count; i++)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(_movePoints[i - 1], _movePoints[i]);
+        }
+    }
+
     public void OnUpdate()
     {
         if (_target as UnityEngine.Object == null) return;

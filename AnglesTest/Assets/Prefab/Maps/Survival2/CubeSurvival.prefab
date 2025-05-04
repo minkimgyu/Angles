@@ -41,8 +41,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3835303810858633111}
   - component: {fileID: 1044620748198509824}
-  - component: {fileID: 1665984037875867969}
-  - component: {fileID: 6788357475002495112}
+  - component: {fileID: 1308582982178536201}
+  - component: {fileID: 1914228070801596388}
+  - component: {fileID: 715108747408811674}
   m_Layer: 0
   m_Name: CubeSurvival
   m_TagString: Untagged
@@ -82,7 +83,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _entryPoint: {fileID: 4331476328979228001}
   _bonusPostion: {fileID: 4164157037870809355}
---- !u!114 &1665984037875867969
+  _gridComponentx1: {fileID: 1308582982178536201}
+  _gridComponentx2: {fileID: 1914228070801596388}
+--- !u!114 &1308582982178536201
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,12 +94,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2139236112780839775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79aa04bca376abe4eb8faf911df25c43, type: 3}
+  m_Script: {fileID: 11500000, guid: 866d8966d3c51a14e9e59589dbb48934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _wallTile: {fileID: 4964813847599455189}
   _groundTile: {fileID: 2580890153450923104}
---- !u!114 &6788357475002495112
+  _size: 0
+  _showPrimaryJumpDirection: 1
+  _showPrimaryJumpPoint: 1
+  _showJumpPointDistances: 0
+  _drawGizmo: 1
+  _blockColor: {r: 1, g: 0.25882354, b: 0.25882354, a: 0.6117647}
+  _primaryJumpPointColor: {r: 1, g: 1, b: 0.4745098, a: 0.48235294}
+  _directionColor: {r: 0.42745098, g: 0.5294118, b: 1, a: 1}
+--- !u!114 &1914228070801596388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +116,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 2139236112780839775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c3af45d449a4ea4cb18f17c3dcce1d4, type: 3}
+  m_Script: {fileID: 11500000, guid: 866d8966d3c51a14e9e59589dbb48934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallTile: {fileID: 4964813847599455189}
+  _groundTile: {fileID: 2580890153450923104}
+  _size: 1
+  _showPrimaryJumpDirection: 1
+  _showPrimaryJumpPoint: 1
+  _showJumpPointDistances: 0
+  _drawGizmo: 1
+  _blockColor: {r: 1, g: 0.25882354, b: 0.25882354, a: 0.6117647}
+  _primaryJumpPointColor: {r: 1, g: 1, b: 0.4745098, a: 0.48235294}
+  _directionColor: {r: 0.42745098, g: 0.5294118, b: 1, a: 1}
+--- !u!114 &715108747408811674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139236112780839775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1129a1fb48386914fa07f13fce646115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3555640127464440203

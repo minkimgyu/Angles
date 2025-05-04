@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PathfindInjecter : MonoBehaviour
 {
-    Pathfinder _pathfinder;
+    IPathfinder _pathfinder;
 
-    public void Initialize(Pathfinder pathfinder)
+    public void Initialize(IPathfinder pathfinder)
     {
         _pathfinder = pathfinder;
     }

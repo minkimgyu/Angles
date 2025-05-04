@@ -4,10 +4,6 @@ using UnityEngine;
 using System;
 using Skill.Strategy;
 
-// 무기는 Visitor 제거해주기
-// PlayerData를 FSM 내부에서 캐싱해서 사용
-// 
-
 namespace Skill
 {
     abstract public class BaseSkill : ISkillUpgradable
@@ -88,11 +84,6 @@ namespace Skill
         int _upgradePoint;
         public int UpgradePoint { get { return _upgradePoint; } }
 
-        //public virtual void Upgrade(int step)
-        //{
-        //    for (int i = 0; i < step; i++) Upgrade();
-        //}
-
         public virtual void Upgrade()
         {
             _upgradePoint++;
@@ -140,15 +131,6 @@ namespace Skill
 
         public virtual bool OnReflect(GameObject targetObject, Vector2 contactPos, Vector2 contactNormal)
         {
-            //List<IDamageable> damageables = _targetingStrategy.TargetDamageables(collision);
-            //if (damageables.Count == 0) return false; // 타겟이 없는 경우
-
-            //_actionStrategy.HitTargets(damageables, collision);
-            ////_effectStrategy.SpawnEffect(collision.contacts[0].point);
-            //_soundStrategy.PlaySound();
-
-            // 자식 객체에서 추가 구현해보기
-
             return true; // 타겟이 존재하는 경우
         }
 
