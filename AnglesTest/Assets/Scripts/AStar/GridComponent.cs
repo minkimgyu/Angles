@@ -218,6 +218,8 @@ public class GridComponent : MonoBehaviour
         Debug.Log("CreateNode");
     }
 
+#if Unity_Editor
+
     private void OnDrawGizmos()
     {
         if (_points == null) return;
@@ -248,6 +250,7 @@ public class GridComponent : MonoBehaviour
         }
     }
 
+#endif
     public void Initialize(Pathfinder pathfinder)
     {
         PathfindInjecter injecter = _groundTile.gameObject.GetComponent<PathfindInjecter>();

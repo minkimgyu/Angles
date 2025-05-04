@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class TrackComponent : MonoBehaviour
 {
@@ -56,7 +57,10 @@ public class TrackComponent : MonoBehaviour
 
         if (_pathfinderTimer.CurrentState == Timer.State.Finish)
         {
+            Profiler.BeginSample("PathFinding");
             _movePoints = FindPath(_myTransform.position, _target.GetPosition(), _size);
+            Profiler.EndSample();
+
             _index = 0;
 
             _pathfinderTimer.Reset();
