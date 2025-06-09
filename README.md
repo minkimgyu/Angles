@@ -1,8 +1,10 @@
 # 🎮 Angles
 
-Unity를 사용하여 개발한 모바일 퍼즐 2D 게임입니다. 🧩
-주어진 도형들을 피하고 몬스터를 샷건으로 물리쳐 모든 스테이지를 클리어하는 것이 목표입니다. 🎯
-현재 **Google Play Store** 🚀에서 서비스 진행 중입니다.
+Unity를 사용하여 개발한 캐주얼 모바일 2D 게임입니다.
+
+스킬을 획득하고 적을 쓰러트려 모든 스테이지를 클리어하는 것이 목표입니다.
+
+[Google Play Store](https://play.google.com/store/apps/details?id=com.hatchling.angles&hl=ko)에서 서비스 진행 중입니다.
 
 <img src="https://github.com/user-attachments/assets/64297dd4-b1d5-4ed6-98d4-e7b84679bcd5" alt="Angles Game Screenshot" width="85%" height="85%" />
 
