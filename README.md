@@ -54,7 +54,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 <img src="https://github.com/user-attachments/assets/0733f9c7-43f2-4075-8c71-56329dbeb17e" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-*Tilemap 기반 A* 길찾기 시각화*
+Tilemap 기반 A* 길찾기 시각화
 
 ---
 
@@ -75,7 +75,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 <img src="https://github.com/user-attachments/assets/0b50d2eb-ce43-4c0c-bf8f-ca79895fc19f" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-*최적화 후 A* 연산 시간이 17.35ms에서 **4.8ms로** 단축되어 약 **3.61배의 성능 향상**을 달성하며 프레임 드랍 문제를 해결했습니다.*
+최적화 후 A* 연산 시간이 17.35ms에서 **4.8ms로** 단축되어 약 **3.61배의 성능 향상**을 달성하며 프레임 드랍 문제를 해결했습니다.
 
 ---
 
@@ -99,7 +99,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 진행 방식 💡
 
-* 플레이 도중 기존 A* 알고리즘과 JPS+ 간 평균 및 최악의 경우를 비교하여 더 효율적인 알고리즘을 선택했습니다.
+플레이 도중 기존 A* 알고리즘과 JPS+ 간 평균 및 최악의 경우를 비교하여 더 효율적인 알고리즘을 선택했습니다.
 
 ### 📊 성능 비교 프로파일링 결과 (A* vs JPS+)
 
@@ -107,35 +107,35 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 <img src="https://github.com/user-attachments/assets/ed85b2bd-a7a6-46db-8861-90b396dc1fb7" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-*좌: A* 알고리즘 (수행 시간: 4.46ms, 요구 수행 시간 대비 비율: 89.2%)*
-*우: JPS+ 알고리즘 (수행 시간: 0.25ms, 요구 수행 시간 대비 비율: 5%)*
+좌: A* 알고리즘 (수행 시간: 4.46ms, 요구 수행 시간 대비 비율: 89.2%)
+우: JPS+ 알고리즘 (수행 시간: 0.25ms, 요구 수행 시간 대비 비율: 5%)
 
 ### 최악의 경우 📉
 
 <img src="https://github.com/user-attachments/assets/d4f7bf7e-f227-4c8d-8174-b2f7fd6c956e" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-*좌: A* 알고리즘 (수행 시간: 7.75ms, 요구 수행 시간 대비 비율: 155%)*
-*우: JPS+ 알고리즘 (수행 시간: 0.41ms, 요구 수행 시간 대비 비율: 8.2%)*
+좌: A* 알고리즘 (수행 시간: 7.75ms, 요구 수행 시간 대비 비율: 155%)
+우: JPS+ 알고리즘 (수행 시간: 0.41ms, 요구 수행 시간 대비 비율: 8.2%)
 
 ### 💡 결론: JPS+ 알고리즘 적용
 
 ### A* 알고리즘의 한계 🚫
 
-* A* 알고리즘은 경로를 찾아가는 과정에서 탐색하는 노드의 수가 증가하며, 특히 거리가 멀어질수록 연산량 및 메모리 사용량이 급격히 증가하여 탐색 시간의 지연과 프레임 드랍을 유발했습니다.
+A* 알고리즘은 경로를 찾아가는 과정에서 탐색하는 노드의 수가 증가하며, 특히 거리가 멀어질수록 연산량 및 메모리 사용량이 급격히 증가하여 탐색 시간의 지연과 프레임 드랍을 유발했습니다.
 
 ### JPS+ 알고리즘의 장점 ✨
 
-* JPS+는 사전에 계산된 점프 포인트를 활용하고, 불필요한 노드의 탐색을 줄이는 가지치기 규칙을 적용하여 탐색 경로를 제한함으로써 **안정적이고 예측 가능한 성능**을 제공합니다.
+JPS+는 사전에 계산된 점프 포인트를 활용하고, 불필요한 노드의 탐색을 줄이는 가지치기 규칙을 적용하여 탐색 경로를 제한함으로써 **안정적이고 예측 가능한 성능**을 제공합니다.
 
 ### JPS+ 적용 결과 ✅
 
-* JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로써, 실시간 처리가 중요한 게임 환경에서도 프레임 안정성을 확보할 수 있었습니다.
+JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로써, 실시간 처리가 중요한 게임 환경에서도 프레임 안정성을 확보할 수 있었습니다.
 
 ### A* vs JPS+ 탐색 과정 시각화 🖼️
 
 <img src="https://github.com/user-attachments/assets/64d790df-e6d8-405d-9638-9cc4369d2126" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-*좌: A* 알고리즘 탐색 과정, 우: JPS+ 알고리즘 탐색 과정*
+좌: A* 알고리즘 탐색 과정, 우: JPS+ 알고리즘 탐색 과정
 
 ---
 
@@ -158,6 +158,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 ### GitHub Release를 통한 배포 📤
 
 <img src="https://github.com/user-attachments/assets/114b5329-6db6-4fcf-80b2-65d6e1af9fa9" alt="GitHub Release" width="85%" height="85%" />
+
 *GitHub Release 페이지 (v1.1.7)*
 
 ### 커스텀 스테이지 에디터 🕹️
