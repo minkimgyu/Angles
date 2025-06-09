@@ -148,3 +148,24 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 ### 스킬 클래스 구조 📜
 
 <img src="https://github.com/user-attachments/assets/464272b2-954c-494a-a193-0349561d3469" alt="Angles Game Screenshot" width="85%" height="85%" />
+
+---
+
+## 🎨 커스텀 에디터를 활용한 스테이지 에디터 개발
+
+각 스테이지별 효율적이고 직관적인 적 배치를 위해 자체적인 커스텀 스테이지 에디터를 개발했습니다. 🧑‍💻
+개발된 에디터는 GitHub Release를 활용하여 팀원에게 배포하고 있습니다. 📦
+이러한 과정을 통해 스테이지 레벨 디자인에 대한 팀 간의 협업 효율성을 향상시켰습니다. 🤝
+
+### GitHub Release를 통한 배포 📤
+
+<img src="https://github.com/user-attachments/assets/114b5329-6db6-4fcf-80b2-65d6e1af9fa9" alt="GitHub Release" width="85%" height="85%" />
+*GitHub Release 페이지 (v1.1.7)*
+
+### 커스텀 스테이지 에디터 🕹️
+
+<img src="https://github.com/user-attachments/assets/352f8857-fae8-42b7-92e7-40eb0ae1ec0a" alt="Custom Stage Editor" width="85%" height="85%" />
+
+*커스텀 스테이지 에디터 UI 및 레벨 편집 화면*
+
+**GitHub Repository:** [https://github.com/minkimgyu/AnglesStageDesigner](https://github.com/minkimgyu/AnglesStageDesigner)
