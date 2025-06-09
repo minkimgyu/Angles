@@ -108,6 +108,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 <img src="https://github.com/user-attachments/assets/ed85b2bd-a7a6-46db-8861-90b396dc1fb7" alt="Angles Game Screenshot" width="100%" height="100%" />
 
 *좌: A\* 알고리즘 (수행 시간: 4.46ms, 요구 수행 시간 대비 비율: 89.2%)*
+
 *우: JPS+ 알고리즘 (수행 시간: 0.25ms, 요구 수행 시간 대비 비율: 5%)*
 
 ### 최악의 경우 📉
@@ -115,6 +116,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 <img src="https://github.com/user-attachments/assets/d4f7bf7e-f227-4c8d-8174-b2f7fd6c956e" alt="Angles Game Screenshot" width="100%" height="100%" />
 
 *좌: A\* 알고리즘 (수행 시간: 7.75ms, 요구 수행 시간 대비 비율: 155%)*
+
 *우: JPS+ 알고리즘 (수행 시간: 0.41ms, 요구 수행 시간 대비 비율: 8.2%)*
 
 ### 💡 결론: JPS+ 알고리즘 적용
