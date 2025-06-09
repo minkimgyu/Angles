@@ -23,7 +23,7 @@ Unity를 사용하여 개발한 캐주얼 모바일 2D 게임입니다.
 ## 👨‍💻 담당 역할 및 기여도 (기여도 100%)
 
 - ✅ **Finite State Machine을 활용하여 Player 기능 구현** ✨
-- ✅ **A* 길찾기 알고리즘을 활용한 챕터 모드 전용 퍼즐 시스템 개발 및 적용** 🔍
+- ✅ **A\* 길찾기 알고리즘을 활용한 챕터 모드 전용 퍼즐 시스템 개발 및 적용** 🔍
 - ✅ **서바이벌 모드 최적화를 위한 JPS+ 길찾기 알고리즘 개발 및 적용** 🚀
 - ✅ **Strategy Pattern을 활용한 무기, 스킬 시스템 개발** 🛡️
 - ✅ **Visitor Pattern을 활용한 업그레이드 시스템 개발** 📈
@@ -54,7 +54,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 <img src="https://github.com/user-attachments/assets/0733f9c7-43f2-4075-8c71-56329dbeb17e" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-Tilemap 기반 A* 길찾기 시각화
+*Tilemap 기반 A\* 길찾기 시각화*
 
 ---
 
@@ -75,7 +75,7 @@ Tilemap 기반 A* 길찾기 시각화
 
 <img src="https://github.com/user-attachments/assets/0b50d2eb-ce43-4c0c-bf8f-ca79895fc19f" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-최적화 후 A* 연산 시간이 17.35ms에서 **4.8ms로** 단축되어 약 **3.61배의 성능 향상**을 달성하며 프레임 드랍 문제를 해결했습니다.
+최적화 후 A\* 연산 시간이 17.35ms에서 **4.8ms로** 단축되어 약 **3.61배의 성능 향상**을 달성하며 프레임 드랍 문제를 해결했습니다.
 
 ---
 
@@ -99,7 +99,7 @@ Tilemap 기반 A* 길찾기 시각화
 
 ### 진행 방식 💡
 
-플레이 도중 기존 A* 알고리즘과 JPS+ 간 평균 및 최악의 경우를 비교하여 더 효율적인 알고리즘을 선택했습니다.
+*플레이 도중 기존 A\* 알고리즘과 JPS+ 간 평균 및 최악의 경우를 비교하여 더 효율적인 알고리즘을 선택했습니다.*
 
 ### 📊 성능 비교 프로파일링 결과 (A* vs JPS+)
 
@@ -107,15 +107,15 @@ Tilemap 기반 A* 길찾기 시각화
 
 <img src="https://github.com/user-attachments/assets/ed85b2bd-a7a6-46db-8861-90b396dc1fb7" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-좌: A* 알고리즘 (수행 시간: 4.46ms, 요구 수행 시간 대비 비율: 89.2%)
-우: JPS+ 알고리즘 (수행 시간: 0.25ms, 요구 수행 시간 대비 비율: 5%)
+*좌: A\* 알고리즘 (수행 시간: 4.46ms, 요구 수행 시간 대비 비율: 89.2%)*
+*우: JPS+ 알고리즘 (수행 시간: 0.25ms, 요구 수행 시간 대비 비율: 5%)*
 
 ### 최악의 경우 📉
 
 <img src="https://github.com/user-attachments/assets/d4f7bf7e-f227-4c8d-8174-b2f7fd6c956e" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-좌: A* 알고리즘 (수행 시간: 7.75ms, 요구 수행 시간 대비 비율: 155%)
-우: JPS+ 알고리즘 (수행 시간: 0.41ms, 요구 수행 시간 대비 비율: 8.2%)
+*좌: A\* 알고리즘 (수행 시간: 7.75ms, 요구 수행 시간 대비 비율: 155%)*
+*우: JPS+ 알고리즘 (수행 시간: 0.41ms, 요구 수행 시간 대비 비율: 8.2%)*
 
 ### 💡 결론: JPS+ 알고리즘 적용
 
@@ -135,7 +135,7 @@ JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로�
 
 <img src="https://github.com/user-attachments/assets/64d790df-e6d8-405d-9638-9cc4369d2126" alt="Angles Game Screenshot" width="85%" height="85%" />
 
-좌: A* 알고리즘 탐색 과정, 우: JPS+ 알고리즘 탐색 과정
+*좌: A\* 알고리즘 탐색 과정, 우: JPS+ 알고리즘 탐색 과정*
 
 ---
 
