@@ -1,8 +1,9 @@
-#define Draw_Progress // 활성화
+// #define Draw_Progress // 활성화
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Pathfinder : MonoBehaviour, IPathfinder
@@ -81,7 +82,7 @@ public class Pathfinder : MonoBehaviour, IPathfinder
 
             _openList.DeleteMin(); // 해당 그리드 지워줌
 #if Draw_Progress
-                _closeListPoints.Add(targetNode.WorldPos);
+            _closeListPoints.Add(targetNode.WorldPos);
 #endif
 
             _closedList.Add(targetNode); // 해당 그리드 추가해줌
@@ -90,6 +91,16 @@ public class Pathfinder : MonoBehaviour, IPathfinder
 
         // 이 경우는 경로를 찾지 못한 상황임
         return null;
+    }
+
+    const float sqrt = 1.414f;
+
+    // 옥타일 거리 휴리스틱
+    float GetDistance(Vector2 start, Vector2 end)
+    {
+        float diffX = Mathf.Abs(start.x - end.x);
+        float diffY = Mathf.Abs(start.y - end.y);
+        return Mathf.Max(diffX, diffY) + (sqrt - 1) * Mathf.Min(diffX, diffY);
     }
 
     void AddNearGridInList(Node targetNode, Node endNode, BaseLife.Size size)
@@ -104,10 +115,10 @@ public class Pathfinder : MonoBehaviour, IPathfinder
             // 여기서 bfs 돌려서 주변 3X3 칸에 이동 불가능한 경로가 있다면 다시 뽑아준다.
             // 만약 모든 노드를 다 뽑은 경우 리턴시킨다.
 
-            if (_closedList.Contains(nearNode)) continue; // 통과하지 못하거나 닫힌 리스트에 있는 경우 다음 그리드 탐색
+            if (nearNode.Block == true || _closedList.Contains(nearNode)) continue; // 통과하지 못하거나 닫힌 리스트에 있는 경우 다음 그리드 탐색
 
             // 이 부분 중요! --> 거리를 측정해서 업데이트 하지 않고 계속 더해주는 방식으로 진행해야함
-            float moveCost = targetNode.G + Vector2.Distance(targetNode.WorldPos, nearNode.WorldPos);
+            float moveCost = targetNode.G + GetDistance(targetNode.WorldPos, nearNode.WorldPos);
             bool isOpenListContainNearGrid = _openList.Contain(nearNode);
 
             // 오픈 리스트에 있더라도 G 값이 변경된다면 다시 리셋해주기
@@ -115,14 +126,14 @@ public class Pathfinder : MonoBehaviour, IPathfinder
             {
                 // 여기서 grid 값 할당 필요
                 nearNode.G = moveCost;
-                nearNode.H = Vector2.Distance(nearNode.WorldPos, endNode.WorldPos);
+                nearNode.H = GetDistance(nearNode.WorldPos, endNode.WorldPos);
                 nearNode.ParentNode = targetNode;
             }
 
             if (isOpenListContainNearGrid == false)
             {
 #if Draw_Progress
-                    _openListPoints.Add(nearNode.WorldPos);
+                _openListPoints.Add(nearNode.WorldPos);
 #endif
                 _openList.Insert(nearNode);
             }
