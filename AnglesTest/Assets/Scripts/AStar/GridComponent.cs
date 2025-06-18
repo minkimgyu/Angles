@@ -210,6 +210,7 @@ public class GridComponent : MonoBehaviour
         {
             for (int j = 0; j < _gridSize.Column; j++)
             {
+                // ³ëµå Ä³½Ì
                 _nodes[i, j].NearNodes[BaseLife.Size.Small] = ReturnNearNodes(new Grid2D(i, j), BaseLife.Size.Small);
                 _nodes[i, j].NearNodes[BaseLife.Size.Medium] = ReturnNearNodes(new Grid2D(i, j), BaseLife.Size.Medium);
             }

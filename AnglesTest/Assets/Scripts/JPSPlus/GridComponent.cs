@@ -21,14 +21,6 @@ namespace JPSPlus
             this._row = row;
             this._column = column;
         }
-
-        public static int Diff(Grid2D a, Grid2D b)
-        {
-            int diffColumns = Mathf.Abs(b._column - a._column);
-            int diffRows = Mathf.Abs(b._row - a._row);
-
-            return Mathf.Max(diffRows, diffColumns);
-        }
     }
 
     public class GridComponent : MonoBehaviour
@@ -86,11 +78,6 @@ namespace JPSPlus
                         Gizmos.color = _blockColor;
                         Gizmos.DrawCube(_nodes[i, j].WorldPos, Vector3.one);
                     }
-                    //else
-                    //{
-                    //    Gizmos.color = _passColor;
-                    //    Gizmos.DrawCube(_nodes[i, j].WorldPos, Vector3.one);
-                    //}
                 }
             }
 
@@ -103,6 +90,7 @@ namespace JPSPlus
                 }
             }
 
+            // 뱡향 디버깅
             if (_showPrimaryJumpDirection)
             {
                 for (int i = 0; i < _gridSize.Row; i++)
@@ -170,6 +158,7 @@ namespace JPSPlus
                 }
             }
 
+            // 점프 포인트 거리 보여주기
             if (_showJumpPointDistances)
             {
                 for (int i = 0; i < _gridSize.Row; i++)
@@ -370,45 +359,44 @@ namespace JPSPlus
 
         List<Vector2> _primaryJumpPoints = new List<Vector2>();
 
-
-        public Node GetNodeDist(int row, int column, int direction, int dist)
+        public Node GetNodeDist(int row, int column, int direction, int distance)
         {
             Node newNode = null;
-            int newRow = row, newColumn = column;
+            int newRow = row;
+            int newColumn = column;
 
             switch (direction)
             {
                 case 0:
-                    newRow -= dist;
+                    newRow -= distance;
                     break;
                 case 1:
-                    newRow -= dist;
-                    newColumn += dist;
+                    newRow -= distance;
+                    newColumn += distance;
                     break;
                 case 2:
-                    newColumn += dist;
+                    newColumn += distance;
                     break;
                 case 3:
-                    newRow += dist;
-                    newColumn += dist;
+                    newRow += distance;
+                    newColumn += distance;
                     break;
                 case 4:
-                    newRow += dist;
+                    newRow += distance;
                     break;
                 case 5:
-                    newRow += dist;
-                    newColumn -= dist;
+                    newRow += distance;
+                    newColumn -= distance;
                     break;
                 case 6:
-                    newColumn -= dist;
+                    newColumn -= distance;
                     break;
                 case 7:
-                    newRow -= dist;
-                    newColumn -= dist;
+                    newRow -= distance;
+                    newColumn -= distance;
                     break;
             }
 
-            // w/ the new coordinates, get the node
             if (IsOutOfRange(new Grid2D(newRow, newColumn)) == false)
             {
                 newNode = _nodes[newRow, newColumn];
@@ -554,7 +542,7 @@ namespace JPSPlus
                     {
                         jumpDistanceSoFar = -1;
                         jumpPointSeen = false;
-                        node.JumpPointDistances[2] = 0; // east
+                        node.JumpPointDistances[2] = 0; // 동쪽 방향
                         continue;
                     }
 
@@ -593,7 +581,7 @@ namespace JPSPlus
                     {
                         jumpDistanceSoFar = -1;
                         jumpPointSeen = false;
-                        node.JumpPointDistances[0] = 0; // north
+                        node.JumpPointDistances[0] = 0; // 북쪽 방향
                         continue;
                     }
 

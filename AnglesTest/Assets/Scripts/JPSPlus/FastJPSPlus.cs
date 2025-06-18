@@ -5,54 +5,51 @@ using UnityEngine;
 
 namespace JPSPlus
 {
+    // Direction
     // ↖ ↑ ↗  7 0 1
     // ←    →  6   2
     // ↙ ↓ ↘  5 4 3
-
-    //public enum Direction
-    //{
-    //    NORTH = 0,
-    //    NORTH_EAST = 1,
-    //    EAST = 2,
-    //    SOUTH_EAST = 3,
-    //    SOUTH = 4,
-    //    SOUTH_WEST = 5,
-    //    WEST = 6,
-    //    NORTH_WEST = 7,
-    //}
 
     public class FastJPSPlus
     {
         List<int>[] _validDirLookUpTable = new List<int>[8]
         {
-            new List<int>{ 2, 1, 0, 7, 6 }, //new List<Direction>{ Direction.EAST,  Direction.NORTH_EAST, Direction.NORTH, Direction.NORTH_WEST, Direction.WEST },
+            new List<int>{ 2, 1, 0, 7, 6 }, //new List<Direction>{ EAST,  NORTH_EAST, NORTH, NORTH_WEST, WEST },
 
-            new List<int>{ 2, 1, 0}, //new List<Direction>{ Direction.EAST,  Direction.NORTH_EAST, Direction.NORTH },
+            new List<int>{ 2, 1, 0}, //new List<Direction>{ EAST,  NORTH_EAST, NORTH },
 
-            new List<int>{ 4, 3, 2, 1, 0 }, //new List<Direction>{ Direction.SOUTH, Direction.SOUTH_EAST, Direction.EAST,  Direction.NORTH_EAST, Direction.NORTH },
+            new List<int>{ 4, 3, 2, 1, 0 }, //new List<Direction>{ SOUTH, SOUTH_EAST, EAST,  NORTH_EAST, NORTH },
 
-            new List<int>{ 4, 3, 2 }, //  Direction.SOUTH, Direction.SOUTH_EAST, Direction.EAST
+            new List<int>{ 4, 3, 2 }, //  SOUTH, SOUTH_EAST, EAST
 
-            new List<int>{ 6, 5, 4, 3, 2  }, // Direction.WEST,  Direction.SOUTH_WEST, Direction.SOUTH, Direction.SOUTH_EAST, Direction.EAST
+            new List<int>{ 6, 5, 4, 3, 2  }, // WEST,  SOUTH_WEST, SOUTH, SOUTH_EAST, EAST
 
-            new List<int>{ 6, 5, 4 }, // Direction.WEST,  Direction.SOUTH_WEST, Direction.SOUTH
+            new List<int>{ 6, 5, 4 }, // WEST,  SOUTH_WEST, SOUTH
 
-            new List<int>{ 0, 7, 6, 5, 4 }, // Direction.NORTH, Direction.NORTH_WEST, Direction.WEST, Direction.SOUTH_WEST, Direction.SOUTH
+            new List<int>{ 0, 7, 6, 5, 4 }, // NORTH, NORTH_WEST, WEST, SOUTH_WEST, SOUTH
 
-            new List<int>{ 0, 7, 6 } // Direction.NORTH, Direction.NORTH_WEST, Direction.WEST
+            new List<int>{ 0, 7, 6 } // NORTH, NORTH_WEST, WEST
         };
 
         List<int> _allDirections = new List<int>
         { 
-            0, //Direction.NORTH, 
-            1, //Direction.NORTH_EAST, 
-            2, //Direction.EAST, 
-            3, //Direction.SOUTH_EAST, 
-            4, //Direction.SOUTH, 
-            5, //Direction.SOUTH_WEST, 
-            6, //Direction.WEST, 
-            7, //Direction.NORTH_WEST 
+            0, // NORTH, 
+            1, // NORTH_EAST, 
+            2, // EAST, 
+            3, // SOUTH_EAST, 
+            4, // SOUTH, 
+            5, // SOUTH_WEST, 
+            6, // WEST, 
+            7, // NORTH_WEST 
         };
+
+        public int GetMaxDiffBetweenGrid(Grid2D a, Grid2D b)
+        {
+            int diffColumns = Mathf.Abs(b.Column - a.Column);
+            int diffRows = Mathf.Abs(b.Row - a.Row);
+
+            return Mathf.Max(diffRows, diffColumns);
+        }
 
         private List<int> GetAllValidDirections(Node node, bool findFirst = false)
         {
@@ -64,10 +61,10 @@ namespace JPSPlus
         {
             switch (dir)
             {
-                case 4: // Direction.SOUTH
-                case 2: // Direction.EAST
-                case 0: // Direction.NORTH
-                case 6: // Direction.WEST
+                case 4: // SOUTH
+                case 2: // EAST
+                case 0: // NORTH
+                case 6: // WEST
                     return true;
             }
 
@@ -78,10 +75,10 @@ namespace JPSPlus
         {
             switch (dir)
             {
-                case 3: // Direction.SOUTH_EAST
-                case 5: // Direction.SOUTH_WEST
-                case 1: // Direction.NORTH_EAST
-                case 7: // Direction.NORTH_WEST
+                case 3: // SOUTH_EAST
+                case 5: // SOUTH_WEST
+                case 1: // NORTH_EAST
+                case 7: // NORTH_WEST
                     return true;
             }
 
@@ -95,21 +92,21 @@ namespace JPSPlus
 
             switch (dir)
             {
-                case 0: // Direction.NORTH
+                case 0: // NORTH
                     return diffRow < 0 && diffColumn == 0;
-                case 1: // Direction.NORTH_EAST
+                case 1: // NORTH_EAST
                     return diffRow < 0 && diffColumn > 0 && Mathf.Abs(diffRow) == Mathf.Abs(diffColumn);
-                case 2: // Direction.EAST
+                case 2: // EAST
                     return diffRow == 0 && diffColumn > 0;
-                case 3: // Direction.SOUTH_EAST
+                case 3: // SOUTH_EAST
                     return diffRow > 0 && diffColumn > 0 && Mathf.Abs(diffRow) == Mathf.Abs(diffColumn);
-                case 4: // Direction.SOUTH
+                case 4: // SOUTH
                     return diffRow > 0 && diffColumn == 0;
-                case 5: // Direction.SOUTH_WEST
+                case 5: // SOUTH_WEST
                     return diffRow > 0 && diffColumn < 0 && Mathf.Abs(diffRow) == Mathf.Abs(diffColumn);
-                case 6: // Direction.WEST
+                case 6: // WEST
                     return diffRow == 0 && diffColumn < 0;
-                case 7: // Direction.NORTH_WEST
+                case 7: // NORTH_WEST
                     return diffRow < 0 && diffColumn < 0 && Mathf.Abs(diffRow) == Mathf.Abs(diffColumn);
             }
 
@@ -123,37 +120,37 @@ namespace JPSPlus
 
             switch (dir)
             {
-                case 0: // Direction.NORTH
+                case 0: // NORTH
                     return diffRow < 0 && diffColumn == 0;
-                case 1: // Direction.NORTH_EAST
+                case 1: // NORTH_EAST
                     return diffRow < 0 && diffColumn > 0;
-                case 2: // Direction.EAST
+                case 2: // EAST
                     return diffRow == 0 && diffColumn > 0;
-                case 3: // Direction.SOUTH_EAST
+                case 3: // SOUTH_EAST
                     return diffRow > 0 && diffColumn > 0;
-                case 4: // Direction.SOUTH
+                case 4: // SOUTH
                     return diffRow > 0 && diffColumn == 0;
-                case 5: // Direction.SOUTH_WEST
+                case 5: // SOUTH_WEST
                     return diffRow > 0 && diffColumn < 0;
-                case 6: // Direction.WEST
+                case 6: // WEST
                     return diffRow == 0 && diffColumn < 0;
-                case 7: // Direction.NORTH_WEST
+                case 7: // NORTH_WEST
                     return diffRow < 0 && diffColumn < 0;
             }
 
             return false;
         }
 
-        readonly float sqrt2 = Mathf.Sqrt(2);
-        readonly float sqrt2MinusOne = Mathf.Sqrt(2) - 1.0f;
+        const float _sqrt2 = 1.414f;
 
-        float GetHeuristic(int curr_row, int curr_column, int goal_row, int goal_column)
+        // 옥타일 휴리스틱 사용
+        float GetHeuristic(int CurrentRow, int CurrentColumn, int GoalRow, int GoalColumn)
         {
             float heuristic;
-            int row_dist = Mathf.Abs(goal_row - curr_row);
-            int column_dist = Mathf.Abs(goal_column - curr_column); // 휴리스틱 값이 음수가 나오는 문제 발생
+            int row_dist = Mathf.Abs(GoalRow - CurrentRow);
+            int column_dist = Mathf.Abs(GoalColumn - CurrentColumn); // 휴리스틱 값이 음수가 나오는 문제 발생
 
-            heuristic = Mathf.Max(row_dist, column_dist) + sqrt2MinusOne * Mathf.Min(row_dist, column_dist);
+            heuristic = Mathf.Max(row_dist, column_dist) + (_sqrt2 - 1) * Mathf.Min(row_dist, column_dist);
 
             return heuristic;
         }
@@ -237,7 +234,6 @@ namespace JPSPlus
                         TargetCurNode = TargetCurNode.ParentNode;
                     }
 
-                    //finalList.Push(startNode);
                     return ConvertNodeToV2(finalList);
                 }
 
@@ -245,7 +241,7 @@ namespace JPSPlus
                 _closedList.Add(targetNode);
 
                 bool findFirst = false;
-                if(_loopCount == 0) findFirst = true; // 시작 노드인 경우 모든 방향 적용해줘야 한다.
+                if(_loopCount == 0) findFirst = true; // 시작 노드인 경우 모든 방향 적용해줘야 한다. -> 중요함!
 
                 List<int> directions = GetAllValidDirections(targetNode, findFirst);
                 for (int i = 0; i < directions.Count; i++)
@@ -255,10 +251,10 @@ namespace JPSPlus
 
                     if (IsCardinal(directions[i]) &&
                      GoalIsInExactDirection(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), directions[i], new Grid2D(endNode.Index.Row, endNode.Index.Column)) &&
-                     Grid2D.Diff(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(endNode.Index.Row, endNode.Index.Column)) <= Mathf.Abs(targetNode.JumpPointDistances[directions[i]]))
+                     GetMaxDiffBetweenGrid(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(endNode.Index.Row, endNode.Index.Column)) <= Mathf.Abs(targetNode.JumpPointDistances[directions[i]]))
                     {
                         successor = endNode;
-                        givenCost = targetNode.G + Grid2D.Diff(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(endNode.Index.Row, endNode.Index.Column));
+                        givenCost = targetNode.G + GetMaxDiffBetweenGrid(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(endNode.Index.Row, endNode.Index.Column));
                     }
                     else if(IsDiagonal(directions[i]) &&
                         GoalIsInGeneralDirection(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), directions[i], new Grid2D(endNode.Index.Row, endNode.Index.Column)) &&
@@ -273,24 +269,24 @@ namespace JPSPlus
                             directions[i],
                             minDiff);
 
-                        givenCost = targetNode.G + sqrt2 * Grid2D.Diff(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(successor.Index.Row, successor.Index.Column));
+                        givenCost = targetNode.G + _sqrt2 * GetMaxDiffBetweenGrid(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(successor.Index.Row, successor.Index.Column));
                     }
                     else if (targetNode.JumpPointDistances[directions[i]] > 0)
                     {
-                        // Jump Point in this direction
+                        // 이 방향에 점프 포인트가 있는 경우
                         successor = GetNodeDist(
                            targetNode.Index.Row,
                            targetNode.Index.Column,
                            directions[i],
                            targetNode.JumpPointDistances[directions[i]]);
 
-                        givenCost = Grid2D.Diff(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(successor.Index.Row, successor.Index.Column));
+                        givenCost = GetMaxDiffBetweenGrid(new Grid2D(targetNode.Index.Row, targetNode.Index.Column), new Grid2D(successor.Index.Row, successor.Index.Column));
 
-                        if (IsDiagonal(directions[i])) givenCost = givenCost * sqrt2;
+                        if (IsDiagonal(directions[i])) givenCost = givenCost * _sqrt2;
                         givenCost += targetNode.G;
                     }
 
-                    // Traditional A* from this point
+                    // A* 알고리즘과 유사한 부분
                     if (successor != null)
                     {
                         if (_closedList.Contains(successor) == true) continue;
@@ -298,11 +294,8 @@ namespace JPSPlus
                         if (_openList.Contains(successor) == false)
                         {
                             successor.ParentNode = targetNode;
-
                             successor.G = givenCost;
-
                             successor.DirectionFromParent = directions[i];
-
                             successor.H = GetHeuristic(successor.Index.Row, successor.Index.Column, endNode.Index.Row, endNode.Index.Column);
 
                             _openList.Insert(successor);
@@ -310,11 +303,8 @@ namespace JPSPlus
                         else if (givenCost < successor.G)
                         {
                             successor.ParentNode = targetNode;
-
                             successor.G = givenCost;
-
                             successor.DirectionFromParent = directions[i];
-
                             successor.H = GetHeuristic(successor.Index.Row, successor.Index.Column, endNode.Index.Row, endNode.Index.Column);
 
                             _openList.Insert(successor);
