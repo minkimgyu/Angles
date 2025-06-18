@@ -39,6 +39,18 @@ Unity를 사용하여 개발한 캐주얼 모바일 2D 게임입니다.
 플레이어의 움직임, 슈팅 기능을 구현하기 위해 각각의 기능을 독립시켜 **Concurrent State Machine**을 적용했습니다.
 이를 통해, 새로운 기능 추가 시 사전 코드의 수정 없이 유연하게 확장이 가능한 구조를 구축했습니다.
 
+[FSM 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/Player.cs#L193)
+
+[Stop State 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/FSM/MovementState/StopState.cs#L6)
+[Move State 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/FSM/MovementState/MoveState.cs#L6)
+[Dash State 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/FSM/MovementState/DashState.cs#L6)
+
+[Ready State 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/FSM/ActionState/ReadyState.cs#L6)
+[Charge State 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/FSM/ActionState/ChargeState.cs#L6)
+[Shoot State 구현 코드](https://github.com/minkimgyu/Angles/blob/c839bd712e3c24aab24a4ba1bf97571933b9c801/AnglesTest/Assets/Scripts/Player/FSM/ActionState/ShootState.cs#L6)
+
+
+
 ### FSM 다이어그램 📊
 
 <img src="https://github.com/user-attachments/assets/2c82888a-4a0e-4ee0-ad96-7057a2baf830" alt="Angles Game Screenshot" width="50%" height="50%" />
