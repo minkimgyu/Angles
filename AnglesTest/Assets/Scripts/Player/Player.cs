@@ -32,9 +32,10 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
     [SerializeField] Transform _bottomPoint;
     public Vector2 BottomPoint => _bottomPoint.localPosition;
 
+// 테스트용 코드
+#if UNITY_EDITOR
     private void OnGUI()
     {
-#if UNITY_EDITOR
         int size = 25;
         Color color = Color.red;
 
@@ -75,10 +76,9 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
             string text = $"{datas[i].Item1} : {datas[i].Item2}";
             GUI.Label(rect, text, style);
         }
+    }
 #elif UNITY_ANDROID
 #endif
-    }
-
 
     float DashRatio { get { return _currentDashFillDuration / _playerData.DashRestoreDuration; } }
     float TotalDashRatio { get { return _currentDashCount + DashRatio; } }
@@ -305,29 +305,8 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 다른 방식으로 들어감
-        // 아예 트리거 방식으로 상호작용하는 기능 설계
-        //IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
-        //if (interactable != null && _interactableObjects.Contains(interactable) == true)
-        //{
-        //    OnInteract(interactable);
-        //}
-        //else
-        //{
-            _actionFSM.OnCollisionEnter(collision); // 위와 같은 경우가 아닌 경우 OnCollisionEnter2D 이벤트 진행
-        //}
+        _actionFSM.OnCollisionEnter(collision);
     }
-
-    //private void OnTriggerEnter2D(Collider2D collider)
-    //{
-    //    // 다른 방식으로 들어감
-    //    // 아예 트리거 방식으로 상호작용하는 기능 설계
-    //    IInteractable interactable = collider.gameObject.GetComponent<IInteractable>();
-    //    if (interactable != null && _interactableObjects.Contains(interactable) == true)
-    //    {
-    //        OnInteract(interactable);
-    //    }
-    //}
 
     public void OnLeftInputStart()
     {
@@ -335,6 +314,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
 
         _movementFSM.OnMoveStart();
     }
+
     public void OnLeftInput(Vector2 direction)
     {
         if (_lifeState == LifeState.Die) return;
@@ -342,6 +322,7 @@ public class Player : BaseLife, IFollowable, IInteracter, ICaster, IStatUpgradab
         _movementFSM.OnMove(direction);
         _actionFSM.OnMove(direction);
     }
+
     public void OnLeftInputEnd()
     {
         if (_lifeState == LifeState.Die) return;

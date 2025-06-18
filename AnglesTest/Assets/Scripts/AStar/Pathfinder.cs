@@ -1,3 +1,5 @@
+#define Draw_Progress // 활성화
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +37,11 @@ public class Pathfinder : MonoBehaviour, IPathfinder
     // 가장 먼저 반올림을 통해 가장 가까운 노드를 찾는다.
     public List<Vector2> FindPath(Vector2 startPos, Vector2 targetPos, BaseEnemy.Size size)
     {
+#if Draw_Progress
+            _openListPoints.Clear();
+            _closeListPoints.Clear();
+#endif
+
         //// 리스트 초기화
         _openList.Clear();
         _closedList.Clear();
@@ -48,6 +55,10 @@ public class Pathfinder : MonoBehaviour, IPathfinder
         if (startNode == null || endNode == null) return null;
 
         _openList.Insert(startNode);
+
+#if Draw_Progress
+            _openListPoints.Add(startNode.WorldPos);
+#endif
 
         while (_openList.Count > 0)
         {
@@ -69,6 +80,10 @@ public class Pathfinder : MonoBehaviour, IPathfinder
             }
 
             _openList.DeleteMin(); // 해당 그리드 지워줌
+#if Draw_Progress
+                _closeListPoints.Add(targetNode.WorldPos);
+#endif
+
             _closedList.Add(targetNode); // 해당 그리드 추가해줌
             AddNearGridInList(targetNode, endNode, size); // 주변 그리드를 찾아서 다시 넣어줌
         }
@@ -104,7 +119,34 @@ public class Pathfinder : MonoBehaviour, IPathfinder
                 nearNode.ParentNode = targetNode;
             }
 
-            if (isOpenListContainNearGrid == false) _openList.Insert(nearNode);
+            if (isOpenListContainNearGrid == false)
+            {
+#if Draw_Progress
+                    _openListPoints.Add(nearNode.WorldPos);
+#endif
+                _openList.Insert(nearNode);
+            }
         }
     }
+
+#if Draw_Progress
+
+        List<Vector2> _closeListPoints = new List<Vector2>();
+        List<Vector2> _openListPoints = new List<Vector2>();
+
+        private void OnDrawGizmos()
+        {
+            for (int i = 0; i < _openListPoints.Count; i++)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawCube(_openListPoints[i], new Vector2(0.8f, 0.8f));
+            }
+
+            for (int i = 0; i < _closeListPoints.Count; i++)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawCube(_closeListPoints[i], new Vector2(0.8f, 0.8f));
+            }
+        }
+#endif
 }
