@@ -62,6 +62,8 @@ Unity를 사용하여 개발한 캐주얼 모바일 2D 게임입니다.
 Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용하여 길찾기 기능을 구현했습니다.
 유닛 크기에 따라 알맞은 경로를 찾아냄으로써, 게임 내 유닛의 자연스러운 이동이 가능하게 했습니다.
 
+[AStar 구현 코드](https://github.com/minkimgyu/Angles/blob/4f6b993bd5160e606e8a547aee7dd6446f39f026/AnglesTest/Assets/Scripts/AStar/Pathfinder.cs#L8)
+
 ### 길찾기 예시 📏
 
 <img src="https://github.com/user-attachments/assets/0733f9c7-43f2-4075-8c71-56329dbeb17e" alt="Angles Game Screenshot" width="85%" height="85%" />
@@ -133,6 +135,8 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 💡 결론: JPS+ 알고리즘 적용
 
+[JPS+ 구현 코드](https://github.com/minkimgyu/Angles/blob/4f6b993bd5160e606e8a547aee7dd6446f39f026/AnglesTest/Assets/Scripts/JPSPlus/FastJPSPlus.cs#L6)
+
 ### A* 알고리즘의 한계 🚫
 
 A* 알고리즘은 경로를 찾아가는 과정에서 탐색하는 노드의 수가 증가하며, 특히 거리가 멀어질수록 연산량 및 메모리 사용량이 급격히 증가하여 탐색 시간의 지연과 프레임 드랍을 유발했습니다.
@@ -156,6 +160,9 @@ JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로�
 ## 🛡️ Strategy Pattern을 활용한 무기, 스킬 시스템 개발
 
 다양한 무기 작동 방식과 효과 알고리즘을 전략 클래스로 분리하여, 기존 코드 수정 없이 새로운 기능을 쉽게 추가하고 유연하게 교체할 수 있는 확장성 높은 구조를 구축했습니다.
+
+[BaseWeapon 구현 코드](https://github.com/minkimgyu/Angles/blob/4f6b993bd5160e606e8a547aee7dd6446f39f026/AnglesTest/Assets/Scripts/Weapon/BaseWeapon.cs#L27)
+[BaseSkill 구현 코드](https://github.com/minkimgyu/Angles/blob/4f6b993bd5160e606e8a547aee7dd6446f39f026/AnglesTest/Assets/Scripts/Skill/BaseSkill.cs#L63)
 
 ### 스킬 클래스 구조 📜
 
