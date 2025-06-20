@@ -155,6 +155,8 @@ JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로�
 
 *좌: A\* 알고리즘 탐색 과정, 우: JPS+ 알고리즘 탐색 과정*
 
+[참고한 깃허브 레포지토리](https://github.com/trgrote/JPS-Unity)
+
 ---
 
 ## 🛡️ Strategy Pattern을 활용한 무기, 스킬 시스템 개발
