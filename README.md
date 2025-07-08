@@ -6,7 +6,7 @@ Unity를 사용하여 개발한 캐주얼 모바일 2D 게임입니다.
 
 [Google Play Store](https://play.google.com/store/apps/details?id=com.hatchling.angles&hl=ko)에서 서비스 진행 중입니다.
 
-<img src="https://github.com/user-attachments/assets/64297dd4-b1d5-4ed6-98d4-e7b84679bcd5" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/64297dd4-b1d5-4ed6-98d4-e7b84679bcd5" alt="Angles Game Screenshot"/>
 
 
 ## 📆 개발 기간
@@ -53,7 +53,7 @@ Unity를 사용하여 개발한 캐주얼 모바일 2D 게임입니다.
 
 ### FSM 다이어그램 📊
 
-<img src="https://github.com/user-attachments/assets/2c82888a-4a0e-4ee0-ad96-7057a2baf830" alt="Angles Game Screenshot" width="50%" height="50%" />
+<img src="https://github.com/user-attachments/assets/2c82888a-4a0e-4ee0-ad96-7057a2baf830" alt="Angles Game Screenshot"/>
 
 ---
 
@@ -81,13 +81,13 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 개선 전후 A* 탐색 비교 📈
 
-<img src="https://github.com/user-attachments/assets/dde2ae75-febd-4b53-b104-bf471bd482b0" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/dde2ae75-febd-4b53-b104-bf471bd482b0" alt="Angles Game Screenshot" />
 
 *좌: 잘못된 경우 (비효율적 탐색), 우: 정상적인 경우 (효율적 탐색)*
 
 ### 개선 후 Deep Profiling 결과 ⚡
 
-<img src="https://github.com/user-attachments/assets/0b50d2eb-ce43-4c0c-bf8f-ca79895fc19f" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/0b50d2eb-ce43-4c0c-bf8f-ca79895fc19f" alt="Angles Game Screenshot"  />
 
 최적화 후 A\* 연산 시간이 17.35ms에서 **4.8ms로** 단축되어 약 **3.61배의 성능 향상**을 달성하며 프레임 드랍 문제를 해결했습니다.
 
@@ -97,7 +97,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 최대 100개의 객체가 플레이어를 동시에 추적하는 서바이벌 모드 특성상, 연산 부하를 줄이기 위해 기존 A* 알고리즘보다 더 효율적인 길찾기 방식이 필요했습니다.
 
-<img src="https://github.com/user-attachments/assets/62fc1d6c-34a7-4c6d-a341-f7e5923f0c50" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/62fc1d6c-34a7-4c6d-a341-f7e5923f0c50" alt="Angles Game Screenshot" />
 
 ### 성능 목표 🎯
 
@@ -107,7 +107,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 평균적인 수행 상황 프로파일링 결과 📊
 
-<img src="https://github.com/user-attachments/assets/996a08df-1c72-4759-9f2f-44034b0576fc" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/996a08df-1c72-4759-9f2f-44034b0576fc" alt="Angles Game Screenshot" />
 
 *평균적인 수행 상황 프로파일링 결과 (좌: 게임 화면, 우: Profiler 데이터)*
 
@@ -119,7 +119,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 평균적인 경우 📈
 
-<img src="https://github.com/user-attachments/assets/ed85b2bd-a7a6-46db-8861-90b396dc1fb7" alt="Angles Game Screenshot" width="100%" height="100%" />
+<img src="https://github.com/user-attachments/assets/ed85b2bd-a7a6-46db-8861-90b396dc1fb7" alt="Angles Game Screenshot"/>
 
 *좌: A\* 알고리즘 (수행 시간: 4.46ms, 요구 수행 시간 대비 비율: 89.2%)*
 
@@ -127,7 +127,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 최악의 경우 📉
 
-<img src="https://github.com/user-attachments/assets/d4f7bf7e-f227-4c8d-8174-b2f7fd6c956e" alt="Angles Game Screenshot" width="100%" height="100%" />
+<img src="https://github.com/user-attachments/assets/d4f7bf7e-f227-4c8d-8174-b2f7fd6c956e" alt="Angles Game Screenshot" />
 
 *좌: A\* 알고리즘 (수행 시간: 7.75ms, 요구 수행 시간 대비 비율: 155%)*
 
@@ -151,7 +151,7 @@ JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로�
 
 ### A* vs JPS+ 탐색 과정 시각화 🖼️
 
-<img src="https://github.com/user-attachments/assets/64d790df-e6d8-405d-9638-9cc4369d2126" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/64d790df-e6d8-405d-9638-9cc4369d2126" alt="Angles Game Screenshot"/>
 
 *좌: A\* 알고리즘 탐색 과정, 우: JPS+ 알고리즘 탐색 과정*
 
@@ -168,7 +168,7 @@ JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로�
 
 ### 스킬 클래스 구조 📜
 
-<img src="https://github.com/user-attachments/assets/464272b2-954c-494a-a193-0349561d3469" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/464272b2-954c-494a-a193-0349561d3469" alt="Angles Game Screenshot" />
 
 ---
 
@@ -180,13 +180,13 @@ JPS+ 알고리즘을 적용해 요구 성능을 안정적으로 달성함으로�
 
 ### GitHub Release를 통한 배포 📤
 
-<img src="https://github.com/user-attachments/assets/114b5329-6db6-4fcf-80b2-65d6e1af9fa9" alt="GitHub Release" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/114b5329-6db6-4fcf-80b2-65d6e1af9fa9" alt="GitHub Release" />
 
 *GitHub Release 페이지 (v1.1.7)*
 
 ### 커스텀 스테이지 에디터 🕹️
 
-<img src="https://github.com/user-attachments/assets/352f8857-fae8-42b7-92e7-40eb0ae1ec0a" alt="Custom Stage Editor" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/352f8857-fae8-42b7-92e7-40eb0ae1ec0a" alt="Custom Stage Editor" />
 
 *커스텀 스테이지 에디터 UI 및 레벨 편집 화면*
 
