@@ -66,7 +66,7 @@ Tilemap 정보를 기반으로 Grid를 생성하고, A* 알고리즘을 활용�
 
 ### 길찾기 예시 📏
 
-<img src="https://github.com/user-attachments/assets/0733f9c7-43f2-4075-8c71-56329dbeb17e" alt="Angles Game Screenshot" width="85%" height="85%" />
+<img src="https://github.com/user-attachments/assets/0733f9c7-43f2-4075-8c71-56329dbeb17e" alt="Angles Game Screenshot"/>
 
 *Tilemap 기반 A\* 길찾기 시각화*
 
